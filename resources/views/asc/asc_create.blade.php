@@ -61,6 +61,8 @@
             align-items: center;
         }
 
+        /*jj*/
+
         .dropdown-menu {
             min-width: auto;
         }
