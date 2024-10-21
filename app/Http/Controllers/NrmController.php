@@ -13,17 +13,40 @@ class NrmController extends Controller
      */
     public function index()
     {
-        $entries = request()->get('entries', 10); // Get 'entries' from request, default to 10 if not present
-        $nrmtrainings = NrmTraining::latest()->paginate($entries)->appends(['entries' => $entries]);
+        // Use the request() helper to access request data
+        $search = request()->get('search');
+
+        // Get 'entries' from request (for pagination), default to 10 if not present
+        $entries = request()->get('entries', 10);
+
+        // Search in the NrmTraining model using relevant fields
+        $nrmtrainings = NrmTraining::when($search, function ($query, $search) {
+            return $query->where('program_name', 'like', '%' . $search . '%')
+                ->orWhere('program_number', 'like', '%' . $search . '%')
+                ->orWhere('crop_name', 'like', '%' . $search . '%')
+                ->orWhere('date', 'like', '%' . $search . '%')
+                ->orWhere('venue', 'like', '%' . $search . '%')
+                ->orWhere('resource_person_name', 'like', '%' . $search . '%')
+                ->orWhere('training_program_cost', 'like', '%' . $search . '%')
+                ->orWhere('resource_person_payment', 'like', '%' . $search . '%')
+                ->orWhere('province_name', 'like', '%' . $search . '%')
+                ->orWhere('district', 'like', '%' . $search . '%')
+                ->orWhere('ds_division_name', 'like', '%' . $search . '%')
+                ->orWhere('gn_division_name', 'like', '%' . $search . '%')
+                ->orWhere('as_center', 'like', '%' . $search . '%');
+        })
+        ->latest()
+        ->paginate($entries)
+        ->appends(['entries' => $entries, 'search' => $search]); // Preserve query params for pagination
 
         // Calculate the total value of Program Cost
-        $totalProgramCost = NrmTraining::sum('training_program_cost'); // Assuming training_program_cost is numeric
+        $totalProgramCost = NrmTraining::sum('training_program_cost');
 
         // Count the total number of NRM training programs
-        $totalPrograms = NrmTraining::count(); // Assuming you want to count all programs
+        $totalPrograms = NrmTraining::count();
 
-        // Pass the variables to the view
-        return view('nrm.nrm_index', compact('nrmtrainings', 'entries', 'totalProgramCost', 'totalPrograms'));
+        // Pass variables to the view
+        return view('nrm.nrm_index', compact('nrmtrainings', 'entries', 'totalProgramCost', 'totalPrograms', 'search'));
     }
 
 
