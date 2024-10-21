@@ -269,7 +269,7 @@ document.getElementById('add-contribution').addEventListener('click', function (
 $(document).on('click', '.remove-contribution-btn', function() {
     $(this).closest('.contribution-group').remove();
 });
-
+//
 // Add Product Details (Total Production, Total Income, Profit)
 document.getElementById('add-product').addEventListener('click', function () {
      var productFields = document.getElementById('product-fields');
@@ -299,7 +299,7 @@ document.getElementById('add-product').addEventListener('click', function () {
      productFields.appendChild(newProductGroup);
  });
 
-       
+    
     
 
 </script>
