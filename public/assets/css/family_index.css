@@ -1,0 +1,27 @@
+.card {
+    background-color: #c4259ce1;
+    border: 1px solid #a50909;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px;
+    margin: 10px;
+}
+
+.card h1 {
+    margin: 15px 0;
+}
+.owl-nav button {
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: #007bff;
+}
+.owl-nav button:hover {
+    color: #0056b3;
+}
+.container-fluid {
+background-color: #FFFFFF;
+border-radius: 10px;
+padding: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}

@@ -1,0 +1,113 @@
+.card {
+    opacity: 0;
+    animation: fadeInAnimation 1s ease-in-out forwards;
+}
+.card {
+    background-color: #d32828;
+    border: 1px solid #8ea8ce;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(18, 174, 41, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+
+.card:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-body h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.card-body p {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.icon-container {
+    margin-top: 15px;
+    text-align: right;
+}
+
+
+.icon-container a {
+    text-decoration: none;
+    color: #333333;
+    font-size: 16px;
+}
+
+.icon-container a {
+    text-decoration: none;
+    color: #333333;
+    font-size: 16px;
+}
+
+.icon-container a:hover {
+    color: #007bff;
+}
+.beneficiary-details {
+    display: none; /* Hide beneficiary details by default */
+}
+body {
+background-color: #f8f9fa;
+font-family: Arial, sans-serif;
+}
+.wrapper.container {
+    width: 80vw;
+    margin-left: 270px; /* Adjust margin-left to give space for sidebar */
+    padding-top: 50px;
+}
+.beneficiary-section,
+.family-section {
+background-color: #fff;
+border-radius: 10px;
+padding: 30px;
+margin-bottom: 30px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.beneficiary-section h1,
+.family-section h2 {
+text-align: center;
+margin-bottom: 30px;
+
+}
+.beneficiary-details,
+.family-members {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.beneficiary-details p,
+.family-member p {
+margin: 5px 0;
+}
+.icon-container {
+margin-top: 10px;
+}
+.icon-container a {
+margin-right: 10px;
+}
+.card {
+opacity: 0;
+animation: fadeInAnimation 1s ease-in-out forwards;
+}
+
+@keyframes fadeInAnimation {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+
+.tank-details .card-header {
+    background-color: #c0eeea;
+    color: rgb(243, 157, 157);
+    font-weight: bold;
+}
+

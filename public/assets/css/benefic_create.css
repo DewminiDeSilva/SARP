@@ -1,0 +1,4 @@
+.custom-border {
+    border: 2px solid rgb(0, 255, 42); /* Change 'red' to any color you prefer */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding a box shadow for a box effect */
+}

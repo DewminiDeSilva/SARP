@@ -1,0 +1,35 @@
+
+    /* Adjust background and text colors */
+    body {
+        background-color: #f8f9fa; /* Light gray background */
+        color: #333; /* Dark gray text */
+    }
+    .container {
+        background-color: #fff; /* White background */
+        border: 1px solid #ced4da; /* Light gray border */
+        border-radius: 5px; /* Rounded corners */
+        padding: 20px; /* Add some padding */
+    }
+
+    /* Adjust background color of the container */
+    
+    /* Adjust background and text colors of the dropdowns */
+    .dropdown .form-label.dropdown-label {
+        color: #333; /* Dark gray text */
+    }
+
+    .dropdown .btn-secondary {
+        background-color: #007bff; /* Blue background */
+        color: #fff; /* White text */
+    }
+
+    /* Adjust button hover color */
+    .dropdown .btn-secondary:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    /* Adjust button focus color */
+    .dropdown .btn-secondary:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5); /* Light blue shadow on focus */
+    }
+

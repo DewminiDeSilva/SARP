@@ -1,0 +1,102 @@
+*{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    display: flex;
+}
+.center-heading h1 {
+    margin-bottom: 20px;
+    color: #1c1d1c; /* Change this to your desired color */
+    font-size: 36px; /* Change this to your desired font size */
+}
+
+.table {
+    width: 100%;
+}
+.content{
+    width: 85vw;
+    margin-left: 15vw;
+}
+
+.table header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(238, 49, 74);
+}
+.table header p{
+    color: black;
+}
+button{
+    outline: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+}
+.add_new{
+    padding: 10px 20px;
+    color: aliceblue;
+    background-color: #2137f8;
+}
+input{
+    padding: 10px  20px;
+    margin: 0 10px;
+    outline: none;
+    border:1px solid #0298cf;
+    border-radius: 6px;
+    color: #0298cf;
+}
+.center-heading {
+    display: flex;
+    justify-content: center;
+}
+.scrollable-table {
+    height: 500px; /* Set your preferred height here */
+    overflow-y: auto;
+}
+.center-heading {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Adjust as needed */
+}
+
+/* Set the main container to fill the viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Ensure full height for container */
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 300;
+    padding: 30px;
+}
+
+/* Make the table container flexible and fill remaining space */
+.table-container {
+    flex: 1;
+    overflow-y: auto;
+}
+tbody tr:hover {
+    background-color: #e0dff7; /* Change to the desired background color */
+}
+/* Custom CSS for centering pagination and message */
+/* Custom CSS for positioning at bottom right corner */
+.content {
+    padding: 20px;
+    margin-left: 250px; /* Add a left margin equal to the width of the sidebar */
+    box-sizing: border-box; /* Include padding and border in the width */
+    overflow-y: auto; /* Add scroll if the content exceeds the viewport height */
+}

@@ -1,0 +1,168 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.img {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 20vw;
+    
+
+    position: fixed;
+    top: 2px;
+    left: 5px;
+    bottom: 50px;
+    background-color: #0b6d1f; /* light purple background */
+    padding-top: 20px;
+    border-radius: 10px; /* Rounded corners */
+    overflow-y: auto;
+    z-index: 1000;/*sara*/
+}
+.sidebar .header {
+    text-align: center;
+    padding: 20px;
+}
+
+.sidebar .logo {
+    width: 100px;
+    height: auto;
+}
+.sidebar h2 {
+    color: #FFFFFF; /* Green text color for the title */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: left;
+    position: relative; /* Needed for positioning arrows */
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: black; /* Black text color */
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    padding-left: 30px; /* Add padding to align text */
+}
+
+.sidebar ul li ul li a {
+    font-size: 16px; /* Smaller font size for submenu items */
+    font-weight: normal; /* Normal weight for submenu items */
+    padding-left: 30px; /* Indentation for submenu items */
+}
+
+.sidebar ul li ul {
+    display: none; /* Initially hide submenus */
+}
+
+.sidebar ul li a:hover, .sidebar ul li ul li a:hover {
+    color: #094511; /* Hover color for all links */
+}
+
+.submenu > a:before {
+    content: '\25B6'; /* Right angle quotation mark */
+    position: absolute;
+    left: 10px;
+    transition: transform 0.3s;
+}
+
+.submenu ul.show {
+    display: block; /* Show submenu on click */
+}
+
+.submenu > a.active:before {
+    transform: rotate(90deg); /* Rotate arrow when submenu is active */
+}
+
+.submenu ul li.submenu > a:before {
+    content: '\25B6'; /* Right angle quotation mark for nested submenus */
+    position: absolute;
+    left: 20px; /* Indent nested submenu arrow */
+    transition: transform 0.3s;
+}
+
+.submenu ul li.submenu > a.active:before {
+    transform: rotate(90deg); /* Rotate arrow when nested submenu is active */
+}
+
+.submenu ul li ul.show {
+    display: block; /* Show nested submenu on click */
+}
+
+.sidebar .header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .header .logo {
+    max-width: 100px; /* Adjust the size as needed */
+    height: auto;
+}
+
+ul.nested::before {
+    position: absolute;
+    content: "";
+    left: 20px;
+    top: 30px; /* Adjust as needed */
+    width: 1px;
+    height: 70%;
+    background-color: #FFFFFF;
+}
+ul.nested-n::before {
+    position: absolute;
+    content: "";
+    left: 20px;
+    top: 30px; /* Adjust as needed */
+    width: 1px;
+    height: 70%;
+    background-color: #FFFFFF;
+}
+
+ul.nested li {
+    position: relative;
+    padding-left: 40px;
+}
+ul.nested li::before {
+    position: absolute;
+    content: "";
+    left: 20px;
+    top: 50%;
+    width: 20px;
+    height: 1px;
+    background-color: #FFFFFF;
+}
+
+.sidebar ul li .nested,
+.sidebar ul li .nested-n {
+    display: none;
+    padding-left: 20px;
+}
+
+.sidebar ul li .nested.show,
+.sidebar ul li .nested-n.show {
+    display: block;
+}
+
+.sidebar ul li a.active {
+    font-weight: bold;
+}
+.sidebar ul li.submenu .nested-n li::after {
+    display: none;
+}
+
+.sidewidth {
+    width: 100%;
+}
