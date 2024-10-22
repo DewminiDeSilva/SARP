@@ -208,7 +208,7 @@ Route::get('/agriculture/{id}/edit', [AgriController::class, 'edit'])->name('agr
 Route::delete('/agriculture/{id}', [AgriController::class, 'destroy'])->name('agriculture.destroy');
 Route::put('/agriculture/{id}', [AgriController::class, 'update'])->name('agriculture.update');
 Route::get('/agriculture/search', [AgriController::class, 'search'])->name('agriculture.search');
-
+Route::get('/get-crops/{category}', [AgriController::class, 'getCropsByCategory']);
 //livestock
 
 
@@ -450,5 +450,6 @@ Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
 });
 
 Route::get('/dashboard', [BeneficiaryController::class, 'dashboard'])->name('dashboard');
+
 
 

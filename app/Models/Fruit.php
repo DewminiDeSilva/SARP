@@ -10,6 +10,7 @@ class Fruit extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'fruit_name'
     ];
 
