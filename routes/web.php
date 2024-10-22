@@ -25,6 +25,7 @@ use App\Http\Controllers\GrievanceController;
 use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\VegitableController;
 use App\Http\Controllers\FruitController;
+use App\Http\Controllers\OtherCropController;
 use App\Http\Controllers\HomeGardenController;
 use App\Http\Controllers\DairyController;
 use App\Http\Controllers\PoultaryController;
@@ -165,6 +166,9 @@ Route::resource('fruit', FruitController::class);
 
 // Homegarden Routes
 Route::resource('homegarden', HomeGardenController::class);
+
+//other crop routes
+Route::resource('other_crops', OtherCropController::class);
 
 // Dairy Routes
 Route::resource('dairy', DairyController::class);
