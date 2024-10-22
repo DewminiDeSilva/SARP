@@ -233,36 +233,44 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="provinceDropdown" class="form-label dropdown-label color-label col-form-label">Province</label>
-            <select class="form-control greenbackground" id="provinceDropdown" name="province_name" required>
+            <label for="province" class="form-label dropdown-label">Province</label>
+            <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
                 <option value="">Select Province</option>
             </select>
+            <input type="hidden" id="provinceName" name="province_name">
         </div>
     </div>
+
+
+
+
 
     <!-- District and DS Division -->
     <div class="form-row">
         <div class="form-group">
-            <label for="districtDropdown" class="form-label bold-label color-label">District</label>
-            <select class="form-control greenbackground" id="districtDropdown" name="district_name" required>
+            <label for="district" class="form-label dropdown-label">District</label>
+            <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
                 <option value="">Select District</option>
             </select>
+            <input type="hidden" id="districtName" name="district_name">
         </div>
         <div class="form-group">
-            <label for="dsDivisionDropdown" class="form-label bold-label color-label">DS Division</label>
-            <select class="form-control greenbackground" id="dsDivisionDropdown" name="ds_division_name" required>
+            <label for="dsDivisionDropdown" class="form-label dropdown-label">DS Division</label>
+            <select id="dsDivisionDropdown" name="ds_division" class="btn btn-success dropdown-toggle" required>
                 <option value="">Select DS Division</option>
             </select>
+            <input type="hidden" id="dsDivisionName" name="ds_division_name">
         </div>
     </div>
 
     <!-- GND and ASC -->
     <div class="form-row">
         <div class="form-group">
-            <label for="gndDropdown" class="form-label bold-label color-label">GND</label>
-            <select class="form-control greenbackground" id="gndDropdown" name="gn_division_name" required>
-                <option value="">Select GND</option>
+            <label for="gndDropdown" class="form-label dropdown-label">GN Division</label>
+            <select id="gndDropdown" name="gn_division_name" class="btn btn-success dropdown-toggle" required>
+                <option value="">Select GN Division</option>
             </select>
+            <input type="hidden" id="gndName" name="gn_division_name">
         </div>
         <div class="form-group">
             <label for="ascDropdown" class="form-label bold-label color-label">Select ASC</label>
@@ -516,7 +524,6 @@
 $(document).ready(function () {
     // Fetch tank names from the API endpoint
     $.get('/tanks', function (data) {
-        // console.log(data);
         // Populate the dropdown menu with tank names
         $.each(data, function (index, tank) {
             $('#tankDropdown').append($('<option>', {
@@ -555,7 +562,7 @@ $(document).ready(function () {
         url: '/provinces',
         type: 'GET',
         success: function(data) {
-            // Populate province dropdown
+            // Populate the province dropdown
             $.each(data, function(index, province) {
                 $('#provinceDropdown').append($('<option>', {
                     value: province.id,
@@ -568,29 +575,20 @@ $(document).ready(function () {
     // Fetch districts based on selected province
     $('#provinceDropdown').change(function() {
         var provinceId = $(this).val();
+        $('#provinceName').val($(this).find('option:selected').text()); // Store province name in hidden input
 
-        // Check if a province is selected
         if (provinceId !== '') {
-            // Clear the district and DS Division dropdowns
+            // Clear and reset the district dropdown
             $('#districtDropdown').empty().append($('<option>', {
                 value: '',
                 text: 'Select District'
             }));
-            $('#dsDivisionDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select DS Division'
-            }));
-            $('#gndDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select GND'
-            }));
 
-            // Fetch districts only if a valid province ID is selected
+            // Fetch districts from the selected province
             $.ajax({
                 url: '/provinces/' + provinceId + '/districts',
                 type: 'GET',
                 success: function(data) {
-                    // Populate district dropdown
                     $.each(data, function(index, district) {
                         $('#districtDropdown').append($('<option>', {
                             value: district.id,
@@ -599,50 +597,29 @@ $(document).ready(function () {
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error - show a message to the user or handle it as needed
+                    console.error(xhr.responseText); // Log any error for debugging
                 }
             });
-        } else {
-            // Clear the district and DS Division dropdowns if no province is selected
-            $('#districtDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select District'
-            }));
-            $('#dsDivisionDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select DS Division'
-            }));
-            $('#gndDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select GND'
-            }));
         }
-        // Reset hidden fields
-        $('#provinceName').val('');
-        $('#districtName').val('');
-        $('#dsDivisionName').val('');
-        $('#gndName').val('');
     });
 
     // Fetch DS Divisions based on selected district
     $('#districtDropdown').change(function() {
         var districtId = $(this).val();
+        $('#districtName').val($(this).find('option:selected').text()); // Store district name in hidden input
 
-        // Check if a district is selected
         if (districtId !== '') {
-            // Fetch DS Divisions only if a valid district ID is selected
+            // Clear and reset the DS Division dropdown
+            $('#dsDivisionDropdown').empty().append($('<option>', {
+                value: '',
+                text: 'Select DS Division'
+            }));
+
+            // Fetch DS Divisions from the selected district
             $.ajax({
                 url: '/districts/' + districtId + '/ds-divisions',
                 type: 'GET',
                 success: function(data) {
-                    // Clear the DS Division dropdown
-                    $('#dsDivisionDropdown').empty().append($('<option>', {
-                        value: '',
-                        text: 'Select DS Division'
-                    }));
-
-                    // Populate DS Division dropdown
                     $.each(data, function(index, dsDivision) {
                         $('#dsDivisionDropdown').append($('<option>', {
                             value: dsDivision.id,
@@ -651,40 +628,29 @@ $(document).ready(function () {
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error - show a message to the user or handle it as needed
+                    console.error(xhr.responseText); // Log any error for debugging
                 }
             });
-        } else {
-            // Clear the DS Division dropdown if no district is selected
-            $('#dsDivisionDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select DS Division'
-            }));
         }
-        // Reset hidden field
-        $('#dsDivisionName').val('');
     });
 
-    // Fetch GNDs based on selected DS Division
+    // Fetch GN Divisions based on selected DS Division
     $('#dsDivisionDropdown').change(function() {
         var dsDivisionId = $(this).val();
+        $('#dsDivisionName').val($(this).find('option:selected').text()); // Store DS Division name in hidden input
 
-        // Check if a DS Division is selected
         if (dsDivisionId !== '') {
-            // Fetch GNDs only if a valid DS Division ID is selected
+            // Clear and reset the GN Division dropdown
+            $('#gndDropdown').empty().append($('<option>', {
+                value: '',
+                text: 'Select GN Division'
+            }));
+
+            // Fetch GN Divisions from the selected DS Division
             $.ajax({
                 url: '/ds-divisions/' + dsDivisionId + '/gn-divisions',
                 type: 'GET',
                 success: function(data) {
-                    console.log(data);
-                    // Clear the GND dropdown
-                    $('#gndDropdown').empty().append($('<option>', {
-                        value: '',
-                        text: 'Select GND'
-                    }));
-
-                    // Populate GND dropdown
                     $.each(data, function(index, gnd) {
                         $('#gndDropdown').append($('<option>', {
                             value: gnd.id,
@@ -693,39 +659,20 @@ $(document).ready(function () {
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error - show a message to the user or handle it as needed
+                    console.error(xhr.responseText); // Log any error for debugging
                 }
             });
-        } else {
-            // Clear the GND dropdown if no DS Division is selected
-            $('#gndDropdown').empty().append($('<option>', {
-                value: '',
-                text: 'Select GND'
-            }));
         }
-        // Reset hidden field
-        $('#gndName').val('');
     });
 
-    // Update hidden fields when options are selected
-    $('#provinceDropdown').change(function() {
-        $('#provinceName').val($(this).find('option:selected').text());
-    });
-
-    $('#districtDropdown').change(function() {
-        $('#districtName').val($(this).find('option:selected').text());
-    });
-
-    $('#dsDivisionDropdown').change(function() {
-        $('#dsDivisionName').val($(this).find('option:selected').text());
-    });
-
+    // Store the GN Division name in hidden input
     $('#gndDropdown').change(function() {
         $('#gndName').val($(this).find('option:selected').text());
     });
 });
+
 </script>
+
 
 
 
