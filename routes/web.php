@@ -45,6 +45,7 @@ use App\Http\Controllers\FFSParticipantController;
 use App\Http\Controllers\BeneFormController;
 use App\Http\Controllers\NrmController;
 use App\Http\Controllers\NrmParticipantController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -456,3 +457,4 @@ Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
 Route::get('/dashboard', [BeneficiaryController::class, 'dashboard'])->name('dashboard');
 
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
