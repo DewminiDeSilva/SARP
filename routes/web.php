@@ -136,6 +136,12 @@ Route::post('/uploadAscCsv', [AscRegistrationController::class, 'uploadCsv'])->n
 
 Route::resource('grievances', GrievanceController::class);
 
+Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])->name('grievances.report.csv');
+Route::post('grievances/upload_csv', [GrievanceController::class, 'uploadCsv'])->name('grievances.upload_csv');
+//Route::get('/grievances/search', [GrievanceController::class, 'search'])->name('grievances.search');
+// Route for grievances search
+Route::get('/searchGrievances', [GrievanceController::class, 'search'])->name('searchGrievances');
+
 // Officer routes
 Route::get('/grievances/{grievance}/officer/create', [OfficerController::class, 'create'])->name('officer.create');
 Route::post('/grievances/{grievance}/officer', [OfficerController::class, 'store'])->name('officer.store');

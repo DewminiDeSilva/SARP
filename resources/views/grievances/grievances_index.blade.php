@@ -84,6 +84,30 @@
             <div class="center-heading" style="text-align: center;">
                 <h1>Grievances Details</h1>
             </div>
+            <div class="d-flex justify-content-between mb-3">
+                <a href="{{ route('grievances.create') }}" class="btn btn-success">Add New Grievance</a>
+                <a href="{{ route('grievances.report.csv') }}" class="btn btn-primary">Generate CSV Report</a>
+            </div>
+
+            <!-- CSV Upload Form -->
+            <form action="{{ route('grievances.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline mb-3">
+                @csrf
+                <div class="form-group mr-2">
+                    <input type="file" name="csv_file" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success">Upload CSV</button>
+            </form>
+
+            <!-- Search Form -->
+            <form method="GET" action="{{ route('searchGrievances') }}" class="form-inline mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request()->query('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+
             <div class="row table-container">
                 <div class="col">
                     <table class="table table-bordered" style="width: 100%">
