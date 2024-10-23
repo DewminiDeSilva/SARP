@@ -232,6 +232,7 @@
                             <th scope="col">DS Division</th>
                             <th scope="col">GN Division</th>
                             <th scope="col">ASC</th>
+                            <th scope="col">Tank Name</th>
                             <th scope="col">Cascade Name</th>
                             <th scope="col">AI Division</th>
                             <th scope="col">Latitude</th>
@@ -270,6 +271,7 @@
                             <td>{{ $beneficiary->district_name }}</td>
                             <td>{{ $beneficiary->ds_division_name }}</td>
                             <td>{{ $beneficiary->gn_division_name }}</td>
+                            <td>{{ $beneficiary->tank_name }}</td>
                             <td>{{ $beneficiary->as_center }}</td>
                             <td>{{ $beneficiary->cascade_name }}</td>
                             <td>{{ $beneficiary->ai_division }}</td>

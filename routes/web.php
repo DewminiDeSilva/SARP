@@ -456,6 +456,8 @@ Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
 
 Route::get('/dashboard', [BeneficiaryController::class, 'dashboard'])->name('dashboard');
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 
 
