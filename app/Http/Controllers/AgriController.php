@@ -235,8 +235,7 @@ public function store(Request $request)
         if ($search) {
             $beneficiaryIds = $beneficiaryQuery->where(function($query) use ($search) {
                 $query->where('nic', 'like', '%' . $search . '%')
-                    ->orWhere('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('name_with_initials', 'like', '%' . $search . '%')
                     ->orWhere('gn_division_name', 'like', '%' . $search . '%');
             })->pluck('id');
 
@@ -256,8 +255,8 @@ public function store(Request $request)
 
         $beneficiaries = Beneficiary::where(function($query) use ($search) {
                 $query->where('nic', 'like', '%' . $search . '%')
-                    ->orWhere('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%');
+                    ->orWhere('name_with_initials', 'like', '%' . $search . '%');
+                 
             })
             ->orWhereIn('id', $filteredBeneficiaryIds)
             ->paginate($entries)
@@ -337,6 +336,9 @@ public function store(Request $request)
             case 'home_garden':
                 $crops = \App\Models\HomeGarden::all();
                 break;
+            case 'others':
+                $crops = \App\Models\OtherCrop::all();
+                 break; 
             default:
                 $crops = [];  // Handle "others" category or other cases
                 break;

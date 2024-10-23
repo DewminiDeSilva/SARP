@@ -345,19 +345,21 @@
             <!-- Search and CSV Files -->
             <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('agro.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add New Enterprise</a>
+                <a href="{{ route('agro.csv.generate') }}" class="btn btn-success">Download CSV</a>
 
-                <a class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <!-- CSV Upload Form -->
-                <form class="form-inline">
-                    @csrf
-                    <div class="form-group mr-2">
-                        <input type="file" name="csv_file" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Upload CSV</button>
-                </form>
+                <form action="{{ route('agro.csv.upload') }}" method="POST" enctype="multipart/form-data">
+                 @csrf
+                <div class="form-group">
+                <label for="csv_file">Upload CSV:</label>
+               <input type="file" name="csv_file" id="csv_file" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload CSV</button>
+            </form>
+
                 <!-- Search form -->
                 <form class="form-inline">
                     <div class="input-group">

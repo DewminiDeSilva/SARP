@@ -214,6 +214,10 @@
                         case 'home_garden':
                             cropName = crop.homegarden_name;
                             break;
+                            case 'others':
+                            cropName = crop.crop_name;
+                            break;
+
                         default:
                             cropName = crop.name;
                     }

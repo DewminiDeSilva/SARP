@@ -173,4 +173,90 @@ class AgroController extends Controller
             'Pragma' => 'no-cache'
         ]);
     }
+
+    public function uploadCsv(Request $request)
+{
+    $request->validate([
+        'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+    ]);
+
+    $path = $request->file('csv_file')->getRealPath();
+    $csvData = array_map('str_getcsv', file($path));
+    $header = array_shift($csvData); // Remove the header
+
+    foreach ($csvData as $row) {
+        $row = array_combine($header, $row);
+
+        // Validate data for each row
+        $validatedData = Validator::make($row, [
+            'enterprise_name' => 'required|string|max:255',
+            'registration_number' => 'required|string|max:255',
+            'institute_of_registration' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:15',
+            'website_name' => 'nullable|string|max:255',
+            'description_of_certificates' => 'nullable|string',
+            'nature_of_business' => 'required|string|max:255',
+            'products_available' => 'required|string',
+            'yield_collection_details' => 'required|string',
+            'marketing_information' => 'required|string',
+            'list_of_distributors' => 'required|string',
+            'asset_name' => 'required|string|max:255',
+            'asset_value' => 'required|numeric|min:0',
+        ])->validate();
+
+        // Create the Agro enterprise
+        $agro = Agro::create($validatedData);
+
+        // Create AgroAsset for the enterprise
+        AgroAsset::create([
+            'agro_id' => $agro->id,
+            'asset_name' => $row['asset_name'],
+            'asset_value' => $row['asset_value'],
+        ]);
+    }
+
+    return redirect()->route('agro.index')->with('success', 'CSV file uploaded successfully.');
+}
+
+public function generateCsv()
+{
+    $agros = Agro::with('assets')->get();
+    
+    $csvData = [];
+    $csvData[] = [
+        'Enterprise Name', 'Registration Number', 'Institute of Registration', 
+        'Address', 'Email', 'Phone Number', 'Website Name', 
+        'Description of Certificates', 'Nature of Business', 'Products Available', 
+        'Yield Collection Details', 'Marketing Information', 'List of Distributors',
+        'Asset Name', 'Asset Value'
+    ];
+
+    foreach ($agros as $agro) {
+        foreach ($agro->assets as $asset) {
+            $csvData[] = [
+                $agro->enterprise_name, $agro->registration_number, $agro->institute_of_registration, 
+                $agro->address, $agro->email, $agro->phone_number, $agro->website_name, 
+                $agro->description_of_certificates, $agro->nature_of_business, $agro->products_available, 
+                $agro->yield_collection_details, $agro->marketing_information, $agro->list_of_distributors,
+                $asset->asset_name, $asset->asset_value
+            ];
+        }
+    }
+
+    $fileName = 'agros_' . date('Ymd_His') . '.csv';
+    $filePath = storage_path('app/public/' . $fileName);
+    $file = fopen($filePath, 'w');
+
+    foreach ($csvData as $line) {
+        fputcsv($file, $line);
+    }
+
+    fclose($file);
+
+    return response()->download($filePath)->deleteFileAfterSend(true);
+}
+
+
 }
