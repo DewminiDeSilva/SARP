@@ -13,12 +13,19 @@ class InfrastructureController extends Controller
      */
     public function index()
     {
-        $entries = request()->get('entries', 10);
-        $infrastructures = Infrastructure::latest()->paginate($entries)->appends(['entries' => $entries]);
-        $totalInfrastructures = Infrastructure::count();
+    $entries = request()->get('entries', 10);
+    $infrastructures = Infrastructure::latest()->paginate($entries)->appends(['entries' => $entries]);
 
-        return view('infrastructure.infrastructure_index', compact('infrastructures', 'totalInfrastructures', 'entries'));
+    // Get counts for ongoing and completed infrastructure records
+    $totalInfrastructures = Infrastructure::count();
+    $ongoingCount = Infrastructure::where('status', 'On Going')->count();
+    $completedCount = Infrastructure::where('status', 'Finished')->count();
+
+    // Pass these counts to the view
+    return view('infrastructure.infrastructure_index', compact('infrastructures', 'totalInfrastructures', 'ongoingCount', 'completedCount', 'entries'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
