@@ -242,7 +242,46 @@
         .td{
             vertical-align: middle;
         }
-
+        .upload-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="file"] {
+            display: block;
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            color: green;
+        }
     </style>
 
 <style>
@@ -314,11 +353,14 @@
     </div>
 
     <div class="right-column">
+    @if (request()->get('page', 1) > 1)
+    <a href="{{ route('agro.index', ['page' => 1]) }}" class="btn-back">
+        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back">
+        <span class="btn-text">Back</span>
+    </a>
+     @endif
 
-        <a href="{{ route('training.index') }}" class="btn-back">
-            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
-
+    </a>
         <div class="container-fluid">
             <div class="row mt-4">
                 <div class="col-md-12">
@@ -428,11 +470,12 @@
                                         <img src="{{ asset('assets/images/myPdf.png') }}" alt="Pdf Icon" style="width: 50px; height: 50px; ">
                                     </a>
                                 @else
-                                    <form action="{{ route('agro.upload_pdf', $agro->id) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="file" name="business_plan" class="form-control-file" accept="application/pdf">
-                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Upload PDF</button>
-                                    </form>
+                                <form action="{{ route('agro.upload_pdf', $agro->id) }}" method="POST" enctype="multipart/form-data">
+                                 @csrf
+                                 <label for="business_plan">Upload Business Plan (PDF):</label>
+                                  <input type="file" name="business_plan" id="business_plan" accept="application/pdf" required>
+                                <button type="submit">Upload PDF</button>
+                                         </form>
                                 @endif
                             </td>
                             <td>
