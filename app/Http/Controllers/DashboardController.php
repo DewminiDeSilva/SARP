@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Report;
-use App\Models\Training;
+use App\Models\TankRehabilitation;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    /**
+     * Display the dashboard with summary data.
+     */
     public function index()
     {
-        // Gather statistics data for the dashboard
-        $totalUsers = User::count();
-        $totalReports = Report::count();
-        $totalTrainings = Training::count();
+        // Tank Rehabilitation Module
+        $statuses = [
+            'Identified', 'Started', 'On Going', 'Finished', 'PIR Completed', 
+            'Survey Completed', 'Engineering Serveys', 'Drawings and Designs Completed', 
+            'BOQ Completed', 'Ratification meeting completed', 'Bidding documents completed', 
+            'IFAD no objection received', 'Paper advertised', 'Evalution of bids', 'Agreement Sign'
+        ];
 
-        // Prepare data for the monthly users chart
-        $monthlyUsers = User::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-                            ->groupBy('month')
-                            ->get()
-                            ->pluck('count', 'month')
-                            ->toArray();
+        $statusCounts = [];
+        foreach ($statuses as $status) {
+            $statusCounts[] = TankRehabilitation::where('status', $status)->count();
+        }
 
-        // Pass data to the view
-        return view('dashboard.dashboard', compact('totalUsers', 'totalReports', 'totalTrainings', 'monthlyUsers'));
+        // Pass the data to the view
+        return view('dashboard', compact('statuses', 'statusCounts'));
     }
 }

@@ -293,7 +293,7 @@
                                     <!-- <th>Contractor</th> -->
                                     <!-- <th>Open Ref No</th> New field -->
                                     <th>Awarded Date</th> <!-- New field -->
-                                    <th>Cumulative Amount</th> <!-- New field -->
+                                    <th>Cumulative Paid Amount</th> <!-- New field -->
                                     <th>Paid Advanced Amount</th> <!-- New field -->
                                     <th>Recommended IPC No</th> <!-- New field -->
                                     <th>Recommended IPC Amount</th> <!-- New field -->
