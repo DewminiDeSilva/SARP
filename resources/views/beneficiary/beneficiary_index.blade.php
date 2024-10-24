@@ -221,7 +221,7 @@
                             <th scope="col">Address</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
-                            <th scope="col">Education</th>
+                            <!-- <th scope="col">Education</th>
                             <th scope="col">Bank Name</th>
                             <th scope="col">Bank Branch</th>
                             <th scope="col">Account Number</th>
@@ -246,7 +246,7 @@
                             <th scope="col">Household Level Assets Description</th>
                             <th scope="col">Community-Based Organization</th>
                             <th scope="col">Type of Water Resource</th>
-                            <th scope="col">Training Details Description</th>
+                            <th scope="col">Training Details Description</th> -->
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -261,7 +261,7 @@
                             <td>{{ $beneficiary->address }}</td>
                             <td>{{ $beneficiary->email }}</td>
                             <td>{{ $beneficiary->phone }}</td>
-                            <td>{{ $beneficiary->education }}</td>
+                            <!-- <td>{{ $beneficiary->education }}</td>
                             <td>{{ $beneficiary->bank_name }}</td>
                             <td>{{ $beneficiary->bank_branch }}</td>
                             <td>{{ $beneficiary->account_number }}</td>
@@ -286,7 +286,7 @@
                             <td>{{ $beneficiary->household_level_assets_description }}</td>
                             <td>{{ $beneficiary->community_based_organization }}</td>
                             <td>{{ $beneficiary->type_of_water_resource }}</td>
-                            <td>{{ $beneficiary->training_details_description }}</td>
+                            <td>{{ $beneficiary->training_details_description }}</td> -->
                             <td class="buttonline">
                                 <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('family/create', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-primary btn-sm button-a">Add Members</a>
