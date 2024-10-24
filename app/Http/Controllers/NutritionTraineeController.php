@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Models\NutritionTrainee;
 use App\Models\Nutrition;
+use League\Csv\Writer;
+use League\Csv\Reader;
 
 class NutritionTraineeController extends Controller
 {
@@ -15,13 +20,16 @@ class NutritionTraineeController extends Controller
 {
     // If $nutrition_id is provided, filter by nutrition_id, otherwise show all trainees
     if ($nutrition_id) {
+        $nutrition = Nutrition::findOrFail($nutrition_id); // Retrieve the Nutrition model
         $trainees = NutritionTrainee::where('nutrition_id', $nutrition_id)->paginate(10);
     } else {
         $trainees = NutritionTrainee::paginate(10);
     }
 
-    return view('nutrition_trainee.trainee_index', compact('trainees', 'nutrition_id'));
+    // Pass $nutrition to the view
+    return view('nutrition_trainee.trainee_index', compact('trainees', 'nutrition'));
 }
+
 
 
     /**
@@ -78,6 +86,17 @@ class NutritionTraineeController extends Controller
     ->with('success', 'Trainee registered successfully.');
 
     }
+
+
+    public function show($id)
+{
+    // Fetch the nutrition program by ID
+    $nutrition = Nutrition::findOrFail($id);
+
+    // Return the 'nutrition_show' view with the nutrition program details
+    return view('nutrition_show', compact('nutrition'));
+}
+
 
     /**
      * Show the form for editing the specified resource.
@@ -146,4 +165,115 @@ class NutritionTraineeController extends Controller
     ->with('success', 'Trainee updated successfully.');
 
     }
+
+
+    //Serach
+
+    public function search(Request $request, $nutrition_id)
+{
+    $searchTerm = $request->input('search');
+
+    // Search across all relevant columns in the NutritionTrainee table
+    $trainees = NutritionTrainee::where('nutrition_id', $nutrition_id)
+        ->where(function ($query) use ($searchTerm) {
+            $query->where('full_name', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('nic', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('address', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('dob', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('age', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('gender', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('mobile_number', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('education_level', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('income_level', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('special_remark', 'LIKE', '%' . $searchTerm . '%');
+        })
+        ->paginate(10);
+
+    // Redirect to the nutrition.show view and pass the nutrition program, trainees, and search term
+    $nutrition = Nutrition::findOrFail($nutrition_id);
+
+    return view('nutrition.nutrition_show', compact('nutrition', 'trainees', 'searchTerm'));
+}
+
+
+    //Generate csv
+
+
+    public function download_csv($nutrition_id)
+{
+    // Fetch the nutrition program by ID
+    $nutrition = Nutrition::findOrFail($nutrition_id);
+
+    // Fetch the trainees (participants) related to the nutrition program
+    $trainees = NutritionTrainee::where('nutrition_id', $nutrition_id)->get();
+
+    // Create a CSV writer instance
+    $csv = Writer::createFromString('');
+
+    // Add header row to the CSV
+    $csv->insertOne(['Full Name', 'NIC', 'Address', 'Date of Birth', 'Age' , 'Gender' , 'Mobile' , 'Education Level' , 'Income Level' , 'Special Remark']);
+
+    // Add rows for each trainee
+    foreach ($trainees as $trainee) {
+        $csv->insertOne([
+            $trainee->full_name,
+            $trainee->nic,
+            $trainee->address,
+            $trainee->dob,
+            $trainee->age,
+            ucfirst($trainee->gender),
+            $trainee->mobile_number,
+            $trainee->education_level,
+            $trainee->income_level,
+            $trainee->special_remark,
+        ]);
+    }
+
+    // Store the CSV file in the local storage
+    $filename = 'nutrition_trainees_' . $nutrition_id . '.csv';
+    Storage::disk('local')->put($filename, $csv->toString());
+
+    // Return the CSV file as a downloadable response
+    return response()->download(storage_path('app/' . $filename))->deleteFileAfterSend(true);
+}
+
+//upload csv
+
+public function uploadCsv(Request $request, $nutrition_id)
+{
+    $request->validate([
+        'csv_file' => 'required|mimes:csv,txt',
+    ]);
+
+    $file = $request->file('csv_file');
+    $path = $file->getRealPath();
+
+    // Create the CSV reader
+    $csv = Reader::createFromPath($path, 'r');
+    $csv->setHeaderOffset(0); // Assuming the first row contains headers
+
+    foreach ($csv as $row) {
+        // Use the nutrition ID from the route parameter to associate the records
+        $nutritionTrainee = new NutritionTrainee();
+        $nutritionTrainee->nutrition_id = $nutrition_id;
+        $nutritionTrainee->full_name = $row['Full Name'];
+        $nutritionTrainee->nic = $row['NIC'];
+        $nutritionTrainee->address = $row['Address'];
+        // Convert the date from MM/DD/YYYY to YYYY-MM-DD
+        $dob = \Carbon\Carbon::createFromFormat('m/d/Y', $row['Date of Birth'])->format('Y-m-d');
+        $nutritionTrainee->dob = $dob;
+        $nutritionTrainee->age = $row['Age'];
+        $nutritionTrainee->gender = $row['Gender'];
+        $nutritionTrainee->mobile_number = $row['Mobile'];
+        $nutritionTrainee->education_level = $row['Education Level'];
+        $nutritionTrainee->income_level = $row['Income Level'];
+        $nutritionTrainee->special_remark = $row['Special Remark'];
+        $nutritionTrainee->save();
+    }
+
+    return redirect()->route('nutrition.show', $nutrition_id)
+        ->with('success', 'CSV data uploaded successfully.');
+}
+
+
 }

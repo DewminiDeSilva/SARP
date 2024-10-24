@@ -153,16 +153,6 @@ li:hover {
                         </ul>
                     </li>
 
-                    <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Livestock</a>
-                        <ul class="nested">
-                            <li href="/livestock"><a href="/livestock" style="color: #FFFFFF">Livestock Registration</a></li>
-
-                        </ul>
-                    </li>
-
-
-
                         <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li>
 
                         <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
