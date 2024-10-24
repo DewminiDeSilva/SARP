@@ -341,7 +341,7 @@
                                 <!-- New fields -->
                         <div class="info"><label>Open Reference Number:</label><p>{{ $tankRehabilitation->open_ref_no }}</p></div>
                         <div class="info"><label>Awarded Date:</label><p>{{ $tankRehabilitation->awarded_date }}</p></div>
-                        <div class="info"><label>Cumulative Amount:</label><p>{{ $tankRehabilitation->cumulative_amount }}</p></div>
+                        <div class="info"><label>Cumulative Paid Amount:</label><p>{{ $tankRehabilitation->cumulative_amount }}</p></div>
                         <div class="info"><label>Paid Advanced Amount:</label><p>{{ $tankRehabilitation->paid_advanced_amount }}</p></div>
                         <div class="info"><label>Recommended IPC Number:</label><p>{{ $tankRehabilitation->recommended_ipc_no }}</p></div>
                         <div class="info"><label>Recommended IPC Amount:</label><p>{{ $tankRehabilitation->recommended_ipc_amount }}</p></div>
