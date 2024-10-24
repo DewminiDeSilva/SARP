@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vegitable extends Model
+class OtherCrop extends Model
 {
     use HasFactory;
-    protected $table = 'vegitables';
+
     protected $fillable = [
         'crop_name'
     ];

@@ -114,7 +114,7 @@
             <button onclick="window.location.href='{{ route('homegarden.create') }}';" class="custom-button" style="background-image: url('assets/images/homegarden.jpeg'); font-size: 2rem; font-weight: bold;">
                 Home Garden
             </button>
-            <button class="custom-button" style="background-image: url('assets/images/others.jpg'); font-size: 2rem; font-weight: bold;">
+            <button class="custom-button" onclick="window.location.href='{{ route('other_crops.create') }}';" style="background-image: url('assets/images/others.jpg'); font-size: 2rem; font-weight: bold;">
                 Others
             </button>
         </div>

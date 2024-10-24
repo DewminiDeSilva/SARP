@@ -41,7 +41,16 @@ class NutritionTraineeController extends Controller
         $request->validate([
             'nutrition_id' => 'required|exists:nutrient_details,id', // Ensure the correct table reference
             'full_name' => 'required|string|max:255',
-            'nic' => 'required|string|max:12|unique:nutrition_trainees',
+            'nic' => ['required', 'string', 'max:12',
+                function ($attribute, $value, $fail) use ($request) {
+                    // Check if the same NIC exists for the same nutrition program
+                    if (NutritionTrainee::where('nic', $value)
+                        ->where('nutrition_id', $request->nutrition_id)
+                        ->exists()) {
+                        $fail('The NIC is already registered for this nutrition program.');
+                    }
+                }
+            ],
             'address' => 'required|string',
             'dob' => 'required|date',
             'age' => 'required|string',
@@ -84,10 +93,28 @@ class NutritionTraineeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Retrieve the trainee record to update
+        $trainee = NutritionTrainee::findOrFail($id); // Move this before the validation
 
+        // Validate input data, ensuring that NIC is unique within the same nutrition program (except for the current trainee)
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'nic' => 'required|string|max:12|unique:nutrition_trainees,nic,' . $id,
+            'nic' => [
+                'required',
+                'string',
+                'max:12',
+                // Custom validation for unique NIC within the same nutrition program, excluding the current trainee
+                function ($attribute, $value, $fail) use ($request, $trainee) {
+                    $exists = NutritionTrainee::where('nic', $value)
+                        ->where('nutrition_id', $request->nutrition_id)
+                        ->where('id', '!=', $trainee->id) // Exclude the current trainee from the check
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('The NIC is already registered for this nutrition program.');
+                    }
+                }
+            ],
             'address' => 'required|string',
             'dob' => 'required|date',
             'age' => 'required|string',
@@ -98,19 +125,14 @@ class NutritionTraineeController extends Controller
             'special_remark' => 'nullable|string',
         ]);
 
-        // Find and update the trainee
-        $trainee = NutritionTrainee::findOrFail($id);
+        // Update the trainee record with validated data
         $trainee->update($request->all());
 
-
-
-        // Redirect to the related nutrition show page
-    
-
-    return redirect()->route('nutrition.show', ['nutrition' => $trainee->nutrition_id])
-    ->with('success', 'Trainee updated successfully.');
-
+        // Redirect back to the nutrition program's page with success message
+        return redirect()->route('nutrition.show', ['nutrition' => $trainee->nutrition_id])
+                        ->with('success', 'Trainee updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -73,10 +73,11 @@
                 </div>
             </div>
 
-                <!-- Crop Variety -->
+            <!-- Crop Variety -->
+            <div class="row mt-3">
                 <div class="col">
                     <label for="cropVariety" class="form-label bold-label">Crop Variety</label>
-                    <input type="text" class="form-control" id="cropVariety" name="crop_variety" required>
+                    <input type="text" class="form-control" id="cropVariety" name="crop_variety" >
                 </div>
             </div>
 
@@ -84,77 +85,77 @@
             <div class="row mt-3">
                 <div class="col">
                     <label for="plantingDate" class="form-label bold-label">Planting Date</label>
-                    <input type="date" class="form-control" id="plantingDate" name="planting_date" required>
+                    <input type="date" class="form-control" id="plantingDate" name="planting_date">
                 </div>
             </div>
-            <!-- Input -->
+
+            <!-- Inputs -->
             <div class="row mt-3">
                 <div class="col">
                     <label for="inputs" class="form-label bold-label">Inputs</label>
                     <input type="text" class="form-control" id="inputs" name="inputs" required>
                 </div>
+            </div>
                 
-                  <!-- Farmer Contribution and Cost -->
-                  <div class="row mt-3">
-                    <div class="col">
-                        Farmer or Other Contribution
-                    </div>
-                    <div class="card-body">
-                        <div id="contribution-fields">
-                            <div class="row contribution-group">
-                                <div class="col-5 form-group">
-                                    <label for="farmer_contribution[]">Farmer Contribution</label>
-                                    <input type="text" name="farmer_contribution[]" class="form-control" required>
-                                </div>
-                                <div class="col-5 form-group">
-                                    <label for="cost[]">Cost</label>
-                                    <input type="number" step="0.01" name="cost[]" class="form-control" required>
-                                </div>
-                                <!-- No remove button for the first group -->
+            <!-- Farmer Contribution and Cost -->
+            <div class="row mt-3">
+                <div class="col">
+                    Farmer or Other Contribution
+                </div>
+                <div class="card-body">
+                    <div id="contribution-fields">
+                        <div class="row contribution-group">
+                            <div class="col-5 form-group">
+                                <label for="farmer_contribution[]">Farmer Contribution</label>
+                                <input type="text" name="farmer_contribution[]" class="form-control" required>
+                            </div>
+                            <div class="col-5 form-group">
+                                <label for="cost[]">Cost</label>
+                                <input type="number" step="0.01" name="cost[]" class="form-control" required>
                             </div>
                         </div>
-                        <button type="button" id="add-contribution" class="btn btn-primary mt-3">Add More </button>
                     </div>
+                    <button type="button" id="add-contribution" class="btn btn-primary mt-3">Add More</button>
                 </div>
-            <!-- Total Acres and Total Production -->
+            </div>
+
+            <!-- Total Acres -->
             <div class="row mt-3">
                 <div class="col">
                     <label for="totalAcres" class="form-label bold-label">Total Number of Acres Cultivated</label>
                     <input type="number" class="form-control" id="totalAcres" name="total_acres" required>
                 </div>
-        
             </div>
 
             <!-- Total Production, Total Income, Profit for Products -->
-<div class="row mt-3">
-    <div class="col">
-        Product Details
-    </div>
-    <div class="card-body">
-        <div id="product-fields">
-            <div class="row product-group">
-                <div class="col-4 form-group">
-                    <label for="product_name[]">Product Name</label>
-                    <input type="text" name="product_name[]" class="form-control" required>
+            <div class="row mt-3">
+                <div class="col">
+                    Product Details
                 </div>
-                <div class="col-3 form-group">
-                    <label for="total_production[]">Total Production (kg)</label>
-                    <input type="number" step="0.01" name="total_production[]" class="form-control" required>
+                <div class="card-body">
+                    <div id="product-fields">
+                        <div class="row product-group">
+                            <div class="col-4 form-group">
+                                <label for="product_name[]">Product Name</label>
+                                <input type="text" name="product_name[]" class="form-control" required>
+                            </div>
+                            <div class="col-3 form-group">
+                                <label for="total_production[]">Total Production (kg)</label>
+                                <input type="number" step="0.01" name="total_production[]" class="form-control" required>
+                            </div>
+                            <div class="col-3 form-group">
+                                <label for="total_income[]">Total Income</label>
+                                <input type="number" step="0.01" name="total_income[]" class="form-control" required>
+                            </div>
+                            <div class="col-2 form-group">
+                                <label for="profit[]">Profit</label>
+                                <input type="number" step="0.01" name="profit[]" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="add-product" class="btn btn-primary mt-3">Add More Product</button>
                 </div>
-                <div class="col-3 form-group">
-                    <label for="total_income[]">Total Income</label>
-                    <input type="number" step="0.01" name="total_income[]" class="form-control" required>
-                </div>
-                <div class="col-2 form-group">
-                    <label for="profit[]">Profit</label>
-                    <input type="number" step="0.01" name="profit[]" class="form-control" required>
-                </div>
-                <!-- No remove button for the first group -->
             </div>
-        </div>
-        <button type="button" id="add-product" class="btn btn-primary mt-3">Add More Product </button>
-    </div>
-</div>
 
             <!-- GN Division Name -->
             <input type="hidden" id="gnDivisionName" name="gn_division_name">
@@ -168,69 +169,79 @@
             </div>
         </form>
     </div>
+    @if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 
     <!-- jQuery Script for CSRF Token in AJAX -->
     <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        $('#categoryDropdown').change(function () {
+    var selectedCategory = $(this).val();
+    var cropNameDropdown = $('#cropName');
+
+    // Clear previous options
+    cropNameDropdown.empty().append($('<option>', {
+        value: '',
+        text: 'Select Crop Name'
+    }));
+
+    // Make AJAX call to fetch crops based on selected category
+    if (selectedCategory) {
+        $.ajax({
+            url: '/get-crops/' + selectedCategory,
+            method: 'GET',
+            success: function (data) {
+                console.log(data);  // Check the response in the browser console
+
+                data.forEach(function (crop) {
+                    var cropName = '';
+
+                    // Dynamically set the crop name based on category
+                    switch (selectedCategory) {
+                        case 'vegetables':
+                            cropName = crop.crop_name;
+                            break;
+                        case 'fruits':
+                            cropName = crop.fruit_name;
+                            break;
+                        case 'home_garden':
+                            cropName = crop.homegarden_name;
+                            break;
+                            case 'others':
+                            cropName = crop.crop_name;
+                            break;
+
+                        default:
+                            cropName = crop.name;
+                    }
+
+                    // Append the crop name to the dropdown
+                    cropNameDropdown.append($('<option>', {
+                        value: cropName,
+                        text: cropName
+                    }));
+                });
+            },
+            error: function () {
+                alert('Error fetching crops');
             }
         });
+    }
+});
 
-        $(document).ready(function () {
-            // Fetch GN Division Name on page load if beneficiaryId is present
-            var beneficiaryId = $('input[name="beneficiary_id"]').val();
-            fetchGnDivisionName(beneficiaryId);
-
-            // Define crop options for each category
-            const cropOptions = {
-                vegetables: [
-                    { value: 'pomegranate', text: 'Pomegranate' },
-                    { value: 'carrot', text: 'Carrot' },
-                    { value: 'beans', text: 'Beans' }
-                ],
-                fruits: [
-                    { value: 'apple', text: 'Apple' },
-                    { value: 'orange', text: 'Orange' }
-                ],
-                home_garden: [
-                    { value: 'anthurium', text: 'Anthurium' },
-                    { value: 'orchid', text: 'Orchid' }
-                ],
-                others: [
-                    { value: 'xxxx', text: 'XXXX' },
-                    { value: 'aaaa', text: 'AAAA' }
-                ]
-            };
-
-            // Handle category selection
-            $('#categoryDropdown').change(function () {
-                var selectedCategory = $(this).val();
-                var cropNameDropdown = $('#cropName');
-
-                // Clear previous options
-                cropNameDropdown.empty().append($('<option>', {
-                    value: '',
-                    text: 'Select Crop Name'
-                }));
-
-                // Populate new options based on selected category
-                if (selectedCategory in cropOptions) {
-                    $.each(cropOptions[selectedCategory], function (index, crop) {
-                        cropNameDropdown.append($('<option>', {
-                            value: crop.value,
-                            text: crop.text
-                        }));
-                    });
-                }
-            });
-        });
 
         // Function to fetch the GN Division Name
         function fetchGnDivisionName(beneficiaryId) {
             if (beneficiaryId) {
                 $.ajax({
-                    url: '/get-gn-division-name/' + beneficiaryId, // URL to fetch GN Division Name
+                    url: '/get-gn-division-name/' + beneficiaryId,
                     method: 'GET',
                     success: function (data) {
                         $('#gnDivisionName').val(data.gn_division_name);
@@ -241,68 +252,80 @@
                 });
             }
         }
+        $(document).ready(function () {
+    var beneficiaryId = $('input[name="beneficiary_id"]').val();
+    fetchGnDivisionName(beneficiaryId);  // This should run on page load
+    console.log("Fetching GN division for Beneficiary ID:", beneficiaryId);
+});
     </script>
 
-<script>
-document.getElementById('add-contribution').addEventListener('click', function () {
-     var contributionFields = document.getElementById('contribution-fields');
-     var newContributionGroup = document.createElement('div');
-     newContributionGroup.className = 'row contribution-group mt-3';
-     newContributionGroup.innerHTML = `
-         <div class="col-5 form-group">
-             <label for="farmer_contribution[]">Farmer Contribution</label>
-             <input type="text" name="farmer_contribution[]" class="form-control" required>
-         </div>
-         <div class="col-5 form-group">
-             <label for="cost[]">Cost</label>
-             <input type="number" step="0.01" name="cost[]" class="form-control" required>
-         </div>
-         <div class="col-2">
-             <button type="button" class="btn btn-danger remove-contribution-btn">Remove</button>
-         </div>
-     `;
-     contributionFields.appendChild(newContributionGroup);
- });
+    <script>
+    // Add farmer contribution fields dynamically
+    document.getElementById('add-contribution').addEventListener('click', function () {
+         var contributionFields = document.getElementById('contribution-fields');
+         var newContributionGroup = document.createElement('div');
+         newContributionGroup.className = 'row contribution-group mt-3';
+         newContributionGroup.innerHTML = `
+             <div class="col-5 form-group">
+                 <label for="farmer_contribution[]">Farmer Contribution</label>
+                 <input type="text" name="farmer_contribution[]" class="form-control" required>
+             </div>
+             <div class="col-5 form-group">
+                 <label for="cost[]">Cost</label>
+                 <input type="number" step="0.01" name="cost[]" class="form-control" required>
+             </div>
+             <div class="col-2">
+                 <button type="button" class="btn btn-danger remove-contribution-btn">Remove</button>
+             </div>
+         `;
+         contributionFields.appendChild(newContributionGroup);
+     });
 
+    // Remove contribution fields dynamically
+    $(document).on('click', '.remove-contribution-btn', function() {
+        $(this).closest('.contribution-group').remove();
+    });
 
-// Remove farmer contribution and cost from the DOM
-$(document).on('click', '.remove-contribution-btn', function() {
-    $(this).closest('.contribution-group').remove();
+    // Add product details dynamically
+    document.getElementById('add-product').addEventListener('click', function () {
+         var productFields = document.getElementById('product-fields');
+         var newProductGroup = document.createElement('div');
+         newProductGroup.className = 'row product-group mt-3';
+         newProductGroup.innerHTML = `
+             <div class="col-4 form-group">
+                 <label for="product_name[]">Product Name</label>
+                 <input type="text" name="product_name[]" class="form-control" required>
+             </div>
+             <div class="col-3 form-group">
+                 <label for="total_production[]">Total Production (kg)</label>
+                 <input type="number" step="0.01" name="total_production[]" class="form-control" required>
+             </div>
+             <div class="col-3 form-group">
+                 <label for="total_income[]">Total Income</label>
+                 <input type="number" step="0.01" name="total_income[]" class="form-control" required>
+             </div>
+             <div class="col-2 form-group">
+                 <label for="profit[]">Profit</label>
+                 <input type="number" step="0.01" name="profit[]" class="form-control" required>
+             </div>
+             <div class="col-2">
+                 <button type="button" class="btn btn-danger remove-product-btn">Remove</button>
+             </div>
+         `;
+         productFields.appendChild(newProductGroup);
+     });
+
+    // Remove product fields dynamically
+    $(document).on('click', '.remove-product-btn', function() {
+        $(this).closest('.product-group').remove();
+    });
+
+    $('form').on('submit', function(e) {
+    e.preventDefault(); // Prevent form submission temporarily
+    console.log($(this).serialize()); // Log the serialized form data
+    $(this).unbind('submit').submit(); // Re-enable form submission
 });
 
-// Add Product Details (Total Production, Total Income, Profit)
-document.getElementById('add-product').addEventListener('click', function () {
-     var productFields = document.getElementById('product-fields');
-     var newProductGroup = document.createElement('div');
-     newProductGroup.className = 'row product-group mt-3';
-     newProductGroup.innerHTML = `
-         <div class="col-4 form-group">
-             <label for="product_name[]">Product Name</label>
-             <input type="text" name="product_name[]" class="form-control" required>
-         </div>
-         <div class="col-3 form-group">
-             <label for="total_production[]">Total Production (kg)</label>
-             <input type="number" step="0.01" name="total_production[]" class="form-control" required>
-         </div>
-         <div class="col-3 form-group">
-             <label for="total_income[]">Total Income</label>
-             <input type="number" step="0.01" name="total_income[]" class="form-control" required>
-         </div>
-         <div class="col-2 form-group">
-             <label for="profit[]">Profit</label>
-             <input type="number" step="0.01" name="profit[]" class="form-control" required>
-         </div>
-         <div class="col-2">
-             <button type="button" class="btn btn-danger remove-product-btn">Remove</button>
-         </div>
-     `;
-     productFields.appendChild(newProductGroup);
- });
-
-       
-    
-
-</script>
-
+    </script>
 </body>
 </html>

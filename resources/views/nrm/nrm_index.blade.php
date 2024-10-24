@@ -256,14 +256,14 @@
                         <button type="submit" class="btn btn-success">Upload CSV</button>
                     </form>
                     <!-- Search form -->
-                    <form method="GET" action="{{ route('nrm.search') }}" class="form-inline">
-                   <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search" name="search" required>
+                    <form method="GET" action="{{ route('nrm.index') }}" class="form-inline">
+                    <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request()->get('search') }}" required>
                     <div class="input-group-append">
-                   <button class="btn btn-outline-secondary" type="submit">Search</button>
-                  </div>
-                 </div>
-                   </form>
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                    </div>
+                    </form>
 
                 </div>
 

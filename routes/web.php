@@ -25,6 +25,7 @@ use App\Http\Controllers\GrievanceController;
 use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\VegitableController;
 use App\Http\Controllers\FruitController;
+use App\Http\Controllers\OtherCropController;
 use App\Http\Controllers\HomeGardenController;
 use App\Http\Controllers\DairyController;
 use App\Http\Controllers\PoultaryController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\FFSParticipantController;
 use App\Http\Controllers\BeneFormController;
 use App\Http\Controllers\NrmController;
 use App\Http\Controllers\NrmParticipantController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -136,6 +138,12 @@ Route::post('/uploadAscCsv', [AscRegistrationController::class, 'uploadCsv'])->n
 
 Route::resource('grievances', GrievanceController::class);
 
+Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])->name('grievances.report.csv');
+Route::post('grievances/upload_csv', [GrievanceController::class, 'uploadCsv'])->name('grievances.upload_csv');
+//Route::get('/grievances/search', [GrievanceController::class, 'search'])->name('grievances.search');
+// Route for grievances search
+Route::get('/searchGrievances', [GrievanceController::class, 'search'])->name('searchGrievances');
+
 // Officer routes
 Route::get('/grievances/{grievance}/officer/create', [OfficerController::class, 'create'])->name('officer.create');
 Route::post('/grievances/{grievance}/officer', [OfficerController::class, 'store'])->name('officer.store');
@@ -159,6 +167,9 @@ Route::resource('fruit', FruitController::class);
 
 // Homegarden Routes
 Route::resource('homegarden', HomeGardenController::class);
+
+//other crop routes
+Route::resource('other_crops', OtherCropController::class);
 
 // Dairy Routes
 Route::resource('dairy', DairyController::class);
@@ -202,7 +213,7 @@ Route::get('/agriculture/{id}/edit', [AgriController::class, 'edit'])->name('agr
 Route::delete('/agriculture/{id}', [AgriController::class, 'destroy'])->name('agriculture.destroy');
 Route::put('/agriculture/{id}', [AgriController::class, 'update'])->name('agriculture.update');
 Route::get('/agriculture/search', [AgriController::class, 'search'])->name('agriculture.search');
-
+Route::get('/get-crops/{category}', [AgriController::class, 'getCropsByCategory']);
 //livestock
 
 
@@ -233,6 +244,9 @@ Route::resource('agro', AgroController::class);
 Route::resource('agro', AgroController::class);
 Route::post('agro/{agro}/upload-pdf', [AgroController::class, 'uploadPdf'])->name('agro.upload_pdf');
 Route::get('agro/{agro}/view-pdf', [AgroController::class, 'viewPdf'])->name('agro.view_pdf');
+
+Route::get('/agro/csv/generate', [AgroController::class, 'generateCsv'])->name('agro.csv.generate');
+Route::post('/agro/csv/upload', [AgroController::class, 'uploadCsv'])->name('agro.csv.upload');
 
 //Shareholder
 // Shareholder Routes
@@ -444,5 +458,10 @@ Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
 });
 
 Route::get('/dashboard', [BeneficiaryController::class, 'dashboard'])->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+
 
 

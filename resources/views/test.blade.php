@@ -33,6 +33,7 @@
             flex: 0 0 80%;
             padding: 20px;
         }
+        
     </style>
 </head>
 <body>
@@ -45,7 +46,7 @@
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
             <form class="form-horizontal" action="{{ route('officer.store', $grievance->id) }}" method="POST">
                 <div class="col-md-12">
-                    <h2 class="mb-4">Officer Action Registration</h2>
+                    <h2 class="mb-4">Officer Actions Registration</h2>
                 </div>
                 @csrf
                 <div class="row">

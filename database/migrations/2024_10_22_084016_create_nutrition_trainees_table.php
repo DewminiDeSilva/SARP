@@ -14,7 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('nutrition_trainees')) {
             Schema::create('nutrition_trainees', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('nutrition_id'); // Ensure this matches the primary key type of nutrient_details
+                $table->unsignedBigInteger('nutrition_id'); // This matches the type of id in nutrient_details (bigIncrements)
                 $table->string('nic');
                 $table->string('full_name');
                 $table->string('address');
@@ -27,10 +27,13 @@ return new class extends Migration
                 $table->text('special_remark')->nullable();
                 $table->timestamps();
 
+                // Composite unique constraint on nic and nutrition_id
+                $table->unique(['nic', 'nutrition_id']);
+
                 // Foreign key constraint
                 $table->foreign('nutrition_id')
                       ->references('id')
-                      ->on('nutrition_details')
+                      ->on('nutrient_details')  // Make sure the table name is correct
                       ->onDelete('cascade');
             });
         }
