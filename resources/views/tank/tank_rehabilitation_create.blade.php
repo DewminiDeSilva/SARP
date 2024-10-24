@@ -337,7 +337,7 @@
                 </div>
 
                 <div class="col-6 form-group">
-                    <label for="cumulative_amount" class="form-label">Cumulative Amount</label>
+                    <label for="cumulative_amount" class="form-label">Cumulative Paid Amount</label>
                     <input type="text" class="form-control" id="cumulative_amount" name="cumulative_amount" required>
                 </div>
                 </div>
