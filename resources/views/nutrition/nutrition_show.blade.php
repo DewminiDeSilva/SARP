@@ -316,6 +316,50 @@
                             </br>
 
     <h2 style="color: green;">Farmer Organization Members</h2>
+
+            <!-- Actions and Search Section -->
+            <div class="d-flex justify-content-between mb-3">
+                <a href="{{ route('nutrition_trainee.create', $nutrition->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Participant</a>
+                <a href="{{ route('nutrition_trainee.download_csv', $nutrition->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Download CSV Report</a>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <!-- CSV Upload Form -->
+                <form action="{{ route('nutrition_trainee.upload_csv', $nutrition->id) }}" method="POST" enctype="multipart/form-data" class="form-inline">
+                    @csrf
+                    <div class="form-group mr-2">
+                        <input type="file" name="csv_file" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Upload CSV</button>
+                </form>
+
+
+
+                @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
+
+                <!-- Search form -->
+                <form method="GET" action="{{ route('nutrition_trainee.search', $nutrition->id) }}" class="form-inline">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search Participants" name="search" value="{{ old('search', $searchTerm ?? '') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+
+
+            </div>
+
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead>

@@ -308,6 +308,22 @@ Route::get('/nutrition/{nutrition_id}/trainees', [NutritionTraineeController::cl
 
 Route::put('/nutrition_trainee/{id}', [NutritionTraineeController::class, 'update'])->name('nutrition_trainee.update');
 
+// Search Trainees within a specific nutrition program
+//Route::get('/nutrition/{nutrition_id}/trainees/search', [NutritionTraineeController::class, 'search'])->name('nutrition_trainee.search');
+Route::get('/nutrition/{nutrition_id}/trainees/search', [NutritionTraineeController::class, 'search'])->name('nutrition_trainee.search');
+
+
+// Download CSV of trainees for a specific nutrition program
+Route::get('/nutrition/{nutrition_id}/trainees/download-csv', [NutritionTraineeController::class, 'download_csv'])->name('nutrition_trainee.download_csv');
+
+// Upload CSV to add trainees for a specific nutrition program
+//Route::post('/nutrition/{nutrition_id}/trainees/upload-csv', [NutritionTraineeController::class, 'upload_csv'])->name('nutrition_trainee.upload_csv');
+Route::post('/nutrition/{nutrition_id}/trainees/upload-csv', [NutritionTraineeController::class, 'uploadCsv'])->name('nutrition_trainee.upload_csv');
+
+
+
+
+
 Route::resource('ffs-training', FFSTrainingController::class);
 // CSV Download for FFS Training Program
 Route::get('/bene-form/search', [BeneFormController::class, 'search'])->name('bene-form.search');
