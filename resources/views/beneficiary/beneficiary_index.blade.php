@@ -372,7 +372,7 @@
 
 
 
-<h1>BAR CHART </h1>
+<!-- <h1>BAR CHART </h1> -->
 <div id="donut-chart"></div>
 <div id="myChart" style="width:100%;max-width:600px"></div>
 
