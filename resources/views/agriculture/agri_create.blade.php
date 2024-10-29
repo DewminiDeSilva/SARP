@@ -93,7 +93,7 @@
                     <label for="inputs" class="form-label bold-label">Inputs</label>
                     <input type="text" class="form-control" id="inputs" name="inputs" required>
                 </div>
-                
+
                   <!-- Farmer Contribution and Cost -->
                   <div class="row mt-3">
                     <div class="col">
@@ -122,7 +122,7 @@
                     <label for="totalAcres" class="form-label bold-label">Total Number of Acres Cultivated</label>
                     <input type="number" class="form-control" id="totalAcres" name="total_acres" required>
                 </div>
-        
+
             </div>
 
             <!-- Total Production, Total Income, Profit for Products -->
@@ -299,8 +299,8 @@ document.getElementById('add-product').addEventListener('click', function () {
      productFields.appendChild(newProductGroup);
  });
 
-       
-    
+
+    /////
 
 </script>
 
