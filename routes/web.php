@@ -231,6 +231,9 @@ Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLiv
 Route::put('/livestocks/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
 Route::delete('/livestocks/{livestock_id}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
 
+Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
+
+//Route::post('/get-production-focus-options', [LivestockController::class, 'getProductionFocusOptions']);
 
 
 //Agro

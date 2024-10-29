@@ -7,15 +7,30 @@
     <title>Beneficiary List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        /* Root Variables for consistent colors and values */
+        :root {
+            --primary-green: #28a745;
+            --primary-blue: #007bff;
+            --border-color: #dee2e6;
+            --card-border: #e0e0e0;
+            --text-dark: #333;
+            --text-muted: #666;
+            --card-bg: #ffffff;
+            --card-header-bg: rgb(204, 241, 241);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Layout Styles */
         .frame {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
         }
+
         .left-column {
             flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
+            border-right: 1px solid var(--border-color);
         }
 
         .right-column {
@@ -27,57 +42,151 @@
             flex: 0 0 80%;
             padding: 20px;
         }
+
+        /* Heading Styles */
+        h2 {
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Table Styles */
         .table-responsive {
             margin-top: 20px;
         }
-        .table th, .table td {
-            vertical-align: middle;
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            background-color: transparent;
         }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            padding: 0.75rem;
+        }
+
+        .table-bordered {
+            border: 1px solid var(--border-color);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.075);
+        }
+
+        /* Button Styles */
         .btn-sm {
             margin: 2px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
         }
-        h2 {
-            color: #28a745;
-            margin-bottom: 20px;
-        }
+
         .btn-green {
-            background-color: #28a745;
-            border-color: #28a745;
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-green:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
             color: white;
         }
+
         .btn-blue {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-blue:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
             color: white;
         }
-        .card {
-    border-left: 5px solid #28a745;
-}
-.card-title {
-    color: #28a745;
-}
-.card-summary {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    .card-summary .card {
-        flex: 1;
-        margin: 0 10px;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #f8f9fa;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .card-summary .card h3 {
-        margin: 0;
-        font-size: 24px;
-    }
-    .card-summary .card p {
-        margin: 0;
-        font-size: 16px;
-        color: #6c757d;
-    }
+
+        /* Summary Cards Section */
+        .card-summary {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 10px;
+        }
+
+        .card-summary .card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .card-summary .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-summary .card .card-header {
+            background-color: var(--card-header-bg);
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .card-summary .card .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-summary .card h3 {
+            font-size: 32px;
+            margin: 10px 0;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .card-summary .card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .frame {
+                flex-direction: column;
+            }
+
+            .left-column,
+            .right-column {
+                flex: 0 0 100%;
+            }
+
+            .card-summary {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .card-summary .card {
+                width: 100%;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -87,74 +196,75 @@
         </div>
 
         <div class="right-column">
+            <div class="card-summary">
+                <div class="card">
+                    <div class="card-header">Livestock Statistics</div>
+                    <div class="card-body">
+                        <h3>{{ $totalLivestocks }}</h3>
+                        <p>Total Livestocks Registered</p>
+                    </div>
+                </div>
 
-            <div class="card">
-                <h3>{{ $totalLivestocks }}</h3>
-                <p>Total Livestocks Registered</p>
+                <div class="card">
+                    <div class="card-header">Beneficiary Statistics</div>
+                    <div class="card-body">
+                        <h3>{{ $totalBeneficiaries }}</h3>
+                        <p>Total Beneficiaries Doing Livestocks</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Division Statistics</div>
+                    <div class="card-body">
+                        <h3>{{ $totalGnDivisions }}</h3>
+                        <p>Total GN Divisions Involved</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="card">
-                <h3>{{ $totalBeneficiaries }}</h3>
-                <p>Total Beneficiaries Doing livestocks</p>
+            <div class="container">
+                <h2>Beneficiary List</h2>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">NIC</th>
+                                <th scope="col">Name with Initials</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Date Of Birth</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">GN Division</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($beneficiaries as $beneficiary)
+                            <tr>
+                                <td>{{ $beneficiary->nic }}</td>
+                                <td>{{ $beneficiary->name_with_initials }}</td>
+                                <td>{{ $beneficiary->address }}</td>
+                                <td>{{ $beneficiary->dob }}</td>
+                                <td>{{ $beneficiary->gender }}</td>
+                                <td>{{ $beneficiary->age }}</td>
+                                <td>{{ $beneficiary->phone }}</td>
+                                <td>{{ $beneficiary->gn_division_name }}</td>
+                                <td>
+                                    @if($beneficiary->id)
+                                        <a href="{{ route('livestocks.create', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-green btn-sm">Add Livestock</a>
+                                        <a href="{{ route('livestocks.list', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-blue btn-sm">View Livestock</a>
+                                    @else
+                                        <span class="text-muted">No ID available</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="card">
-                <h3>{{ $totalGnDivisions }}</h3>
-                <p>Total GN Divisions Involved</p>
-            </div>
-        
-
-        <div class="container">
-            <h2 class="text-center">Beneficiary List</h2>
-
-
-
-            <!-- Search Form -->
-
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">NIC</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Date Of Birth</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Age</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">GN Division</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($beneficiaries as $beneficiary)
-                        <tr>
-                            <td>{{ $beneficiary->nic }}</td>
-                            <td>{{ $beneficiary->first_name }}</td>
-                            <td>{{ $beneficiary->last_name }}</td>
-                            <td>{{ $beneficiary->address }}</td>
-                            <td>{{ $beneficiary->dob }}</td>
-                            <td>{{ $beneficiary->gender }}</td>
-                            <td>{{ $beneficiary->age }}</td>
-                            <td>{{ $beneficiary->phone }}</td>
-                            <td>{{ $beneficiary->gn_division_name }}</td>
-                            <td>
-                                @if($beneficiary->id)
-                                    <a href="{{ route('livestocks.create', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-green btn-sm">
-                                        Add Livestock
-                                    </a>
-                                    <a href="{{ route('livestocks.list', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-blue btn-sm">View Livestock</a>
-                                @else
-                                    <span class="text-muted">No ID available</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-</div>
         </div>
     </div>
 </body>

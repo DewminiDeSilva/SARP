@@ -184,4 +184,42 @@ class LivestockController extends Controller
         return redirect()->route('livestocks.list', ['beneficiary_id' => $beneficiary_id])
             ->with('success', 'Livestock record deleted successfully!');
     }
+
+    public function getProductionFocusByLivestockType($type)
+    {
+        try {
+            $options = [];
+    
+            switch ($type) {
+                case 'Dairy':
+                    $options = \App\Models\Dairy::select('id', 'dairy_name as name')
+                        ->orderBy('name')
+                        ->get();
+                    break;
+                case 'Poultry':
+                    $options = \App\Models\Poultary::select('id', 'poultary_name as name')
+                        ->orderBy('name')
+                        ->get();
+                    break;
+                case 'Goat Rearing':
+                    $options = \App\Models\Goat::select('id', 'goat_name as name')
+                        ->orderBy('name')
+                        ->get();
+                    break;
+                case 'Aqua Culture':
+                    $options = \App\Models\AquaCulture::select('id', 'aquaculture_name as name')
+                        ->orderBy('name')
+                        ->get();
+                    break;
+                default:
+                    return response()->json(['error' => 'Invalid livestock type'], 400);
+            }
+    
+            return response()->json($options);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching production focus: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error while fetching production focus'], 500);
+        }
+    }
+    
 }

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Livestock Registration</title>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -45,8 +47,10 @@
     </style>
 </head>
 <body>
+
+     
     <div class="container">
-        <h2>Livestock Registration for {{ $beneficiary->first_name }} {{ $beneficiary->last_name }}</h2>
+        <h2>Livestock Registration for <td>{{ $beneficiary->name_with_initials }}</td></h2>
         
         @if($errors->any())
             <div class="alert alert-danger">
@@ -70,10 +74,10 @@
                             <label for="livestock_type" class="form-label">Livestock Type</label>
                             <select id="livestock_type" name="livestock_type" class="form-control" required>
                                 <option value="">Select Livestock Type</option>
-                                <option value="cattle">Cattle</option>
-                                <option value="poultry">Poultry</option>
-                                <option value="goats">Goats</option>
-                                <option value="sheep">Sheep</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Poultry">Poultary</option>
+                                <option value="Goat Rearing">Goat Rearing</option>
+                                <option value="Aqua Culture">Aqua Culture</option>
                             </select>
                         </div>
                     </div>
@@ -207,25 +211,38 @@
                 });
             }
 
-            // Define production focus options
-            const productionFocusOptions = {
-                cattle: [{ value: 'milk', text: 'Milk Production' }, { value: 'meat', text: 'Meat Production' }],
-                poultry: [{ value: 'eggs', text: 'Egg Production' }, { value: 'meat', text: 'Meat Production' }],
-                goats: [{ value: 'milk', text: 'Milk Production' }, { value: 'meat', text: 'Meat Production' }],
-                sheep: [{ value: 'wool', text: 'Wool Production' }, { value: 'meat', text: 'Meat Production' }]
-            };
+            // Handle livestock type change
+$('#livestock_type').change(function() {
+    var selectedType = $(this).val();
+    var productionFocusDropdown = $('#production_focus');
+    
+    // Clear existing options
+    productionFocusDropdown.empty().append(`
+        <option value="">Select Production Focus</option>
+    `);
 
-            // Handle livestock type selection change
-            $('#livestock_type').change(function () {
-                var selectedLivestockType = $(this).val();
-                var productionFocusDropdown = $('#production_focus');
-                productionFocusDropdown.empty().append($('<option>', { value: '', text: 'Select Production Focus' }));
-                if (selectedLivestockType in productionFocusOptions) {
-                    productionFocusOptions[selectedLivestockType].forEach(focus => {
-                        productionFocusDropdown.append($('<option>', { value: focus.value, text: focus.text }));
-                    });
-                }
-            });
+    if (selectedType) {
+        // Make AJAX call to get production focus options
+        $.ajax({
+            url: `/livestocks/get-production-focus/${selectedType}`, // Updated URL pattern
+            type: 'GET',
+            success: function(response) {
+                // Add new options based on response
+                response.forEach(function(item) {
+                    let optionText = item.name; // Assuming 'name' is the common field in all models
+                    productionFocusDropdown.append(`
+                        <option value="${item.id}">${optionText}</option>
+                    `);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('Error loading production focus options. Please try again.');
+            }
+        });
+    }
+});
+
 
             // Add Contribution
             $('#addContribution').click(function () {
@@ -282,6 +299,8 @@
             $(document).on('click', '.remove-product', function () {
                 $(this).closest('.row').remove();
             });
+
+            
         });
     </script>
 </body>
