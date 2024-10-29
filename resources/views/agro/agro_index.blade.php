@@ -69,19 +69,36 @@
             flex: 0 0 20%;
             border-right: 1px solid #dee2e6;
         }
-
         .submitbtton {
             color: #fff;
-            background-color: #198754;
-            border-color: #198754;
-        }
+    background-color: #198754;
+    border-color: #198754;
+    padding: 6px 12px; /* Adjust padding for balanced look */
+    font-size: 16px; /* Font size adjustment */
+    height: 38px; /* Match height with input field */
+}
 
-        .submitbtton:active,
-        .submitbtton:hover {
-            background-color: #145c32;
-            border-color: #145c32;
-            color: #fff;
-        }
+
+.submitbtton:hover,
+.submitbtton:active {
+    background-color: #145c32;
+    border-color: #145c32;
+}
+
+.container-fluid h2 {
+    color: green;
+}
+
+.card {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 2rem;
+    color: #333;
+}
+
 
         .button-container {
             display: flex;
@@ -341,6 +358,28 @@
         /*background-color: #1e8e1e; /* Dark green on hover */
 
     }
+    .file-upload-wrapper {
+    display: flex;
+    align-items: center; /* Center align items in the flex container */
+    gap: 10px; /* Space between the file input and button */
+}
+
+.file-input {
+    height: 38px; /* Set height to match the button */
+    width: 250px; /* Set a fixed width for the file input */
+}
+
+.upload-button {
+    padding: 6px 12px; /* Adjust padding for balance */
+    font-size: 14px; /* Font size adjustment */
+    height: 38px; /* Ensure height matches the file input */
+    background-color: #198754;
+    color: #fff;
+    border: 1px solid #198754;
+    border-radius: 4px;
+    min-width: 120px; /* Set a minimum width for better appearance */
+}
+
 </style>
 
 </head>
@@ -361,57 +400,63 @@
      @endif
 
     </a>
-        <div class="container-fluid">
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="center-heading text-center">
-                        <h2 style="font-size: 2.5rem; color: green;">Agro Enterprises Details</h2>
-                    </div>
+    <div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <h2 style="font-size: 2.5rem; color: green;">Agro Enterprises Details</h2>
+        </div>
+    </div>
+
+    <!-- Centered Card for Total Enterprises -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-3 text-center">
+            <div class="card">
+                <div class="card-header">
+                    Total Agro Enterprise
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $agros->total() }}</h5>
+                    <p class="card-text">Total agro enterprises currently in the system.</p>
                 </div>
             </div>
+            </div> 
+           
+    </div>
+    
+    
+    <div class="row mt-4">
+    <div class="col-md-3">
+        <!-- Upload CSV Form -->
+        
+        <form action="{{ route('agro.csv.upload') }}" method="POST" enctype="multipart/form-data" class="form-inline">
+            @csrf
+            <div class="file-upload-wrapper d-flex align-items-start">
+                <input type="file" name="csv_file" class="form-control file-input" required>
+                <button type="submit" class="btn btn-success upload-button">Upload CSV</button>
+            </div>
+        </form>
 
-            <div class="container">
-                <div class="row justify-content-center mt-4">
-                    <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-                        <div class="card-header">
-                            Total Agro Enterprise
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $agros->total() }}</h5>
-                            <p class="card-text">Total agro enterprises currently in the system.</p>
-                        </div>
-                    </div>
+        <!-- Search Form -->
+        <form class="form-inline mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </div>
             </div>
+        </form>
 
-            <!-- Search and CSV Files -->
-            <div class="d-flex justify-content-between mb-3">
-                <a href="{{ route('agro.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add New Enterprise</a>
-                <a href="{{ route('agro.csv.generate') }}" class="btn btn-success">Download CSV</a>
+        <!-- Add New Enterprise Button -->
+        <a href="{{ route('agro.create') }}" class="btn submitbtton mb-3">+ Add New Enterprise</a>
+    </div>
+    
+    <!-- Generate CSV Report Button in a Separate Column -->
+    <div class="col-md-6 offset-md-3 text-right">
+        <a href="{{ route('agro.csv.generate') }}" class="btn submitbtton">Generate CSV Report</a>
+    </div>
+</div>
 
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <!-- CSV Upload Form -->
-                <form action="{{ route('agro.csv.upload') }}" method="POST" enctype="multipart/form-data">
-                 @csrf
-                <div class="form-group">
-                <label for="csv_file">Upload CSV:</label>
-               <input type="file" name="csv_file" id="csv_file" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Upload CSV</button>
-            </form>
-
-                <!-- Search form -->
-                <form class="form-inline">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="search">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            
 
             <!-- Success message handling -->
             @if(session('success'))

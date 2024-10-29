@@ -159,11 +159,9 @@
 
                     <div class="form-group">
                         <div class="d-flex justify-content-between">
-                <a href="{{ route('beneficiary.create') }}" class="btn submitbtton"> + Add New </button>
-                <a href="{{route('download.csv')}}"  class="btn submitbtton">Generate CSV Report</a>
-
-
-            </div>
+                      <a href="{{ route('beneficiary.create') }}" class="btn submitbtton"> + Add New </button>
+                       <a href="{{route('download.csv')}}"  class="btn submitbtton">Generate CSV Report</a>
+                </div>
 
             </div>
 
@@ -372,20 +370,6 @@
 
 
 
-<!-- <h1>BAR CHART </h1> -->
-<div id="donut-chart"></div>
-<div id="myChart" style="width:100%;max-width:600px"></div>
-
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-
-
 
     @foreach ($beneficiaries as $beneficiary)
     {{-- popup modal --}}
@@ -471,29 +455,6 @@
 
 
 
-{{-- PIE CHART TEST --}}
-<script src=
-"https://d3js.org/d3.v4.min.js"></script>
-<script src=
-"https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js"></script>
-<link rel="stylesheet"
-      href=
-"https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.css" />
-<link rel=
-"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-      type="text/css" />
-
-<script src=
-"https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-</script>
-<script src=
-"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
-</script>
-
-<script src=
-"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js">
-</script>
-
 
 
 
@@ -527,7 +488,7 @@
         font-family: "Verdana", sans-serif;
         font-size: 40px;
     }
-</styl>
+</style>
 
 
 
