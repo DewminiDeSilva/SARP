@@ -47,8 +47,19 @@
     </style>
 </head>
 <body>
+    <div class="frame">
+    <div class="left-column">
+        @include('dashboard.dashboardC')
+        @csrf
+    </div>
+    <div class="right-column">
     <div class="container mt-5">
-        <h2>Agriculture Form</h2>
+
+        <div class="center-heading text-center">
+            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form</h1>
+        </div>
+    </br>
+        <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
         <form action="{{ route('agriculture.store') }}" method="POST">
             @csrf
             <!-- Crop Category and Crop Name -->
@@ -95,26 +106,6 @@
                     <label for="inputs" class="form-label bold-label">Inputs</label>
                     <input type="text" class="form-control" id="inputs" name="inputs" required>
                 </div>
-<<<<<<< HEAD
-
-                  <!-- Farmer Contribution and Cost -->
-                  <div class="row mt-3">
-                    <div class="col">
-                        Farmer or Other Contribution
-                    </div>
-                    <div class="card-body">
-                        <div id="contribution-fields">
-                            <div class="row contribution-group">
-                                <div class="col-5 form-group">
-                                    <label for="farmer_contribution[]">Farmer Contribution</label>
-                                    <input type="text" name="farmer_contribution[]" class="form-control" required>
-                                </div>
-                                <div class="col-5 form-group">
-                                    <label for="cost[]">Cost</label>
-                                    <input type="number" step="0.01" name="cost[]" class="form-control" required>
-                                </div>
-                                <!-- No remove button for the first group -->
-=======
             </div>
 
             <!-- Farmer Contribution and Cost -->
@@ -132,7 +123,6 @@
                             <div class="col-5 form-group">
                                 <label for="cost[]">Cost</label>
                                 <input type="number" step="0.01" name="cost[]" class="form-control" required>
->>>>>>> 1b11a7dca539ebad1e854ac9afad14443ac59f7e
                             </div>
                         </div>
                     </div>
@@ -146,10 +136,6 @@
                     <label for="totalAcres" class="form-label bold-label">Total Number of Acres Cultivated</label>
                     <input type="number" class="form-control" id="totalAcres" name="total_acres" required>
                 </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b11a7dca539ebad1e854ac9afad14443ac59f7e
             </div>
 
             <!-- Total Production, Total Income, Profit for Products -->
@@ -193,6 +179,7 @@
                 </div>
             </div>
         </form>
+    </div>
     </div>
     @if($errors->any())
     <div class="alert alert-danger">
@@ -351,42 +338,6 @@
     $(this).unbind('submit').submit(); // Re-enable form submission
 });
 
-<<<<<<< HEAD
-// Add Product Details (Total Production, Total Income, Profit)
-document.getElementById('add-product').addEventListener('click', function () {
-     var productFields = document.getElementById('product-fields');
-     var newProductGroup = document.createElement('div');
-     newProductGroup.className = 'row product-group mt-3';
-     newProductGroup.innerHTML = `
-         <div class="col-4 form-group">
-             <label for="product_name[]">Product Name</label>
-             <input type="text" name="product_name[]" class="form-control" required>
-         </div>
-         <div class="col-3 form-group">
-             <label for="total_production[]">Total Production (kg)</label>
-             <input type="number" step="0.01" name="total_production[]" class="form-control" required>
-         </div>
-         <div class="col-3 form-group">
-             <label for="total_income[]">Total Income</label>
-             <input type="number" step="0.01" name="total_income[]" class="form-control" required>
-         </div>
-         <div class="col-2 form-group">
-             <label for="profit[]">Profit</label>
-             <input type="number" step="0.01" name="profit[]" class="form-control" required>
-         </div>
-         <div class="col-2">
-             <button type="button" class="btn btn-danger remove-product-btn">Remove</button>
-         </div>
-     `;
-     productFields.appendChild(newProductGroup);
- });
-
-
-
-</script>
-
-=======
     </script>
->>>>>>> 1b11a7dca539ebad1e854ac9afad14443ac59f7e
 </body>
 </html>

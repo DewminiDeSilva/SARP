@@ -288,7 +288,7 @@
                                     <p>{{$tankRehabilitation->agency}}</p>
                                 </div>
                                 <div class="info">
-                                    <label>No. of Family:</label>
+                                    <label>No. of Families:</label>
                                     <p>{{$tankRehabilitation->no_of_family}}</p>
                                 </div>
                                 <div class="info">
@@ -317,7 +317,7 @@
                                     <p>{{$tankRehabilitation->contractor}}</p>
                                 </div>
                                 <div class="info">
-                                    <label>Payment:</label>
+                                    <label>Total Contract Value:</label>
                                     <p>{{$tankRehabilitation->payment}}</p>
                                 </div>
                                 <div class="info">
