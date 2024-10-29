@@ -30,12 +30,7 @@
             <!-- Category Field -->
             <div class="mb-3">
                 <label for="category" class="form-label">Category</label>
-                <select id="category" name="category" class="form-control" required>
-                    <option value="vegetables" {{ $agricultureData->category == 'vegetables' ? 'selected' : '' }}>Vegetables</option>
-                    <option value="fruits" {{ $agricultureData->category == 'fruits' ? 'selected' : '' }}>Fruits</option>
-                    <option value="home_garden" {{ $agricultureData->category == 'home_garden' ? 'selected' : '' }}>Home Garden</option>
-                    <option value="others" {{ $agricultureData->category == 'others' ? 'selected' : '' }}>Others</option>
-                </select>
+                <input type="text" class="form-control" id="category" name="category" value="{{ old('category', $agricultureData->category) }}" required>
             </div>
 
             <!-- Crop Name Field -->
@@ -50,11 +45,7 @@
                 <input type="number" class="form-control" id="total_acres" name="total_acres" value="{{ old('total_acres', $agricultureData->total_acres) }}" required>
             </div>
 
-            <!-- Total Production Field -->
-            <div class="mb-3">
-                <label for="total_production" class="form-label">Total Production (kg)</label>
-                <input type="number" class="form-control" id="total_production" name="total_production" value="{{ old('total_production', $agricultureData->total_production) }}" required>
-            </div>
+         
 
             <!-- Farmer Contributions and Costs -->
             <div class="mb-3">

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vegitable extends Model
 {
     use HasFactory;
-
+    protected $table = 'vegitables';
     protected $fillable = [
         'crop_name'
     ];

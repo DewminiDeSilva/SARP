@@ -153,8 +153,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">NIC</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
+                                <th scope="col">Beneficiary Name With Initials</th>
                                 <th scope="col">GN Division</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -163,8 +162,7 @@
                             @foreach ($beneficiaries as $beneficiary)
                                 <tr>
                                     <td>{{ $beneficiary->nic }}</td>
-                                    <td>{{ $beneficiary->first_name }}</td>
-                                    <td>{{ $beneficiary->last_name }}</td>
+                                    <td>{{ $beneficiary->name_with_initials }}</td>
                                     <td>{{ $beneficiary->gn_division_name }}</td>
                                     <td class="buttonline">
                                         <div class="button-group">

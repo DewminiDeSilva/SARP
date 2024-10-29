@@ -61,6 +61,8 @@
             align-items: center;
         }
 
+        
+
         .dropdown-menu {
             min-width: auto;
         }

@@ -7,6 +7,9 @@ use App\Models\Beneficiary;
 use App\Models\AgricultureData;
 use App\Models\AgriFarmerContribution;
 use App\Models\AgriculturProduct;
+use App\Models\Vegitable;
+use App\Models\Fruit;
+use App\Models\HomeGarden;
 use Illuminate\Support\Facades\DB;
 
 class AgriController extends Controller
@@ -39,7 +42,7 @@ public function store(Request $request)
         'crop_name' => 'required|string|max:255',
         'crop_variety' => 'nullable|string|max:255',
         'inputs' => 'required|string|max:255',
-        'planting_date' => 'required|date',
+        'planting_date' => 'nullable|date',
         'total_acres' => 'required|numeric|min:0',
         'gn_division_name' => 'required|string|max:255',
         'beneficiary_id' => 'required|exists:beneficiaries,id',
@@ -89,9 +92,6 @@ public function store(Request $request)
     }
 }
 
-
-    
-    
     public function show(AgricultureData $agricultureData)
     {
         $farmerContributions = $agricultureData->farmerContributions; 
@@ -235,8 +235,7 @@ public function store(Request $request)
         if ($search) {
             $beneficiaryIds = $beneficiaryQuery->where(function($query) use ($search) {
                 $query->where('nic', 'like', '%' . $search . '%')
-                    ->orWhere('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('name_with_initials', 'like', '%' . $search . '%')
                     ->orWhere('gn_division_name', 'like', '%' . $search . '%');
             })->pluck('id');
 
@@ -256,8 +255,8 @@ public function store(Request $request)
 
         $beneficiaries = Beneficiary::where(function($query) use ($search) {
                 $query->where('nic', 'like', '%' . $search . '%')
-                    ->orWhere('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%');
+                    ->orWhere('name_with_initials', 'like', '%' . $search . '%');
+                 
             })
             ->orWhereIn('id', $filteredBeneficiaryIds)
             ->paginate($entries)
@@ -323,5 +322,36 @@ public function store(Request $request)
             }
         }
     }
+
+    public function getCropsByCategory($category)
+{
+    try {
+        switch ($category) {
+            case 'vegetables':
+                $crops = \App\Models\Vegitable::all();
+                break;
+            case 'fruits':
+                $crops = \App\Models\Fruit::all();
+                break;
+            case 'home_garden':
+                $crops = \App\Models\HomeGarden::all();
+                break;
+            case 'others':
+                $crops = \App\Models\OtherCrop::all();
+                 break; 
+            default:
+                $crops = [];  // Handle "others" category or other cases
+                break;
+        }
+        
+        return response()->json($crops);
+    } catch (\Exception $e) {
+        // Log the error message for debugging
+        \Log::error('Error fetching crops: ' . $e->getMessage());
+        return response()->json(['error' => 'Server error while fetching crops'], 500);
+    }
+}
+
+
 }
 

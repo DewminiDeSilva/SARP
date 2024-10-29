@@ -243,36 +243,42 @@
             </div>
 
             <div class="container">
-                <div class="row justify-content-center mt-4">
-                    <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-                        <div class="card-header">
-                            Total Infrastructures
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $infrastructures->total() }}</h5>
-                            <p class="card-text">Total infrastructures currently in the system.</p>
-                        </div>
-                    </div>
-
-                    <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-                        <div class="card-header">
-                            Ongoing
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">Infrastructures currently undergoing progress.</p>
-                        </div>
-                    </div>
-
-                    <div class="card text-center" style="width: 18rem;">
-                        <div class="card-header">
-                            Completed
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">Infrastructures that have completed progress.</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="row justify-content-center mt-4">
+        <!-- Total Infrastructures Card -->
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+                Total Infrastructures
             </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $totalInfrastructures }}</h5>
+                <p class="card-text">Total infrastructures currently in the system.</p>
+            </div>
+        </div>
+
+        <!-- Ongoing Infrastructures Card -->
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+                Ongoing
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $ongoingCount }}</h5>
+                <p class="card-text">Infrastructures currently undergoing progress.</p>
+            </div>
+        </div>
+
+        <!-- Completed Infrastructures Card -->
+        <div class="card text-center" style="width: 18rem;">
+            <div class="card-header">
+                Completed
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $completedCount }}</h5>
+                <p class="card-text">Infrastructures that have completed progress.</p>
+            </div>
+        </div>
+    </div>
+</div>
+>
 
             <div class="right-column">
                 <div class="container-fluid top-left">

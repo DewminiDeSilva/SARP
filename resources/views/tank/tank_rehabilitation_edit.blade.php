@@ -198,14 +198,28 @@
                     </div>
 
                     <div class="col">
-                        <div class="dropdown">
-                            <label for="tank">Tank Status</label>
-                            <select class="form-control btn btn-secondary"  name="status" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;">
-                                <option value="{{ $tankRehabilitation->status }}">{{ $tankRehabilitation->status }}</option>
-                                <!-- Status options -->
-                            </select>
+                            <div class="dropdown">
+                                <label for="tank">Tank Status</label>
+                                <select class="form-control btn btn-success" name="status" data-bs-toggle="dropdown" aria-expanded="false" required>
+                                    <option value="">Tank Status</option>
+                                    <option value="Identified">Identified</option>
+                                    <option value="Started">Started</option>
+                                    <option value="On Going">On Going</option>
+                                    <option value="Finished">Finished</option>
+                                    <option value="PIR Completed">PIR Completed</option>
+                                    <option value="Survey Completed">Survey Completed</option>
+                                    <option value="Engineering Serveys">Engineering Serveys</option>
+                                    <option value="Drawings and Designs Completed">Drawings and Designs Completed</option>
+                                    <option value="BOQ Completed">BOQ Completed</option>
+                                    <option value="Ratification meeting completed">Ratification meeting completed</option>
+                                    <option value="Bidding documents completed">Bidding documents completed</option>
+                                    <option value="IFAD no objection received">IFAD no objection received</option>
+                                    <option value="Paper advertised">Paper advertised</option>
+                                    <option value="Evalution of bids">Evalution of bids</option>
+                                    <option value="Agreement Sign">Agreement Sign</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
                     <div class="col">
                         <div class="dropdown">
                             <label for="tank">Implementing Agency</label>
@@ -301,7 +315,7 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label for="cumulative_amount" class="form-label">Cumulative Amount</label>
+                <label for="cumulative_amount" class="form-label">Cumulative Paid Amount</label>
                 <input type="text" class="form-control" id="cumulative_amount" name="cumulative_amount" value="{{ $tankRehabilitation->cumulative_amount }}" required>
             </div>
             </div>
