@@ -303,12 +303,13 @@
                                     <th>Crop Name</th>
                                     <th class="program-name">Date</th>
                                     <th>Venue</th>
-                                    <th>Resource Person</th>
+                                    <th>Program Cost</th>
+                                    <!-- <th>Resource Person</th>
                                     <th>Program Cost</th>
                                     <th>Resource Person Payment</th>
                                     <th>District</th>
                                     <th>DSD</th>
-                                    <th>GND</th>
+                                    <th>GND</th> -->
                                     <th>ASC</th>
                                     <th>Actions</th>
                                 </tr>
@@ -321,12 +322,13 @@
                                     <td >{{ $nrm->crop_name }}</td>
                                     <td class="program-name">{{ $nrm->date }}</td>
                                     <td>{{ $nrm->venue }}</td>
-                                    <td>{{ $nrm->resource_person_name }}</td>
+                                    <td>{{ $nrm->training_program_cost }}</td>
+                                    <!-- <td>{{ $nrm->resource_person_name }}</td>
                                     <td>{{ $nrm->training_program_cost }}</td>
                                     <td>{{ $nrm->resource_person_payment }}</td>
                                     <td>{{ $nrm->district }}</td>
                                     <td>{{ $nrm->ds_division_name }}</td>
-                                    <td>{{ $nrm->gn_division_name}}</td>
+                                    <td>{{ $nrm->gn_division_name}}</td> -->
                                     <td>{{ $nrm->as_center}}</td>
                                     <td class="button-container">
                                     <a href="{{ route('nrm-participants.create', $nrm->id) }}" title="Add Participant">
