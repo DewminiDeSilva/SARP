@@ -236,6 +236,9 @@ Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLiv
 Route::put('/livestocks/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
 Route::delete('/livestocks/{livestock_id}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
 
+Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
+
+//Route::post('/get-production-focus-options', [LivestockController::class, 'getProductionFocusOptions']);
 
 
 //Agro
@@ -351,6 +354,8 @@ Route::get('reportCsv', [TankRehabilitationController::class, 'reportCsv'])->nam
 Route::post('/tank_rehabilitation/upload-csv', [TankRehabilitationController::class, 'uploadCsv'])->name('tank_rehabilitation.upload_csv');
 
 //Route::get('/nutrition/download-csv', [NutritionController::class, 'downloadCsv'])->name('nutrition.download_csv');
+
+//////
 
 
 Route::get('reportCsv', [TankRehabilitationController::class, 'reportCsv'])->name('downloadtank.csv');
@@ -482,3 +487,4 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 
 
+///
