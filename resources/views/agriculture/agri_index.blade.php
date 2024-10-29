@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -14,75 +15,170 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        .frame {
+
+<style>
+    .entries-container {
+        display: flex;
+        align-items: center;
+    }
+    .entries-container label {
+        margin-bottom: 0;
+    }
+    .entries-container select {
+        display: inline-block;
+        width: auto;
+        appearance: auto; /* Ensures the dropdown uses the default arrow */
+    -webkit-appearance: auto; /* Vendor prefix for better browser support */
+    -moz-appearance: auto; /* Vendor prefix for Firefox */
+    }
+
+
+    .frame {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .left-column {
+        flex: 0 0 20%;
+        /*padding: 20px;*/
+        border-right: 1px solid #dee2e6;
+    }
+
+    .right-column {
+        flex: 0 0 80%;
+        padding: 20px;
+    }
+
+    .icon-action {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .icon-action .fas {
+        font-size: 1.2rem;
+    }
+
+    .icon-action .fas.fa-edit {
+        color: green;
+    }
+
+    .icon-action .fas.fa-eye {
+        color: blue;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 10px; /* Adjust the gap between buttons as needed */
+    }
+
+    .custom-button {
+            background-color: white;
+            color: red;
+            border: 2px solid transparent; /* Initially no border */
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            transition: border 0.3s ease; /* Smooth transition for border */
+            width: 60px; /* Set a fixed width */
+            height: 40px; /* Set a fixed height */
+            box-sizing: border-box; /* Ensures padding is included in width and height */
+            background-color: #f5c6cb;
         }
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
+
+        .custom-button:hover {
+            border-color: red; /* Border appears on hover */
+            background-color: #f5c6cb;
         }
-        .left-column {
-            flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
+
+        .edit-button {
+            background-color: white; /* White background */
+            color: orange;
+            border: 2px solid transparent; /* Initially no border */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px; /* Set a fixed width */
+            height: 40px; /* Set a fixed height */
+            box-sizing: border-box; /* Ensures padding is included in width and height */
+            /*padding: 10px;*/
+            transition: border 0.3s ease, background-color 0.3s ease; /* Smooth transition for border and background color */
+            background-color: #ffeeba; /* Slightly darker light yellow on hover */
         }
+
+        .edit-button:hover {
+            border-color: orange; /* Border appears on hover */
+            background-color: #ffeeba; /* Slightly darker light yellow on hover */
+        }
+
+        .view-button {
+            background-color: white; /* White background */
+            color: orange;
+            border: 2px solid transparent; /* Initially no border */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px; /* Set a fixed width */
+            height: 40px; /* Set a fixed height */
+            box-sizing: border-box; /* Ensures padding is included in width and height */
+            /*padding: 10px;*/
+            transition: border 0.3s ease, background-color 0.3s ease; /* Smooth transition for border and background color */
+            background-color: #60C267; /* Slightly darker light yellow on hover */
+        }
+
+        .view-button:hover {
+            border-color: green; /* Border appears on hover */
+            background-color: #60C267; /* Slightly darker light yellow on hover */
+        }
+
+        .card-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #c7eef1; /* Blue color example */
+            color: #0d0e0d; /* Text color */
+            /* width: 18; */
+        }
+
+
         .pagination .page-item {
-            margin: 0;
+            margin: 0 0px; /* Adjust the margin to reduce space */
         }
         .pagination .page-link {
-            padding: 5px 10px;
-            color: #28a745;
+            padding: 5px 10px; /* Adjust padding to control button size */
         }
+
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
+
+        .page-item:hover {
+            border-color: #fff;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .page-link {
+            color : #28a745;
+        }
+
         .page-item.active .page-link {
             z-index: 3;
             color: #fff;
             background-color: #126926;
             border-color: #126926;
         }
-        .submitbtton {
-            color: #fff;
-            background-color: #198754;
-            border-color: #198754;
-        }
-        .submitbtton:active,
-        .submitbtton:hover {
-            background-color: #145c32;
-            border-color: #145c32;
-            color: #fff;
-        }
-        .buttonline {
-            white-space: nowrap;
-        }
-        .button-group a, .button-group form {
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .card-summary {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .card-summary .card {
-            flex: 1;
-            margin: 0 10px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #f8f9fa;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .card-summary .card h3 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .card-summary .card p {
-            margin: 0;
-            font-size: 16px;
-            color: #6c757d;
-        }
-    </style>
+
+</style>
+
+
 </head>
 <body>
 
@@ -93,9 +189,55 @@
     </div>
     <div class="right-column">
         <div class="container-fluid">
-            <div class="center-heading" style="text-align: center;">
-                <h1>Agriculture</h1>
+
+            <div class="center-heading text-center">
+                <h1 style="font-size: 2.5rem; color: green;">Agriculture</h1>
             </div>
+
+
+        <div class="container">
+        <div class="justify-content-center">
+
+        <div class="container mt-4">
+    <div class="d-flex justify-content-center">
+
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+                Total Crops Registered
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $totalCrops }}</h5>
+            </div>
+        </div>
+
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+                Total Beneficiaries Doing Crops
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $totalBeneficiaries }}</h5>
+            </div>
+        </div>
+
+        <!-- Remove margin-right from the last card to avoid extra spacing on the right -->
+        <div class="card text-center" style="width: 18rem;">
+            <div class="card-header">
+                Total GN Divisions Involved
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $totalGnDivisions }}</h5>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+        </div>
+    </div>
+    </br>
+
+        <div class="container-fluid">
 
             <!-- Search form -->
             <form method="GET" action="{{ route('agriculture.search') }}" class="form-inline">
@@ -120,7 +262,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="entries-container">
                     <label for="entriesSelect">Show</label>
-                    <select id="entriesSelect" class="custom-select custom-select-sm form-control form-control-sm mx-2" onchange="updateEntries()">
+                    <select id="entriesSelect" class=" custom-select-sm form-control form-control-sm mx-2" onchange="updateEntries()">
                         <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
                         <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
                         <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
@@ -131,25 +273,12 @@
                 <div id="tableInfo" class="text-right"></div>
             </div>
 
-            <div class="card-summary">
-                <div class="card">
-                    <h3>{{ $totalCrops }}</h3>
-                    <p>Total Crops Registered</p>
-                </div>
-                <div class="card">
-                    <h3>{{ $totalBeneficiaries }}</h3>
-                    <p>Total Beneficiaries Doing Crops</p>
-                </div>
-                <div class="card">
-                    <h3>{{ $totalGnDivisions }}</h3>
-                    <p>Total GN Divisions Involved</p>
-                </div>
-            </div>
+
 
             <!-- Beneficiaries Table -->
             <div class="row table-container">
                 <div class="col">
-                    <table id="beneficiariesTable" class="table table-bordered table-sm">
+                    <table id="beneficiariesTable" class="table table-bordered">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">NIC</th>
@@ -177,6 +306,7 @@
                     </table>
                 </div>
             </div>
+                </br>
 
             <!-- Pagination Section for Beneficiaries -->
             <nav aria-label="Page navigation example">
@@ -221,6 +351,7 @@
                     </li>
                 </ul>
             </nav>
+        </div>
         </div>
     </div>
 </div>

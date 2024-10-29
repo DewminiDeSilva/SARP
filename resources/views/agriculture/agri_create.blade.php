@@ -47,8 +47,19 @@
     </style>
 </head>
 <body>
+    <div class="frame">
+    <div class="left-column">
+        @include('dashboard.dashboardC')
+        @csrf
+    </div>
+    <div class="right-column">
     <div class="container mt-5">
-        <h2>Agriculture Form</h2>
+
+        <div class="center-heading text-center">
+            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form</h1>
+        </div>
+    </br>
+        <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
         <form action="{{ route('agriculture.store') }}" method="POST">
             @csrf
             <!-- Crop Category and Crop Name -->
@@ -96,7 +107,7 @@
                     <input type="text" class="form-control" id="inputs" name="inputs" required>
                 </div>
             </div>
-                
+
             <!-- Farmer Contribution and Cost -->
             <div class="row mt-3">
                 <div class="col">
@@ -168,6 +179,7 @@
                 </div>
             </div>
         </form>
+    </div>
     </div>
     @if($errors->any())
     <div class="alert alert-danger">
