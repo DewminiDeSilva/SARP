@@ -80,7 +80,7 @@
         @csrf
     </div>
     <div class="right-column">
-        <div class="container">
+        <div class="container-fluid">
             <div class="center-heading" style="text-align: center;">
                 <h1>Grievances Details</h1>
             </div>
