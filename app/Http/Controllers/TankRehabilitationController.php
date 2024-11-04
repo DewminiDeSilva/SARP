@@ -95,9 +95,9 @@ class TankRehabilitationController extends Controller
     public function show(TankRehabilitation $tankRehabilitation)
     {
         // Assuming a total amount to calculate percentage (replace with actual logic)
-        $totalAmount = 1000;
+        $cumulative_amount = $tankRehabilitation->cumulative_amount;
         $payment = $tankRehabilitation->payment;
-        $percentage = $this->calculatePercentage($payment, $totalAmount);
+        $percentage = $this->calculatePercentage($payment, $cumulative_amount);
 
         return view('tank.tank_rehabilitation_show', compact('tankRehabilitation', 'percentage'));
     }
@@ -392,13 +392,13 @@ public function uploadCsv(Request $request)
     /**
      * Calculate percentage function.
      */
-    private function calculatePercentage($payment, $totalAmount)
+    private function calculatePercentage($payment, $cumulative_amount)
     {
         $payment = (float) $payment;
-        $totalAmount = (float) $totalAmount;
+        $cumulative_amount = (float) $cumulative_amount;
 
-        if ($totalAmount > 0) {
-            return ($payment / $totalAmount) * 100;
+        if ($cumulative_amount > 0) {
+            return ($cumulative_amount / $payment) * 100;
         }
         return 0;
     }

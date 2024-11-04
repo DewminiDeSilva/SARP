@@ -363,7 +363,7 @@
                                     <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title">Finance Progress Report is at</br> <span id="currentDate2"></span></h5>
+                                                <h5 class="card-title">Finance Progress as at</br> <span id="currentDate2"></span></h5>
 
                                                 <p class="card-text">Paid Amount: {{$tankRehabilitation->payment}}</p>
                                                 <p class="card-text">Percentage: {{$percentage}}%</p>
