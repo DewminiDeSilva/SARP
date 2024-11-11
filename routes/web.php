@@ -196,6 +196,9 @@ Route::get('/lstock', function () {
 //Beneficiary List
 
 Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
+// In routes/web.php
+Route::get('/beneficiaries', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
+
 
 
 

@@ -482,18 +482,33 @@ public function generateCsv()
     }
 
 
-    public function list()
-    {
-        
-    $beneficiaries = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')->paginate(10);
+    public function list(Request $request)
+{
+    $entries = $request->get('entries', 10); // Default to 10 entries per page
+    $search = $request->get('search');
 
-    // Calculate summary statistics
+    $query = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name');
+
+    // Apply search filter if provided
+    if ($search) {
+        $query->where('nic', 'like', '%' . $search . '%')
+              ->orWhere('name_with_initials', 'like', '%' . $search . '%')
+              ->orWhere('gender', 'like', '%' . $search . '%')
+              ->orWhere('address', 'like', '%' . $search . '%')
+              ->orWhere('phone', 'like', '%' . $search . '%')
+              ->orWhere('gn_division_name', 'like', '%' . $search . '%');
+    }
+
+    // Paginate with selected entries per page
+    $beneficiaries = $query->paginate($entries)->appends(['entries' => $entries, 'search' => $search]);
+
+    // Summary statistics
     $totalBeneficiaries = Beneficiary::count();
     $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
     $totalLivestocks = Livestock::distinct('gn_division_name')->count('gn_division_name');
 
+    return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks', 'entries', 'search'));
+}
 
-    return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
-    }
 
 }

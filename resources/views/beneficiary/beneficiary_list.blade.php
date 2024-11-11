@@ -7,7 +7,7 @@
     <title>Beneficiary List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Root Variables for consistent colors and values */
+        /* Root Variables */
         :root {
             --primary-green: #28a745;
             --primary-blue: #007bff;
@@ -163,6 +163,140 @@
             line-height: 1.4;
         }
 
+        * Pagination Container */
+.pagination {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+    gap: 0;
+}
+
+/* Page Items */
+.pagination .page-item {
+    margin: 0;
+}
+
+/* Page Links - Basic Style */
+.pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+    margin-left: -1px; /* Creates connected look */
+}
+
+/* First Item Border Radius */
+.pagination .page-item:first-child .page-link {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    margin-left: 0;
+}
+
+/* Last Item Border Radius */
+.pagination .page-item:last-child .page-link {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* Hover State */
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #0056b3;
+    z-index: 2;
+}
+
+/* Active State */
+.pagination .page-item.active .page-link {
+    background-color: #fff;
+    border-color: #dee2e6;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Previous/Next Arrows */
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    color: #000;
+}
+
+/* Next Arrow - Blue Color */
+.pagination .page-item:last-child .page-link {
+    color: #007bff;
+}
+
+/* Showing Entries Text */
+.showing-entries {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Container for Pagination Info */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Arrow content */
+.pagination .page-item:first-child .page-link::after {
+    content: "‹";
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.pagination .page-item:last-child .page-link::after {
+    content: "›";
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Hide default Previous/Next text */
+.pagination .page-item:first-child .page-link span,
+.pagination .page-item:last-child .page-link span {
+    display: none;
+}
+
+        /* Entries Info and Pagination Container */
+        .d-flex.justify-content-between {
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .d-flex.justify-content-between p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Search and Entries Selection Styles */
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            width: auto;
+        }
+
+        .custom-select {
+            width: auto;
+            margin: 0 10px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .frame {
@@ -186,6 +320,17 @@
             .table-responsive {
                 overflow-x: auto;
             }
+
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -196,6 +341,10 @@
         </div>
 
         <div class="right-column">
+
+            <div class="right-column">
+                <div class="container">
+                    <h2 class="text-center">Beneficiary List</h2>
             <div class="card-summary">
                 <div class="card">
                     <div class="card-header">Livestock Statistics</div>
@@ -222,9 +371,29 @@
                 </div>
             </div>
 
-            <div class="container">
-                <h2>Beneficiary List</h2>
-
+            
+    
+                    <!-- Search Form -->
+                    <form method="GET" action="{{ route('beneficiary.list') }}" class="form-inline mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </form>
+    
+                    <!-- Show Entries Dropdown -->
+                    <div class="form-group d-flex align-items-center mb-3">
+                        <label for="entriesSelect" class="mr-2">Show</label>
+                        <form method="GET" action="{{ route('beneficiary.list') }}" id="entriesForm">
+                            <select id="entriesSelect" name="entries" class="custom-select" onchange="document.getElementById('entriesForm').submit();">
+                                <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
+                                <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                                <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
+                            </select>
+                        </form>
+                        <label for="entriesSelect" class="ml-2">entries</label>
+                    </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -264,8 +433,51 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
+
+               <!-- Pagination Section -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {{ $beneficiaries->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $beneficiaries->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+
+        @php
+                                    $currentPage = $beneficiaries->currentPage();
+                                    $lastPage = $beneficiaries->lastPage();
+                                    $startPage = max($currentPage - 2, 1);
+                                    $endPage = min($currentPage + 2, $lastPage);
+                                @endphp
+
+                                @if ($startPage > 1)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $beneficiaries->url(1) }}">1</a>
+                                    </li>
+                                    @if ($startPage > 2)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $startPage; $i <= $endPage; $i++)
+                                    <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $beneficiaries->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($endPage < $lastPage)
+                                    @if ($endPage < $lastPage - 1)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $beneficiaries->url($lastPage) }}">{{ $lastPage }}</a>
+                                    </li>
+                                @endif
+
+                                <li class="page-item {{ $beneficiaries->hasMorePages() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
+                                </li>
+    </ul>
+</nav>
+
+
 </body>
 </html>
