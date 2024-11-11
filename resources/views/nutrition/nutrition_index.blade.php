@@ -375,10 +375,8 @@
 </div>
 
 
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-3">
-                {{ $nutritionPrograms->links() }}
-            </div>
+           
+          
         </div>
     </div>
 </div>
