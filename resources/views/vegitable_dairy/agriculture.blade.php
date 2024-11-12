@@ -118,10 +118,7 @@
                 Others
             </button>
         </div>
-
-    </div>
-    </div>
-    <div class="container mt-5">
+        <div class="container mt-5">
     <h1 class="text-center">Agriculture Data</h1>
 
     <!-- Vegetables Table -->
@@ -208,7 +205,10 @@
         </tbody>
     </table>
 </div>
-
+    </div>
+    
+    </div>
+  
 <!-- jQuery and DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
