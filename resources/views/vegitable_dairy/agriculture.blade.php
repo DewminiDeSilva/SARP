@@ -121,6 +121,102 @@
 
     </div>
     </div>
+    <div class="container mt-5">
+    <h1 class="text-center">Agriculture Data</h1>
+
+    <!-- Vegetables Table -->
+    <h3>Registered Vegetables</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+              
+                <th>Vegetable Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($vegitables as $vegitable)
+            <tr>
+              
+                <td>{{ $vegitable->crop_name }}</td>
+                <td>{{ $vegitable->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Fruits Table -->
+    <h3>Registered Fruits</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                
+                <th>Fruit Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($fruits as $fruit)
+            <tr>
+              
+                <td>{{ $fruit->fruit_name }}</td>
+                <td>{{ $fruit->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Home Gardens Table -->
+    <h3>Registered Home Gardens</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                
+                <th>Home Garden Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($homegardens as $homegarden)
+            <tr>
+                
+                <td>{{ $homegarden->homegarden_name }}</td>
+                <td>{{ $homegarden->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Other Crops Table -->
+    <h3>Registered Other Crops</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                
+                <th>Crop Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($crops as $crop)
+            <tr>
+                
+                <td>{{ $crop->crop_name }}</td>
+                <td>{{ $crop->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('table').DataTable();
+    });
+</script>
 
 
 

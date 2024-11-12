@@ -52,6 +52,7 @@
 .custom-border {
     border: 2px solid green;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-color: darkgreen !important;
 }
 
 .dropdown-label, .bold-label {
@@ -180,6 +181,23 @@
     margin-bottom: 5px; /* Space between label and select input */
 }
 
+.three-dropdown-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Space between the dropdowns */
+    margin-bottom: 20px; /* Space below the row */
+}
+
+.three-dropdown-row .dropdown {
+    flex: 1;
+}
+
+.three-dropdown-row .form-control,
+.three-dropdown-row .dropdown-toggle {
+    width: 100%; /* Ensure full width within each dropdown container */
+}
+
+
 </style>
 
 </head>
@@ -191,6 +209,10 @@
             @csrf
         </div>
         <div class="right-column">
+
+        <div class="col-md-12 text-center">
+            <h2 class="header-title" style="color: green;">Beneficiary Registration</h2>
+        </div>
 
 
 
@@ -204,6 +226,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
+
+
             <div class="modal-body">
                Beneficiary Details successfully Registerd.
             </div>
@@ -217,101 +242,120 @@
 
 
 
-    <div class="container mt-5 border rounded border p-4 custom-border">
+    <div class="container mt-5 border rounded p-4 custom-border" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
     <form action="{{ route('beneficiary.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <div class="col-md-12 text-center">
-        <h2 style="color: green; font-weight: bold; font-size: 48px;">Beneficiary Registration</h2>
-    </div>
 
     <!-- Tank and Province -->
-    <div class="form-row">
-        <div class="form-group">
-            <label for="tankDropdown" class="form-label dropdown-label color-label col-form-label">Select Tank Name</label>
-            <select id="tankDropdown" class="form-control greenbackground" name="tank_name" required>
-                <option value="" class="greenbackground">Select Tank</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="province" class="form-label dropdown-label">Province</label>
-            <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
-                <option value="">Select Province</option>
-            </select>
-            <input type="hidden" id="provinceName" name="province_name">
-        </div>
-    </div>
-
-
-
-
-
-    <!-- District and DS Division -->
-    <div class="form-row">
-        <div class="form-group">
-            <label for="district" class="form-label dropdown-label">District</label>
-            <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
-                <option value="">Select District</option>
-            </select>
-            <input type="hidden" id="districtName" name="district_name">
-        </div>
-        <div class="form-group">
-            <label for="dsDivisionDropdown" class="form-label dropdown-label">DS Division</label>
-            <select id="dsDivisionDropdown" name="ds_division" class="btn btn-success dropdown-toggle" required>
-                <option value="">Select DS Division</option>
-            </select>
-            <input type="hidden" id="dsDivisionName" name="ds_division_name">
-        </div>
-    </div>
-
-    <!-- GND and ASC -->
-    <div class="form-row">
-        <div class="form-group">
-            <label for="gndDropdown" class="form-label dropdown-label">GN Division</label>
-            <select id="gndDropdown" name="gn_division_name" class="btn btn-success dropdown-toggle" required>
-                <option value="">Select GN Division</option>
-            </select>
-            <input type="hidden" id="gndName" name="gn_division_name">
-        </div>
-        <div class="form-group">
-            <label for="ascDropdown" class="form-label bold-label color-label">Select ASC</label>
-            <select class="form-control greenbackground" id="ascDropdown" name="as_center" required>
-                <option value="">Select ASC</option>
-            </select>
-        </div>
-        <div class="form-group">
+    <div class="row">
+        <div class="col">
             <div class="dropdown">
-                <label for="tank">Cascade Name</label>
+                <label for="province" class="form-label dropdown-label">Province</label>
+                <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
+                    <option value="">Select Province</option>
+                </select>
+                <input type="hidden" id="provinceName" name="province_name">
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <label for="district" class="form-label dropdown-label">District</label>
+                <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
+                    <option value="">Select District</option>
+                </select>
+                <input type="hidden" id="districtName" name="district_name">
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <label for="dsDivisionDropdown" class="form-label dropdown-label">DS Division</label>
+                <select id="dsDivisionDropdown" name="ds_division" class="btn btn-success dropdown-toggle" required>
+                    <option value="">Select DS Division</option>
+                </select>
+                <input type="hidden" id="dsDivisionName" name="ds_division_name">
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <label for="gndDropdown" class="form-label dropdown-label">GN Division</label>
+                <select id="gndDropdown" name="gn_division_name" class="btn btn-success dropdown-toggle" required>
+                    <option value="">Select GN Division</option>
+                </select>
+                <input type="hidden" id="gndName" name="gn_division_name">
+            </div>
+        </div>
+
+    </div>
+
+</br>
+
+    <div class="three-dropdown-row">
+
+        <div class="col">
+            <div class="dropdown">
+                <label for="ascDropdown" class="form-label dropdown-label">Select ASC</label>
+                <select class="btn btn-success dropdown-toggle" id="ascDropdown" name="as_center" required>
+                    <option value="">Select ASC</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
+                <select id="tankDropdown" class="btn btn-success dropdown-toggle" name="tank_name" required>
+                    <option value="" class="greenbackground">Select Tank</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <label for="tank" class="form-label dropdown-label">Cascade Name</label>
                 <select class="form-control btn btn-success" id="cascadeDropdown" name="cascade_name" data-bs-toggle="dropdown" aria-expanded="false" required>
                     <option value="">Select Cascade name</option>
                 </select>
             </div>
         </div>
 
+
+    </div>
+
+
+
+
+
+
+
+    <!-- GND and ASC -->
+    <div class="form-row">
+
         <div class="form-group">
             <label for="ai_division">AI Division</label>
             <input type="text" class="form-control" name="ai_division" placeholder="Enter AI Division" required>
         </div>
-        </div>
 
-    <!-- NIC, Name with Initials, Gender, DOB, Address, and Age -->
-    <div class="form-row">
         <div class="form-group">
             <label for="nic">Beneficiary NIC</label>
             <input type="text" class="form-control" name="nic" placeholder="Enter Beneficiary NIC" required>
         </div>
+
+    </div>
+
+    <!-- NIC, Name with Initials, Gender, DOB, Address, and Age -->
+    <div class="form-row">
+
         <div class="form-group">
             <label for="name_with_initials">Name with Initials</label>
             <input type="text" class="form-control" name="name_with_initials" placeholder="Enter Name with Initials" required>
         </div>
-    </div>
-    <div class="form-row">
+
         <div class="form-group">
             <label for="dob">Date Of Birth</label>
             <input type="text" class="form-control datepicker-container" id="dob" name="dob" placeholder="Select Date of Birth" required>
-        </div>
-        <div class="form-group">
-            <label for="age">Age</label>
-            <input type="text" class="form-control" id="age" name="age" placeholder="Age" readonly>
         </div>
     </div>
 
@@ -332,7 +376,14 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-row">
+
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="text" class="form-control" id="age" name="age" placeholder="Age" readonly>
+        </div>
+
+        <div class="form-group">
         <label for="education">Education Level</label>
             <select class="form-control" name="education" required>
                 <option value="">Select Education Level</option>
@@ -343,30 +394,46 @@
                 <option value="Post Graduate">Post Graduate</option>
                 <option value="Others">Others</option>
             </select>
+        </div>
+
     </div>
 
 
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" name="email" placeholder="Enter Email Address">
-    </div>
+
+
+
+
+
 
 
     <!-- Phone, Address, and Family Members Count -->
     <div class="form-row">
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter Email Address">
+        </div>
+
         <div class="form-group">
             <label for="phone">Mobile Number</label>
             <input type="text" class="form-control" name="phone" placeholder="Enter Mobile Number(s)">
             <small class="form-text text-muted">Separate multiple numbers with comma (,)</small>
         </div>
+
+    </div>
+
+    <div class="form-row">
+
         <div class="form-group">
             <label for="address">Address</label>
             <input type="text" class="form-control" name="address" placeholder="Enter Address" required>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="number_of_family_members">Number of Family Members</label>
-        <input type="number" class="form-control" name="number_of_family_members" placeholder="Enter Number of Family Members" required>
+
+        <div class="form-group">
+            <label for="number_of_family_members">Number of Family Members</label>
+            <input type="number" class="form-control" name="number_of_family_members" placeholder="Enter Number of Family Members" required>
+        </div>
+
     </div>
 
     <!-- Land Ownership and Coordinates -->
@@ -403,6 +470,10 @@
             <label for="average_income">Average Income</label>
             <input type="text" class="form-control" name="average_income" placeholder="Enter Average Income" required>
         </div>
+
+    </div>
+
+    <div class="form-row">
         <div class="form-group">
             <label for="monthly_household_expenses">Monthly Household Expenses</label>
             <input type="text" class="form-control" name="monthly_household_expenses" placeholder="Enter Monthly Household Expenses" required>
@@ -434,7 +505,8 @@
         </div>
     </div>
 
-    <!-- Additional Information -->
+</br>
+
     <div class="form-row">
         <div class="form-group">
             <label for="head_of_householder_name">Head of Householder Name</label>
@@ -444,6 +516,11 @@
             <label for="householder_number">Householder Number</label>
             <input type="text" class="form-control" name="householder_number" placeholder="Enter Householder Number" required>
         </div>
+    </div>
+
+    <!-- Additional Information -->
+    <div class="form-row">
+
         <div class="form-group">
             <label for="type_of_water_resource">Type of Water Resource</label>
             <input type="text" class="form-control" name="type_of_water_resource" placeholder="Enter Type of Water Resource" required>
@@ -452,6 +529,10 @@
             <label for="training_details_description">Training Details Description</label>
             <input type="text" class="form-control" name="training_details_description" placeholder="Enter Training Details Description">
         </div>
+
+    </div>
+
+    <div class="form-row">
 
         <div class="form-group">
             <label for="community_based_organization">Community-Based Organization</label>

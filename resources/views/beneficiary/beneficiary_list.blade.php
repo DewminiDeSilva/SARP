@@ -7,7 +7,44 @@
     <title>Beneficiary List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+<<<<<<< HEAD
         /* Root Variables */
+=======
+        /* Root Variables for consistent colors and values */
+        .pagination .page-item {
+            margin: 0 0px; /* Adjust the margin to reduce space */
+        }
+        .pagination .page-link {
+            padding: 5px 10px; /* Adjust padding to control button size */
+        }
+
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
+
+        .page-item:hover {
+            border-color: #fff;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .page-link {
+            color : #28a745;
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #126926;
+            border-color: #126926;
+        }
+>>>>>>> a24c8993212f6bf5c36bbdfcf85fb126bda7fe8c
         :root {
             --primary-green: #28a745;
             --primary-blue: #007bff;
@@ -320,6 +357,7 @@
             .table-responsive {
                 overflow-x: auto;
             }
+<<<<<<< HEAD
 
             .pagination {
                 flex-wrap: wrap;
@@ -331,6 +369,9 @@
                 gap: 10px;
                 text-align: center;
             }
+=======
+            
+>>>>>>> a24c8993212f6bf5c36bbdfcf85fb126bda7fe8c
         }
     </style>
 </head>
@@ -432,6 +473,65 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Pagination Section -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {{ $beneficiaries->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $beneficiaries->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+
+        @php
+                                    $currentPage = $beneficiaries->currentPage();
+                                    $lastPage = $beneficiaries->lastPage();
+                                    $startPage = max($currentPage - 2, 1);
+                                    $endPage = min($currentPage + 2, $lastPage);
+                                @endphp
+
+                                @if ($startPage > 1)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $beneficiaries->url(1) }}">1</a>
+                                    </li>
+                                    @if ($startPage > 2)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $startPage; $i <= $endPage; $i++)
+                                    <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $beneficiaries->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($endPage < $lastPage)
+                                    @if ($endPage < $lastPage - 1)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $beneficiaries->url($lastPage) }}">{{ $lastPage }}</a>
+                                    </li>
+                                @endif
+
+                                <li class="page-item {{ $beneficiaries->hasMorePages() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
+                                </li>
+    </ul>
+</nav>
+
+@php
+                            $currentPage = $beneficiaries->currentPage();
+                            $perPage = $beneficiaries->perPage();
+                            $total = $beneficiaries->total();
+                            $startingNumber = ($currentPage - 1) * $perPage + 1;
+                            $endingNumber = min($total, $currentPage * $perPage);
+                        @endphp
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <div id="tableInfo" class="text-right">
+                                <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
+                            </div>
+                        </div>
+
                 </div>
 
                <!-- Pagination Section -->
