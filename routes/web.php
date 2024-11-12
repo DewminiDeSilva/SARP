@@ -46,6 +46,8 @@ use App\Http\Controllers\BeneFormController;
 use App\Http\Controllers\NrmController;
 use App\Http\Controllers\NrmParticipantController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AgricultureDataController;
+use App\Http\Controllers\LivestockDataController;
 
 
 Route::get('/', function () {
@@ -482,9 +484,9 @@ Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
-
-
-
-
 ///
+
+Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
+Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
+
+//Route::get('/agriculture-data', [AgricultureDataController::class, 'index'])->name('agriculture.data');
