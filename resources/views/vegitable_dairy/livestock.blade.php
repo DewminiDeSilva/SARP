@@ -121,6 +121,104 @@
 
     </div>
     </div>
+    <div class="container mt-5">
+    <h1 class="text-center">Livestock Data</h1>
+
+    
+
+    <!-- Dairy Table -->
+    <h3 class="mt-5">Dairy</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                
+                <th>Dairy Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($dairies as $dairy)
+            <tr>
+                
+                <td>{{ $dairy->dairy_name }}</td>
+                <td>{{ $dairy->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Poultry Table -->
+    <h3 class="mt-5">Poultry</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+             
+                <th>Poultry Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($poultaries as $poultary)
+            <tr>
+               
+                <td>{{ $poultary->poultary_name }}</td>
+                <td>{{ $poultary->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Goat Rearing Table -->
+    <h3 class="mt-5">Goat Rearing</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+              
+                <th>Goat Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($goats as $goat)
+            <tr>
+               
+                <td>{{ $goat->goat_name }}</td>
+                <td>{{ $goat->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Aqua Culture Table -->
+    <h3 class="mt-5">Aqua Culture</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+               
+                <th>Aqua Culture Name</th>
+                <th>Date Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($aquacultures as $aquaculture)
+            <tr>
+             
+                <td>{{ $aquaculture->aquaculture_name }}</td>
+                <td>{{ $aquaculture->created_at->format('Y-m-d') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('table').DataTable();
+    });
+</script>
 
 
 
