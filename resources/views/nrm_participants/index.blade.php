@@ -45,6 +45,14 @@
             display: flex;
             justify-content: space-between;
         }
+
+        .card-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #c7eef1; /* Blue color example */
+            color: #0d0e0d; /* Text color */
+            /* width: 18; */
+        }
     </style>
 
     <style>
@@ -151,7 +159,7 @@
                         <div class="col-md-7">
                             <p style="word-wrap: break-word; max-width: 300px;"> {{ $nrmTraining->program_name }}</p>
                         </div>
-                    
+
                     <div class="row">
                         <div class="col-md-5">
                             <strong>Venue:</strong>
@@ -235,6 +243,25 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="container">
+    <div class="justify-content-center">
+        <div class="container mt-4">
+            <div class="d-flex justify-content-center">
+                <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+                    <div class="card-header">
+                        Total Participants
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $totalParticipants }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <!-- Success Message -->
             @if (session('success'))
