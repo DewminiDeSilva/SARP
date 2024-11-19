@@ -63,6 +63,16 @@
             background-color: #129310;
         }
 
+        .btn-success:hover {
+        background-color: #218838 !important; /* Darker green for hover */
+        color: white;
+    }
+
+        .btninline {
+            display: inline-flex;
+            gap: 5px; /* Add some space between buttons if needed */
+        }
+
     </style>
 
     <style>
@@ -116,6 +126,8 @@
         .btn-back:hover img {
             transform: translateX(-50px);
         }
+
+
     </style>
 
 </head>
@@ -140,7 +152,7 @@
         <!-- Search Form -->
         <form method="GET" action="{{ route('bene-form.search') }}" class="form-inline mb-4">
             <input type="text" class="form-control mr-2" name="query" placeholder="Search Beneficiaries" required>
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-success">Search</button>
         </form>
 
         <!-- Beneficiary Form Details Card -->
@@ -180,8 +192,10 @@
                         <td>{{ $beneForm->address }}</td>
                         <td>{{ $beneForm->phone_number }}</td>
                         <td>{{ $beneForm->email }}</td>
-                        <td>
-                            <a href="{{ route('bene-form.show', $beneForm->id) }}" class="btn btn-primary">View Details</a>
+                        <td class="btninline">
+                            <a href="{{ route('bene-form.show', $beneForm->id) }}">
+                                <button class="btn btn-success" style="height: 40px; width: 150px; font-size: 16px; background-color: #28a745; color: white;">View Details</button>
+                            </a>
                             <form action="{{ route('bene-form.destroy', $beneForm->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')

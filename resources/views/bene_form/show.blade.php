@@ -8,6 +8,24 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+
+.frame {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .left-column {
+            flex: 0 0 20%;
+            border-right: 1px;
+        }
+
+        .right-column {
+            flex: 0 0 80%;
+            padding: 20px;
+        }
+
         .custom-frame {
             border: 2px solid rgba(0, 128, 0, 0.2);
             background-color: rgba(0, 128, 0, 0.2);
@@ -15,7 +33,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            
+
         }
         .section-title {
             text-align: center;
@@ -34,6 +52,7 @@
             @include('dashboard.dashboardC')
             @csrf
         </div>
+    <div class="right-column">
     <!-- Personal Information -->
     <div class="custom-frame">
         <h4>Personal Information</h4>
@@ -275,6 +294,7 @@
             </div>
         </div>
     </div>
+
     </div>
 </div>
 
