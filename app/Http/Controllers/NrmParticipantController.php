@@ -18,6 +18,7 @@ class NrmParticipantController extends Controller
 {
     $nrmTraining = NrmTraining::findOrFail($nrmTrainingId);
 
+<<<<<<< HEAD
     // If there's a search query, filter participants
     $search = $request->input('search');
 
@@ -39,6 +40,35 @@ class NrmParticipantController extends Controller
 
     return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'search', 'entries', 'totalParticipants'));
 }
+
+=======
+        // Get search query
+        $search = $request->input('search');
+
+        // Number of entries per page
+        $entries = $request->get('entries', 10);
+
+        // Fetch participants with pagination
+        $nrmParticipants = NRMParticipant::where('nrm_training_id', $nrmTrainingId)
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                             ->orWhere('nic', 'like', "%{$search}%")
+                             ->orWhere('address_institution', 'like', "%{$search}%")
+                             ->orWhere('contact_number', 'like', "%{$search}%")
+                             ->orWhere('designation', 'like', "%{$search}%")
+                             ->orWhere('youth', 'like', "%{$search}%");
+            })
+            ->paginate($entries);
+
+        // Calculate total participants
+        $totalParticipants = $nrmParticipants->total();
+
+        // Pass variables to the view
+        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'search', 'entries'));
+    }
+>>>>>>> Ravindu
+
+
 
 
     /**
@@ -179,6 +209,9 @@ class NrmParticipantController extends Controller
     // If there's a search query, filter participants
     $search = $request->input('search');
 
+    // Get 'entries' from request (for pagination), default to 10 if not present
+    $entries = $request->get('entries', 10);
+
     $nrmParticipants = NrmParticipant::where('nrm_training_id', $nrmTrainingId)
         ->when($search, function ($query, $search) {
             return $query->where('name', 'like', "%{$search}%")
@@ -188,9 +221,12 @@ class NrmParticipantController extends Controller
                          ->orWhere('designation', 'like', "%{$search}%")
                          ->orWhere('youth', 'like', "%{$search}%");
         })
-        ->get();
+        ->paginate($entries);
 
-    return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'search'));
+        // Calculate total participants (after filtering)
+    $totalParticipants = $nrmParticipants->total();
+
+    return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants',  'search', 'entries'));
 }
 
 }
