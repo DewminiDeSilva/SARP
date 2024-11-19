@@ -8,11 +8,30 @@
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        .custom-border {
+            border: 2px solid green;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .frame {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .right-column {
+            flex: 0 0 80%;
+            padding: 20px;
+        }
+        .left-column {
+            flex: 0 0 20%;
+            border-right: 1px solid #dee2e6;
+        }
+
         /* Custom CSS */
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #34495e;
-            --accent-color: #3498db;
+            /* --accent-color: #3498db; */
             --light-gray: #f8f9fa;
             --border-color: #dee2e6;
             --header-bg: #f3f4f6;  /* Light gray header background */
@@ -61,7 +80,7 @@
         }
 
         /* Add sort indicator space */
-        
+
         .table thead th:last-child {
             border-right: none;
         }
@@ -178,7 +197,13 @@
 </head>
 <body>
 
-    
+<div class="frame">
+    <div class="left-column">
+        @include('dashboard.dashboardC')
+        @csrf
+    </div>
+    <div class="right-column">
+
     <!-- Rest of the HTML remains the same as in the previous version -->
     <div class="container">
         <h2>Livestock Details for Beneficiary: <span>{{ $beneficiary->name_with_initials }}</span></h2>
@@ -208,7 +233,7 @@
                     <td data-label="Total Acres">{{ $livestock->total_number_of_acres ?? 'N/A' }}</td>
                     <td data-label="Total Cost">{{ $livestock->total_cost ?? 'N/A' }}</td>
                     <td data-label="Inputs">{{ $livestock->inputs ?? 'N/A' }}</td>
-                    
+
                     <td data-label="Farmer Contributions">
                         @if($livestock->liveContributions->isNotEmpty())
                             @foreach($livestock->liveContributions as $contribution)
@@ -238,13 +263,13 @@
                     </td>
 
                     <td data-label="Actions">
-                        <a href="{{ route('livestocks.edit', ['beneficiary_id' => $beneficiary->id, 'livestock' => $livestock->id]) }}" 
+                        <a href="{{ route('livestocks.edit', ['beneficiary_id' => $beneficiary->id, 'livestock' => $livestock->id]) }}"
                            class="btn btn-warning">Edit</a>
-                        <form action="{{ route('livestocks.destroy', ['beneficiary_id' => $beneficiary->id, 'livestock_id' => $livestock->id]) }}" 
+                        <form action="{{ route('livestocks.destroy', ['beneficiary_id' => $beneficiary->id, 'livestock_id' => $livestock->id]) }}"
                               method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" 
+                            <button type="submit" class="btn btn-danger"
                                     onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
                         </form>
                     </td>
@@ -258,6 +283,8 @@
                 <p>No livestock data found for this beneficiary.</p>
             </div>
         @endif
+    </div>
+    </div>
     </div>
 
     <!-- Include Bootstrap JS -->

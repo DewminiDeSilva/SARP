@@ -211,7 +211,7 @@
                 flex-direction: column;
                 gap: 15px;
             }
-            
+
             .card-summary .card {
                 width: 100%;
             }
@@ -219,8 +219,14 @@
             .table-responsive {
                 overflow-x: auto;
             }
-            
+
         }
+
+        /* Inline button container */
+.btninline {
+    display: inline-flex;
+    gap: 5px; /* Add some space between buttons if needed */
+}
     </style>
 </head>
 <body>
@@ -230,6 +236,11 @@
         </div>
 
         <div class="right-column">
+
+        <div class="col-md-12 text-center">
+        <h2 class="header-title" style="color: green;">Beneficiary List</h2>
+        </div>
+
             <div class="card-summary">
                 <div class="card">
                     <div class="card-header">Livestock Statistics</div>
@@ -256,11 +267,13 @@
                 </div>
             </div>
 
-            <div class="container">
-                <h2>Beneficiary List</h2>
 
+
+
+            <div class="row table-container">
+                <div class="col">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">NIC</th>
@@ -285,7 +298,7 @@
                                 <td>{{ $beneficiary->age }}</td>
                                 <td>{{ $beneficiary->phone }}</td>
                                 <td>{{ $beneficiary->gn_division_name }}</td>
-                                <td>
+                                <td class="btninline">
                                     @if($beneficiary->id)
                                         <a href="{{ route('livestocks.create', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-green btn-sm">Add Livestock</a>
                                         <a href="{{ route('livestocks.list', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-blue btn-sm">View Livestock</a>
@@ -357,6 +370,8 @@
                         </div>
 
                 </div>
+            </div>
+
             </div>
         </div>
     </div>
