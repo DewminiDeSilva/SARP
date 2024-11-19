@@ -270,7 +270,7 @@
                     </select>
                     <label for="entriesSelect">entries</label>
                 </div>
-                <div id="tableInfo" class="text-right"></div>
+            
             </div>
 
 
@@ -306,7 +306,9 @@
                     </table>
                 </div>
             </div>
-                </br>
+          </br>
+
+         <div id="tableInfo" class="text-left"></div>
 
             <!-- Pagination Section for Beneficiaries -->
             <nav aria-label="Page navigation example">
