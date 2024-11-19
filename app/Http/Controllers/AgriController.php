@@ -30,7 +30,14 @@ class AgriController extends Controller
 
     public function create($beneficiaryId = null)
     {
-        return view('agriculture.agri_create', compact('beneficiaryId'));
+        $beneficiary = null;
+        if ($beneficiaryId) {
+            $beneficiary = Beneficiary::find($beneficiaryId);
+            if (!$beneficiary) {
+                return redirect()->route('agriculture.index')->withErrors('Beneficiary not found.');
+            }
+        }
+        return view('agriculture.agri_create', compact('beneficiary'));
     }
 
   

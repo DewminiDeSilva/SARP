@@ -56,7 +56,7 @@
     <div class="container mt-5">
 
         <div class="center-heading text-center">
-            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form</h1>
+            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form {{ $beneficiary->name_with_initials }}</h1>
         </div>
     </br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
