@@ -21,7 +21,7 @@ class BeneficiaryController extends Controller
         $search = $request->get('search');
         $beneficiaries = Beneficiary::where('nic', 'like', '%'.$search.'%')
             ->orWhere('name_with_initials', 'like', '%'.$search.'%')
-            ->orWhere('gender', 'like', '%'.$search.'%')
+            ->orWhere('gender', '=', $search) // Exact match for gender
             ->orWhere('dob', 'like', '%'.$search.'%') // Added
             ->orWhere('age', 'like', '%'.$search.'%') // Added
             ->orWhere('address', 'like', '%'.$search.'%')
