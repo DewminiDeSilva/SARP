@@ -53,6 +53,40 @@
             color: #0d0e0d; /* Text color */
             /* width: 18; */
         }
+
+        .pagination .page-item {
+            margin: 0 0px; /* Adjust the margin to reduce space */
+        }
+        .pagination .page-link {
+            padding: 5px 10px; /* Adjust padding to control button size */
+        }
+
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
+
+        .page-item:hover {
+            border-color: #fff;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .page-link {
+            color : #28a745;
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #126926;
+            border-color: #126926;
+        }
     </style>
 
     <style>
@@ -337,6 +371,69 @@
                     </tbody>
                 </table>
             </div>
+
+
+            <!-- Pagination Links -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item {{ $nrmParticipants->onFirstPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $nrmParticipants->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+
+                        @php
+                            $currentPage = $nrmParticipants->currentPage();
+                            $lastPage = $nrmParticipants->lastPage();
+                            $startPage = max($currentPage - 2, 1);
+                            $endPage = min($currentPage + 2, $lastPage);
+                        @endphp
+
+                        @if ($startPage > 1)
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $nrmParticipants->url(1) }}">1</a>
+                            </li>
+                            @if ($startPage > 2)
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            @endif
+                        @endif
+
+                        @for ($i = $startPage; $i <= $endPage; $i++)
+                            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $nrmParticipants->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        @if ($endPage < $lastPage)
+                            @if ($endPage < $lastPage - 1)
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            @endif
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $nrmParticipants->url($lastPage) }}">{{ $lastPage }}</a>
+                            </li>
+                        @endif
+
+                        <li class="page-item {{ $nrmParticipants->hasMorePages() ? '' : 'disabled' }}">
+                            <a class="page-link" href="{{ $nrmParticipants->nextPageUrl() }}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                @php
+                    $currentPage = $nrmParticipants->currentPage();
+                    $perPage = $nrmParticipants->perPage();
+                    $total = $nrmParticipants->total();
+                    $startingNumber = ($currentPage - 1) * $perPage + 1;
+                    $endingNumber = min($total, $currentPage * $perPage);
+                @endphp
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div id="tableInfo" class="text-right">
+                        <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
+                    </div>
+                </div>
+
+
+
+
         </div>
     </div>
 </div>
