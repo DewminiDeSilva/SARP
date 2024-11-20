@@ -37,7 +37,7 @@ class AgriController extends Controller
                 return redirect()->route('agriculture.index')->withErrors('Beneficiary not found.');
             }
         }
-        return view('agriculture.agri_create', compact('beneficiary'));
+        return view('agriculture.agri_create', compact('beneficiary','beneficiaryId'));
     }
 
   
