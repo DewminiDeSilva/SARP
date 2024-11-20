@@ -78,7 +78,7 @@
     </div>
 
     <div class="container">
-        <h2>Livestock Registration for <td>{{ $beneficiary->name_with_initials }}</td></h2>
+        <!-- <h2>Livestock Registration for <td>{{ $beneficiary->name_with_initials }}</td></h2> -->
 
         @if($errors->any())
             <div class="alert alert-danger">
