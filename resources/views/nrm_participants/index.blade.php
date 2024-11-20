@@ -246,25 +246,6 @@
 
 
             <div class="container">
-<<<<<<< HEAD
-                <div class="justify-content-center">
-                    <div class="container mt-4">
-                        <div class="d-flex justify-content-center">
-
-                            <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-                                <div class="card-header">
-                                    Total Participants
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $totalParticipants }}</h5>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-=======
     <div class="justify-content-center">
         <div class="container mt-4">
             <div class="d-flex justify-content-center">
@@ -280,7 +261,6 @@
         </div>
     </div>
 </div>
->>>>>>> Ravindu
 
 
             <!-- Success Message -->
@@ -356,8 +336,6 @@
                         @endforeach
                     </tbody>
                 </table>
-
-
             </div>
         </div>
     </div>
