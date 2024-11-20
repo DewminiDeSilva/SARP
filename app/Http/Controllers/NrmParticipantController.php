@@ -15,33 +15,9 @@ class NrmParticipantController extends Controller
      * Display a list of participants for a specific NRM training program.
      */
     public function listParticipants(Request $request, $nrmTrainingId)
-{
-    $nrmTraining = NrmTraining::findOrFail($nrmTrainingId);
+    {
+        $nrmTraining = NrmTraining::findOrFail($nrmTrainingId);
 
-<<<<<<< HEAD
-    // If there's a search query, filter participants
-    $search = $request->input('search');
-
-    // Get 'entries' from request (for pagination), default to 10 if not present
-    $entries = request()->get('entries', 10);
-
-    $nrmParticipants = NRMParticipant::where('nrm_training_id', $nrmTrainingId)
-        ->when($search, function ($query, $search) {
-            return $query->where('name', 'like', "%{$search}%")
-                         ->orWhere('nic', 'like', "%{$search}%")
-                         ->orWhere('address_institution', 'like', "%{$search}%")
-                         ->orWhere('contact_number', 'like', "%{$search}%")
-                         ->orWhere('designation', 'like', "%{$search}%")
-                         ->orWhere('youth', 'like', "%{$search}%");
-        })
-        ->paginate($entries); // Use paginate() instead of get()
-
-    $totalParticipants = $nrmParticipants->total(); // Get the total count of participants
-
-    return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'search', 'entries', 'totalParticipants'));
-}
-
-=======
         // Get search query
         $search = $request->input('search');
 
@@ -66,7 +42,6 @@ class NrmParticipantController extends Controller
         // Pass variables to the view
         return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'search', 'entries'));
     }
->>>>>>> Ravindu
 
 
 
