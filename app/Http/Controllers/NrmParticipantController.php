@@ -70,7 +70,6 @@ class NrmParticipantController extends Controller
 
 
 
-
     /**
      * Show the form to create a new participant for a specific NRM training program.
      */

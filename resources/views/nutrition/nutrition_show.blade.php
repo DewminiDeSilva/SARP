@@ -315,7 +315,7 @@
 
                             </br>
 
-    <h2 style="color: green;">Farmer Organization Members</h2>
+    <h2 style="color: green;">Nutrition Program Participants</h2>
 
             <!-- Actions and Search Section -->
             <div class="d-flex justify-content-between mb-3">
