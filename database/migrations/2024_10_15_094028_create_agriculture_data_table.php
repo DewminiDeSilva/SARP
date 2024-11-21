@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('crop_variety'); // Nullable crop variety column
             $table->date('planting_date'); // Nullable planting date column
             $table->string('inputs'); // Nullable inputs column
-            $table->integer('total_acres'); // Integer total_acres
+            $table->float('total_acres', 8, 2); // Integer total_acres
             $table->timestamps();
         });
 
