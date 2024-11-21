@@ -80,6 +80,7 @@ li:hover {
         <ul>
             <li><a href="/dashboard" style="color: #FFFFFF">Dashboard</a></li>
             <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
+            <li><a href="/staff_profile" style="color: #FFFFFF">STAFF PROFILE</a></li>
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Beneficiary</a>
                 <ul class="nested">

@@ -48,6 +48,7 @@ use App\Http\Controllers\NrmParticipantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
+use App\Http\Controllers\StaffProfileController;
 
 
 Route::get('/', function () {
@@ -490,3 +491,18 @@ Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
 Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
 
 //Route::get('/agriculture-data', [AgricultureDataController::class, 'index'])->name('agriculture.data');
+
+Route::prefix('staff_profile')->group(function () {
+    Route::get('/', [StaffProfileController::class, 'index'])->name('staff_profile.index');        // List all profiles
+    Route::get('/create', [StaffProfileController::class, 'create'])->name('staff_profile.create'); // Create form
+    Route::post('/store', [StaffProfileController::class, 'store'])->name('staff_profile.store');   // Store new profile
+    Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff_profile.show'); // View profile
+    Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit'); // Edit form
+    Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update'); // Update profile
+    Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff_profile.destroy'); // Delete profile
+});
+Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
+Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
+Route::get('/staff_profile/search', [StaffProfileController::class, 'search'])->name('staff_profile.search');
+
+Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
