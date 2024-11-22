@@ -200,6 +200,7 @@ Route::get('/lstock', function () {
 
 Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
 
+Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
 
 
 
