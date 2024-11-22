@@ -266,6 +266,20 @@
                     </div>
                 </div>
             </div>
+            <form method="GET" action="{{ route('beneficiary.searchLivestock') }}" class="form-inline">
+    <div class="input-group">
+        <input 
+            type="text" 
+            class="form-control" 
+            name="search" 
+            placeholder="Search Beneficiaries" 
+            value="{{ request('search') }}" 
+        >
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-outline-success">Search</button>
+        </div>
+    </div>
+</form>
 
 
 

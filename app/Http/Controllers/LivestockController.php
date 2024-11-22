@@ -222,4 +222,29 @@ class LivestockController extends Controller
         }
     }
     
+    public function searchLivestock(Request $request)
+{
+    $search = $request->input('search'); // Get the search query
+
+    // Search in Beneficiary fields
+    $beneficiaries = Beneficiary::where('nic', 'like', "%{$search}%")
+        ->orWhere('name_with_initials', 'like', "%{$search}%")
+        ->orWhere('address', 'like', "%{$search}%")
+        ->orWhere('gn_division_name', 'like', "%{$search}%")
+        ->paginate(10); // Add pagination
+        
+
+    // Add required statistics
+    $totalLivestocks = Livestock::count();
+    $totalBeneficiaries = Beneficiary::count();
+    $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
+
+    // Return the view with data
+    return view('beneficiary.beneficiary_list', compact('beneficiaries','search','totalLivestocks','totalBeneficiaries','totalGnDivisions'
+    ));
+}
+
+  
+
+
 }
