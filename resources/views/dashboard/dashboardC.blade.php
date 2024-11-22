@@ -96,10 +96,10 @@ li:hover {
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Tank</a>
+                <a href="#" style="color: #FFFFFF">Tank Rehabilitation</a>
                 <ul class="nested">
-                    <li href="/tank_rehabilitation/create"><a href="/tank_rehabilitation/create" style="color: #FFFFFF">Tank Registation</a></li>
-                    <li href="/tank_rehabilitation"><a href="/tank_rehabilitation" style="color: #FFFFFF">Tank Details</a></li>
+                    <li href="/tank_rehabilitation/create"><a href="/tank_rehabilitation/create" style="color: #FFFFFF">Tank Rehabilitation Registation</a></li>
+                    <li href="/tank_rehabilitation"><a href="/tank_rehabilitation" style="color: #FFFFFF">Tank Rehabilitation Details</a></li>
                 </ul>
             </li>
 
