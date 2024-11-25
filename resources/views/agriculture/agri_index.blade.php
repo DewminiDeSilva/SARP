@@ -352,6 +352,11 @@
                         <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
                     </li>
                 </ul>
+                <!-- Pagination Section -->
+          <div class="d-flex justify-content-center mt-3">
+          {{ $beneficiaries->appends(['search' => request('search'), 'entries' => request('entries')])->links() }}
+            </div>
+
             </nav>
         </div>
         </div>
