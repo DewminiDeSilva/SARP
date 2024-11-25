@@ -504,6 +504,7 @@ Route::prefix('staff_profile')->group(function () {
 });
 Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
 Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
-Route::get('/staff_profile/search', [StaffProfileController::class, 'search'])->name('staff_profile.search');
+
+Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
 
 Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');

@@ -129,26 +129,30 @@ class StaffProfileController extends Controller
 {
     $search = $request->get('search');
 
-    // Build a query to search across all relevant fields
+    // Build a query to search across relevant fields in the StaffProfile model
     $staffProfiles = StaffProfile::where('name_with_initials', 'like', '%' . $search . '%')
         ->orWhere('nic_number', 'like', '%' . $search . '%')
         ->orWhere('designation', 'like', '%' . $search . '%')
         ->orWhere('permanent_address', 'like', '%' . $search . '%')
         ->orWhere('contact_number', 'like', '%' . $search . '%')
-        ->orWhere('mobile_fixed', 'like', '%' . $search . '%')
         ->orWhere('email_address', 'like', '%' . $search . '%')
         ->orWhere('date_of_birth', 'like', '%' . $search . '%')
         ->orWhere('gender', 'like', '%' . $search . '%')
         ->orWhere('w_and_op_number', 'like', '%' . $search . '%')
         ->orWhere('highest_education_qualifications', 'like', '%' . $search . '%')
         ->orWhere('salary', 'like', '%' . $search . '%')
+        ->orWhere('salary_increment_date', 'like', '%' . $search . '%')
         ->orWhere('personal_file_number', 'like', '%' . $search . '%')
         ->orWhere('first_appointment_date', 'like', '%' . $search . '%')
         ->paginate(10)
-        ->appends(['search' => $search]); // Ensure search term persists in pagination links
+        ->appends(['search' => $search]);
 
-    // Pass the search term back to the view
-    return view('staff_profile.staff_index', compact('staffProfiles', 'search'));
+    // Add additional summary counts if needed
+    $totalStaff = StaffProfile::count();
+    $maleStaff = StaffProfile::where('gender', 'Male')->count();
+    $femaleStaff = StaffProfile::where('gender', 'Female')->count();
+
+    return view('staff_profile.staff_index', compact('staffProfiles', 'search', 'totalStaff', 'maleStaff', 'femaleStaff'));
 }
 
     /**

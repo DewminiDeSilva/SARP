@@ -154,14 +154,17 @@
         </div>
     </div>
 </div>
-                <!-- Search Form -->
-                <form method="GET" action="{{ route('staff_profile.search') }}" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="search" class="form-control" placeholder="Search staff profiles" value="{{ request()->get('search') }}">
-        <button class="btn btn-secondary" type="submit">Search</button>
-    </div>
-</form>
 
+                <!-- Search Form -->
+                <form method="GET" action="{{ route('searchstaff') }}" class="form-inline">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="search">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+<p>
 
                 <!-- Success Message -->
                 @if(session('success'))
