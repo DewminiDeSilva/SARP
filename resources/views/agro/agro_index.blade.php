@@ -419,15 +419,15 @@
                     <p class="card-text">Total agro enterprises currently in the system.</p>
                 </div>
             </div>
-            </div> 
-           
+            </div>
+
     </div>
-    
-    
+
+
     <div class="row mt-4">
     <div class="col-md-3">
         <!-- Upload CSV Form -->
-        
+
         <form action="{{ route('agro.csv.upload') }}" method="POST" enctype="multipart/form-data" class="form-inline">
             @csrf
             <div class="file-upload-wrapper d-flex align-items-start">
@@ -437,26 +437,27 @@
         </form>
 
         <!-- Search Form -->
-        <form class="form-inline mb-3">
+        <form class="form-inline mb-3" action="{{ route('agrosearch') }}" method="GET">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" name="search">
+                <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </div>
             </div>
         </form>
 
+
         <!-- Add New Enterprise Button -->
-        <a href="{{ route('agro.create') }}" class="btn submitbtton mb-3">+ Add New Enterprise</a>
+        <a href="{{ route('agro.create') }}" class="btn submitbtton mb-3">Add New Enterprise</a>
     </div>
-    
+
     <!-- Generate CSV Report Button in a Separate Column -->
     <div class="col-md-6 offset-md-3 text-right">
         <a href="{{ route('agro.csv.generate') }}" class="btn submitbtton">Generate CSV Report</a>
     </div>
 </div>
 
-            
+
 
             <!-- Success message handling -->
             @if(session('success'))
@@ -483,6 +484,10 @@
 
             <!-- Table displaying agro enterprise details -->
             <div class="table-responsive">
+            @if($agros->isEmpty())
+                <p>No records found for "{{ request('search') }}".</p>
+            @endif
+
                 <table class="table table-bordered">
                     <thead class="thead-light">
                         <tr>
