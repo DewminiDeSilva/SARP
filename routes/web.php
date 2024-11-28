@@ -254,6 +254,8 @@ Route::get('agro/{agro}/view-pdf', [AgroController::class, 'viewPdf'])->name('ag
 
 Route::get('/agro/csv/generate', [AgroController::class, 'generateCsv'])->name('agro.csv.generate');
 Route::post('/agro/csv/upload', [AgroController::class, 'uploadCsv'])->name('agro.csv.upload');
+Route::get('/agrosearch', [AgroController::class, 'search'])->name('agrosearch');
+
 
 //Shareholder
 // Shareholder Routes
