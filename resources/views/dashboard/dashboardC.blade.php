@@ -137,15 +137,22 @@ li:hover {
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Agriculture and Livestock</a>
                 <ul class="nested">
-
-                        <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
-                        <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
-                        <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li>
-
-                        <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
-
-
-
+                <li class="submenu">
+                        <a href="#" style="color: #FFFFFF">Agriculture</a>
+                        <ul class="nested">
+                            <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
+                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li> 
+                        </ul>
+                    </li>
+                        
+                        <li class="submenu">
+                        <a href="#" style="color: #FFFFFF">Livestock</a>
+                        <ul class="nested">
+                            <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
+                            <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
+                            <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Stocking Details Fingerlings</a></li>
+                        </ul>
+                    </li>
 
                 </ul>
             </li>
