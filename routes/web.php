@@ -517,3 +517,5 @@ Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])
 //Fingerling
 
 Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
+Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
+
