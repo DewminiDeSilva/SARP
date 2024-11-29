@@ -49,6 +49,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\StaffProfileController;
+use App\Http\Controllers\FingerlingController;
+
+
 
 
 Route::get('/', function () {
@@ -508,3 +511,7 @@ Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'upd
 Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
 
 Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
+
+//Fingerling
+
+Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
