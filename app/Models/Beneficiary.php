@@ -46,7 +46,10 @@ class Beneficiary extends Model
         'monthly_household_expenses',
         'household_level_assets_description',
         'type_of_water_resource',
-        'training_details_description'
+        'training_details_description',
+        'input1',
+        'input2',
+        'input3',
     ];
 
     /**
