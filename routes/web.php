@@ -49,6 +49,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\StaffProfileController;
+use App\Http\Controllers\FingerlingController;
+
+
 
 
 Route::get('/', function () {
@@ -199,6 +202,9 @@ Route::get('/lstock', function () {
 //Beneficiary List
 
 Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
+// In routes/web.php
+Route::get('/beneficiaries', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
+
 
 Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
 
@@ -254,6 +260,8 @@ Route::get('agro/{agro}/view-pdf', [AgroController::class, 'viewPdf'])->name('ag
 
 Route::get('/agro/csv/generate', [AgroController::class, 'generateCsv'])->name('agro.csv.generate');
 Route::post('/agro/csv/upload', [AgroController::class, 'uploadCsv'])->name('agro.csv.upload');
+Route::get('/agrosearch', [AgroController::class, 'search'])->name('agrosearch');
+
 
 //Shareholder
 // Shareholder Routes
@@ -508,3 +516,9 @@ Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'upd
 Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
 
 Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
+
+//Fingerling
+
+Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
+Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
+

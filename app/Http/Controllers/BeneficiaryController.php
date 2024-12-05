@@ -53,6 +53,9 @@ class BeneficiaryController extends Controller
             ->orWhere('training_details_description', 'like', '%'.$search.'%') // Added
             ->orWhere('latitude', 'like', '%'.$search.'%')
             ->orWhere('longitude', 'like', '%'.$search.'%')
+            ->orWhere('input1', 'like', '%' . $search . '%') // New input
+            ->orWhere('input2', 'like', '%' . $search . '%') // New input
+            ->orWhere('input3', 'like', '%' . $search . '%') // New input
             ->paginate(10);
     
         // Check if you want to return the beneficiary_index or beneficiary_list view
@@ -125,6 +128,9 @@ class BeneficiaryController extends Controller
                          'community_based_organization' => $beneficiaryData['Community-Based Organization'] ?? null,
                          'type_of_water_resource' => $beneficiaryData['Type of Water Resource'] ?? null,
                          'training_details_description' => $beneficiaryData['Training Details Description'] ?? null,
+                         'input1' => $beneficiaryData['Input1'] ?? null, // New input
+                        'input2' => $beneficiaryData['Input2'] ?? null, // New input
+                        'input3' => $beneficiaryData['Input3'] ?? null, // New input
                      ]);
                  }
              }
@@ -152,7 +158,7 @@ public function generateCsv()
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'AI Division', 'Latitude', 'Longitude',
         'Number of Family Members', 'Head of Householder Name', 'Householder Number', 'Income Source', 'Average Income',
         'Monthly Household Expenses', 'Household Level Assets Description', 'Community-Based Organization', 'Type of Water Resource',
-        'Training Details Description'
+        'Training Details Description','Input1', 'Input2', 'Input3'
     ];
 
     // Insert the header into the CSV file
@@ -193,7 +199,10 @@ public function generateCsv()
             $beneficiary->household_level_assets_description,
             $beneficiary->community_based_organization,
             $beneficiary->type_of_water_resource,
-            $beneficiary->training_details_description
+            $beneficiary->training_details_description,
+            $beneficiary->input1, // New input
+            $beneficiary->input2, // New input
+            $beneficiary->input3, // New input
         ];
 
         // Insert data row into CSV
@@ -250,6 +259,7 @@ public function generateCsv()
 
     public function store(Request $request)
     {
+        
     // Validate the request data
     $request->validate([
         'nic' => 'required|string|max:12|unique:beneficiaries,nic', // Not nullable
@@ -286,6 +296,9 @@ public function generateCsv()
         'community_based_organization' => 'nullable|string|max:255', // Nullable
         'type_of_water_resource' => 'required|string|max:255', // Not nullable
         'training_details_description' => 'nullable|string|max:500', // Nullable
+        'input1' => 'nullable|string|max:255',
+        'input2' => 'nullable|string|max:255',
+        'input3' => 'nullable|string|max:255',
     ]);
  
 
@@ -410,6 +423,9 @@ public function generateCsv()
         'household_level_assets_description' => 'nullable|string|max:500',
         'type_of_water_resource' => 'nullable|string|max:255',
         'training_details_description' => 'nullable|string|max:500',
+        'input1' => 'nullable|string|max:255',
+        'input2' => 'nullable|string|max:255',
+        'input3' => 'nullable|string|max:255',
     ]);
 
     // Find the beneficiary by ID
@@ -460,7 +476,7 @@ public function generateCsv()
         'Monthly Household Expenses', 'Number of Family Members', 'Education', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area', 
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'Tank Name', 'AI Division', 'Account Number', 'Bank Name', 
         'Bank Branch', 'Latitude', 'Longitude', 'Head of Householder Name', 'Householder Number', 'Household Level Assets Description', 
-        'Community-Based Organization', 'Type of Water Resource', 'Training Details Description'
+        'Community-Based Organization', 'Type of Water Resource', 'Training Details Description','Input1', 'Input2', 'Input3'
     ]);
 
     foreach ($beneficiaries as $row) {
@@ -470,7 +486,9 @@ public function generateCsv()
             $row->land_ownership_proposed_cultivation_area, $row->province_name, $row->district_name, $row->ds_division_name, $row->gn_division_name, 
             $row->as_center, $row->cascade_name, $row->tank_name, $row->ai_division, $row->account_number, $row->bank_name, $row->bank_branch, 
             $row->latitude, $row->longitude, $row->head_of_householder_name, $row->householder_number, $row->household_level_assets_description, 
-            $row->community_based_organization, $row->type_of_water_resource, $row->training_details_description
+            $row->community_based_organization, $row->type_of_water_resource, $row->training_details_description,$row->input1, // Added field
+            $row->input2, // Added field
+            $row->input3  // Added field
         ]);
     }
     fclose($fp);
@@ -482,18 +500,22 @@ public function generateCsv()
     }
 
 
-    public function list()
-    {
-        
-    $beneficiaries = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')->paginate(10);
+    public function list(Request $request)
+{
+    $entries = $request->get('entries', 10); // Default to 10 entries per page
+    $search = $request->get('search');
 
-    // Calculate summary statistics
+    $query = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name');
+
+    // Summary statistics
     $totalBeneficiaries = Beneficiary::count();
     $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
     $totalLivestocks = Livestock::distinct('gn_division_name')->count('gn_division_name');
 
+    return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks', 'entries', 'search'));
+}
 
-    return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
-    }
+
+    
 
 }

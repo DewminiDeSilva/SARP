@@ -97,14 +97,14 @@ class AgroController extends Controller
     ]);
 
     $data = $request->except(['asset_name', 'asset_value']);
-    
+
     // Handle file upload for business plan
     if ($request->hasFile('business_plan')) {
         // Delete old business plan if exists
         if ($agro->business_plan) {
             Storage::delete($agro->business_plan);
         }
-        
+
         // Store the new business plan
         $data['business_plan'] = $request->file('business_plan')->store('business_plans');
     }
@@ -213,12 +213,12 @@ public function uploadCsv(Request $request)
 public function generateCsv()
 {
     $agros = Agro::with('assets')->get();
-    
+
     $csvData = [];
     $csvData[] = [
-        'Enterprise Name', 'Registration Number', 'Institute of Registration', 
-        'Address', 'Email', 'Phone Number', 'Website Name', 
-        'Description of Certificates', 'Nature of Business', 'Products Available', 
+        'Enterprise Name', 'Registration Number', 'Institute of Registration',
+        'Address', 'Email', 'Phone Number', 'Website Name',
+        'Description of Certificates', 'Nature of Business', 'Products Available',
         'Yield Collection Details', 'Marketing Information', 'List of Distributors',
         'Asset Name', 'Asset Value'
     ];
@@ -226,9 +226,9 @@ public function generateCsv()
     foreach ($agros as $agro) {
         foreach ($agro->assets as $asset) {
             $csvData[] = [
-                $agro->enterprise_name, $agro->registration_number, $agro->institute_of_registration, 
-                $agro->address, $agro->email, $agro->phone_number, $agro->website_name, 
-                $agro->description_of_certificates, $agro->nature_of_business, $agro->products_available, 
+                $agro->enterprise_name, $agro->registration_number, $agro->institute_of_registration,
+                $agro->address, $agro->email, $agro->phone_number, $agro->website_name,
+                $agro->description_of_certificates, $agro->nature_of_business, $agro->products_available,
                 $agro->yield_collection_details, $agro->marketing_information, $agro->list_of_distributors,
                 $asset->asset_name, $asset->asset_value
             ];
@@ -291,5 +291,39 @@ public function viewPdf($id)
         'Pragma' => 'no-cache',
     ]);
 }
+
+
+
+/**
+ * Search functionality for Agro enterprises.
+ */
+public function search(Request $request)
+{
+    $search = $request->get('search');
+
+    // Search across Agro and related AgroAsset fields
+    $agros = Agro::with('assets')
+        ->where('enterprise_name', 'like', '%' . $search . '%')
+        ->orWhere('registration_number', 'like', '%' . $search . '%')
+        ->orWhere('institute_of_registration', 'like', '%' . $search . '%')
+        ->orWhere('address', 'like', '%' . $search . '%')
+        ->orWhere('email', 'like', '%' . $search . '%')
+        ->orWhere('phone_number', 'like', '%' . $search . '%')
+        ->orWhere('website_name', 'like', '%' . $search . '%')
+        ->orWhere('description_of_certificates', 'like', '%' . $search . '%')
+        ->orWhere('nature_of_business', 'like', '%' . $search . '%')
+        ->orWhere('products_available', 'like', '%' . $search . '%')
+        ->orWhere('yield_collection_details', 'like', '%' . $search . '%')
+        ->orWhere('marketing_information', 'like', '%' . $search . '%')
+        ->orWhere('list_of_distributors', 'like', '%' . $search . '%')
+        ->orWhereHas('assets', function ($query) use ($search) {
+            $query->where('asset_name', 'like', '%' . $search . '%')
+                ->orWhere('asset_value', 'like', '%' . $search . '%');
+        })
+        ->paginate(10);
+
+    return view('agro.agro_index', compact('agros', 'search'));
+}
+
 
 }

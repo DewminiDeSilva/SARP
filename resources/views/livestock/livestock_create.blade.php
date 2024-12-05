@@ -259,7 +259,7 @@ $('#livestock_type').change(function() {
                 response.forEach(function(item) {
                     let optionText = item.name; // Assuming 'name' is the common field in all models
                     productionFocusDropdown.append(`
-                        <option value="${item.id}">${optionText}</option>
+                        <option value="${item.name}">${optionText}</option>
                     `);
                 });
             },
