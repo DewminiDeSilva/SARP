@@ -366,6 +366,70 @@
                                         <label>Training Details:</label>
                                         <p>{{$beneficiary->training_details_description}}</p>
                                     </div>
+                                    <div class="container">
+    
+    <hr>
+
+    <!-- Display Input1: Agriculture/Livestock -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Agriculture/Livestock:</strong>
+        </div>
+        <div class="col-md-6">
+            {{ $beneficiary->input1 ?? 'N/A' }}
+        </div>
+    </div>
+
+    <!-- Display Input2 and Input3 based on Input1 -->
+    @if ($beneficiary->input1 === 'agriculture')
+        <!-- Agriculture Section -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Crop Category:</strong>
+            </div>
+            <div class="col-md-6">
+                {{ $beneficiary->input2 ?? 'N/A' }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Crop Name:</strong>
+            </div>
+            <div class="col-md-6">
+                {{ $beneficiary->input3 ?? 'N/A' }}
+            </div>
+        </div>
+    @elseif ($beneficiary->input1 === 'livestock')
+        <!-- Livestock Section -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Livestock Type:</strong>
+            </div>
+            <div class="col-md-6">
+                {{ $beneficiary->input2 ?? 'N/A' }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Production Focus:</strong>
+            </div>
+            <div class="col-md-6">
+                {{ $beneficiary->input3 ?? 'N/A' }}
+            </div>
+        </div>
+    @else
+        <!-- Default Section for No Data -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Details:</strong>
+            </div>
+            <div class="col-md-6">
+                No details available.
+            </div>
+        </div>
+    @endif
+</div>
+
                                 </div>
                             </div>
                         </div>
