@@ -507,6 +507,19 @@ public function generateCsv()
 
     $query = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name');
 
+    // Apply search filter if provided
+    if ($search) {
+        $query->where('nic', 'like', '%' . $search . '%')
+              ->orWhere('name_with_initials', 'like', '%' . $search . '%')
+              ->orWhere('gender', 'like', '%' . $search . '%')
+              ->orWhere('address', 'like', '%' . $search . '%')
+              ->orWhere('phone', 'like', '%' . $search . '%')
+              ->orWhere('gn_division_name', 'like', '%' . $search . '%');
+    }
+
+    // Paginate with selected entries per page
+    $beneficiaries = $query->paginate($entries)->appends(['entries' => $entries, 'search' => $search]);
+
     // Summary statistics
     $totalBeneficiaries = Beneficiary::count();
     $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
