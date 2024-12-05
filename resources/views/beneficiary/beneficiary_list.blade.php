@@ -7,6 +7,9 @@
     <title>Beneficiary List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+<<<<<<< HEAD
+        /* Root Variables */
+=======
         /* Root Variables for consistent colors and values */
         .pagination .page-item {
             margin: 0 0px; /* Adjust the margin to reduce space */
@@ -41,6 +44,7 @@
             background-color: #126926;
             border-color: #126926;
         }
+>>>>>>> a24c8993212f6bf5c36bbdfcf85fb126bda7fe8c
         :root {
             --primary-green: #28a745;
             --primary-blue: #007bff;
@@ -196,6 +200,140 @@
             line-height: 1.4;
         }
 
+        * Pagination Container */
+.pagination {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+    gap: 0;
+}
+
+/* Page Items */
+.pagination .page-item {
+    margin: 0;
+}
+
+/* Page Links - Basic Style */
+.pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+    margin-left: -1px; /* Creates connected look */
+}
+
+/* First Item Border Radius */
+.pagination .page-item:first-child .page-link {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    margin-left: 0;
+}
+
+/* Last Item Border Radius */
+.pagination .page-item:last-child .page-link {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* Hover State */
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #0056b3;
+    z-index: 2;
+}
+
+/* Active State */
+.pagination .page-item.active .page-link {
+    background-color: #fff;
+    border-color: #dee2e6;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Previous/Next Arrows */
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    color: #000;
+}
+
+/* Next Arrow - Blue Color */
+.pagination .page-item:last-child .page-link {
+    color: #007bff;
+}
+
+/* Showing Entries Text */
+.showing-entries {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Container for Pagination Info */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Arrow content */
+.pagination .page-item:first-child .page-link::after {
+    content: "‹";
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.pagination .page-item:last-child .page-link::after {
+    content: "›";
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Hide default Previous/Next text */
+.pagination .page-item:first-child .page-link span,
+.pagination .page-item:last-child .page-link span {
+    display: none;
+}
+
+        /* Entries Info and Pagination Container */
+        .d-flex.justify-content-between {
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .d-flex.justify-content-between p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Search and Entries Selection Styles */
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            width: auto;
+        }
+
+        .custom-select {
+            width: auto;
+            margin: 0 10px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .frame {
@@ -219,7 +357,7 @@
             .table-responsive {
                 overflow-x: auto;
             }
-
+            
         }
 
         /* Inline button container */
@@ -236,11 +374,6 @@
         </div>
 
         <div class="right-column">
-
-        <div class="col-md-12 text-center">
-        <h2 class="header-title" style="color: green;">Beneficiary List</h2>
-        </div>
-
             <div class="card-summary">
                 <div class="card">
                     <div class="card-header">Livestock Statistics</div>
@@ -267,11 +400,9 @@
                 </div>
             </div>
 
+            <div class="container">
+                <h2>Beneficiary List</h2>
 
-
-
-            <div class="row table-container">
-                <div class="col">
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
@@ -370,8 +501,6 @@
                         </div>
 
                 </div>
-            </div>
-
             </div>
         </div>
     </div>

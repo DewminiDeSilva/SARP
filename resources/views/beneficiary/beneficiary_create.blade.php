@@ -14,6 +14,10 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- Correctly link your CSS file -->
+<link rel="stylesheet" href="{{ asset('css/beneficiary_create.css') }}">
+
+<!-- Correctly link your JS files -->
 
 <link rel="stylesheet" href="{{ asset('assets/css/beneficiary_create.css')}} ">
 <script>
@@ -199,7 +203,58 @@
 
 
 </style>
+<style>
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border: none;
+            padding: 10px 50px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
 
+        .btn-back img {
+            width: 45px;
+            height: auto;
+            margin-right: 5px;
+            transition: transform 0.3s ease;
+            background: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-back .btn-text {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            right: 25px;
+            background-color: #1e8e1e;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 0;
+        }
+
+        .btn-back:hover .btn-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .btn-back:hover img {
+            transform: translateX(-50px);
+        }
+    </style>
 </head>
 <body>
 
@@ -209,6 +264,10 @@
             @csrf
         </div>
         <div class="right-column">
+
+        <a href="{{ route('beneficiary.index') }}" class="btn-back">
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            </a>
 
         <div class="col-md-12 text-center">
             <h2 class="header-title" style="color: green;">Beneficiary Registration</h2>
@@ -321,13 +380,67 @@
             </div>
         </div>
 
-
+ 
     </div>
+<!-- agri and livestock dropdown -->
 
+<!-- Input 1 Dropdown for Agriculture/Livestock -->
+<div class="form-group">
+    <label for="agriculture_livestock" class="form-label dropdown-label">Agriculture/Livestock</label>
+    <select class="form-control btn btn-success" id="agriculture_livestock" name="input1" required>
+        <option value="">Select Option</option>
+        <option value="agriculture">Agriculture</option>
+        <option value="livestock">Livestock</option>
+    </select>
+</div>
 
+<!-- Section for Agriculture -->
+<div id="agricultureSection" class="row mt-3 d-none">
+    <div class="col">
+        <div class="form-group">
+            <label for="categoryDropdown" class="form-label dropdown-label">Crop Category</label>
+            <select class="form-control btn btn-success" id="categoryDropdown" name="input2">
+                <option value="">Select Category</option>
+                <option value="vegetables">Vegetables</option>
+                <option value="fruits">Fruits</option>
+                <option value="home_garden">Home Garden</option>
+                <option value="others">Others</option>
+            </select>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label for="cropName" class="form-label dropdown-label">Crop Name</label>
+            <select class="form-control btn btn-success" id="cropName" name="input3">
+                <option value="">Select Crop Name</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-
-
+<!-- Section for Livestock -->
+<div id="livestockSection" class="row mt-3 d-none">
+    <div class="col">
+        <div class="form-group">
+            <label for="livestock_type" class="form-label dropdown-label">Livestock Type</label>
+            <select class="form-control btn btn-success" id="livestock_type" name="input2">
+                <option value="">Select Livestock Type</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Poultry">Poultry</option>
+                <option value="Goat Rearing">Goat Rearing</option>
+                <option value="Aqua Culture">Aqua Culture</option>
+            </select>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label for="production_focus" class="form-label dropdown-label">Production Focus</label>
+            <select class="form-control btn btn-success" id="production_focus" name="input3">
+                <option value="">Select Production Focus</option>
+            </select>
+        </div>
+    </div>
+</div>
 
 
     <!-- GND and ASC -->
@@ -556,50 +669,10 @@
 <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
     <strong>Success!</strong> Beneficiary registration completed successfully.
 </div>
-<script>
- $(document).ready(function() {
-    // Handle form submission
-    $('form').submit(function(event) {
-        // Prevent default form submission behavior
-        event.preventDefault();
-
-        // Perform AJAX form submission
-        $.ajax({
-            url: $(this).attr('action'),
-            type: $(this).attr('method'),
-            data: $(this).serialize(),
-            success: function(response) {
-                // Show success modal
-                $('#successModal').modal('show');
-
-                // Automatically close the modal after 5 seconds (5000 milliseconds)
-                setTimeout(function() {
-                    $('#successModal').modal('hide');
-                    // Redirect to beneficiary index page after modal is closed
-                    window.location.href = '/beneficiary';
-                }, 6000);
-
-                // Optionally, reset the form fields
-                $('form')[0].reset();
-            },
-            error: function(xhr, status, error) {
-                // Handle error
-                console.error(xhr.responseText);
-                // You can display an error message here if needed
-            }
-        });
-    });
-
-    // Close modal button action
-    $('#successModal .btn-secondary').click(function() {
-        $('#successModal').modal('hide');
-        // Redirect to beneficiary index page after modal is closed
-        window.location.href = '/beneficiary';
-    });
-});
 
 
-</script>
+
+
 <script>
 
 $(document).ready(function () {
@@ -751,6 +824,86 @@ $(document).ready(function () {
         $('#gndName').val($(this).find('option:selected').text());
     });
 });
+
+
+// agri livestock
+
+$(document).ready(function () {
+    // Handle Agriculture/Livestock Selection
+    $('#agriculture_livestock').change(function () {
+        var selectedOption = $(this).val();
+
+        // Show/Hide Agriculture and Livestock sections based on selection
+        $('#agricultureSection').toggleClass('d-none', selectedOption !== 'agriculture');
+        $('#livestockSection').toggleClass('d-none', selectedOption !== 'livestock');
+
+        // Clear dropdowns when switching between sections
+        $('#categoryDropdown, #cropName, #livestock_type, #production_focus').val('');
+    });
+
+    // Handle Agriculture Category Change (Input2 and Input3 for Agriculture)
+    $('#categoryDropdown').change(function () {
+        var selectedCategory = $(this).val();
+        var cropNameDropdown = $('#cropName');
+
+        // Clear previous options in the Crop Name dropdown
+        cropNameDropdown.empty().append('<option value="">Select Crop Name</option>');
+
+        // Make AJAX call to fetch crops based on the selected category
+        if (selectedCategory) {
+            $.ajax({
+                url: '/get-crops/' + selectedCategory, // Adjust API route if necessary
+                method: 'GET',
+                success: function (data) {
+                    if (data && data.length > 0) {
+                        // Populate the Crop Name dropdown with fetched data
+                        data.forEach(function (crop) {
+                            var cropName = crop.crop_name || crop.name; // Adjust based on API response field
+                            cropNameDropdown.append('<option value="' + cropName + '">' + cropName + '</option>');
+                        });
+                    } else {
+                        alert('No crops found for the selected category.');
+                    }
+                },
+                error: function () {
+                    alert('Error fetching crops. Please try again.');
+                },
+            });
+        }
+    });
+
+    // Handle Livestock Type Change (Input2 and Input3 for Livestock)
+    $('#livestock_type').change(function () {
+        var selectedType = $(this).val();
+        var productionFocusDropdown = $('#production_focus');
+
+        // Clear existing options in the Production Focus dropdown
+        productionFocusDropdown.empty().append('<option value="">Select Production Focus</option>');
+
+        // Make AJAX call to fetch production focus options for the selected livestock type
+        if (selectedType) {
+            $.ajax({
+                url: `/livestocks/get-production-focus/${selectedType}`, // Adjust API route if necessary
+                method: 'GET',
+                success: function (response) {
+                    if (response && response.length > 0) {
+                        // Populate the Production Focus dropdown with fetched data
+                        response.forEach(function (item) {
+                            productionFocusDropdown.append('<option value="' + item.name + '">' + item.name + '</option>');
+
+                        });
+                    } else {
+                        alert('No production focus options found for the selected livestock type.');
+                    }
+                },
+                error: function () {
+                    alert('Error loading production focus options. Please try again.');
+                },
+            });
+        }
+    });
+});
+
 
 </script>
 

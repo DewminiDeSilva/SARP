@@ -80,7 +80,7 @@ li:hover {
         <ul>
             <li><a href="/dashboard" style="color: #FFFFFF">Dashboard</a></li>
             <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
-            <li><a href="/staff_profile" style="color: #FFFFFF">STAFF PROFILE</a></li>
+            <li><a href="/staff_profile" style="color: #FFFFFF">Staff Profile</a></li>
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Beneficiary</a>
                 <ul class="nested">
@@ -96,10 +96,10 @@ li:hover {
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Tank</a>
+                <a href="#" style="color: #FFFFFF">Tank Rehabilitation</a>
                 <ul class="nested">
-                    <li href="/tank_rehabilitation/create"><a href="/tank_rehabilitation/create" style="color: #FFFFFF">Tank Registation</a></li>
-                    <li href="/tank_rehabilitation"><a href="/tank_rehabilitation" style="color: #FFFFFF">Tank Details</a></li>
+                    <li href="/tank_rehabilitation/create"><a href="/tank_rehabilitation/create" style="color: #FFFFFF">Tank Rehabilitation Registation</a></li>
+                    <li href="/tank_rehabilitation"><a href="/tank_rehabilitation" style="color: #FFFFFF">Tank Rehabilitation Details</a></li>
                 </ul>
             </li>
 
@@ -137,15 +137,22 @@ li:hover {
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Agriculture and Livestock</a>
                 <ul class="nested">
-
-                        <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
-                        <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
-                        <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li>
-
-                        <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
-
-
-
+                <li class="submenu">
+                        <a href="#" style="color: #FFFFFF">Agriculture</a>
+                        <ul class="nested">
+                            <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
+                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li> 
+                        </ul>
+                    </li>
+                        
+                        <li class="submenu">
+                        <a href="#" style="color: #FFFFFF">Livestock</a>
+                        <ul class="nested">
+                            <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
+                            <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
+                            <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Stocking Details Fingerlings</a></li>
+                        </ul>
+                    </li>
 
                 </ul>
             </li>

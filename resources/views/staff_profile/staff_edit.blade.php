@@ -134,8 +134,8 @@
 
                     <!-- Date of Birth -->
                     <div class="mb-3">
-                        <label for="dob" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" id="dob" name="dob" value="{{ $staffProfile->dob }}" required>
+                        <label for="date_of_birth" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ $staffProfile->date_of_birth }}" required>
                     </div>
 
                     <!-- Gender -->
@@ -151,14 +151,14 @@
 
                     <!-- W&OP Number -->
                     <div class="mb-3">
-                        <label for="wop_number" class="form-label">W&OP Number</label>
-                        <input type="text" class="form-control" id="wop_number" name="wop_number" value="{{ $staffProfile->wop_number }}" required>
+                        <label for="w_and_op_number" class="form-label">W&OP Number</label>
+                        <input type="text" class="form-control" id="w_and_op_number" name="w_and_op_number" value="{{ $staffProfile->w_and_op_number }}" required>
                     </div>
 
                     <!-- Highest Educational Qualifications -->
                     <div class="mb-3">
-                        <label for="education_qualifications" class="form-label">Highest Education Qualifications</label>
-                        <input type="text" class="form-control" id="education_qualifications" name="education_qualifications" value="{{ $staffProfile->education_qualifications }}" required>
+                        <label for="highest_education_qualifications" class="form-label">Highest Education Qualifications</label>
+                        <input type="text" class="form-control" id="highest_education_qualifications" name="highest_education_qualifications" value="{{ $staffProfile->highest_education_qualifications }}" required>
                     </div>
 
                     <!-- Salary -->
