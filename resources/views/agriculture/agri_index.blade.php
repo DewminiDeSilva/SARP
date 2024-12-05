@@ -270,7 +270,7 @@
                     </select>
                     <label for="entriesSelect">entries</label>
                 </div>
-                <div id="tableInfo" class="text-right"></div>
+            
             </div>
 
 
@@ -306,7 +306,9 @@
                     </table>
                 </div>
             </div>
-                </br>
+          </br>
+
+         <div id="tableInfo" class="text-left"></div>
 
             <!-- Pagination Section for Beneficiaries -->
             <nav aria-label="Page navigation example">
@@ -350,6 +352,9 @@
                         <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
                     </li>
                 </ul>
+            
+          
+          
             </nav>
         </div>
         </div>
@@ -368,22 +373,26 @@
     }
 
     $(document).ready(function() {
-        $('#beneficiariesTable').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false
-        });
+    const totalBeneficiaries = {{ $beneficiaries->total() }}; // Laravel total
+    const perPage = {{ $beneficiaries->perPage() }}; // Laravel items per page
+    const currentPage = {{ $beneficiaries->currentPage() }}; // Laravel current page
 
-        const entriesSelect = document.getElementById('entriesSelect');
-        const tableInfo = document.getElementById('tableInfo');
-
-        entriesSelect.addEventListener('change', function() {
-            updateEntries();
-        });
-
-        const pageInfo = $('#beneficiariesTable').DataTable().page.info();
-        tableInfo.innerHTML = `Showing ${pageInfo.start + 1} to ${pageInfo.end} of ${pageInfo.recordsTotal} entries`;
+    $('#beneficiariesTable').DataTable({
+        "paging": false,
+        "searching": false,
+        "info": false
     });
+
+    const tableInfo = document.getElementById('tableInfo');
+
+    // Calculate starting and ending entries
+    const startEntry = (currentPage - 1) * perPage + 1;
+    const endEntry = Math.min(currentPage * perPage, totalBeneficiaries);
+
+    // Update the table info dynamically
+    tableInfo.innerHTML = `Showing ${startEntry} to ${endEntry} of ${totalBeneficiaries} entries`;
+});
+
 </script>
 </body>
 </html>

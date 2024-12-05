@@ -19,6 +19,24 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <style>
+
+        .frame {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .left-column {
+            flex: 0 0 20%;
+            border-right: 1px;
+        }
+
+        .right-column {
+            flex: 0 0 80%;
+            padding: 20px;
+        }
+
         /* Styling for the page */
         body {
             background-color: #f0f2f5;
@@ -48,10 +66,20 @@
 </head>
 <body>
 
-     
+    <div class="frame">
+    <div class="left-column">
+        @include('dashboard.dashboardC')
+        @csrf
+    </div>
+    <div class="right-column">
+
+    <div class="col-md-12 text-center">
+    <h2 class="header-title" style="color: green;">Livestock Registration for <td style="color: black;">{{ $beneficiary->name_with_initials }}</td></h2>
+    </div>
+
     <div class="container">
-        <h2>Livestock Registration for <td>{{ $beneficiary->name_with_initials }}</td></h2>
-        
+        <!-- <h2>Livestock Registration for <td>{{ $beneficiary->name_with_initials }}</td></h2> -->
+
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -215,7 +243,7 @@
 $('#livestock_type').change(function() {
     var selectedType = $(this).val();
     var productionFocusDropdown = $('#production_focus');
-    
+
     // Clear existing options
     productionFocusDropdown.empty().append(`
         <option value="">Select Production Focus</option>
@@ -231,7 +259,7 @@ $('#livestock_type').change(function() {
                 response.forEach(function(item) {
                     let optionText = item.name; // Assuming 'name' is the common field in all models
                     productionFocusDropdown.append(`
-                        <option value="${item.id}">${optionText}</option>
+                        <option value="${item.name}">${optionText}</option>
                     `);
                 });
             },
@@ -300,7 +328,7 @@ $('#livestock_type').change(function() {
                 $(this).closest('.row').remove();
             });
 
-            
+
         });
     </script>
 </body>

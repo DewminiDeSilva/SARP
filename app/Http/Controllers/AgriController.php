@@ -30,7 +30,14 @@ class AgriController extends Controller
 
     public function create($beneficiaryId = null)
     {
-        return view('agriculture.agri_create', compact('beneficiaryId'));
+        $beneficiary = null;
+        if ($beneficiaryId) {
+            $beneficiary = Beneficiary::find($beneficiaryId);
+            if (!$beneficiary) {
+                return redirect()->route('agriculture.index')->withErrors('Beneficiary not found.');
+            }
+        }
+        return view('agriculture.agri_create', compact('beneficiary','beneficiaryId'));
     }
 
   
@@ -263,11 +270,14 @@ public function store(Request $request)
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalCrops = AgricultureData::distinct('crop_name')->count('crop_name');
-        $totalBeneficiaries = Beneficiary::count();
+        //$totalBeneficiaries = Beneficiary::count();
+        $totalBeneficiaries = $filteredBeneficiaryIds->count();
         $totalGnDivisions = AgricultureData::distinct('gn_division_name')->count('gn_division_name');
 
         return view('agriculture.agri_index', compact('agricultureData', 'search', 'entries', 'beneficiaries', 'totalCrops', 'totalBeneficiaries', 'totalGnDivisions'));
     }
+
+   
 
     public function showByBeneficiary($beneficiaryId)
     {

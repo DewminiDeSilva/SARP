@@ -56,7 +56,7 @@
     <div class="container mt-5">
 
         <div class="center-heading text-center">
-            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form</h1>
+            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form {{ $beneficiary->name_with_initials }}</h1>
         </div>
     </br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
@@ -134,7 +134,7 @@
             <div class="row mt-3">
                 <div class="col">
                     <label for="totalAcres" class="form-label bold-label">Total Number of Acres Cultivated</label>
-                    <input type="number" class="form-control" id="totalAcres" name="total_acres" required>
+                    <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" required>
                 </div>
             </div>
 

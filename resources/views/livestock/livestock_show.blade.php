@@ -7,8 +7,37 @@
     <title>Livestock Details</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        .custom-border {
+            border: 2px solid green;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .frame {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .right-column {
+            flex: 0 0 80%;
+            padding: 20px;
+        }
+        .left-column {
+            flex: 0 0 20%;
+            border-right: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body>
+<div class="frame">
+    <div class="left-column">
+        @include('dashboard.dashboardC')
+        @csrf
+    </div>
+    <div class="right-column">
+
     <div class="container mt-5">
         <h2>livestock Details for Beneficiary: {{ $beneficiary->first_name }}</h2>
 
@@ -36,6 +65,7 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+    </div>
     </body>
     </html>
-    

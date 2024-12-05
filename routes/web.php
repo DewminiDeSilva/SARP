@@ -48,6 +48,10 @@ use App\Http\Controllers\NrmParticipantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
+use App\Http\Controllers\StaffProfileController;
+use App\Http\Controllers\FingerlingController;
+
+
 
 
 Route::get('/', function () {
@@ -202,6 +206,7 @@ Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])->name(
 Route::get('/beneficiaries', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
 
 
+Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
 
 
 
@@ -255,6 +260,8 @@ Route::get('agro/{agro}/view-pdf', [AgroController::class, 'viewPdf'])->name('ag
 
 Route::get('/agro/csv/generate', [AgroController::class, 'generateCsv'])->name('agro.csv.generate');
 Route::post('/agro/csv/upload', [AgroController::class, 'uploadCsv'])->name('agro.csv.upload');
+Route::get('/agrosearch', [AgroController::class, 'search'])->name('agrosearch');
+
 
 //Shareholder
 // Shareholder Routes
@@ -493,3 +500,25 @@ Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
 Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
 
 //Route::get('/agriculture-data', [AgricultureDataController::class, 'index'])->name('agriculture.data');
+
+Route::prefix('staff_profile')->group(function () {
+    Route::get('/', [StaffProfileController::class, 'index'])->name('staff_profile.index');        // List all profiles
+    Route::get('/create', [StaffProfileController::class, 'create'])->name('staff_profile.create'); // Create form
+    Route::post('/store', [StaffProfileController::class, 'store'])->name('staff_profile.store');   // Store new profile
+    Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff_profile.show'); // View profile
+    Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit'); // Edit form
+    Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update'); // Update profile
+    Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff_profile.destroy'); // Delete profile
+});
+Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
+Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
+
+Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
+
+Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
+
+//Fingerling
+
+Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
+Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
+

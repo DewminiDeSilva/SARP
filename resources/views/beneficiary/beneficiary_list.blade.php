@@ -349,7 +349,7 @@
                 flex-direction: column;
                 gap: 15px;
             }
-            
+
             .card-summary .card {
                 width: 100%;
             }
@@ -357,22 +357,14 @@
             .table-responsive {
                 overflow-x: auto;
             }
-<<<<<<< HEAD
-
-            .pagination {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .d-flex.justify-content-between {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-=======
             
->>>>>>> a24c8993212f6bf5c36bbdfcf85fb126bda7fe8c
         }
+
+        /* Inline button container */
+.btninline {
+    display: inline-flex;
+    gap: 5px; /* Add some space between buttons if needed */
+}
     </style>
 </head>
 <body>
@@ -382,10 +374,6 @@
         </div>
 
         <div class="right-column">
-
-            <div class="right-column">
-                <div class="container">
-                    <h2 class="text-center">Beneficiary List</h2>
             <div class="card-summary">
                 <div class="card">
                     <div class="card-header">Livestock Statistics</div>
@@ -412,31 +400,11 @@
                 </div>
             </div>
 
-            
-    
-                    <!-- Search Form -->
-                    <form method="GET" action="{{ route('beneficiary.list') }}" class="form-inline mb-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
-                            <button class="btn btn-primary" type="submit">Search</button>
-                        </div>
-                    </form>
-    
-                    <!-- Show Entries Dropdown -->
-                    <div class="form-group d-flex align-items-center mb-3">
-                        <label for="entriesSelect" class="mr-2">Show</label>
-                        <form method="GET" action="{{ route('beneficiary.list') }}" id="entriesForm">
-                            <select id="entriesSelect" name="entries" class="custom-select" onchange="document.getElementById('entriesForm').submit();">
-                                <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
-                                <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
-                            </select>
-                        </form>
-                        <label for="entriesSelect" class="ml-2">entries</label>
-                    </div>
+            <div class="container">
+                <h2>Beneficiary List</h2>
+
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">NIC</th>
@@ -461,7 +429,7 @@
                                 <td>{{ $beneficiary->age }}</td>
                                 <td>{{ $beneficiary->phone }}</td>
                                 <td>{{ $beneficiary->gn_division_name }}</td>
-                                <td>
+                                <td class="btninline">
                                     @if($beneficiary->id)
                                         <a href="{{ route('livestocks.create', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-green btn-sm">Add Livestock</a>
                                         <a href="{{ route('livestocks.list', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-blue btn-sm">View Livestock</a>
@@ -533,51 +501,8 @@
                         </div>
 
                 </div>
-
-               <!-- Pagination Section -->
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item {{ $beneficiaries->onFirstPage() ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $beneficiaries->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
-        </li>
-
-        @php
-                                    $currentPage = $beneficiaries->currentPage();
-                                    $lastPage = $beneficiaries->lastPage();
-                                    $startPage = max($currentPage - 2, 1);
-                                    $endPage = min($currentPage + 2, $lastPage);
-                                @endphp
-
-                                @if ($startPage > 1)
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ $beneficiaries->url(1) }}">1</a>
-                                    </li>
-                                    @if ($startPage > 2)
-                                        <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    @endif
-                                @endif
-
-                                @for ($i = $startPage; $i <= $endPage; $i++)
-                                    <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $beneficiaries->url($i) }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-
-                                @if ($endPage < $lastPage)
-                                    @if ($endPage < $lastPage - 1)
-                                        <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    @endif
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ $beneficiaries->url($lastPage) }}">{{ $lastPage }}</a>
-                                    </li>
-                                @endif
-
-                                <li class="page-item {{ $beneficiaries->hasMorePages() ? '' : 'disabled' }}">
-                                    <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
-                                </li>
-    </ul>
-</nav>
-
-
+            </div>
+        </div>
+    </div>
 </body>
 </html>
