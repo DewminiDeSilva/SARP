@@ -272,8 +272,9 @@
                             <th scope="col">Date Of Birth</th>
                             <th scope="col">Age</th>
                             <th scope="col">Address</th>
-                            <th scope="col">Email</th>
                             <th scope="col">Phone</th>
+                            <th scope="col">Crop Name/Production Focus
+                            </th>
                             <!-- <th scope="col">Education</th>
                             <th scope="col">Bank Name</th>
                             <th scope="col">Bank Branch</th>
@@ -312,8 +313,8 @@
                             <td>{{ $beneficiary->dob }}</td>
                             <td>{{ $beneficiary->age }}</td>
                             <td>{{ $beneficiary->address }}</td>
-                            <td>{{ $beneficiary->email }}</td>
                             <td>{{ $beneficiary->phone }}</td>
+                            <td>{{ $beneficiary->input3 }}</td>
                             <!-- <td>{{ $beneficiary->education }}</td>
                             <td>{{ $beneficiary->bank_name }}</td>
                             <td>{{ $beneficiary->bank_branch }}</td>
