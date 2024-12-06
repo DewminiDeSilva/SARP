@@ -115,7 +115,7 @@
                 Home Garden
             </button>
             <button class="custom-button" onclick="window.location.href='{{ route('other_crops.create') }}';" style="background-image: url('assets/images/others.jpg'); font-size: 2rem; font-weight: bold;">
-                Others
+            Cereals/Legumes
             </button>
         </div>
 
@@ -188,7 +188,7 @@
     </table>
 
     <!-- Other Crops Table -->
-    <h3>Registered Other Crops</h3>
+    <h3>Registered Cereals/Legumes Crops</h3>
     <table class="table table-bordered">
         <thead>
             <tr>

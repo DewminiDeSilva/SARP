@@ -385,14 +385,15 @@
 <!-- agri and livestock dropdown -->
 
 <!-- Input 1 Dropdown for Agriculture/Livestock -->
-<div class="form-group">
-    <label for="agriculture_livestock" class="form-label dropdown-label">Agriculture/Livestock</label>
-    <select class="form-control btn btn-success" id="agriculture_livestock" name="input1" required>
-        <option value="">Select Option</option>
-        <option value="agriculture">Agriculture</option>
-        <option value="livestock">Livestock</option>
-    </select>
-</div>
+<div class="col">
+    <div class="dropdown">
+        <label for="agriculture_livestock" class="form-label dropdown-label">Agriculture/Livestock</label>
+        <select class="form-control btn btn-success" id="agriculture_livestock" name="input1" data-bs-toggle="dropdown" aria-expanded="false" required>
+            <option value="">Select Option</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="livestock">Livestock</option>
+        </select>
+    </div>
 
 <!-- Section for Agriculture -->
 <div id="agricultureSection" class="row mt-3 d-none">
@@ -404,7 +405,7 @@
                 <option value="vegetables">Vegetables</option>
                 <option value="fruits">Fruits</option>
                 <option value="home_garden">Home Garden</option>
-                <option value="others">Others</option>
+                <option value="others">Cereals/Legumes</option>
             </select>
         </div>
     </div>

@@ -96,7 +96,7 @@
 
     <!-- form -->
     <div class="container mt-5 mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">
-        <h3 style="font-size: 2rem; color: green;">Other Crop Registration</h3>
+        <h3 style="font-size: 2rem; color: green;">Cereals/Legumes Crop Registration</h3>
     </br>
         <form class="form-horizontal" method="POST" action="{{ route('other_crops.store') }}">
             @csrf
