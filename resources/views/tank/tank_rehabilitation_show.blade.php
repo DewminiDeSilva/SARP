@@ -372,10 +372,7 @@
                                     </div>
                                 </div>
                                 <!-- Add more tank details here if needed -->
-                            </div>
-
-                        </div>
-
+                            
 
                         <!-- Image fields -->
                         <div class="construction-images">
@@ -414,6 +411,9 @@
             </div>
         </div>
     </div>
+    </div>
+
+</div>
 
     <script>
      // Function to get the current date in YYYY-MM-DD format
