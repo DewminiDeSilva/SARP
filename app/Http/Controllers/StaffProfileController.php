@@ -286,6 +286,13 @@ public function updateStatus(Request $request, StaffProfile $staffProfile)
 
     return response()->json(['success' => true, 'new_status' => $staffProfile->status]);
 }
+public function viewByStatus()
+{
+    $inServiceStaff = StaffProfile::where('status', 'in_service')->get();
+    $resignedStaff = StaffProfile::where('status', 'resigned')->get();
+
+    return view('staff_profile.staff_by_status', compact('inServiceStaff', 'resignedStaff'));
+}
 
 
 }
