@@ -66,10 +66,14 @@ class StaffProfileController extends Controller
             'appointment_letter' => $appointmentLetterPath,
             'first_appointment_date' => $request->first_appointment_date,
             'grade' => 'A',
-    'cv' => null, // No CV initially
-    'status' => 'in_service', // Default status
+            'cv' => null, // No CV initially
+            'status' => 'in_service', // Default status
     // other fields...
         ]);
+        
+
+        return redirect('/staff_profile')->with('success', 'Staff profile created successfully.');
+
         $request->validate([
             'cv' => 'nullable|file|mimes:pdf|max:5120',
         ]);
@@ -79,8 +83,6 @@ class StaffProfileController extends Controller
         StaffProfile::create(array_merge($request->all(), [
             'cv' => $cvPath,
         ]));
-
-        return redirect('/staff_profile')->with('success', 'Staff profile created successfully.');
     }
 
     /**
