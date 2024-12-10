@@ -522,3 +522,5 @@ Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])
 Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
 Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
 
+Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
+Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);

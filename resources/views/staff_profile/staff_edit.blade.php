@@ -203,6 +203,32 @@
         </div>
     </div>
 </div>
+<script>$(document).on('click', '.status-toggle', function (e) {
+    e.preventDefault();
 
+    let button = $(this); // Button clicked
+    let staffId = button.closest('form').data('id'); // Staff ID from data attribute
+    let newStatus = button.text().trim() === 'In Service' ? 'resigned' : 'in_service';
+
+    $.ajax({
+        url: `/staff_profile/${staffId}/status`,
+        type: 'PATCH',
+        data: {
+            _token: '{{ csrf_token() }}',
+        },
+        success: function (response) {
+            if (response.success) {
+                // Toggle button class and text
+                button
+                    .toggleClass('btn-success btn-danger')
+                    .text(response.new_status === 'in_service' ? 'In Service' : 'Resigned');
+            }
+        },
+        error: function () {
+            alert('Failed to update status. Please try again.');
+        }
+    });
+});
+</script>
 </body>
 </html>

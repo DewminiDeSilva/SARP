@@ -119,6 +119,14 @@
                             <input type="text" class="form-control" id="nic_number" name="nic_number" placeholder="Enter NIC Number" required>
                         </div>
                     </div>
+                    <!-- Grade Input -->
+<div class="col-md-6">
+    <label for="grade" class="form-label">Grade</label>
+    <input type="text" class="form-control" id="grade" name="grade" value="{{ old('grade', $staffProfile->grade ?? '') }}">
+</div>
+
+
+
 
                     <!-- Designation and Permanent Address -->
                     <div class="row mb-3">
@@ -206,7 +214,11 @@
                         <label for="first_appointment_date" class="form-label">First Appointment Date</label>
                         <input type="date" class="form-control" id="first_appointment_date" name="first_appointment_date">
                     </div>
-
+<!-- CV Upload -->
+<div class="col-md-6">
+    <label for="cv" class="form-label">Upload CV</label>
+    <input type="file" class="form-control" id="cv" name="cv" accept=".pdf">
+</div>
                     <!-- Submit Button -->
                     <div class="text-center">
                         <button type="submit" class="btn btn-submit">Submit</button>
