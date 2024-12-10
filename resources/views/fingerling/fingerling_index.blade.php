@@ -13,7 +13,6 @@
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-    /* Include provided CSS */
     .entries-container {
         display: flex;
         align-items: center;
@@ -80,44 +79,39 @@
         transform: translateX(-50px);
     }
     .pagination .page-item {
-            margin: 0 0px; /* Adjust the margin to reduce space */
-        }
-        .pagination .page-link {
-            padding: 5px 10px; /* Adjust padding to control button size */
-        }
-
-        .page-item {
-            background-color: white;
-            padding: 0px;
-        }
-
-        .pagination:hover {
-            border-color: #fff;
-            background-color: #fff;
-        }
-
-        .page-item:hover {
-            border-color: #fff;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .page-link {
-            color : #28a745;
-        }
-
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff;
-            background-color: #126926;
-            border-color: #126926;
-        }
+        margin: 0 0px;
+    }
+    .pagination .page-link {
+        padding: 5px 10px;
+    }
+    .page-item {
+        background-color: white;
+        padding: 0px;
+    }
+    .pagination:hover {
+        border-color: #fff;
+        background-color: #fff;
+    }
+    .page-item:hover {
+        border-color: #fff;
+        background-color: #fff;
+        cursor: pointer;
+    }
+    .page-link {
+        color : #28a745;
+    }
+    .page-item.active .page-link {
+        z-index: 3;
+        color: #fff;
+        background-color: #126926;
+        border-color: #126926;
+    }
 </style>
 </head>
 <body>
 <div class="frame">
     <div class="left-column">
-        @include('dashboard.dashboardC') <!-- Include dashboard content if necessary -->
+        @include('dashboard.dashboardC')
     </div>
     <div class="right-column">
         <a href="{{ route('fingerling.index') }}" class="btn-back">
@@ -161,7 +155,9 @@
                         <tbody>
                             @foreach ($tanks as $tank)
                             <tr>
-                                <td>{{ $tank->tank_id }}</td>
+                                <!-- Show Earlier Tank ID -->
+                                <td>{{ $tank->tank_id }}</td> <!-- Shows 19/11/T/W/11 -->
+
                                 <td>{{ $tank->tank_name }}</td>
                                 <td>{{ $tank->ds_division_name }}</td>
                                 <td>{{ $tank->gn_division_name }}</td>
@@ -169,8 +165,11 @@
                                 <td>{{ $tank->river_basin }}</td>
                                 <td>{{ $tank->cascade_name }}</td>
                                 <td class="buttonline">
-                                    <a href="" class="btn btn-info btn-sm">View Data</a>
-                                    <a href="" class="btn btn-primary btn-sm button-a">Add Data</a>
+                                    <!-- View Data Button -->
+                                    <a href="{{ route('fingerling.show', ['tank_id' => $tank->id]) }}" class="btn btn-info btn-sm">View Data</a>
+                                    
+                                    <!-- Add Data Button -->
+                                    <a href="{{ route('fingerling.create', $tank->id) }}" class="btn btn-primary btn-sm button-a">Add Data</a>
                                 </td>
                             </tr>
                             @endforeach
