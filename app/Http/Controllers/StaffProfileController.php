@@ -65,7 +65,20 @@ class StaffProfileController extends Controller
             'personal_file_number' => $request->personal_file_number,
             'appointment_letter' => $appointmentLetterPath,
             'first_appointment_date' => $request->first_appointment_date,
+            'grade' => 'A',
+    'cv' => null, // No CV initially
+    'status' => 'in_service', // Default status
+    // other fields...
         ]);
+        $request->validate([
+            'cv' => 'nullable|file|mimes:pdf|max:5120',
+        ]);
+    
+        $cvPath = $request->file('cv') ? $request->file('cv')->store('cv_uploads', 'public') : null;
+    
+        StaffProfile::create(array_merge($request->all(), [
+            'cv' => $cvPath,
+        ]));
 
         return redirect('/staff_profile')->with('success', 'Staff profile created successfully.');
     }
@@ -96,7 +109,9 @@ class StaffProfileController extends Controller
             'appointment_letter' => 'nullable|file|mimes:pdf|max:5120',
             'nic_number' => 'required|unique:staff_profiles,nic_number,' . $staffProfile->id,
             'email_address' => 'nullable|email',
+            
         ]);
+        
 
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('staff_photos', 'public');
@@ -264,5 +279,13 @@ class StaffProfileController extends Controller
 
     return view('staff_profile.staff_summary', compact('totalStaff', 'staffByType', 'staffByDesignation', 'staffByGender'));
 }
+public function updateStatus(Request $request, StaffProfile $staffProfile)
+{
+    $staffProfile->status = $staffProfile->status === 'in_service' ? 'resigned' : 'in_service';
+    $staffProfile->save();
+
+    return response()->json(['success' => true, 'new_status' => $staffProfile->status]);
+}
+
 
 }

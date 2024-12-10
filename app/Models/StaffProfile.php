@@ -32,5 +32,8 @@ class StaffProfile extends Model
         'personal_file_number',
         'appointment_letter',
         'first_appointment_date',
+        'grade',
+        'cv',
+        'status',
     ];
 }
