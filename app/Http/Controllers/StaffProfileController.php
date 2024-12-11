@@ -18,8 +18,11 @@ class StaffProfileController extends Controller
     
         // Count total staff members
         $totalStaff = StaffProfile::count();
+
+        $maleStaff = StaffProfile::where('gender', 'Male')->count();
+    $femaleStaff = StaffProfile::where('gender', 'Female')->count();
     
-        return view('staff_profile.staff_index', compact('staffProfiles', 'totalStaff', 'entries'));
+        return view('staff_profile.staff_index', compact('staffProfiles', 'totalStaff', 'maleStaff', 'femaleStaff', 'entries'));
     }
     
 
