@@ -6,6 +6,9 @@
 <title>Tank details</title>
  <!-- Add jQuery -->
  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
  <!-- Add Bootstrap JS -->
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -168,6 +171,7 @@
         }
 
 </style>
+
 </head>
 <body>
     <div class="frame">
@@ -180,9 +184,10 @@
                 <div class="center-heading text-center">
                     <h1 style="font-size: 2.5rem; color: green;">Tank Rehabilitation Details</h1>
                 </div>
-
-  <div class="container">
+                
+                <div class="container">
     <div class="row justify-content-center mt-4">
+        <!-- Total Tanks Card -->
         <div class="card text-center" style="width: 18rem; margin-right: 20px;">
             <div class="card-header">
                 Total Tanks
@@ -193,27 +198,53 @@
             </div>
         </div>
 
+        <!-- Ongoing Tanks Card -->
         <div class="card text-center" style="width: 18rem; margin-right: 20px;">
             <div class="card-header">
                 Ongoing
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $ongoingCount }}</h5> <!-- Display the count here -->
+                <h5 class="card-title">{{ $ongoingCount }}</h5>
                 <p class="card-text">Tanks currently undergoing rehabilitation.</p>
             </div>
         </div>
 
-        <div class="card text-center" style="width: 18rem;">
+        <!-- Completed Tanks Card -->
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
             <div class="card-header">
                 Completed
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $completedCount }}</h5> <!-- Display the count here -->
+                <h5 class="card-title">{{ $completedCount }}</h5>
                 <p class="card-text">Tanks that have completed rehabilitation.</p>
             </div>
         </div>
     </div>
+
+    <!-- View Map Button -->
+    <div class="row justify-content-center mt-4">
+        <button class="btn btn-success" data-toggle="modal" data-target="#mapModal" style="width: 200px;">View Map</button>
+    </div>
 </div>
+
+<!-- Map Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mapModalLabel">Tank Locations Map</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Map Container -->
+                <div id="map" style="height: 500px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
         <div class="right-column">
 
@@ -491,6 +522,37 @@
 
             </div>
         </div>
+        <script>
+    $(document).ready(function () {
+        // Initialize the map, center on Sri Lanka
+        var map = L.map('map').setView([7.8731, 80.7718], 8); // Coordinates of Sri Lanka
 
+        // Use a more detailed tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18, // Allow closer zoom for better details
+            minZoom: 6   // Set minimum zoom level for better control
+        }).addTo(map);
+
+        // Tank locations passed from the controller
+        var tankLocations = @json($tankLocations);
+
+        // Add markers for each tank
+        tankLocations.forEach(function (tank) {
+            if (tank.latitude && tank.longitude) {
+                L.marker([tank.latitude, tank.longitude])
+                    .addTo(map)
+                    .bindPopup(`<strong>${tank.tank_name}</strong>`);
+            }
+        });
+
+        // Fix map rendering issue inside Bootstrap modal
+        $('#mapModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                map.invalidateSize(); // Adjust map size after modal display
+            }, 10);
+        });
+    });
+</script>
 </body>
 </html>
