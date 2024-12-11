@@ -12,23 +12,22 @@ class FingerlingController extends Controller
      * Display a listing of tank records in the Fingerling module.
      */
     public function index()
-{
-    // Fetch relevant data from the TankRehabilitation model
-    $tanks = TankRehabilitation::select(
-        'id', // Primary key
-        'tank_id', // Earlier tank ID (19/11/T/W/11)
-        'tank_name',
-        'ds_division_name',
-        'gn_division_name',
-        'as_centre',
-        'river_basin',
-        'cascade_name'
-    )->paginate(10); // Use pagination for the records
+    {
+        // Fetch relevant data from the TankRehabilitation model
+        $tanks = TankRehabilitation::select(
+            'id', // Primary key
+            'tank_id', // Earlier tank ID (19/11/T/W/11)
+            'tank_name',
+            'ds_division_name',
+            'gn_division_name',
+            'as_centre',
+            'river_basin',
+            'cascade_name'
+        )->paginate(10); // Use pagination for the records
 
-    // Return the index view with tank data
-    return view('fingerling.fingerling_index', compact('tanks'));
+        // Return the index view with tank data
+        return view('fingerling.fingerling_index', compact('tanks'));
     }
-
 
     /**
      * Show the form to add fingerling data for a specific tank.
@@ -98,19 +97,19 @@ class FingerlingController extends Controller
     /**
      * Show the fingerling data for a specific tank.
      *
-     * @param int $tank_id The ID of the tank whose data is being viewed.
+     * @param int $id The ID of the tank whose data is being viewed.
      */
-    public function show($tank_id)
+    public function show($id)
     {
         // Fetch the fingerling data by matching the foreign key 'tank_id'
-        $fingerling = Fingerling::where('tank_id', $tank_id)->first();
+        $fingerlings = Fingerling::where('tank_id', $id)->get(); // Fetch all related fingerling records
+        $tank = TankRehabilitation::find($id); // Fetch tank details for display
 
-        // Redirect back if no data is found
-        if (!$fingerling) {
+        if ($fingerlings->isEmpty()) {
             return redirect()->route('fingerling.index')->with('error', 'No fingerling data found for this tank.');
         }
 
-        // Pass the fingerling data to the 'fingerling_show' view
-        return view('fingerling.fingerling_show', compact('fingerling'));
+        // Pass the fingerling data and tank details to the 'fingerling_show' view
+        return view('fingerling.fingerling_show', compact('fingerlings', 'tank'));
     }
 }
