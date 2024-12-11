@@ -216,8 +216,35 @@
             </div>
         </div>
     </div>
-</div>
 
+
+<!-- Male Staff -->
+<div class="col-md-6 mb-4">
+        <div class="card summary-card text-center">
+            <div class="card-header summary-card-header bg-success text-white">
+                Male Staff Members
+                </div>
+                <div class="card-body text-center summary-card-body">
+                <h3>{{ $maleStaff }}</h3>
+            </div>
+        </div>
+    </div>
+    <!-- Female Staff -->
+    <div class="col-md-6 mb-4">
+        <div class="card summary-card text-center">
+            <div class="card-header summary-card-header bg-success text-white">
+                Female Staff Members
+                </div>
+                <div class="card-body text-center summary-card-body">
+                <h3>{{ $femaleStaff }}</h3>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+    
+    </div>
+   
                 <!-- Search Form -->
                 <form method="GET" action="{{ route('searchstaff') }}" class="form-inline">
                         <div class="input-group">
