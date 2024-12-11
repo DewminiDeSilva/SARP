@@ -852,26 +852,47 @@ $(document).ready(function () {
 
         // Make AJAX call to fetch crops based on the selected category
         if (selectedCategory) {
-            $.ajax({
-                url: '/get-crops/' + selectedCategory, // Adjust API route if necessary
-                method: 'GET',
-                success: function (data) {
-                    if (data && data.length > 0) {
-                        // Populate the Crop Name dropdown with fetched data
-                        data.forEach(function (crop) {
-                            var cropName = crop.crop_name || crop.name; // Adjust based on API response field
-                            cropNameDropdown.append('<option value="' + cropName + '">' + cropName + '</option>');
-                        });
-                    } else {
-                        alert('No crops found for the selected category.');
+        $.ajax({
+            url: '/get-crops/' + selectedCategory,
+            method: 'GET',
+            success: function (data) {
+                console.log(data);  // Check the response in the browser console
+
+                data.forEach(function (crop) {
+                    var cropName = '';
+
+                    // Dynamically set the crop name based on category
+                    switch (selectedCategory) {
+                        case 'vegetables':
+                            cropName = crop.crop_name;
+                            break;
+                        case 'fruits':
+                            cropName = crop.fruit_name;
+                            break;
+                        case 'home_garden':
+                            cropName = crop.homegarden_name;
+                            break;
+                            case 'others':
+                            cropName = crop.crop_name;
+                            break;
+
+                        default:
+                            cropName = crop.name;
                     }
-                },
-                error: function () {
-                    alert('Error fetching crops. Please try again.');
-                },
-            });
-        }
-    });
+
+                    // Append the crop name to the dropdown
+                    cropNameDropdown.append($('<option>', {
+                        value: cropName,
+                        text: cropName
+                    }));
+                });
+            },
+            error: function () {
+                alert('Error fetching crops');
+            }
+        });
+    }
+});
 
     // Handle Livestock Type Change (Input2 and Input3 for Livestock)
     $('#livestock_type').change(function () {
