@@ -246,6 +246,11 @@
                                     </div>
 
                                     <div class="info">
+                                        <label>Tank Name :</label>
+                                        <p>{{$beneficiary->tank_name}}</p>
+                                    </div>
+
+                                    <div class="info">
                                         <label>Gender:</label>
                                         <p>{{$beneficiary->gender}}</p>
                                     </div>
