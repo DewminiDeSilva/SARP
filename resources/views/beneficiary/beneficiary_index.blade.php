@@ -395,6 +395,7 @@
                             <th scope="col">Phone</th>
                             <th scope="col">Crop Name/Production Focus
                             </th>
+                            <th scope="col">Tank Name</th>
                             <!-- <th scope="col">Education</th>
                             <th scope="col">Bank Name</th>
                             <th scope="col">Bank Branch</th>
@@ -435,6 +436,7 @@
                             <td>{{ $beneficiary->address }}</td>
                             <td>{{ $beneficiary->phone }}</td>
                             <td>{{ $beneficiary->input3 }}</td>
+                            <td>{{ $beneficiary->tank_name }}</td>
                             <!-- <td>{{ $beneficiary->education }}</td>
                             <td>{{ $beneficiary->bank_name }}</td>
                             <td>{{ $beneficiary->bank_branch }}</td>
