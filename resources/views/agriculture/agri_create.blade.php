@@ -72,7 +72,7 @@
                             <option value="vegetables">Vegetables</option>
                             <option value="fruits">Fruits</option>
                             <option value="home_garden">Home Garden</option>
-                            <option value="others">Others</option>
+                            <option value="others">Cereals/Legumes</option>
                         </select>
                     </div>
                 </div>

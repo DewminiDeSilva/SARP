@@ -231,7 +231,13 @@ class LivestockController extends Controller
         ->orWhere('name_with_initials', 'like', "%{$search}%")
         ->orWhere('address', 'like', "%{$search}%")
         ->orWhere('gn_division_name', 'like', "%{$search}%")
+        ->orWhere('gender', '=', $search) // Exact match for gender
+        ->orWhere('dob', 'like', '%'.$search.'%') // Added
+        ->orWhere('age', 'like', '%'.$search.'%') // Added
+        ->orWhere('address', 'like', '%'.$search.'%')
+        ->orWhere('phone', 'like', '%'.$search.'%')
         ->paginate(10); // Add pagination
+        
         
 
     // Add required statistics

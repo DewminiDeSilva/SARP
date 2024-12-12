@@ -20,8 +20,10 @@ class TankRehabilitationController extends Controller
         $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
         $completedCount = TankRehabilitation::where('status', 'Finished')->count();
 
+        $tankLocations = TankRehabilitation::select('tank_name', 'latitude', 'longitude')->get();
+
         // Return the view with tank rehabilitation records
-        return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'ongoingCount', 'completedCount', 'totalTanks', 'entries'));
+       return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'ongoingCount', 'completedCount', 'totalTanks', 'entries', 'tankLocations'));
     }
 
     /**
@@ -316,10 +318,13 @@ public function reportCsv()
         ->paginate(10);
 
     // Add the counts for ongoing and completed rehabilitations
+    $totalTanks = TankRehabilitation::count();
     $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
     $completedCount = TankRehabilitation::where('status', 'Finished')->count();
 
-    return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'search', 'ongoingCount', 'completedCount'));
+    $tankLocations = TankRehabilitation::select('tank_name', 'latitude', 'longitude')->get();
+
+    return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'search','totalTanks','tankLocations', 'ongoingCount', 'completedCount'));
     }
 
 

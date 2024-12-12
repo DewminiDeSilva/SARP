@@ -97,7 +97,10 @@
                 <div class="text-center mb-4">
                     <h2 class="section-title">Staff Profile Details</h2>
                 </div>
-
+                <div class="card">
+        <div class="card-header bg-{{ $staffProfile->status === 'in_service' ? 'success' : 'danger' }} text-white">
+            Staff Profile - {{ $staffProfile->status === 'in_service' ? 'In Service' : 'Resigned' }}
+        </div>
                 <div class="custom-frame">
                     <div class="row mb-4">
                         <div class="col-md-4 text-center">
@@ -154,6 +157,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </body>
 </html>

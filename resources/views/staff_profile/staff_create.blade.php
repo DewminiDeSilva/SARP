@@ -7,6 +7,7 @@
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
@@ -119,6 +120,14 @@
                             <input type="text" class="form-control" id="nic_number" name="nic_number" placeholder="Enter NIC Number" required>
                         </div>
                     </div>
+                    <!-- Grade Input -->
+<div class="col-md-6">
+    <label for="grade" class="form-label">Grade</label>
+    <input type="text" class="form-control" id="grade" name="grade" value="{{ old('grade', $staffProfile->grade ?? '') }}">
+</div>
+
+
+
 
                     <!-- Designation and Permanent Address -->
                     <div class="row mb-3">
@@ -206,7 +215,11 @@
                         <label for="first_appointment_date" class="form-label">First Appointment Date</label>
                         <input type="date" class="form-control" id="first_appointment_date" name="first_appointment_date">
                     </div>
-
+<!-- CV Upload -->
+<div class="col-md-6">
+    <label for="cv" class="form-label">Upload CV</label>
+    <input type="file" class="form-control" id="cv" name="cv" accept=".pdf">
+</div>
                     <!-- Submit Button -->
                     <div class="text-center">
                         <button type="submit" class="btn btn-submit">Submit</button>
