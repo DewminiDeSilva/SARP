@@ -274,6 +274,17 @@
         </div>
 
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+
 
     <!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -380,7 +391,7 @@
             </div>
         </div>
 
- 
+
     </div>
 <!-- agri and livestock dropdown -->
 
