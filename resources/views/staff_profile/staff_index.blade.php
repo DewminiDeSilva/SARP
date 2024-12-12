@@ -34,7 +34,7 @@
             padding: 20px;
         }
 
-        .btn-back {
+        /* .btn-back {
             background-color: green;
             color: white;
             border: none;
@@ -47,7 +47,7 @@
 
         .btn-back:hover {
             background-color: darkgreen;
-        }
+        } */
 
         .card-header {
             background-color: #126926;
@@ -84,6 +84,7 @@
 
         .btn-action.view {
             background-color: #60c267;
+            text-decoration: none; /* Removes underline */
         }
 
         .btn-action.edit {
@@ -176,8 +177,111 @@
     border: 2px solid #d9534f; /* Error red border */
 }
 
+.btn-success {
+    background-color: green;
+}
 
+.card-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #c7eef1; /* Blue color example */
+            color: #0d0e0d; /* Text color */
+        }
+
+        .pagination .page-item {
+            margin: 0 0px; /* Adjust the margin to reduce space */
+        }
+        .pagination .page-link {
+            padding: 5px 10px; /* Adjust padding to control button size */
+        }
+
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
+
+        .page-item:hover {
+            border-color: #fff;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .page-link {
+            color : #28a745;
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #126926;
+            border-color: #126926;
+        }
     </style>
+
+<style>
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center; /* Center content horizontally */
+        /*background-color: #26CF23; /* Button background color */
+        color: #fff; /* Text color */
+        border: none; /* Remove default border */
+        padding: 10px 50px; /* Adjust padding */
+        border-radius: 4px; /* Rounded corners */
+        text-decoration: none; /* Remove underline */
+        font-size: 14px; /* Font size */
+        transition: background-color 0.3s ease; /* Smooth transition */
+        cursor: pointer; /* Pointer cursor on hover */
+        position: relative; /* Position relative for text positioning */
+        overflow: hidden; /* Hide overflow to create a smooth effect */
+    }
+
+    .btn-back img {
+        width: 45px; /* Adjust the size of the arrow image */
+        height: auto;
+        margin-right: 5px; /* Space between the image and text */
+        transition: transform 0.3s ease; /* Smooth transition for image */
+        background: none; /* Ensure no background on the image */
+        position: relative; /* Position relative for smooth animation */
+        z-index: 1; /* Ensure image is on top */
+    }
+
+    .btn-back .btn-text {
+        opacity: 0; /* Hide text initially */
+        visibility: hidden; /* Hide text initially */
+        position: absolute; /* Position absolutely within the button */
+        right: 25px; /* Adjust right position to fit the button */
+        background-color: #1e8e1e; /* Background color for text on hover */
+        color: #fff; /* Text color */
+        padding: 4px 8px; /* Padding around text */
+        border-radius: 4px; /* Rounded corners for text background */
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Smooth transition */
+        z-index: 0; /* Ensure text is beneath the image */
+    }
+
+    .btn-back:hover .btn-text {
+        opacity: 1; /* Show text on hover */
+        visibility: visible; /* Show text on hover */
+        transform: translateX(-5px); /* Move text to the right on hover */
+        padding: 10px 20px; /* Adjust padding */
+        border-radius: 20px; /* Rounded corners */
+    }
+
+    .btn-back:hover img {
+        transform: translateX(-50px); /* Move image to the left on hover */
+    }
+
+    .btn-back:hover {
+        /*background-color: #1e8e1e; /* Dark green on hover */
+
+    }
+</style>
+
 </head>
 <body>
     <div class="frame">
@@ -189,72 +293,76 @@
 
         <div class="right-column">
             <!-- Back Button -->
-            
-            <div class="container">
-            <a href="{{ route('dashboard') }}" class="btn-back mb-3">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
 
-                <h1 class="text-center mb-4" style="color: green;">Staff Profiles</h1>
+        <a href="{{ route('dashboard') }}" class="btn-back">
+        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+        </a>
+
+            <div class="col-md-12 text-center">
+                <h2 class="header-title" style="color: green;">Staff Profiles</h2>
+            </div>
 
                 <!-- Add and CSV Actions -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <a href="{{ route('staff_profile.create') }}" class="btn btn-primary">Add Staff Profile</a>
-                    
+                    <a href="{{ route('staff_profile.create') }}" class="btn btn-success">Add Staff Profile</a>
+
                 </div>
-                <div class="row">
-            <!-- Total Staff -->
-            <div class="row justify-content-center">
-    <!-- Total Staff -->
-    <div class="col-md-6 mb-4">
-        <div class="card summary-card text-center">
-            <div class="card-header summary-card-header bg-success text-white">
-                Total Staff Members
-            </div>
-            <div class="card-body text-center summary-card-body">
-                <h3>{{ $totalStaff }}</h3>
-            </div>
-        </div>
-    </div>
 
 
-<!-- Male Staff -->
-<div class="col-md-6 mb-4">
-        <div class="card summary-card text-center">
-            <div class="card-header summary-card-header bg-success text-white">
-                Male Staff Members
-                </div>
-                <div class="card-body text-center summary-card-body">
-                <h3>{{ $maleStaff }}</h3>
+
+    <div class="row justify-content-center mt-4">
+    <div class="container mt-4">
+    <div class="d-flex justify-content-center">
+        <!-- Total Tanks Card -->
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+            Total Staff Members
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $totalStaff }}</h5>
+
+            </div>
+        </div>
+
+        <!-- Ongoing Tanks Card -->
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+            Male Staff Members
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $maleStaff }}</h5>
+
+            </div>
+        </div>
+
+        <!-- Completed Tanks Card -->
+        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+            <div class="card-header">
+            Female Staff Members
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $femaleStaff }}</h5>
+
             </div>
         </div>
     </div>
-    <!-- Female Staff -->
-    <div class="col-md-6 mb-4">
-        <div class="card summary-card text-center">
-            <div class="card-header summary-card-header bg-success text-white">
-                Female Staff Members
-                </div>
-                <div class="card-body text-center summary-card-body">
-                <h3>{{ $femaleStaff }}</h3>
-            </div>
-        </div>
     </div>
-    
     </div>
-    
-    </div>
-   
+
+</br>
                 <!-- Search Form -->
-                <form method="GET" action="{{ route('searchstaff') }}" class="form-inline">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="search">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit">Search</button>
-                            </div>
+                    <div class="row justify-content-start">
+                        <div class="col-md-4">
+                            <form method="GET" action="{{ route('searchstaff') }}" class="form-inline">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Search" name="search">
+                                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-<p>
+                    </div>
+
+
 
                 <!-- Success Message -->
                 @if(session('success'))
@@ -294,10 +402,10 @@
                 <td>{{ $staffProfile->contact_number }}</td>
                 <td>{{ $staffProfile->salary ? 'LKR ' . number_format($staffProfile->salary, 2) : 'N/A' }}</td>
                 <td>
-    <button 
-        type="button" 
-        class="btn btn-sm status-toggle {{ $staffProfile->status === 'in_service' ? 'btn-success' : 'btn-danger' }}" 
-        data-id="{{ $staffProfile->id }}" 
+    <button
+        type="button"
+        class="btn btn-sm status-toggle {{ $staffProfile->status === 'in_service' ? 'btn-success' : 'btn-danger' }}"
+        data-id="{{ $staffProfile->id }}"
         data-status="{{ $staffProfile->status }}">
         {{ $staffProfile->status === 'in_service' ? 'In Service' : 'Resigned' }}
     </button>
@@ -326,6 +434,50 @@
         @endforeach
     </tbody>
 </table>
+
+<!-- Pagination Links -->
+<nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item {{ $staffProfiles->onFirstPage() ? 'disabled' : '' }}">
+                                    <a class="page-link" href="{{ $staffProfiles->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+                                </li>
+
+                                @php
+                                    $currentPage = $staffProfiles->currentPage();
+                                    $lastPage = $staffProfiles->lastPage();
+                                    $startPage = max($currentPage - 2, 1);
+                                    $endPage = min($currentPage + 2, $lastPage);
+                                @endphp
+
+                                @if ($startPage > 1)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $staffProfiles->url(1) }}">1</a>
+                                    </li>
+                                    @if ($startPage > 2)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $startPage; $i <= $endPage; $i++)
+                                    <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $staffProfiles->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($endPage < $lastPage)
+                                    @if ($endPage < $lastPage - 1)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $staffProfiles->url($lastPage) }}">{{ $lastPage }}</a>
+                                    </li>
+                                @endif
+
+                                <li class="page-item {{ $staffProfiles->hasMorePages() ? '' : 'disabled' }}">
+                                    <a class="page-link" href="{{ $staffProfiles->nextPageUrl() }}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center">
