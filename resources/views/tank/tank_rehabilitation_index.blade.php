@@ -493,6 +493,50 @@
                                 @endif
                             });
                         </script>
+<script>
+    $(document).ready(function () {
+        // Initialize the map, center on Sri Lanka
+        var map = L.map('map').setView([7.8731, 80.7718], 8); // Coordinates of Sri Lanka
+
+        // Use a detailed tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18, // Allow closer zoom for better details
+            minZoom: 6   // Set minimum zoom level for better control
+        }).addTo(map);
+
+        // Tank locations passed from the controller
+        var tankLocations = @json($tankLocations);
+
+        // Add markers for each tank
+        tankLocations.forEach(function (tank) {
+            if (tank.latitude && tank.longitude) {
+                // Create a marker
+                var marker = L.marker([tank.latitude, tank.longitude]).addTo(map);
+
+                // Create the popup content
+                var popupContent = `
+                    <div>
+                        <strong>Tank Name:</strong> ${tank.tank_name}<br>
+                        <strong>Tank ID:</strong> ${tank.tank_id}<br>
+                        <strong>Progress:</strong> ${tank.progress}<br>
+                        <strong>Status:</strong> ${tank.status}<br>
+                    </div>
+                `;
+
+                // Bind the popup to the marker
+                marker.bindPopup(popupContent);
+            }
+        });
+
+        // Fix map rendering issue inside Bootstrap modal
+        $('#mapModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                map.invalidateSize(); // Adjust map size after modal display
+            }, 10);
+        });
+    });
+</script>
 
 
 
@@ -554,5 +598,8 @@
         });
     });
 </script>
+
+
+
 </body>
 </html>

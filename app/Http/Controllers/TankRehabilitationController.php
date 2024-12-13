@@ -20,7 +20,8 @@ class TankRehabilitationController extends Controller
         $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
         $completedCount = TankRehabilitation::where('status', 'Finished')->count();
 
-        $tankLocations = TankRehabilitation::select('tank_name', 'latitude', 'longitude')->get();
+        
+        $tankLocations = TankRehabilitation::select('tank_id', 'tank_name', 'latitude', 'longitude', 'progress', 'status')->get();
 
         // Return the view with tank rehabilitation records
        return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'ongoingCount', 'completedCount', 'totalTanks', 'entries', 'tankLocations'));
