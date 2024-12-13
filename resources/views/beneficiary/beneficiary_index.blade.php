@@ -245,33 +245,122 @@
         </div>
 
 
-        <div class="container">
-    <div class="row justify-content-center mt-4">
+        <div class="container mt-4">
+    <div class="row justify-content-center">
         <!-- Total Beneficiaries Card -->
-        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
-                Total Beneficiaries<br>
-                Registration
-            </div>
-            <div class="card-body">
-                <h4 class="card-title">{{ $beneficiaries->total() }}</h4>
-                <h4 class="card-text">Total Beneficiaries currently in the system.</h4>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-header">
+                    Total Beneficiaries<br>
+                    Registration
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ $beneficiaries->total() }}</h4>
+                    <p class="card-text">Total Beneficiaries currently in the system.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Crop Names Summary Card with Popup -->
-        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
-                View Crop Name/Production Focus
+        <!-- Crop Names Summary Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-header">
+                    View Crop Name/Production Focus
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $input3Summary->count() ?? 0 }}</h5>
+                    <p class="card-text">Click below to view the Crop Name/Production Focus summary.</p>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#input3SummaryModal">View</button>
+                </div>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ $input3Summary->count() ?? 0 }}</h5> <!-- Total count of unique Input3 -->
-                <p class="card-text">Click below to view the Crop Name/Production Focus summary.</p>
-                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#input3SummaryModal">View</button>
+        </div>
+
+        <!-- Tank Names Summary Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-header">
+                    View Tank Name
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $tankNameSummary->count() ?? 0 }}</h5>
+                    <p class="card-text">Click below to view the Tank Name summary.</p>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#tankNameSummaryModal">View</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal for Crop Name Summary -->
+<div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="input3SummaryModalLabel">Summary of Beneficiaries by Crop Name/Production Focus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Crop Name/Production Focus</th>
+                            <th>Count</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($input3Summary as $summary)
+                            <tr>
+                                <td>{{ $summary->input3 }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <!-- <td><a href="" class="btn btn-info btn-sm">View</a></td> -->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Tank Name Summary -->
+<div class="modal fade" id="tankNameSummaryModal" tabindex="-1" aria-labelledby="tankNameSummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tankNameSummaryModalLabel">Summary of Beneficiaries by Tank Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Tank Name</th>
+                            <th>Count</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tankNameSummary as $summary)
+                            <tr>
+                                <td>{{ $summary->tank_name }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <!-- <td><a href="" class="btn btn-info btn-sm">View</a></td> -->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal for Input3 Summary (Crop Names) -->
 <div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
@@ -307,7 +396,44 @@
         </div>
     </div>
 </div>
-</br>
+
+
+<div class="modal fade" id="tankNameSummaryModal" tabindex="-1" aria-labelledby="tankNameSummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tankNameSummaryModalLabel">Summary of Beneficiaries by Tank Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Tank Name</th>
+                            <th>Count</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tankNameSummary as $summary)
+                            <tr>
+                                <td>{{ $summary->tank_name }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <td>
+                                    <a href="" class="btn btn-info btn-sm">View</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
