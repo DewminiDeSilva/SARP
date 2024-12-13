@@ -402,23 +402,27 @@
                 <td>{{ $staffProfile->contact_number }}</td>
                 <td>{{ $staffProfile->salary ? 'LKR ' . number_format($staffProfile->salary, 2) : 'N/A' }}</td>
                 <td>
-<<<<<<< HEAD
-    <button 
-        type="button" 
-        class="btn btn-sm status-toggle {{ $staffProfile->status === 'in_service' ? 'btn-success' : 'btn-danger' }}" 
-        data-id="{{ $staffProfile->id }}" 
-        data-status="{{ $staffProfile->status }}"
-        {{ $staffProfile->status === 'resigned' ? 'disabled' : '' }}>
-=======
+    @if ($staffProfile->status === 'in_service')
+        <button
+            type="button"
+            class="btn btn-sm status-toggle btn-success"
+            data-id="{{ $staffProfile->id }}"
+            data-status="{{ $staffProfile->status }}">
+            In Service
+        </button>
+    @else
     <button
         type="button"
         class="btn btn-sm status-toggle {{ $staffProfile->status === 'in_service' ? 'btn-success' : 'btn-danger' }}"
         data-id="{{ $staffProfile->id }}"
         data-status="{{ $staffProfile->status }}">
->>>>>>> ccc903870551ff57041b65984f25be1abc6d919a
+
         {{ $staffProfile->status === 'in_service' ? 'In Service' : 'Resigned' }}
     </button>
+    @endif
 </td>
+
+                
 
 
 
