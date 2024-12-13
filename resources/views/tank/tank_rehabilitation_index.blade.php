@@ -223,7 +223,7 @@
 
     <!-- View Map Button -->
     <div class="row justify-content-center mt-4">
-        <button class="btn btn-success" data-toggle="modal" data-target="#mapModal" style="width: 200px;">View Map</button>
+        <button class="btn btn-success" data-toggle="modal" data-target="#mapModal" style="width: 200px;">All Tanks View Map<br>Srilanka</button>
     </div>
 </div>
 
