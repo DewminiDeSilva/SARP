@@ -17,7 +17,9 @@ class AscRegistrationController extends Controller
     {
         try {
             $ascRegistrations = AscRegistration::paginate(10);
-            return view('asc.asc_index', compact('ascRegistrations'));
+            $totalASCs = AscRegistration::count(); 
+            return view('asc.asc_index', compact('ascRegistrations','totalASCs'));
+           
         } catch (\Exception $e) {
             \Log::error($e);
             abort(500, 'Something went wrong.');
@@ -136,7 +138,8 @@ class AscRegistrationController extends Controller
         ->orWhere('services_available', 'like', '%' . $search . '%')
         ->paginate(10);
 
-    return view('asc.asc_index', compact('ascRegistrations', 'search'));
+        $totalASCs = $ascRegistrations->total();
+    return view('asc.asc_index', compact('ascRegistrations', 'search','totalASCs'));
 }
 
   /**

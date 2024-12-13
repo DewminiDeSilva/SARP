@@ -117,7 +117,9 @@ class CDFController extends Controller
             ->orWhere('cdf_address', 'like', '%'.$search.'%')
             ->paginate(10);
 
-        return view('cdf.cdf_index', compact('cdfs', 'search'));
+            $totalCDFs = $cdfs->total();
+
+        return view('cdf.cdf_index', compact('cdfs', 'search','totalCDFs'));
     }
 
     /**

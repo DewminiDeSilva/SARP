@@ -228,7 +228,7 @@ td {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 150px; /* Set a fixed width */
+            width: 120px; /* Set a fixed width */
             height: 40px; /* Set a fixed height */
             box-sizing: border-box; /* Ensures padding is included in width and height */
             /*padding: 10px;*/
@@ -301,6 +301,61 @@ td {
         /*background-color: #1e8e1e; /* Dark green on hover */
 
     }
+    /* Summary Section Styles */
+    .summary-card-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    
+    margin: 0 auto; /* Centers the container */
+    width: 100%; /* Full width */
+    position: relative; /* Allows positioning adjustments */
+    z-index: 10; /* Ensures the cards appear above other elements */
+}
+
+.summary-card {
+    width: 25%; /* Adjust the width of each card */
+    background-color: #e3f7fc; /* Light blue background */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a deeper shadow for a floating effect */
+    padding: 20px; /* Inner padding */
+    text-align: center; /* Center-align content */
+    font-family: Arial, sans-serif; /* Simple font */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.summary-card h4 {
+    background-color: #b3e5fc; /* Slightly darker blue for the heading */
+    color: #000; /* Black text */
+    font-size: 1.25rem; /* Medium font size */
+    margin: 0;
+    padding: 10px 0; /* Add padding to heading */
+    border-radius: 6px 6px 0 0; /* Round only the top corners */
+    font-weight: bold; /* Bold text */
+}
+
+.summary-card .number {
+    font-size: 2.5rem; /* Larger font size for numbers */
+    font-weight: bold; /* Bold text for numbers */
+    color: #333; /* Dark gray text */
+    margin: 10px 0; /* Space around the number */
+}
+
+.summary-card p {
+    color: #555; /* Gray text color */
+    font-size: 1rem; /* Normal font size */
+    margin: 0; /* No margin */
+    padding: 5px 0; /* Add space inside the paragraph */
+}
+
+.card-header {
+    font-weight: bold;
+    text-align: center;
+    background-color: #c7eef1; /* Blue color example */
+    color: #0d0e0d; /* Text color */
+}
+
 </style>
 
 </head>
@@ -407,10 +462,37 @@ td {
                 </div>
             </div>
         </div>
+       
+        {{-- <div class="summary-card-container">
+            <div class="summary-card">
+                <h4>Total CDF Records</h4>
+                <div class="number">{{ $totalCDFs }}</div>
+                <p>Total records currently in the system.</p>
+            </div>
+        </div> --}}
 
+        <div class="container">
+            <div class="justify-content-center">
+                <div class="container mt-4">
+                    <div class="d-flex justify-content-center">
+            
+                        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+                            <div class="card-header">
+                                Total CDF Records
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $totalCDFs }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
 
+    </br>
+        
 
-
+    
 
         <!--serch and csv files-->
 
