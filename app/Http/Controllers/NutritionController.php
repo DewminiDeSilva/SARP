@@ -16,8 +16,11 @@ class NutritionController extends Controller
     {
         // Fetch all nutrition programs
         $nutritionPrograms = Nutrition::latest()->paginate(10);
-
-        return view('nutrition.nutrition_index', compact('nutritionPrograms'));
+        // Count total nutrition programs
+    $totalNutritionPrograms = Nutrition::count();
+    // Calculate the total cost of all nutrition programs
+    $totalCost = Nutrition::sum('cost_of_training_program');
+        return view('nutrition.nutrition_index', compact('nutritionPrograms', 'totalNutritionPrograms', 'totalCost'));
     }
 
     /**
@@ -196,7 +199,12 @@ class NutritionController extends Controller
             ->orWhere('description', 'like', '%' . $search . '%')
             ->paginate(10);
 
-        return view('nutrition.nutrition_index', compact('nutritionPrograms', 'search'));
+             // Total count of search results
+    $totalNutritionPrograms = $nutritionPrograms->total();
+    // Calculate the total cost for filtered results
+    $totalCost = $nutritionPrograms->sum('cost_of_training_program');
+
+        return view('nutrition.nutrition_index', compact('nutritionPrograms', 'search', 'totalNutritionPrograms', 'totalCost'));
     }
 
     /**
