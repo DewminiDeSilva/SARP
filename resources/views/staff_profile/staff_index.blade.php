@@ -402,14 +402,28 @@
                 <td>{{ $staffProfile->contact_number }}</td>
                 <td>{{ $staffProfile->salary ? 'LKR ' . number_format($staffProfile->salary, 2) : 'N/A' }}</td>
                 <td>
+    @if ($staffProfile->status === 'in_service')
+        <button
+            type="button"
+            class="btn btn-sm status-toggle btn-success"
+            data-id="{{ $staffProfile->id }}"
+            data-status="{{ $staffProfile->status }}">
+            In Service
+        </button>
+    @else
     <button
         type="button"
         class="btn btn-sm status-toggle {{ $staffProfile->status === 'in_service' ? 'btn-success' : 'btn-danger' }}"
         data-id="{{ $staffProfile->id }}"
         data-status="{{ $staffProfile->status }}">
+
         {{ $staffProfile->status === 'in_service' ? 'In Service' : 'Resigned' }}
     </button>
+    @endif
 </td>
+
+                
+
 
 
                 <td>
@@ -493,75 +507,93 @@
     </div>
     <script>
     $(document).on('click', '.status-toggle', function () {
-        let button = $(this);
-        let staffId = button.data('id');
-        let currentStatus = button.data('status');
+    let button = $(this);
+    let staffId = button.data('id');
+    let currentStatus = button.data('status');
 
-        // Show SweetAlert confirmation
+    // Always show "Action Blocked" message for resigned status
+    if (currentStatus === 'resigned') {
         Swal.fire({
-            title: '<span style="color:#126926;">Are you sure?</span>',
-            html: `<span style="color:#555;">Do you want to <b style="color:${currentStatus === 'in_service' ? '#d9534f' : '#5cb85c'};">${currentStatus === 'in_service' ? 'resign' : 'reinstate'}</b> this person?</span>`,
-            icon: 'warning',
-            iconColor: '#ffcc00',
-            showCancelButton: true,
-            confirmButtonColor: '#126926', // Confirm button color
-            cancelButtonColor: '#d9534f', // Cancel button color
-            confirmButtonText: '<b>Yes</b>',
-            cancelButtonText: '<b>No</b>',
+            title: '<span style="color:#d9534f;">Action Blocked</span>',
+            html: '<span style="color:#555;">This staff member is already resigned. No further changes allowed.</span>',
+            icon: 'info',
+            iconColor: '#d9534f',
+            timer: 2000,
+            showConfirmButton: false,
             customClass: {
-                popup: 'custom-swal-popup', // Custom popup class
-                title: 'custom-swal-title', // Custom title class
-                content: 'custom-swal-content', // Custom content class
+                popup: 'custom-swal-error-popup'
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Perform AJAX request
-                $.ajax({
-                    url: `/staff_profile/${staffId}/status`,
-                    type: 'PATCH',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            // Update button appearance and text
-                            button
-                                .toggleClass('btn-success btn-danger')
-                                .text(response.new_status === 'in_service' ? 'In Service' : 'Resigned')
-                                .data('status', response.new_status);
+        });
+        return;
+    }
 
-                            // Show SweetAlert success message
-                            Swal.fire({
-                                title: '<span style="color:#5cb85c;">Success!</span>',
-                                html: `<span style="color:#555;">Status updated to <b>${response.new_status === 'in_service' ? 'In Service' : 'Resigned'}</b>.</span>`,
-                                icon: 'success',
-                                iconColor: '#5cb85c',
-                                timer: 2000,
-                                showConfirmButton: false,
-                                customClass: {
-                                    popup: 'custom-swal-success-popup'
-                                }
-                            });
-                        }
-                    },
-                    error: function () {
-                        // Show SweetAlert error message
+    // Show SweetAlert confirmation for other statuses
+    Swal.fire({
+        title: '<span style="color:#126926;">Are you sure?</span>',
+        html: `<span style="color:#555;">Do you want to <b style="color:${currentStatus === 'in_service' ? '#d9534f' : '#5cb85c'};">${currentStatus === 'in_service' ? 'resign' : 'reinstate'}</b> this person?</span>`,
+        icon: 'warning',
+        iconColor: '#ffcc00',
+        showCancelButton: true,
+        confirmButtonColor: '#126926',
+        cancelButtonColor: '#d9534f',
+        confirmButtonText: '<b>Yes</b>',
+        cancelButtonText: '<b>No</b>',
+        customClass: {
+            popup: 'custom-swal-popup',
+            title: 'custom-swal-title',
+            content: 'custom-swal-content',
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Perform AJAX request
+            $.ajax({
+                url: `/staff_profile/${staffId}/status`,
+                type: 'PATCH',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Update button appearance and text
+                        button
+                            .toggleClass('btn-success btn-danger')
+                            .text(response.new_status === 'in_service' ? 'Okay' : 'Resigned')
+                            .data('status', response.new_status);
+
+                        // Show SweetAlert success message
                         Swal.fire({
-                            title: '<span style="color:#d9534f;">Error!</span>',
-                            html: '<span style="color:#555;">Failed to update status. Please try again.</span>',
-                            icon: 'error',
-                            iconColor: '#d9534f',
+                            title: '<span style="color:#5cb85c;">Success!</span>',
+                            html: `<span style="color:#555;">Status updated to <b>${response.new_status === 'in_service' ? 'Okay' : 'Resigned'}</b>.</span>`,
+                            icon: 'success',
+                            iconColor: '#5cb85c',
                             timer: 2000,
                             showConfirmButton: false,
                             customClass: {
-                                popup: 'custom-swal-error-popup'
+                                popup: 'custom-swal-success-popup'
                             }
                         });
                     }
-                });
-            }
-        });
+                },
+                error: function () {
+                    // Show SweetAlert error message
+                    Swal.fire({
+                        title: '<span style="color:#d9534f;">Error!</span>',
+                        html: '<span style="color:#555;">Failed to update status. Please try again.</span>',
+                        icon: 'error',
+                        iconColor: '#d9534f',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'custom-swal-error-popup'
+                        }
+                    });
+                }
+            });
+        }
     });
+});
+
+
 </script>
 
 
