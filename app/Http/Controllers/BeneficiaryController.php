@@ -63,6 +63,12 @@ class BeneficiaryController extends Controller
                     ->select('input3', DB::raw('COUNT(*) as count'))
                     ->groupBy('input3')
                     ->get();
+
+                    $tankNameSummary = Beneficiary::where('tank_name', 'like', '%'.$search.'%')
+                    ->select('tank_name', DB::raw('COUNT(*) as count'))
+                    ->groupBy('tank_name')
+                    ->get();
+                    
                             
                     return view('beneficiary.beneficiary_index', compact('beneficiaries', 'search', 'input3Summary'));
         
@@ -234,8 +240,12 @@ public function index()
                                 ->groupBy('input3')
                                 ->get();
 
+    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
+                                ->groupBy('tank_name')
+                                ->get();
+
     return view('beneficiary.beneficiary_index', compact(
-        'beneficiaries', 'search', 'input3Summary'
+        'beneficiaries', 'search', 'input3Summary','tankNameSummary'
     ));
 }
 
@@ -503,17 +513,19 @@ public function index()
 
 
     public function list()
-    {
-        
-    $beneficiaries = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')->paginate(10);
+{
+    $beneficiaries = Beneficiary::where('input1', 'livestock')
+        ->select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')
+        ->paginate(10);
 
     // Calculate summary statistics
-    $totalBeneficiaries = Beneficiary::count();
-    $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
+    $totalBeneficiaries = Beneficiary::where('input1', 'livestock')->count();
+    $totalGnDivisions = Beneficiary::where('input1', 'livestock')->distinct('gn_division_name')->count();
     $totalLivestocks = Livestock::distinct('gn_division_name')->count('gn_division_name');
 
-
     return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
-    }
+}
 
+
+    
 }

@@ -840,18 +840,29 @@ $(document).ready(function () {
 
 // agri livestock
 
+
+
 $(document).ready(function () {
     // Handle Agriculture/Livestock Selection
     $('#agriculture_livestock').change(function () {
-        var selectedOption = $(this).val();
+    var selectedOption = $(this).val();
 
-        // Show/Hide Agriculture and Livestock sections based on selection
-        $('#agricultureSection').toggleClass('d-none', selectedOption !== 'agriculture');
-        $('#livestockSection').toggleClass('d-none', selectedOption !== 'livestock');
+    // Show/Hide Agriculture and Livestock sections based on selection
+    $('#agricultureSection').toggleClass('d-none', selectedOption !== 'agriculture');
+    $('#livestockSection').toggleClass('d-none', selectedOption !== 'livestock');
 
-        // Clear dropdowns when switching between sections
-        $('#categoryDropdown, #cropName, #livestock_type, #production_focus').val('');
-    });
+    // Enable/Disable fields based on the section being displayed
+    if (selectedOption === 'agriculture') {
+        $('#categoryDropdown, #cropName').prop('disabled', false);
+        $('#livestock_type, #production_focus').prop('disabled', true);
+    } else if (selectedOption === 'livestock') {
+        $('#categoryDropdown, #cropName').prop('disabled', true);
+        $('#livestock_type, #production_focus').prop('disabled', false);
+    } else {
+        $('#categoryDropdown, #cropName, #livestock_type, #production_focus').prop('disabled', true);
+    }
+});
+
 
     // Handle Agriculture Category Change (Input2 and Input3 for Agriculture)
     $('#categoryDropdown').change(function () {

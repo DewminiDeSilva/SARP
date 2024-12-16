@@ -188,6 +188,66 @@
         .btn-back:hover img {
             transform: translateX(-50px);
         }
+        .card-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #c7eef1; /* Blue color example */
+            color: #0d0e0d; /* Text color */
+        }
+        .summary-card-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    
+    margin: 0 auto; /* Centers the container */
+    width: 100%; /* Full width */
+    position: relative; /* Allows positioning adjustments */
+    z-index: 10; /* Ensures the cards appear above other elements */
+}
+
+.summary-card {
+    width: 25%; /* Adjust the width of each card */
+    background-color: #e3f7fc; /* Light blue background */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a deeper shadow for a floating effect */
+    padding: 20px; /* Inner padding */
+    text-align: center; /* Center-align content */
+    font-family: Arial, sans-serif; /* Simple font */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.summary-card h4 {
+    background-color: #b3e5fc; /* Slightly darker blue for the heading */
+    color: #000; /* Black text */
+    font-size: 1.25rem; /* Medium font size */
+    margin: 0;
+    padding: 10px 0; /* Add padding to heading */
+    border-radius: 6px 6px 0 0; /* Round only the top corners */
+    font-weight: bold; /* Bold text */
+}
+
+.summary-card .number {
+    font-size: 2.5rem; /* Larger font size for numbers */
+    font-weight: bold; /* Bold text for numbers */
+    color: #333; /* Dark gray text */
+    margin: 10px 0; /* Space around the number */
+}
+
+.summary-card p {
+    color: #555; /* Gray text color */
+    font-size: 1rem; /* Normal font size */
+    margin: 0; /* No margin */
+    padding: 5px 0; /* Add space inside the paragraph */
+}
+
+.card-header {
+    font-weight: bold;
+    text-align: center;
+    background-color: #c7eef1; /* Blue color example */
+    color: #0d0e0d; /* Text color */
+}
+
     </style>
 
 </head>
@@ -206,6 +266,39 @@
 
         <div class="">
             <h2 style="color: green; font-weight: bold; text-align: center;">Nutrition Program List</h2>
+
+           
+            <div class="container">
+                <div class="justify-content-center">
+                    <div class="container mt-4">
+                        <div class="d-flex justify-content-center">
+                
+                            <div class="card text-center" style="width: 18rem; margin-right: 20px;">
+                                <div class="card-header">
+                                    Total Nutrition Programs
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$totalNutritionPrograms  }}</h5>
+                                    <p>Total nutrition programs currently in the system.</p>
+                                </div>
+                            </div>
+                            <!-- Total Cost Card -->
+        <div class="card text-center" style="width: 18rem;">
+            <div class="card-header">
+                Total Cost
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ number_format($totalCost, 2) }}</h5>
+                <p>Total cost of all nutrition programs.</p>
+                        </div>
+                    </div>   
+                </div>
+            </div>
+    
+        </br>
+    </div>
+            
+</div>         
 
             <!-- Add New Program Button -->
             <div class="d-flex justify-content-between mb-3">
@@ -248,7 +341,10 @@
                     </select>
                     <label for="entriesSelect">entries</label>
                 </div>
-                        </div>
+            
+            </div>
+        
+
 
             <!-- Table for displaying Nutrition Program records -->
             <div class="table-container">
@@ -317,7 +413,7 @@
             </div>
 
             <!-- Pagination Links -->
-<nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item {{ $nutritionPrograms->onFirstPage() ? 'disabled' : '' }}">
             <a class="page-link" href="{{ $nutritionPrograms->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
@@ -358,36 +454,36 @@
             <a class="page-link" href="{{ $nutritionPrograms->nextPageUrl() }}">Next</a>
         </li>
     </ul>
-</nav>
+   </nav>
 
-@php
+  @php
     $currentPage = $nutritionPrograms->currentPage();
     $perPage = $nutritionPrograms->perPage();
     $total = $nutritionPrograms->total();
     $startingNumber = ($currentPage - 1) * $perPage + 1;
     $endingNumber = min($total, $currentPage * $perPage);
-@endphp
+  @endphp
 
-<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
     <div id="tableInfo" class="text-right">
         <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
     </div>
-</div>
+  </div>
 
 
 
 
         </div>
     </div>
-</div>
-<script>
+  </div>
+  <script>
     document.getElementById('entriesSelect').addEventListener('change', function() {
         let entries = this.value;
         let url = new URL(window.location.href);
         url.searchParams.set('entries', entries);
         window.location.href = url.href;
     });
-</script>
+   </script>
 
 </body>
 </html>
