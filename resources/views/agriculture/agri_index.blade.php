@@ -352,9 +352,6 @@
                         <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
                     </li>
                 </ul>
-            
-          
-          
             </nav>
         </div>
         </div>
