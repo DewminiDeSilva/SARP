@@ -513,18 +513,18 @@ public function index()
 
 
     public function list()
-    {
-        
-    $beneficiaries = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')->paginate(10);
+{
+    $beneficiaries = Beneficiary::where('input1', 'livestock')
+        ->select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')
+        ->paginate(10);
 
     // Calculate summary statistics
-    $totalBeneficiaries = Beneficiary::count();
-    $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
+    $totalBeneficiaries = Beneficiary::where('input1', 'livestock')->count();
+    $totalGnDivisions = Beneficiary::where('input1', 'livestock')->distinct('gn_division_name')->count();
     $totalLivestocks = Livestock::distinct('gn_division_name')->count('gn_division_name');
 
-
     return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
-    }
+}
 
 
     

@@ -227,18 +227,22 @@ class LivestockController extends Controller
     $search = $request->input('search'); // Get the search query
 
     // Search in Beneficiary fields
-    $beneficiaries = Beneficiary::where('nic', 'like', "%{$search}%")
-        ->orWhere('name_with_initials', 'like', "%{$search}%")
+    $beneficiaries = Beneficiary::where('input1', 'livestock')
+    ->where(function($query) use ($search) {
+        $query->where('nic', 'like', "%$search%")
+              ->orWhere('name_with_initials', 'like', "%$search%")
         ->orWhere('address', 'like', "%{$search}%")
         ->orWhere('gn_division_name', 'like', "%{$search}%")
         ->orWhere('gender', '=', $search) // Exact match for gender
         ->orWhere('dob', 'like', '%'.$search.'%') // Added
         ->orWhere('age', 'like', '%'.$search.'%') // Added
         ->orWhere('address', 'like', '%'.$search.'%')
-        ->orWhere('phone', 'like', '%'.$search.'%')
+        ->orWhere('phone', 'like', '%'.$search.'%');
+
+    })
         ->paginate(10); // Add pagination
         
-        
+    
 
     // Add required statistics
     $totalLivestocks = Livestock::count();
