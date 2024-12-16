@@ -169,6 +169,66 @@
             margin-bottom: 5px;
         }
     </style>
+
+<style>
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center; /* Center content horizontally */
+        /*background-color: #26CF23; /* Button background color */
+        color: #fff; /* Text color */
+        border: none; /* Remove default border */
+        padding: 10px 50px; /* Adjust padding */
+        border-radius: 4px; /* Rounded corners */
+        text-decoration: none; /* Remove underline */
+        font-size: 14px; /* Font size */
+        transition: background-color 0.3s ease; /* Smooth transition */
+        cursor: pointer; /* Pointer cursor on hover */
+        position: relative; /* Position relative for text positioning */
+        overflow: hidden; /* Hide overflow to create a smooth effect */
+    }
+
+    .btn-back img {
+        width: 45px; /* Adjust the size of the arrow image */
+        height: auto;
+        margin-right: 5px; /* Space between the image and text */
+        transition: transform 0.3s ease; /* Smooth transition for image */
+        background: none; /* Ensure no background on the image */
+        position: relative; /* Position relative for smooth animation */
+        z-index: 1; /* Ensure image is on top */
+    }
+
+    .btn-back .btn-text {
+        opacity: 0; /* Hide text initially */
+        visibility: hidden; /* Hide text initially */
+        position: absolute; /* Position absolutely within the button */
+        right: 25px; /* Adjust right position to fit the button */
+        background-color: #1e8e1e; /* Background color for text on hover */
+        color: #fff; /* Text color */
+        padding: 4px 8px; /* Padding around text */
+        border-radius: 4px; /* Rounded corners for text background */
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Smooth transition */
+        z-index: 0; /* Ensure text is beneath the image */
+    }
+
+    .btn-back:hover .btn-text {
+        opacity: 1; /* Show text on hover */
+        visibility: visible; /* Show text on hover */
+        transform: translateX(-5px); /* Move text to the right on hover */
+        padding: 10px 20px; /* Adjust padding */
+        border-radius: 20px; /* Rounded corners */
+    }
+
+    .btn-back:hover img {
+        transform: translateX(-50px); /* Move image to the left on hover */
+    }
+
+    .btn-back:hover {
+        /*background-color: #1e8e1e; /* Dark green on hover */
+
+    }
+</style>
+
 </head>
 <body>
 
@@ -178,14 +238,22 @@
         @csrf
     </div>
     <div class="right-column">
+
+    <!-- Back Button -->
+        <a href="{{ route('beneficiary.index') }}" class="btn-back">
+            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+        </a>
+
+        <div class="col-md-12 text-center">
+            <h2 class="header-title" style="color: green;">Edit Beneficiary</h2>
+        </div>
+
         <div class="container mt-5 border rounded border p-4 custom-border">
             <form action="{{ route('beneficiary.update', $beneficiary->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
-                <div class="col-md-12 text-center">
-                    <h2 style="color: green; font-weight: bold; font-size: 48px;">Edit Beneficiary</h2>
-                </div>
+
 
                 <!-- Tank and Province -->
                 <div class="form-row">
