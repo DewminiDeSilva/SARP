@@ -14,19 +14,50 @@ use Illuminate\Support\Facades\DB;
 
 class AgriController extends Controller
 {
-    public function index()
-    {
-        $entries = request()->get('entries', 10);
-        $agricultureData = AgricultureData::latest()->paginate($entries)->appends(['entries' => $entries]);
-        $totalAgricultureData = AgricultureData::count();
+    // public function index()
+    // {
+    //     $entries = request()->get('entries', 10);
+    //     $agricultureData = AgricultureData::latest()->paginate($entries)->appends(['entries' => $entries]);
+    //     $totalAgricultureData = AgricultureData::count();
 
-        $totalCrops = AgricultureData::distinct('crop_name')->count('crop_name');
-        $totalBeneficiaries = AgricultureData::distinct('beneficiary_id')->count('beneficiary_id');
-        $totalGnDivisions = AgricultureData::distinct('gn_division_name')->count('gn_division_name');
-        $beneficiaries = Beneficiary::paginate($entries);
+    //     $totalCrops = AgricultureData::distinct('crop_name')->count('crop_name');
+    //     //$totalBeneficiaries = AgricultureData::distinct('beneficiary_id')->count('beneficiary_id');
+    //     $totalBeneficiaries = AgricultureData::distinct('input1','agriculture')->count();
+    //     $totalGnDivisions = AgricultureData::distinct('gn_division_name')->count('gn_division_name');
+    //     $beneficiaries = Beneficiary::paginate($entries);
     
-        return view('agriculture.agri_index', compact('agricultureData', 'totalAgricultureData', 'entries', 'beneficiaries', 'totalCrops', 'totalBeneficiaries', 'totalGnDivisions'));
-    }
+    //     return view('agriculture.agri_index', compact('agricultureData', 'totalAgricultureData', 'entries', 'beneficiaries', 'totalCrops', 'totalBeneficiaries', 'totalGnDivisions','input1','agriculture'));
+    // }
+
+    public function index()
+{
+    $entries = request()->get('entries', 10);
+
+    // Fetch only beneficiaries where input1 is 'agriculture'
+    $beneficiaries = Beneficiary::where('input1', 'agriculture')->paginate($entries);
+
+    // Agriculture Data Pagination
+    $agricultureData = AgricultureData::latest()->paginate($entries)->appends(['entries' => $entries]);
+
+    // Total Counts
+    $totalAgricultureData = AgricultureData::count();
+    $totalCrops = AgricultureData::distinct('crop_name')->count('crop_name');
+    $totalBeneficiaries = Beneficiary::where('input1', 'agriculture')->count();
+    $totalGnDivisions = AgricultureData::distinct('gn_division_name')->count('gn_division_name');
+
+    // Pass data to the view
+    return view('agriculture.agri_index', compact(
+        'agricultureData', 
+        'totalAgricultureData', 
+        'entries', 
+        'beneficiaries', 
+        'totalCrops', 
+        'totalBeneficiaries', 
+        'totalGnDivisions'
+    ));
+}
+
+
 
     public function create($beneficiaryId = null)
     {
