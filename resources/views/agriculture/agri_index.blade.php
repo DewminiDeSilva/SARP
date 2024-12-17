@@ -284,6 +284,7 @@
                                 <th scope="col">NIC</th>
                                 <th scope="col">Beneficiary Name With Initials</th>
                                 <th scope="col">GN Division</th>
+                                <th scope="col">Crop Name</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
@@ -293,6 +294,7 @@
                                     <td>{{ $beneficiary->nic }}</td>
                                     <td>{{ $beneficiary->name_with_initials }}</td>
                                     <td>{{ $beneficiary->gn_division_name }}</td>
+                                    <td>{{ $beneficiary->input3 }}</td>
                                     <td class="buttonline">
                                         <div class="button-group">
                                             <a href="{{ route('agriculture.showByBeneficiary', $beneficiary->id) }}" class="btn btn-info btn-sm">View Details</a>
