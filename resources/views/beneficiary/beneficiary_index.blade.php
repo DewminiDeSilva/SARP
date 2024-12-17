@@ -8,6 +8,11 @@
     {{-- @vite('resources/css/app.css') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -158,6 +163,56 @@
         .btn-back:hover img {
             transform: translateX(-50px);
         }
+        .card-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #c7eef1; /* Blue color example */
+            color: #0d0e0d; /* Text color */
+        }
+
+
+        .pagination .page-item {
+            margin: 0 0px; /* Adjust the margin to reduce space */
+        }
+        .pagination .page-link {
+            padding: 5px 10px; /* Adjust padding to control button size */
+        }
+
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
+
+        .page-item:hover {
+            border-color: #fff;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .page-link {
+            color : #28a745;
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #126926;
+            border-color: #126926;
+        }
+        .entries-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Add spacing between elements */
+}
+.form-select {
+    width: auto; /* Ensure dropdown adjusts based on content */
+}
+
     </style>
 </head>
 <body>
@@ -188,6 +243,199 @@
         <div class="center-heading" style="text-align: center;">
             <h1>Beneficiary Details</h1>
         </div>
+
+
+        <div class="container mt-4">
+    <div class="row justify-content-center">
+        <!-- Total Beneficiaries Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-header">
+                    Total Beneficiaries<br>
+                    Registration
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ $beneficiaries->total() }}</h4>
+                    <p class="card-text">Total Beneficiaries currently in the system.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crop Names Summary Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-header">
+                    View Crop Name/Production Focus
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $input3Summary->count() ?? 0 }}</h5>
+                    <p class="card-text">Click below to view the Crop Name/Production Focus summary.</p>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#input3SummaryModal">View</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tank Names Summary Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-header">
+                    View Tank Name
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $tankNameSummary->count() ?? 0 }}</h5>
+                    <p class="card-text">Click below to view the Tank Name summary.</p>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#tankNameSummaryModal">View</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Crop Name Summary -->
+<div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="input3SummaryModalLabel">Summary of Beneficiaries by Crop Name/Production Focus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Crop Name/Production Focus</th>
+                            <th>Count</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($input3Summary as $summary)
+                            <tr>
+                                <td>{{ $summary->input3 }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <!-- <td><a href="" class="btn btn-info btn-sm">View</a></td> -->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Tank Name Summary -->
+<div class="modal fade" id="tankNameSummaryModal" tabindex="-1" aria-labelledby="tankNameSummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tankNameSummaryModalLabel">Summary of Beneficiaries by Tank Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Tank Name</th>
+                            <th>Count</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tankNameSummary as $summary)
+                            <tr>
+                                <td>{{ $summary->tank_name }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <!-- <td><a href="" class="btn btn-info btn-sm">View</a></td> -->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Input3 Summary (Crop Names) -->
+<div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="input3SummaryModalLabel">Summary of Beneficiaries by Crop Name/Production Focus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Crop Name/Production Focus</th>
+                            <th>Count</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($input3Summary as $summary)
+                            <tr>
+                                <td>{{ $summary->input3 }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <td><a href="" class="btn btn-info btn-sm">View</a></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="tankNameSummaryModal" tabindex="-1" aria-labelledby="tankNameSummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tankNameSummaryModalLabel">Summary of Beneficiaries by Tank Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Tank Name</th>
+                            <th>Count</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tankNameSummary as $summary)
+                            <tr>
+                                <td>{{ $summary->tank_name }}</td>
+                                <td>{{ $summary->count }}</td>
+                                <td>
+                                    <a href="" class="btn btn-info btn-sm">View</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
               <!-- CSV Upload Form -->
             <form action="{{ route('beneficiary.uploadCsv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
@@ -233,19 +481,17 @@
     </script>
 @endif
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div class="entries-container">
-        <label for="entriesSelect">Show</label>
-        <select id="entriesSelect" class="custom-select custom-select-sm form-control form-control-sm mx-2">
-            <option value="10" {{ $beneficiaries->perPage() == 10 ? 'selected' : '' }}>10</option>
-            <option value="25" {{ $beneficiaries->perPage() == 25 ? 'selected' : '' }}>25</option>
-            <option value="50" {{ $beneficiaries->perPage() == 50 ? 'selected' : '' }}>50</option>
-            <option value="100" {{ $beneficiaries->perPage() == 100 ? 'selected' : '' }}>100</option>
-        </select>
-        <label for="entriesSelect">entries</label>
-    </div>
-    <div id="tableInfo" class="text-right"></div>
+<div class="entries-container">
+    <label for="entriesSelect">Show</label>
+    <select id="entriesSelect" class="form-select form-select-sm mx-2">
+        <option value="10" {{ $beneficiaries->perPage() == 10 ? 'selected' : '' }}>10</option>
+        <option value="25" {{ $beneficiaries->perPage() == 25 ? 'selected' : '' }}>25</option>
+        <option value="50" {{ $beneficiaries->perPage() == 50 ? 'selected' : '' }}>50</option>
+        <option value="100" {{ $beneficiaries->perPage() == 100 ? 'selected' : '' }}>100</option>
+    </select>
+    <span>entries</span>
 </div>
+
 
 <div class="row table-container">
     <div class="col">
@@ -272,8 +518,10 @@
                             <th scope="col">Date Of Birth</th>
                             <th scope="col">Age</th>
                             <th scope="col">Address</th>
-                            <th scope="col">Email</th>
                             <th scope="col">Phone</th>
+                            <th scope="col">Crop Name/Production Focus
+                            </th>
+                            <th scope="col">Tank Name</th>
                             <!-- <th scope="col">Education</th>
                             <th scope="col">Bank Name</th>
                             <th scope="col">Bank Branch</th>
@@ -312,8 +560,9 @@
                             <td>{{ $beneficiary->dob }}</td>
                             <td>{{ $beneficiary->age }}</td>
                             <td>{{ $beneficiary->address }}</td>
-                            <td>{{ $beneficiary->email }}</td>
                             <td>{{ $beneficiary->phone }}</td>
+                            <td>{{ $beneficiary->input3 }}</td>
+                            <td>{{ $beneficiary->tank_name }}</td>
                             <!-- <td>{{ $beneficiary->education }}</td>
                             <td>{{ $beneficiary->bank_name }}</td>
                             <td>{{ $beneficiary->bank_branch }}</td>
@@ -527,6 +776,13 @@
         urlParams.set('entries', entries);
         window.location.search = urlParams.toString();
     }
+    document.getElementById('entriesSelect').addEventListener('change', function () {
+    const perPage = this.value;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('entries', perPage);
+    window.location.search = urlParams.toString();
+});
+
 </script>
 
 

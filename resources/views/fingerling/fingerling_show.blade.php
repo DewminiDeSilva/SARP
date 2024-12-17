@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASC Project Details</title>
+    <title>Fingerlings Details</title>
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Add DataTables CSS -->
@@ -249,62 +249,6 @@
         .btn-back:hover img {
             transform: translateX(-50px);
         }
-        .summary-card-container {
-    display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    
-    margin: 0 auto; /* Centers the container */
-    width: 100%; /* Full width */
-    position: relative; /* Allows positioning adjustments */
-    z-index: 10; /* Ensures the cards appear above other elements */
-}
-
-.summary-card {
-    width: 25%; /* Adjust the width of each card */
-    background-color: #e3f7fc; /* Light blue background */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a deeper shadow for a floating effect */
-    padding: 20px; /* Inner padding */
-    text-align: center; /* Center-align content */
-    font-family: Arial, sans-serif; /* Simple font */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
-}
-
-.summary-card h4 {
-    background-color: #b3e5fc; /* Slightly darker blue for the heading */
-    color: #000; /* Black text */
-    font-size: 1.25rem; /* Medium font size */
-    margin: 0;
-    padding: 10px 0; /* Add padding to heading */
-    border-radius: 6px 6px 0 0; /* Round only the top corners */
-    font-weight: bold; /* Bold text */
-}
-
-.summary-card .number {
-    font-size: 2.5rem; /* Larger font size for numbers */
-    font-weight: bold; /* Bold text for numbers */
-    color: #333; /* Dark gray text */
-    margin: 10px 0; /* Space around the number */
-}
-
-.summary-card p {
-    color: #555; /* Gray text color */
-    font-size: 1rem; /* Normal font size */
-    margin: 0; /* No margin */
-    padding: 5px 0; /* Add space inside the paragraph */
-}
-
-.card-header {
-    font-weight: bold;
-    text-align: center;
-    background-color: #c7eef1; /* Blue color example */
-    color: #0d0e0d; /* Text color */
-}
-
-
-
     </style>
 
 </head>
@@ -325,42 +269,15 @@
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="text-center">
-                    <h3 style="font-size: 2rem; color: green;">ASC Project Details</h3>
+                    <h3 style="font-size: 2rem; color: green;">Fingerlings Details</h3>
                 </div>
             </div>
         </div>
 
-        
-
-           
-
-    <div class="container">
-        <div class="justify-content-center">
-            <div class="container mt-4">
-                <div class="d-flex justify-content-center">
-        
-                    <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-                        <div class="card-header">
-                            Number of ASC
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $totalASCs}}</h5>
-                            <p>Total ASC records currently in the system.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>   
-        </div>
-    </div>
-
-
-        
-        
-
         <!-- Generate and Upload CSV, Add ASC Button -->
         <div class="top-section">
             <div class="top-left">
-                <a href="{{ route('asc_registration.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add ASC</a>
+                <a href="{{ route('asc_registration.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Fingerlings</a>
             </div>
             <div class="top-right">
                 <form method="GET" action="{{ route('searchASC') }}" class="form-inline">
@@ -374,53 +291,48 @@
             </div>
         </div>
 
-        <div class="bottom-left">
-            <a href="{{ route('downloadAscCsv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
-            <form action="{{ route('uploadAscCsv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
-                @csrf
-                <div class="form-group mr-2">
-                    <input type="file" name="csv_file" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success">Upload CSV</button>
-            </form>
-        </div>
+        
 
 
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead class="thead-light">
-                    <tr>
-                        <th>Province Name</th>
-                        <th>District Name</th>
-                        <th>DS Division Name</th>
-                        <th>GN Division Name</th>
-                        <th>ASC</th>
-                        <th>ASC Name</th>
-                        <th>Officer Incharge</th>
-                        <th>Contact Email</th>
-                        <th>Contact Number</th>
-                        <th>Services Available</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($ascRegistrations as $ascRegistration)
-                    <tr>
-                        <td>{{ $ascRegistration->province_name }}</td>
-                        <td>{{ $ascRegistration->district_name }}</td>
-                        <td>{{ $ascRegistration->ds_division_name }}</td>
-                        <td>{{ $ascRegistration->gn_division_name }}</td>
-                        <td>{{ $ascRegistration->as_center }}</td>
-                        <td>{{ $ascRegistration->asc_name }}</td>
-                        <td>{{ $ascRegistration->officer_incharge }}</td>
-                        <td>{{ $ascRegistration->contact_email }}</td>
-                        <td>{{ $ascRegistration->contact_number }}</td>
-                        <td>{{ $ascRegistration->services_available }}</td>
+                <tr>
+                            <th>Tank Name</th>
+                            <th>Livestock Type</th>
+                            <th>Stocking Type</th>
+                            <th>Stocking Date</th>
+                            <th>Harvest Date</th>
+                            <th>Variety Harvest (kg)</th>
+                            <th>Cumulative Amount (kg)</th>
+                            <th>Unit Price (Rs)</th>
+                            <th>Total Income (Rs)</th>
+                            <th>Wholesale Quantity (Kg)</th>
+                            <th>Wholesale Unit Price (Rs)</th>
+                            <th>Whole Sale Total Income (Rs)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($fingerlings as $fingerling)
+                        <tr>
+                            <td>{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->livestock_type }}</td>
+                            <td>{{ $fingerling->stocking_type }}</td>
+                            <td>{{ $fingerling->stocking_date }}</td>
+                            <td>{{ $fingerling->harvest_date }}</td>
+                            <td>{{ $fingerling->variety_harvest_kg ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->unit_price_rs ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->wholesale_unit_price_rs ?? 'N/A' }}</td>
+                            <td>{{ $fingerling->wholesale_total_income_rs ?? 'N/A' }}</td>
                         <td class="button-container">
-                            <a href="/asc_registration/{{ $ascRegistration->id }}/edit" class="btn btn-danger edit-button" title="Edit">
+                            <a href="" class="btn btn-danger edit-button" title="Edit">
                                 <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                             </a>
-                            <form action="/asc_registration/{{ $ascRegistration->id }}" method="POST" style="display:inline;">
+                            <form action="" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger custom-button" title="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
@@ -433,55 +345,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="pagination-container">
-            <div id="tableInfo">
-                @php
-                    $currentPage = $ascRegistrations->currentPage();
-                    $perPage = $ascRegistrations->perPage();
-                    $total = $ascRegistrations->total();
-                    $startingNumber = ($currentPage - 1) * $perPage + 1;
-                    $endingNumber = min($total, $currentPage * $perPage);
-                @endphp
-                <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
-            </div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item {{ $ascRegistrations->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $ascRegistrations->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                    @php
-                        $currentPage = $ascRegistrations->currentPage();
-                        $lastPage = $ascRegistrations->lastPage();
-                        $startPage = max($currentPage - 2, 1);
-                        $endPage = min($currentPage + 2, $lastPage);
-                    @endphp
-                    @if ($startPage > 1)
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $ascRegistrations->url(1) }}">1</a>
-                        </li>
-                        @if ($startPage > 2)
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        @endif
-                    @endif
-                    @for ($i = $startPage; $i <= $endPage; $i++)
-                        <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $ascRegistrations->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-                    @if ($endPage < $lastPage)
-                        @if ($endPage < $lastPage - 1)
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        @endif
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $ascRegistrations->url($lastPage) }}">{{ $lastPage }}</a>
-                        </li>
-                    @endif
-                    <li class="page-item {{ $ascRegistrations->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $ascRegistrations->nextPageUrl() }}">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        
     </div>
 </div>
 

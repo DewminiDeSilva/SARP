@@ -9,6 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         /* Custom styling */
         body {
@@ -243,6 +246,11 @@
                                     </div>
 
                                     <div class="info">
+                                        <label>Tank Name :</label>
+                                        <p>{{$beneficiary->tank_name}}</p>
+                                    </div>
+
+                                    <div class="info">
                                         <label>Gender:</label>
                                         <p>{{$beneficiary->gender}}</p>
                                     </div>
@@ -343,30 +351,26 @@
                                     </div>
 
                                     <div class="info">
-                                        <label>Latitude:</label>
-                                        <p>{{$beneficiary->latitude}}</p>
-                                    </div>
-
-                                    <div class="info">
-                                        <label>Longitude:</label>
-                                        <p>{{$beneficiary->longitude}}</p>
-                                    </div>
-
-                                    <div class="info">
-                                        <label>Community-Based Organization:</label>
-                                        <p>{{$beneficiary->community_based_organization}}</p>
-                                    </div>
-
-                                    <div class="info">
-                                        <label>Type of Water Resource:</label>
-                                        <p>{{$beneficiary->type_of_water_resource}}</p>
-                                    </div>
-
-                                    <div class="info">
-                                        <label>Training Details:</label>
-                                        <p>{{$beneficiary->training_details_description}}</p>
-                                    </div>
-                                    <div class="container">
+    <label>Latitude:</label>
+    <p id="latitude">{{$beneficiary->latitude ?? 'N/A'}}</p>
+</div>
+<div class="info">
+    <label>Longitude:</label>
+    <p id="longitude">{{$beneficiary->longitude ?? 'N/A'}}</p>
+</div>
+<div class="info">
+<div id="map" style="width: 100%; height: 400px; margin-top: 20px;"></div>
+    <label>View on Google Maps:</label>
+    @if ($beneficiary->latitude && $beneficiary->longitude)
+        <a href="https://www.google.com/maps?q={{ $beneficiary->latitude }},{{ $beneficiary->longitude }}" 
+           target="_blank" 
+           class="btn btn-primary">
+            Open in Google Maps
+        </a>
+    @else
+        <p style="color: red;">Location not available</p>
+    @endif
+</div>
     
     <hr>
 
@@ -484,9 +488,66 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const latitude = parseFloat(document.getElementById("latitude").innerText);
+        const longitude = parseFloat(document.getElementById("longitude").innerText);
 
+        // Default location (fallback if no data)
+        const defaultLocation = [7.8731, 80.7718]; // Sri Lanka coordinates
+
+        const mapCenter = (latitude && longitude) ? [latitude, longitude] : defaultLocation;
+
+        // Initialize the map
+        const map = L.map("map").setView(mapCenter, 10);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
+
+        // Add a marker if coordinates are valid
+        if (latitude && longitude) {
+            L.marker([latitude, longitude])
+                .addTo(map)
+                .bindPopup("Beneficiary Location")
+                .openPopup();
+        } else {
+            document.getElementById("map").innerHTML =
+                "<p style='color: red; text-align: center;'>Location not available</p>";
+        }
+    });
+</script>
+<script>
+    function initMap() {
+        const latitude = parseFloat(document.getElementById('latitude').innerText);
+        const longitude = parseFloat(document.getElementById('longitude').innerText);
+
+        // Default location if no data
+        const location = (latitude && longitude) ? { lat: latitude, lng: longitude } : { lat: 0, lng: 0 };
+
+        // Initialize the map
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: location,
+        });
+
+        // Add marker if coordinates are valid
+        if (latitude && longitude) {
+            new google.maps.Marker({
+                position: location,
+                map: map,
+                title: 'Beneficiary Location',
+            });
+        } else {
+            document.getElementById('map').innerHTML = '<p style="color: red; text-align: center;">Location not available</p>';
+        }
+    }
+</script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Font Awesome JS -->

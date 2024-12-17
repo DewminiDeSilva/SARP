@@ -18,7 +18,8 @@ class BeneficiaryController extends Controller
      */
     public function search(Request $request)
     {
-        $search = $request->get('search');
+        // search funtion crop names 
+        $search = $request->get('search', ''); // Default value if not provided
         $beneficiaries = Beneficiary::where('nic', 'like', '%'.$search.'%')
             ->orWhere('name_with_initials', 'like', '%'.$search.'%')
             ->orWhere('gender', '=', $search) // Exact match for gender
@@ -57,14 +58,24 @@ class BeneficiaryController extends Controller
             ->orWhere('input2', 'like', '%' . $search . '%') // New input
             ->orWhere('input3', 'like', '%' . $search . '%') // New input
             ->paginate(10);
-    
-        // Check if you want to return the beneficiary_index or beneficiary_list view
-        if ($request->has('view_type') && $request->get('view_type') == 'list') {
-            return view('beneficiary.beneficiary_list', compact('beneficiaries', 'search'));
-        } else {
-            return view('beneficiary.beneficiary_index', compact('beneficiaries', 'search'));
-        }
+                            
+            $input3Summary = Beneficiary::where('input3', 'like', '%'.$search.'%')
+                    ->select('input3', DB::raw('COUNT(*) as count'))
+                    ->groupBy('input3')
+                    ->get();
+
+                    $tankNameSummary = Beneficiary::where('tank_name', 'like', '%'.$search.'%')
+                    ->select('tank_name', DB::raw('COUNT(*) as count'))
+                    ->groupBy('tank_name')
+                    ->get();
+                    
+                            
+                    return view('beneficiary.beneficiary_index', compact('beneficiaries', 'search', 'input3Summary'));
+        
     }
+        // Check if you want to return the beneficiary_index or beneficiary_list view
+        
+    
     
     /**
      * Import data.
@@ -218,27 +229,28 @@ public function generateCsv()
     ]);
 }
 
-    public function index()
-    {
-    $entries = request()->get('entries', 10); // Get 'entries' from request, default to 10 if not present
-    $beneficiaries = Beneficiary::latest()->paginate($entries)->appends(['entries' => $entries]); // Paginate based on 'entries'
+public function index()
+{
+    $search = ''; // Default value
+    $entries = request()->get('entries', 10);
+    $beneficiaries = Beneficiary::latest()->paginate($entries)->appends(['entries' => $entries]);
 
-    // Get counts for gender
-    $maleCount = Beneficiary::where('gender', 'male')->count();
-    $femaleCount = Beneficiary::where('gender', 'female')->count();
+    // Grouped summary (optional if you use it here)
+    $input3Summary = Beneficiary::select('input3', DB::raw('COUNT(*) as count'))
+                                ->groupBy('input3')
+                                ->get();
 
-    // Total count for tanks
-    $tankRehabilitations = Beneficiary::latest()->paginate($entries)->appends(['entries' => $entries]);
-    $totalTanks = Beneficiary::count();
-
-    // Retrieve other necessary counts and data
-    //$registeredGndsCount = Livestock::distinct('gn_division_id')->count(); // You may want to change this based on your requirements
-    $totalBeneficiaries = Beneficiary::count(); // Total number of beneficiaries
+    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
+                                ->groupBy('tank_name')
+                                ->get();
 
     return view('beneficiary.beneficiary_index', compact(
-        'beneficiaries', 'maleCount', 'femaleCount', 'tankRehabilitations', 'totalTanks', 'entries', 'totalBeneficiaries'
+        'beneficiaries', 'search', 'input3Summary','tankNameSummary'
     ));
-    }
+}
+
+
+
 
     public function dashboard()
     {
@@ -501,17 +513,19 @@ public function generateCsv()
 
 
     public function list()
-    {
-        
-    $beneficiaries = Beneficiary::select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')->paginate(10);
+{
+    $beneficiaries = Beneficiary::where('input1', 'livestock')
+        ->select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')
+        ->paginate(10);
 
     // Calculate summary statistics
-    $totalBeneficiaries = Beneficiary::count();
-    $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
+    $totalBeneficiaries = Beneficiary::where('input1', 'livestock')->count();
+    $totalGnDivisions = Beneficiary::where('input1', 'livestock')->distinct('gn_division_name')->count();
     $totalLivestocks = Livestock::distinct('gn_division_name')->count('gn_division_name');
 
-
     return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
-    }
+}
 
+
+    
 }

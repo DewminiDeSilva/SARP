@@ -46,4 +46,12 @@ class TankRehabilitation extends Model
         'during_construction_image',  // During-construction image
         'post_construction_image',  // Post-construction image
     ];
+
+    /**
+     * Relationship with Fingerling model.
+     */
+    public function fingerlings()
+    {
+        return $this->hasMany(Fingerling::class, 'tank_id');
+    }
 }

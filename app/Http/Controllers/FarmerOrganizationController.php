@@ -12,8 +12,8 @@ class FarmerOrganizationController extends Controller
     {
         $entries = request()->get('entries', 10);
         $farmerorganizations = FarmerOrganization::latest()->paginate($entries)->appends(['entries' => $entries]);
-
-        return view('farmer_organization.farmer_organization_index', compact('farmerorganizations', 'entries'));
+        $totalFarmerOrganizations = FarmerOrganization::count();
+        return view('farmer_organization.farmer_organization_index', compact('farmerorganizations', 'entries','totalFarmerOrganizations'));
     }
 
     public function create()
@@ -178,6 +178,8 @@ class FarmerOrganizationController extends Controller
             ->orWhere('cascade_name', 'like', '%'.$search.'%')
             ->paginate(10);
 
-        return view('farmer_organization.farmer_organization_index', compact('farmerorganizations', 'search'));
+            $totalFarmerOrganizations = FarmerOrganization::count();
+
+        return view('farmer_organization.farmer_organization_index', compact('farmerorganizations', 'search','totalFarmerOrganizations'));
     }
 }

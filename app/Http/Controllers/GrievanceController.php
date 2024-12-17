@@ -13,7 +13,8 @@ class GrievanceController extends Controller
     public function index() // Adjusted to have no parameters
     {
         $grievances = $this->getGrievances(request()); // Use the global request helper
-        return view('grievances.grievances_index', compact('grievances'));
+        $totalGrievances = Grievance::count();
+        return view('grievances.grievances_index', compact('grievances', 'totalGrievances'));
     }
 
 
@@ -198,7 +199,9 @@ private function getGrievances(Request $request)
             ->orWhere('sub_project_gn_division', 'like', '%' . $search . '%')
             ->paginate(10);
 
-        return view('grievances.grievances_index', compact('grievances', 'search'));
+            $totalGrievances = $grievances->total();
+
+        return view('grievances.grievances_index', compact('grievances', 'search', 'totalGrievances'));
     }
 
 }
