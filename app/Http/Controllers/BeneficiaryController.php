@@ -515,7 +515,7 @@ public function index()
     public function list()
 {
     $beneficiaries = Beneficiary::where('input1', 'livestock')
-        ->select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name')
+        ->select('id', 'nic', 'name_with_initials', 'address', 'dob', 'gender', 'age', 'phone', 'gn_division_name','input2 as livestock_type','input3 as production_focus')
         ->paginate(10);
 
     // Calculate summary statistics

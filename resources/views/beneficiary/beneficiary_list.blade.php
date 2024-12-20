@@ -298,6 +298,8 @@
                                 <th scope="col">Age</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">GN Division</th>
+                                <th>Livestock Type</th>
+                                <th>Production Focus</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
@@ -312,6 +314,8 @@
                                 <td>{{ $beneficiary->age }}</td>
                                 <td>{{ $beneficiary->phone }}</td>
                                 <td>{{ $beneficiary->gn_division_name }}</td>
+                                <td>{{ $beneficiary->livestock_type ?? 'N/A' }}</td>
+                                <td>{{ $beneficiary->production_focus ?? 'N/A' }}</td>
                                 <td class="btninline">
                                     @if($beneficiary->id)
                                         <a href="{{ route('livestocks.create', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-green btn-sm">Add Livestock</a>

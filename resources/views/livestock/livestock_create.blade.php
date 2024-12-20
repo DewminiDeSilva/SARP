@@ -98,25 +98,29 @@
             <div class="form-section">
                 <div class="row">
                     <div class="col-md-6">
+                        <!-- Livestock Type -->
                         <div class="mb-3">
                             <label for="livestock_type" class="form-label">Livestock Type</label>
-                            <select id="livestock_type" name="livestock_type" class="form-control" required>
+                            <select id="livestock_type" name="livestock_type" class="form-control" disabled>
                                 <option value="">Select Livestock Type</option>
-                                <option value="Dairy">Dairy</option>
-                                <option value="Poultry">Poultary</option>
-                                <option value="Goat Rearing">Goat Rearing</option>
-                                <option value="Aqua Culture">Aqua Culture</option>
+                                <option value="Dairy" {{ $livestockType == 'Dairy' ? 'selected' : '' }}>Dairy</option>
+                                <option value="Poultry" {{ $livestockType == 'Poultry' ? 'selected' : '' }}>Poultry</option>
+                                <option value="Goat Rearing" {{ $livestockType == 'Goat Rearing' ? 'selected' : '' }}>Goat Rearing</option>
+                                <option value="Aqua Culture" {{ $livestockType == 'Aqua Culture' ? 'selected' : '' }}>Aqua Culture</option>
                             </select>
+                            <!-- Add a hidden field to store the livestock type value for submission -->
+                            <input type="hidden" name="livestock_type" value="{{ $livestockType }}">
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <!-- Production Focus -->
                         <div class="mb-3">
                             <label for="production_focus" class="form-label">Production Focus</label>
-                            <select id="production_focus" name="production_focus" class="form-control" required>
-                                <option value="">Select Production Focus</option>
-                            </select>
+                            <input type="text" class="form-control" id="production_focus" name="production_focus" 
+                                   value="{{ $productionFocus }}" readonly>
                         </div>
                     </div>
+                    
                 </div>
 
                 <!-- Newly added Livestock Commencement Date -->
