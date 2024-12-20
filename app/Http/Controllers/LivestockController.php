@@ -24,12 +24,25 @@ class LivestockController extends Controller
     }
 
     // Method to show the form to create a new livestock record
-    public function create(Request $request)
-    {
-        $beneficiary_id = $request->route('beneficiary_id');
-        $beneficiary = Beneficiary::findOrFail($beneficiary_id);
-        return view('livestock.livestock_create', compact('beneficiary'));
+    public function create(Request $request, $beneficiary_id)
+{
+    // Fetch the beneficiary data based on the ID
+    $beneficiary = Beneficiary::findOrFail($beneficiary_id);
+
+    // Check if the beneficiary has livestock-related data
+    if ($beneficiary->input1 === 'livestock') {
+        $livestockType = $beneficiary->input2; // Livestock type
+        $productionFocus = $beneficiary->input3; // Production focus
+    } else {
+        $livestockType = null;
+        $productionFocus = null;
     }
+
+    // Pass the beneficiary and pre-filled data to the view
+    return view('livestock.livestock_create', compact('beneficiary', 'livestockType', 'productionFocus'));
+}
+
+    
 
     // Method to store a new livestock record in the database
     public function store(Request $request)
