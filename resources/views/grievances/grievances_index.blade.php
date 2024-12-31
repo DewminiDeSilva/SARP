@@ -141,10 +141,10 @@
                             <p>Total grievances currently in the system.</p>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
-            
+
             <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('grievances.create') }}" class="btn btn-success">Add New Grievance</a>
                 <a href="{{ route('grievances.report.csv') }}" class="btn btn-primary">Generate CSV Report</a>
@@ -185,12 +185,12 @@
                                 <th>District</th>
                                 <th>DSD</th>
                                 <th>GND</th>
-                                <th>ASC</th>
-                                <th>Cascade Name</th>
-                                <th>Tank Name</th>
+                                <!-- <th>ASC</th> -->
+                                <!-- <th>Cascade Name</th> -->
+                                <!-- <th>Tank Name</th> -->
                                 <th>Date Received</th>
-                                <th>Sub Project Name</th>
-                                <th>Sub Project GN Division</th>
+                                <!-- <th>Sub Project Name</th> -->
+                                <!-- <th>Sub Project GN Division</th> -->
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -208,11 +208,11 @@
                                 <td>{{ $grievance->district }}</td>
                                 <td>{{ $grievance->dsd }}</td>
                                 <td>{{ $grievance->gnd }}</td>
-                                <td>{{ $grievance->asc }}</td>
-                                <td>{{ $grievance->cascade_name }}</td>
-                                <td>{{ $grievance->tank_name }}</td>
-                                <td>{{ $grievance->date_received }}</td>
-                                <td>{{ $grievance->sub_project_name }}</td>
+                                <!-- <td>{{ $grievance->asc }}</td> -->
+                                <!-- <td>{{ $grievance->cascade_name }}</td> -->
+                                <!-- <td>{{ $grievance->tank_name }}</td> -->
+                                <!-- <td>{{ $grievance->date_received }}</td> -->
+                                <!-- <td>{{ $grievance->sub_project_name }}</td> -->
                                 <td>{{ $grievance->sub_project_gn_division }}</td>
                                 <td>
                                     <div class="d-flex">

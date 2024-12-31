@@ -391,13 +391,14 @@
                     <td>{{ $trainee->special_remark }}</td>
 
                     <td>
-                        <a href="{{ route('nutrition_trainee.edit', $trainee->id) }}" class="btn btn-primary btn-sm">Edit</a>
-
-                        <form action="{{ route('nutrition_trainee.destroy', $trainee->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
+                        <div class="button-container">
+                            <a href="{{ route('nutrition_trainee.edit', $trainee->id) }}" class="btn btn-primary btn-sm button-spacing">Edit</a>
+                            <form action="{{ route('nutrition_trainee.destroy', $trainee->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @endforeach
