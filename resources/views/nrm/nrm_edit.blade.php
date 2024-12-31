@@ -23,11 +23,7 @@
             padding: 30px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         }
-        .header-title {
-            color: #000000;
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
+        
         .frame {
             display: flex;
             flex-direction: row;

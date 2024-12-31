@@ -119,9 +119,9 @@
             </button>
         </div>
 
-    </div>
-    </div>
-    <div class="container mt-5">
+
+
+        <div class="container mt-5">
     <h1 class="text-center">Agriculture Data</h1>
 
     <!-- Vegetables Table -->
@@ -129,7 +129,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-              
+
                 <th>Vegetable Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -137,7 +137,7 @@
         <tbody>
             @foreach($vegitables as $vegitable)
             <tr>
-              
+
                 <td>{{ $vegitable->crop_name }}</td>
                 <td>{{ $vegitable->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -150,7 +150,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                
+
                 <th>Fruit Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -158,7 +158,7 @@
         <tbody>
             @foreach($fruits as $fruit)
             <tr>
-              
+
                 <td>{{ $fruit->fruit_name }}</td>
                 <td>{{ $fruit->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -171,7 +171,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                
+
                 <th>Home Garden Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -179,7 +179,7 @@
         <tbody>
             @foreach($homegardens as $homegarden)
             <tr>
-                
+
                 <td>{{ $homegarden->homegarden_name }}</td>
                 <td>{{ $homegarden->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -192,7 +192,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                
+
                 <th>Crop Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -200,7 +200,7 @@
         <tbody>
             @foreach($crops as $crop)
             <tr>
-                
+
                 <td>{{ $crop->crop_name }}</td>
                 <td>{{ $crop->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -208,6 +208,10 @@
         </tbody>
     </table>
 </div>
+
+    </div>
+    </div>
+
 
 <!-- jQuery and DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

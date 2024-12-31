@@ -122,13 +122,6 @@
             color: #343a40;
         }
 
-        h2 {
-            color: #343a40;
-            font-weight: bold;
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
 
         label {
             font-weight: 500;
@@ -230,8 +223,8 @@
         </a>
 
         <div class="col-md-12 text-center">
-    <h2 class="header-title" style="color: green;">Edit Agro Enterprise</h2>
-    </div>
+        <h2 class="header-title" style="color: green;">Edit Agro Enterprise</h2>
+        </div>
 
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
             <form class="form-horizontal" action="{{ route('agro.update', $agro->id) }}" method="POST" enctype="multipart/form-data">
