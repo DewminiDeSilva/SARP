@@ -96,11 +96,16 @@
     <div class="container mt-5">
         <h2>Agriculture Details for Beneficiary: {{ $beneficiary->name_with_initials }}</h2>
 
+        <div class="mb-3">
+        <h5>Crop Category: <span class="text-success">{{ $cropCategory }}</span></h5>
+        <h5>Crop Name: <span class="text-success">{{ $cropName }}</span></h5>
+    </div>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Category</th>
-                    <th>Crop Name</th>
+                    
+                 
                     <th>Crop Variety</th>
                     <th>Farmer Contributions</th>
                     <th>Planting Date</th>
@@ -113,8 +118,8 @@
             <tbody>
                 @foreach($agricultureData as $data)
                 <tr>
-                    <td>{{ $data->category ?? 'N/A' }}</td>
-                    <td>{{ $data->crop_name ?? 'N/A' }}</td>
+                    
+                    
                     <td>{{ $data->crop_variety ?? 'N/A' }}</td>
 
                     <!-- Farmer Contributions and Costs -->

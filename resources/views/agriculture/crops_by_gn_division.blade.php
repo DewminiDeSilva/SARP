@@ -154,7 +154,7 @@
                     <tbody>
                         @forelse ($crops as $crop)
                         <tr>
-                            <td>{{ $crop->crop_name }}</td>
+                            <td>{{ $crop->crop_name ?? 'N/A' }}</td>
                             <td>{{ $crop->total_acres }}</td>
                             <td>{{ $crop->total_beneficiaries }}</td>
                         </tr>

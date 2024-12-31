@@ -24,12 +24,25 @@ class LivestockController extends Controller
     }
 
     // Method to show the form to create a new livestock record
-    public function create(Request $request)
-    {
-        $beneficiary_id = $request->route('beneficiary_id');
-        $beneficiary = Beneficiary::findOrFail($beneficiary_id);
-        return view('livestock.livestock_create', compact('beneficiary'));
+    public function create(Request $request, $beneficiary_id)
+{
+    // Fetch the beneficiary data based on the ID
+    $beneficiary = Beneficiary::findOrFail($beneficiary_id);
+
+    // Check if the beneficiary has livestock-related data
+    if ($beneficiary->input1 === 'livestock') {
+        $livestockType = $beneficiary->input2; // Livestock type
+        $productionFocus = $beneficiary->input3; // Production focus
+    } else {
+        $livestockType = null;
+        $productionFocus = null;
     }
+
+    // Pass the beneficiary and pre-filled data to the view
+    return view('livestock.livestock_create', compact('beneficiary', 'livestockType', 'productionFocus'));
+}
+
+    
 
     // Method to store a new livestock record in the database
     public function store(Request $request)
@@ -223,36 +236,56 @@ class LivestockController extends Controller
     }
     
     public function searchLivestock(Request $request)
-{
-    $search = $request->input('search'); // Get the search query
-
-    // Search in Beneficiary fields
-    $beneficiaries = Beneficiary::where('input1', 'livestock')
-    ->where(function($query) use ($search) {
-        $query->where('nic', 'like', "%$search%")
-              ->orWhere('name_with_initials', 'like', "%$search%")
-        ->orWhere('address', 'like', "%{$search}%")
-        ->orWhere('gn_division_name', 'like', "%{$search}%")
-        ->orWhere('gender', '=', $search) // Exact match for gender
-        ->orWhere('dob', 'like', '%'.$search.'%') // Added
-        ->orWhere('age', 'like', '%'.$search.'%') // Added
-        ->orWhere('address', 'like', '%'.$search.'%')
-        ->orWhere('phone', 'like', '%'.$search.'%');
-
-    })
-        ->paginate(10); // Add pagination
-        
+    {
+        $search = $request->input('search'); // Get the search query
+    
+        // Search in Beneficiary fields where input1 is 'livestock'
+        $beneficiariesQuery = Beneficiary::select(
+            'id', 
+            'nic', 
+            'name_with_initials', 
+            'address', 
+            'gn_division_name', 
+            'gender', 
+            'dob', 
+            'age', 
+            'phone', 
+            'input2 as livestock_type', 
+            'input3 as production_focus'
+        )
+        ->where('input1', 'livestock')
+        ->where(function ($query) use ($search) {
+            $query->where('nic', 'like', "%$search%")
+                  ->orWhere('name_with_initials', 'like', "%$search%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('gn_division_name', 'like', "%{$search}%")
+                  ->orWhere('gender', '=', $search) // Exact match for gender
+                  ->orWhere('dob', 'like', '%'.$search.'%')
+                  ->orWhere('age', 'like', '%'.$search.'%')
+                  ->orWhere('phone', 'like', '%'.$search.'%')
+                  ->orWhere('input2', 'like', "%{$search}%") // Search in input2 (livestock_type)
+                  ->orWhere('input3', 'like', "%{$search}%"); // Search in input3 (production_focus)
+        });
+    
+        // Paginate the filtered beneficiaries
+        $beneficiaries = $beneficiariesQuery->paginate(10);
+    
+        // Calculate summary statistics based on the filtered query
+        $totalLivestocks = Livestock::whereIn('beneficiary_id', $beneficiariesQuery->pluck('id'))->count(); // Livestocks related to filtered beneficiaries
+        $totalBeneficiaries = $beneficiariesQuery->count(); // Filtered beneficiaries count
+        $totalGnDivisions = $beneficiariesQuery->distinct('gn_division_name')->count('gn_division_name'); // Filtered distinct GN Divisions
+    
+        // Return the view with data
+        return view('beneficiary.beneficiary_list', compact(
+            'beneficiaries', 
+            'search', 
+            'totalLivestocks', 
+            'totalBeneficiaries', 
+            'totalGnDivisions'
+        ));
+    }
     
 
-    // Add required statistics
-    $totalLivestocks = Livestock::count();
-    $totalBeneficiaries = Beneficiary::count();
-    $totalGnDivisions = Beneficiary::distinct('gn_division_name')->count();
-
-    // Return the view with data
-    return view('beneficiary.beneficiary_list', compact('beneficiaries','search','totalLivestocks','totalBeneficiaries','totalGnDivisions'
-    ));
-}
 
   
 

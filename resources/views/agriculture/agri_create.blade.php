@@ -63,7 +63,7 @@
         <form action="{{ route('agriculture.store') }}" method="POST">
             @csrf
             <!-- Crop Category and Crop Name -->
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
                 <div class="col">
                     <div class="dropdown">
                         <label for="categoryDropdown" class="form-label dropdown-label">Crop Category</label>
@@ -82,7 +82,24 @@
                         <option value="">Select Crop Name</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
+            <!-- Crop Category (Read-Only) -->
+<div class="row mt-3">
+    <div class="col">
+        <label for="cropCategory" class="form-label bold-label">Crop Category</label>
+        <input type="text" class="form-control" id="cropCategory" name="crop_category" 
+               value="{{ $cropCategory }}" readonly>
+    </div>
+</div>
+
+<!-- Crop Name (Read-Only) -->
+<div class="row mt-3">
+    <div class="col">
+        <label for="cropName" class="form-label bold-label">Crop Name</label>
+        <input type="text" class="form-control" id="cropName" name="crop_name" 
+               value="{{ $cropName }}" readonly>
+    </div>
+</div>
 
             <!-- Crop Variety -->
             <div class="row mt-3">
