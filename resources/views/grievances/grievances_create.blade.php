@@ -40,11 +40,17 @@
         @csrf
     </div>
     <div class="right-column">
+
+    <div class="col-md-12 text-center">
+        <h2 class="header-title" style="color: green;">Grievance Registration</h2>
+    </div>
+
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
             <form class="form-horizontal" action="{{ route('grievances.store') }}" method="POST">
-                <div class="col-md-12">
-                    <h2 class="mb-4">Grievance Registration</h2>
-                </div>
+
+
+
+
                 @csrf
                 <div class="row">
                     <div class="col-6 form-group">
