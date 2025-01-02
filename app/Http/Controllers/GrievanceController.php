@@ -10,12 +10,53 @@ use League\Csv\Reader;
 class GrievanceController extends Controller
 {
     // Adjusted the index method if the parent Controller does not have parameters
-    public function index() // Adjusted to have no parameters
-    {
-        $grievances = $this->getGrievances(request()); // Use the global request helper
-        $totalGrievances = Grievance::count();
-        return view('grievances.grievances_index', compact('grievances', 'totalGrievances'));
-    }
+
+public function index()
+{
+    $grievances = $this->getGrievances(request());
+    $totalGrievances = Grievance::count();
+
+    // Add the latest officer action's status for each grievance
+    $grievances->each(function ($grievance) {
+        $latestOfficer = $grievance->officers()
+            ->orderBy('action_taken_date', 'desc')
+            ->first();
+        $grievance->latest_status = $latestOfficer ? $latestOfficer->status : null;
+    });
+
+
+    // // Grievances with the last action as "Pending"
+    // $pendingActions = Grievance::whereHas('officers', function ($query) {
+    //     $query->where('status', 'Pending')
+    //         ->whereRaw('action_taken_date = (SELECT MAX(action_taken_date) 
+    //             FROM officers 
+    //             WHERE officers.grievance_id = grievances.id)');
+    // })->get();
+
+    // Grievances with the last action as "Pending" or no action at all
+    $pendingActions = Grievance::whereDoesntHave('officers') // Grievances with no actions
+        ->orWhereHas('officers', function ($query) {
+            $query->where('status', 'Pending')
+                ->whereRaw('action_taken_date = (SELECT MAX(action_taken_date) 
+                    FROM officers 
+                    WHERE officers.grievance_id = grievances.id)');
+        })->get();
+
+    // Grievances with the last action as "Completed"
+    $completedActions = Grievance::whereHas('officers', function ($query) {
+        $query->where('status', 'Completed')
+            ->whereRaw('action_taken_date = (SELECT MAX(action_taken_date) 
+                FROM officers 
+                WHERE officers.grievance_id = grievances.id)');
+    })->get();
+
+    return view('grievances.grievances_index', compact(
+        'grievances',
+        'totalGrievances',
+        'pendingActions',
+        'completedActions'
+    ));
+}
 
 
     public function create()
@@ -203,6 +244,8 @@ private function getGrievances(Request $request)
 
         return view('grievances.grievances_index', compact('grievances', 'search', 'totalGrievances'));
     }
+
+    
 
 }
 

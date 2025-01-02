@@ -73,49 +73,63 @@
         }
         .summary-card-container {
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    margin: 0 auto; /* Centers the container */
-    width: 100%; /* Full width */
-    position: relative; /* Allows positioning adjustments */
-    z-index: 10; /* Ensures the cards appear above other elements */
+    justify-content: space-between; /* Equal spacing between cards */
+    align-items: flex-start; /* Align items at the top */
+    margin: 20px 0;
+    
 }
-
 .summary-card {
-    width: 25%; /* Adjust the width of each card */
-    background-color: #e3f7fc; /* Light blue background */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Add a deeper shadow for a floating effect */
-    padding: 20px; /* Inner padding */
-    text-align: center; /* Center-align content */
-    font-family: Arial, sans-serif; /* Simple font */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    width: 30%; /* Adjust card width as needed */
+    background-color: #e3f7fc;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .summary-card h4 {
-    background-color: #b3e5fc; /* Slightly darker blue for the heading */
-    color: #000; /* Black text */
-    font-size: 1.25rem; /* Medium font size */
+    background-color: #b3e5fc;
+    color: #000;
+    font-size: 1.2rem;
     margin: 0;
-    padding: 10px 0; /* Add padding to heading */
-    border-radius: 6px 6px 0 0; /* Round only the top corners */
-    font-weight: bold; /* Bold text */
+    padding: 10px;
+    border-radius: 6px 6px 0 0;
+    font-weight: bold;
 }
 
 .summary-card .number {
-    font-size: 2.5rem; /* Larger font size for numbers */
-    font-weight: bold; /* Bold text for numbers */
-    color: #333; /* Dark gray text */
-    margin: 10px 0; /* Space around the number */
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 15px 0;
 }
 
 .summary-card p {
-    color: #555; /* Gray text color */
-    font-size: 1rem; /* Normal font size */
-    margin: 0; /* No margin */
-    padding: 5px 0; /* Add space inside the paragraph */
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 10px;
 }
+
+.summary-card button {
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .summary-card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .summary-card {
+        width: 80%; /* Adjust width for smaller screens */
+        margin-bottom: 20px;
+    }
+}
+
+
+
+
 
     </style>
 </head>
@@ -132,18 +146,94 @@
             </div>
 
             <div class="container mt-4">
-                <div class="d-flex justify-content-center">
-                    <!-- Total Grievances Card -->
-                    <div class="summary-card-container">
-                        <div class="summary-card">
-                            <h4>Total Grievances</h4>
-                            <div class="number">{{ $totalGrievances }}</div>
-                            <p>Total grievances currently in the system.</p>
-                        </div>
-                    </div>
+    <div class="summary-card-container">
+        <!-- Total Grievances Card -->
+        <div class="summary-card">
+            <h4>Total Grievances</h4>
+            <div class="number">{{ $totalGrievances }}</div>
+            <p>Total grievances currently in the system.</p>
+        </div>
 
-                </div>
+        <!-- Pending Grievances Card -->
+        <div class="summary-card">
+            <h4>Pending Actions</h4>
+            <div class="number">{{ $pendingActions->count() }}</div>
+            <p>Grievances with no actions or the latest action marked as "Pending."</p>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#pendingModal">View</button>
+        </div>
+
+        <!-- Completed Grievances Card -->
+        <div class="summary-card">
+            <h4>Completed Actions</h4>
+            <div class="number">{{ $completedActions->count() }}</div>
+            <p>Grievances with the latest action marked as "Completed."</p>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#completedModal">View</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Pending Grievances Modal -->
+<div class="modal fade" id="pendingModal" tabindex="-1" role="dialog" aria-labelledby="pendingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pendingModalLabel">Pending Grievances</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                @if ($pendingActions->isEmpty())
+                    <p>No Pending Grievances.</p>
+                @else
+                    <ul class="list-group">
+                        @foreach ($pendingActions as $grievance)
+                            <li class="list-group-item">
+                                <strong>{{ $grievance->name }}</strong> ({{ $grievance->subject }})
+                                <br> Address: {{ $grievance->address }}
+                                <br> NIC: {{ $grievance->nic }}
+                                <br> Last Action Date: {{ $grievance->officers->sortByDesc('action_taken_date')->first()->action_taken_date ?? 'N/A' }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Completed Grievances Modal -->
+<div class="modal fade" id="completedModal" tabindex="-1" role="dialog" aria-labelledby="completedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completedModalLabel">Completed Grievances</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if ($completedActions->isEmpty())
+                    <p>No Completed Grievances.</p>
+                @else
+                    <ul class="list-group">
+                        @foreach ($completedActions as $grievance)
+                            <li class="list-group-item">
+                                <strong>{{ $grievance->name }}</strong> ({{ $grievance->subject }})
+                                <br> Address: {{ $grievance->address }}
+                                <br> NIC: {{ $grievance->nic }}
+                                <br> Last Action Date: {{ $grievance->officers->sortByDesc('action_taken_date')->first()->action_taken_date ?? 'N/A' }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
             <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('grievances.create') }}" class="btn btn-success">Add New Grievance</a>
@@ -216,8 +306,17 @@
                                 <td>{{ $grievance->sub_project_gn_division }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="{{ route('officer.create', $grievance->id) }}" class="btn btn-primary mr-2">Action Taken</a>
-                                        <a href="{{ route('grievance.officers', $grievance->id) }}" class="btn btn-success">View</a>
+                                        <!-- <a href="{{ route('officer.create', $grievance->id) }}" class="btn btn-primary mr-2">Action Taken</a>
+                                        <a href="{{ route('grievance.officers', $grievance->id) }}" class="btn btn-success">View</a> -->
+
+                                        @if ($grievance->latest_status === 'Completed')
+                        <!-- If Completed, show disabled Complete button -->
+                        <button class="btn btn-secondary" disabled>Complete</button>
+                    @else
+                        <!-- If not Completed, allow Action Taken -->
+                        <a href="{{ route('officer.create', $grievance->id) }}" class="btn btn-primary mr-2">Action Taken</a>
+                    @endif
+                    <a href="{{ route('grievance.officers', $grievance->id) }}" class="btn btn-success">View</a>
                                     </div>
                                 </td>
                             </tr>
