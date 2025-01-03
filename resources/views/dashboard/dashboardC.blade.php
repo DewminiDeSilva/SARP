@@ -65,7 +65,7 @@ li:hover {
 
 
 
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
     <h2>Management Information System</h2>
         <div class="logoframe" style="cursor: pointer;">
         <div class="img">
@@ -141,10 +141,10 @@ li:hover {
                         <a href="#" style="color: #FFFFFF">Agriculture</a>
                         <ul class="nested">
                             <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
-                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li> 
+                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li>
                         </ul>
                     </li>
-                        
+
                         <li class="submenu">
                         <a href="#" style="color: #FFFFFF">Livestock</a>
                         <ul class="nested">
