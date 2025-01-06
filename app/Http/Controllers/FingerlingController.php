@@ -112,4 +112,106 @@ class FingerlingController extends Controller
         // Pass the fingerling data and tank details to the 'fingerling_show' view
         return view('fingerling.fingerling_show', compact('fingerlings', 'tank'));
     }
+
+
+    public function destroy($id)
+    {
+    // Find the fingerling record by its ID
+    $fingerling = Fingerling::find($id);
+
+    // If the record is not found, redirect back to the show page with an error
+    if (!$fingerling) {
+        return redirect()->route('fingerling.show', $fingerling->tank_id)->with('error', 'Fingerling data not found.');
+    }
+
+    // Store the tank ID before deleting the fingerling record
+    $tank_id = $fingerling->tank_id;
+
+    // Delete the fingerling record
+    $fingerling->delete();
+
+    // Redirect back to the show page with a success message
+    return redirect()->route('fingerling.show', $tank_id)->with('success', 'Fingerling data deleted successfully.');
+    }
+
+    public function edit($id)
+    {
+    // Find the fingerling record by its ID
+    $fingerling = Fingerling::find($id);
+
+    // If the record is not found, redirect to the index with an error message
+    if (!$fingerling) {
+        return redirect()->route('fingerling.index')->with('error', 'Fingerling record not found.');
+    }
+
+    // Pass the fingerling record to the edit view
+    return view('fingerling.fingerling_edit', compact('fingerling'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+    // Validate the form data
+    $request->validate([
+        'livestock_type' => 'required|string',
+        'stocking_type' => 'required|string',
+        'stocking_date' => 'required|date',
+        'stocking_details' => 'nullable|array',
+        'stocking_details.*.variety' => 'nullable|string',
+        'stocking_details.*.stock_number' => 'nullable|integer',
+        'harvest_date' => 'nullable|date',
+        'variety_harvest_kg' => 'nullable|numeric',
+        'amount_cumulative_kg' => 'nullable|numeric',
+        'unit_price_rs' => 'nullable|numeric',
+        'total_income_rs' => 'nullable|numeric',
+        'wholesale_quantity_kg' => 'nullable|numeric',
+        'wholesale_unit_price_rs' => 'nullable|numeric',
+        'wholesale_total_income_rs' => 'nullable|numeric',
+    ]);
+
+    // Find the fingerling record by its ID
+    $fingerling = Fingerling::find($id);
+
+    if (!$fingerling) {
+        return redirect()->route('fingerling.index')->with('error', 'Fingerling record not found.');
+    }
+
+    // Update the fingerling record with validated data
+    $fingerling->update([
+        'livestock_type' => $request->livestock_type,
+        'stocking_type' => $request->stocking_type,
+        'stocking_date' => $request->stocking_date,
+        'stocking_details' => json_encode($request->stocking_details), // Encode as JSON
+        'harvest_date' => $request->harvest_date,
+        'variety_harvest_kg' => $request->variety_harvest_kg,
+        'amount_cumulative_kg' => $request->amount_cumulative_kg,
+        'unit_price_rs' => $request->unit_price_rs,
+        'total_income_rs' => $request->total_income_rs,
+        'wholesale_quantity_kg' => $request->wholesale_quantity_kg,
+        'wholesale_unit_price_rs' => $request->wholesale_unit_price_rs,
+        'wholesale_total_income_rs' => $request->wholesale_total_income_rs,
+    ]);
+
+    // Redirect to the show page with a success message
+    return redirect()->route('fingerling.show', $fingerling->tank_id)->with('success', 'Fingerling data updated successfully.');
+    }
+
+    public function searchFingerling(Request $request)
+    {
+    $search = $request->input('search');
+
+    // Query to search tanks using TankRehabilitation model
+    $tanks = TankRehabilitation::where('tank_name', 'LIKE', "%{$search}%")
+        ->orWhere('ds_division_name', 'LIKE', "%{$search}%")
+        ->orWhere('gn_division_name', 'LIKE', "%{$search}%")
+        ->orWhere('as_centre', 'LIKE', "%{$search}%")
+        ->orWhere('river_basin', 'LIKE', "%{$search}%")
+        ->orWhere('cascade_name', 'LIKE', "%{$search}%")
+        ->paginate(10); // Paginate results
+
+    return view('fingerling.fingerling_index', compact('tanks'));
+    }
+
+
+
 }

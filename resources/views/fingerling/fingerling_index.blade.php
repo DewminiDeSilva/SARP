@@ -39,45 +39,55 @@
         padding: 20px;
     }
     .btn-back {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        border: none;
-        padding: 10px 50px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .btn-back img {
-        width: 45px;
-        height: auto;
-        margin-right: 5px;
-        transition: transform 0.3s ease;
-    }
-    .btn-back .btn-text {
-        opacity: 0;
-        visibility: hidden;
-        position: absolute;
-        right: 25px;
-        background-color: #1e8e1e;
-        color: #fff;
-        padding: 4px 8px;
-        border-radius: 4px;
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    }
-    .btn-back:hover .btn-text {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(-5px);
-    }
-    .btn-back:hover img {
-        transform: translateX(-50px);
-    }
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border: none;
+            padding: 10px 50px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-back img {
+            width: 45px;
+            height: auto;
+            margin-right: 5px;
+            transition: transform 0.3s ease;
+            background: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-back .btn-text {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            right: 25px;
+            background-color: #1e8e1e;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 0;
+        }
+
+        .btn-back:hover .btn-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .btn-back:hover img {
+            transform: translateX(-50px);
+        }
     .pagination .page-item {
         margin: 0 0px;
     }

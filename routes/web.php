@@ -524,6 +524,15 @@ Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'sear
 Route::get('/fingerling/create/{tank_id}', [FingerlingController::class, 'create'])->name('fingerling.create');
 Route::post('/fingerling/store', [FingerlingController::class, 'store'])->name('fingerling.store');
 Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])->name('fingerling.show');
+Route::delete('/fingerling/{id}', [FingerlingController::class, 'destroy'])->name('fingerling.destroy');
+// Route to show the edit form
+Route::get('/fingerling/{id}/edit', [FingerlingController::class, 'edit'])->name('fingerling.edit');
+
+// Route to update the fingerling record
+Route::put('/fingerling/{id}', [FingerlingController::class, 'update'])->name('fingerling.update');
+Route::get('/fingerling/search', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
+
+
 
 Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
 Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);

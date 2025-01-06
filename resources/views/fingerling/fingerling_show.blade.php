@@ -249,6 +249,34 @@
         .btn-back:hover img {
             transform: translateX(-50px);
         }
+
+        .btn-action.edit {
+            background-color: #ffd32c;
+        }
+
+        .btn-action.delete {
+            background-color: #FF746C;
+        }
+
+        .btn-action i {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-action {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            transition: all 0.3s ease;
+        }
     </style>
 
 </head>
@@ -261,9 +289,10 @@
 
     <div class="right-column">
 
-    <a href="{{ route('asc_registration.index') }}" class="btn-back">
-            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
+    <a href="{{ route('fingerling.index') }}" class="btn-back">
+    <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+</a>
+
 
     <div class="container-fluid">
         <div class="row mt-4">
@@ -277,71 +306,99 @@
         <!-- Generate and Upload CSV, Add ASC Button -->
         <div class="top-section">
             <div class="top-left">
-                <a href="{{ route('asc_registration.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Fingerlings</a>
-            </div>
-            <div class="top-right">
-                <form method="GET" action="{{ route('searchASC') }}" class="form-inline">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="search">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
+            <a href="{{ route('fingerling.create', $tank->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Fingerlings</a>
             </div>
         </div>
-
-        
-
 
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead class="thead-light">
                 <tr>
-                            <th>Tank Name</th>
-                            <th>Livestock Type</th>
-                            <th>Stocking Type</th>
-                            <th>Stocking Date</th>
-                            <th>Harvest Date</th>
-                            <th>Variety Harvest (kg)</th>
-                            <th>Cumulative Amount (kg)</th>
-                            <th>Unit Price (Rs)</th>
-                            <th>Total Income (Rs)</th>
-                            <th>Wholesale Quantity (Kg)</th>
-                            <th>Wholesale Unit Price (Rs)</th>
-                            <th>Whole Sale Total Income (Rs)</th>
-                            <th>Actions</th>
-                        </tr>
+                <th>Tank Name</th>
+                    <th>Livestock Type</th>
+                    <th>Stocking Type</th>
+                    <th>Stocking Date</th>
+                    <th>Variety</th>
+                    <th>Stock Number</th>
+                    <th>Harvest Date</th>
+                    <th>Variety Harvest (kg)</th>
+                    <th>Cumulative Amount (kg)</th>
+                    <th>Unit Price (Rs.)</th>
+                    <th>Total Income (Rs.)</th>
+                    <th>Wholesale Quantity (kg)</th>
+                    <th>Wholesale Unit Price (Rs.)</th>
+                    <th>Wholesale Total Income (Rs.)</th>
+                    <th>Actions</th>
+                </tr>
                     </thead>
                     <tbody>
-                        @foreach ($fingerlings as $fingerling)
-                        <tr>
-                            <td>{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->livestock_type }}</td>
-                            <td>{{ $fingerling->stocking_type }}</td>
-                            <td>{{ $fingerling->stocking_date }}</td>
-                            <td>{{ $fingerling->harvest_date }}</td>
-                            <td>{{ $fingerling->variety_harvest_kg ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->unit_price_rs ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->wholesale_unit_price_rs ?? 'N/A' }}</td>
-                            <td>{{ $fingerling->wholesale_total_income_rs ?? 'N/A' }}</td>
+                    @foreach ($fingerlings as $fingerling)
+                    <tr>
+                        <td>{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->livestock_type }}</td>
+                        <td>{{ $fingerling->stocking_type }}</td>
+                        <td>{{ $fingerling->stocking_date }}</td>
+                        <td>
+                            @if (!empty($fingerling->stocking_details) && is_string($fingerling->stocking_details))
+                                @php
+                                    $stockingDetails = json_decode($fingerling->stocking_details, true);
+                                @endphp
+                                @if (is_array($stockingDetails))
+                                    @foreach ($stockingDetails as $detail)
+                                        <p>{{ $detail['variety'] ?? 'N/A' }}</p>
+                                    @endforeach
+                                @else
+                                    <p>N/A</p>
+                                @endif
+                            @else
+                                <p>N/A</p>
+                            @endif
+                        </td>
+                        <td>
+                            @if (!empty($fingerling->stocking_details) && is_string($fingerling->stocking_details))
+                                @php
+                                    $stockingDetails = json_decode($fingerling->stocking_details, true);
+                                @endphp
+                                @if (is_array($stockingDetails))
+                                    @foreach ($stockingDetails as $detail)
+                                        <p>{{ $detail['stock_number'] ?? 'N/A' }}</p>
+                                    @endforeach
+                                @else
+                                    <p>N/A</p>
+                                @endif
+                            @else
+                                <p>N/A</p>
+                            @endif
+                        </td>
+
+
+                        <td>{{ $fingerling->harvest_date }}</td>
+                        <td>{{ $fingerling->variety_harvest_kg ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->unit_price_rs ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->wholesale_unit_price_rs ?? 'N/A' }}</td>
+                        <td>{{ $fingerling->wholesale_total_income_rs ?? 'N/A' }}</td>
                         <td class="button-container">
-                            <a href="" class="btn btn-danger edit-button" title="Edit">
-                                <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
-                            </a>
-                            <form action="" method="POST" style="display:inline;">
+                            <!-- <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn btn-warning btn-sm">Edit</a> -->
+                            <!-- Edit Button -->
+                    <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                        
+                            <!-- Delete Button -->
+                            <form action="{{ route('fingerling.destroy', $fingerling->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger custom-button" title="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
-                                    <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
+                                <button type="submit" class="btn-action delete" title="Delete" onclick="return confirm('Are you sure you want to delete this staff profile?');">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </form>
+
                         </td>
                     </tr>
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
         </div>
