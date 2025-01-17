@@ -50,7 +50,7 @@ use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\FingerlingController;
-
+use App\Http\Controllers\GalleryController;
 
 
 
@@ -527,3 +527,15 @@ Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])-
 
 Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
 Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
+
+//Gallery
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+Route::get('/gallery/album/{album}', [GalleryController::class, 'showAlbum'])->name('gallery.album');
+Route::post('/gallery/album/{album}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
+Route::delete('/gallery/album/{album}/{id}', [GalleryController::class, 'deleteImage'])->name('gallery.image.delete');
+Route::post('/gallery/album/{album}/folder', [GalleryController::class, 'storeFolder'])->name('folder.store');
+Route::get('/gallery/album/{album}/folder/{folder}', [GalleryController::class, 'showFolder'])->name('gallery.folder');
+Route::post('/gallery/album/{album}/folder/{folder}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
+Route::delete('/folder/{album}/{folder}', [GalleryController::class, 'destroyFolder'])->name('folder.destroy');
+Route::delete('/gallery/{album}/{folder}/delete-images', [GalleryController::class, 'deleteImages'])->name('gallery.image.delete');
+//Route::post('/gallery/{album}/{folder}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
