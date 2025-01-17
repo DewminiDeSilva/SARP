@@ -9,7 +9,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
+
+@include('dashboard.header')
+
+    <div class="container mt-5" style="padding-top: 70px;">
         <h2>Edit Agriculture Data</h2>
 
         <!-- Display validation errors -->
@@ -45,7 +48,7 @@
                 <input type="number" class="form-control" id="total_acres" name="total_acres" value="{{ old('total_acres', $agricultureData->total_acres) }}" required>
             </div>
 
-         
+
 
             <!-- Farmer Contributions and Costs -->
             <div class="mb-3">
