@@ -373,7 +373,7 @@ td {
         <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
     </a>
 
-    <!-- form -->
+    {{-- <!-- form -->
     <div class="container mt-5 mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">
         <h3 style="font-size: 2rem; color: green;">CDF Registration</h3>
     </br>
@@ -451,7 +451,7 @@ td {
                 </div>
             </div>
         </form>
-    </div>
+    </div> --}}
 
     <!-- table -->
     <div class="container-fluid">
