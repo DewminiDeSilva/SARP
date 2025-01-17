@@ -16,18 +16,86 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <style>
-        .custom-border {
-            border: 2px solid green;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        body {
+            background-color: #f8f9fa; /* Light gray background */
         }
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #343a40;
+        }
+        .btn-primary {
+            background-color: #198754;
+            border-color: #198754;
+        }
+        .btn-primary:hover {
+            background-color: #145c32;
+            border-color: #145c32;
+        }
+        .dropdown {
+            display: flex;
+            flex-direction: column;
+        }
+        .dropdown select {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            height: 45px;
+        }
+        .btn-back {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #198754;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        .btn-back img {
+            margin-right: 8px;
+        }
+        .container {
+            margin-top: 50px;
+            margin-left: 5px;
+        }
+
+        .dropdown {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dropdown-menu {
+            min-width: auto;
+        }
+
+        .dropdown-item {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        /* Adjust button width to fit the content */
+        .dropdown-toggle {
+            min-width: 250px; /* Increase the width */
+        }
+
+        /* Center align labels */
         .dropdown-label {
-            font-weight: bold;
+            text-align: center;
+            font-size: 20px;
         }
-        .bold-label {
-            font-weight: bold;
+        .entries-container {
+            display: flex;
+            align-items: center;
         }
-        .color-label {
-            color: green;
+        .entries-container label {
+            margin-bottom: 0;
+        }
+        .entries-container select {
+            display: inline-block;
+            width: auto;
         }
         .frame {
             display: flex;
@@ -46,10 +114,21 @@
     </style>
 </head>
 <body>
+    <div class="frame">
+        <div class="left-column">
+            @include('dashboard.dashboardC')
+            @csrf
+        </div>
+    
+        <div class="right-column">
+    
+        <a href="{{ route('cdf.index') }}" class="btn-back">
+            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+        </a>
 
-
-    <div class="container mt-5">
-        <h2>CDF Registration</h2>
+        <div class="container mt-5 mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">
+            <h3 style="font-size: 2rem; color: green;">CDF Registration</h3>
+    
         <form class="form-horizontal" method="POST" action="{{ route('cdf.store') }}">
             @csrf
             <div class="row">
@@ -125,6 +204,9 @@
             </div>
         </form>
     </div>
+</div>
+</div>
+
 
     <script>
         $(document).ready(function () {

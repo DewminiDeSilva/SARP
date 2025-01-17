@@ -64,13 +64,12 @@ class BeneficiaryController extends Controller
                     ->groupBy('input3')
                     ->get();
 
-                    $tankNameSummary = Beneficiary::where('tank_name', 'like', '%'.$search.'%')
-                    ->select('tank_name', DB::raw('COUNT(*) as count'))
-                    ->groupBy('tank_name')
-                    ->get();
-                    
-                            
-                    return view('beneficiary.beneficiary_index', compact('beneficiaries', 'search', 'input3Summary'));
+                    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
+    ->groupBy('tank_name')
+    ->get();
+
+return view('beneficiary.beneficiary_index', compact('beneficiaries', 'search', 'input3Summary', 'tankNameSummary'));
+
         
     }
         // Check if you want to return the beneficiary_index or beneficiary_list view

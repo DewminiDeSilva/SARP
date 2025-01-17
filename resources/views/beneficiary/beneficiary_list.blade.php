@@ -238,7 +238,7 @@
         <div class="right-column">
 
         <div class="col-md-12 text-center">
-        <h2 class="header-title" style="color: green;">Beneficiary List</h2>
+        <h2 class="header-title" style="color: green;">Livestock List</h2>
         </div>
 
             <div class="card-summary">
