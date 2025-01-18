@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- font Noto Sans-->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
     .entries-container {
         display: flex;
@@ -257,11 +260,110 @@
 
 </style>
 
+<style>
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to bottom,rgb(76, 167, 88), #a8d5ba); /* Vertical gradient */
+            color: black; /* Text color */
+            z-index: 1000; /* Ensures header stays above other elements */
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 20px; /* Adjust this value for more/less curve */
+            border-bottom-right-radius: 20px; /* Adjust this value for more/less curve */
+        }
+
+        /* Logo and Text */
+        .fixed-header .logo-container {
+            display: flex;
+            align-items: center;
+            font-family: 'Noto Sans', sans-serif; /* Apply Noto Sans font */
+            font-size: 1.8rem; /* Adjust the font size */
+            margin: 0;
+            color: black; /* Text color */
+            font-weight: bold; /* Ensure the title stands out */
+            text-align: center;
+        }
+
+        .fixed-header img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .fixed-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: black; /* Header text color */
+        }
+
+        /* Profile Section */
+        .fixed-header .profile {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .fixed-header .profile img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Padding to prevent overlap */
+        .content {
+            margin-top: 80px; /* Adjust based on header height */
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Add space between the logos */
+        }
+
+        .ministry-logo, .ifad-logo, .sharp-logo {
+            height: 50px; /* Ensure all logos are of the same height */
+            max-width: 70px; /* Limit the width to ensure proportions are maintained */
+        }
+
+        /* Custom width for the Ministry logo */
+        .custom-ministry-logo {
+            max-width: 120px; /* Adjust the width as needed */
+        }
+    </style>
+
 
 
 </head>
 <body>
-<div class="frame">
+
+<!-- Header -->
+<div class="fixed-header">
+
+    <div class="left-section">
+        <img src="{{ asset('assets/images/name ministry png.png') }}" alt="Ministry Logo" class="ministry-logo custom-ministry-logo">
+        <img src="{{ asset('assets/images/ifad.png') }}" alt="IFAD Logo" class="ifad-logo">
+        <img src="{{ asset('assets/images/sarp2.png') }}" alt="SHARP Logo" class="sharp-logo">
+    </div>
+
+        <div class="logo-container">
+
+            <h1>Management Information System</h1>
+        </div>
+        <div class="profile">
+            <img src="{{ asset('assets/images/LinkedIn_Profile_Photo.jpg') }}" alt="Profile">
+            <span>Ravindu</span>
+        </div>
+    </div>
+
+
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -565,7 +667,10 @@
                     </div>
                 </div>
             </div>
+            @include('dashboard.footer')
         </div>
+
+
 </div>
 </body>
 </html>
