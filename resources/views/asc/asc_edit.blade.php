@@ -117,10 +117,11 @@
             transform: translateX(-50px);
         }
     </style>
-    
+
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         <!-- Include your left column content here -->
         @include('dashboard.dashboardC')
