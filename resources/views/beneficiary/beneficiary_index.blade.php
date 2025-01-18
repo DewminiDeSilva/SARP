@@ -216,7 +216,7 @@
     </style>
 </head>
 <body>
-
+@include('dashboard.header')
     {{-- <body class="h-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;"> --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -226,7 +226,7 @@
 
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
 
-    <div class="frame">
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
