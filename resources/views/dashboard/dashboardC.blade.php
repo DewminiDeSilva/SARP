@@ -51,6 +51,10 @@ li:hover {
     cursor: pointer; /* Change cursor to pointer on hover */
 }
 
+.container {
+            margin-top: 80px; /* Adjust based on header height */
+        }
+
 
 
     </style>
