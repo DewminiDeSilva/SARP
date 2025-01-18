@@ -52,7 +52,8 @@
     </style>
 </head>
 <body>
-
+@include('dashboard.header')
+<div style="padding-top: 70px;">
     <!-- Center the images in a flexbox container -->
     <div class="img-container">
         <img src="{{ asset('assets/images/b12.png') }}" alt="Image 1">
@@ -85,7 +86,7 @@
             </div>
         </div>
     </div>
-
+    </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

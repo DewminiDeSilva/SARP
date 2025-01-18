@@ -253,7 +253,7 @@
     display: flex;
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
-    
+
     margin: 0 auto; /* Centers the container */
     width: 100%; /* Full width */
     position: relative; /* Allows positioning adjustments */
@@ -309,7 +309,8 @@
 
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -330,15 +331,15 @@
             </div>
         </div>
 
-        
 
-           
+
+
 
     <div class="container">
         <div class="justify-content-center">
             <div class="container mt-4">
                 <div class="d-flex justify-content-center">
-        
+
                     <div class="card text-center" style="width: 18rem; margin-right: 20px;">
                         <div class="card-header">
                             Number of ASC
@@ -349,13 +350,13 @@
                         </div>
                     </div>
                 </div>
-            </div>   
+            </div>
         </div>
     </div>
 
 
-        
-        
+
+
 
         <!-- Generate and Upload CSV, Add ASC Button -->
         <div class="top-section">

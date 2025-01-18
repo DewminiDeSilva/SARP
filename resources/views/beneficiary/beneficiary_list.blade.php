@@ -230,7 +230,8 @@
     </style>
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
         </div>
@@ -268,12 +269,12 @@
             </div>
             <form method="GET" action="{{ route('beneficiary.searchLivestock') }}" class="form-inline">
     <div class="input-group">
-        <input 
-            type="text" 
-            class="form-control" 
-            name="search" 
-            placeholder="Search Beneficiaries" 
-            value="{{ request('search') }}" 
+        <input
+            type="text"
+            class="form-control"
+            name="search"
+            placeholder="Search Beneficiaries"
+            value="{{ request('search') }}"
         >
         <div class="input-group-append">
             <button type="submit" class="btn btn-outline-success">Search</button>

@@ -44,8 +44,8 @@
     </style>
 </head>
 <body>
-
-<div class="container mt-4">
+@include('dashboard.header')
+<div class="container mt-4" style="padding-top: 70px;">
     <h2 class="section-title">Beneficiary Application Details</h2>
     <div class="frame">
     <div class="left-column">

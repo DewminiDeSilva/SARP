@@ -181,8 +181,8 @@
 
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -270,7 +270,7 @@
                     </select>
                     <label for="entriesSelect">entries</label>
                 </div>
-            
+
             </div>
 
 
@@ -354,6 +354,12 @@
                         <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
                     </li>
                 </ul>
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> Ravindu
             </nav>
         </div>
         </div>
