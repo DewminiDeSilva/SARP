@@ -174,7 +174,8 @@
 
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
@@ -184,7 +185,7 @@
                 <div class="center-heading text-center">
                     <h1 style="font-size: 2.5rem; color: green;">Tank Rehabilitation Details</h1>
                 </div>
-                
+
                 <div class="container">
     <div class="row justify-content-center mt-4">
         <!-- Total Tanks Card -->

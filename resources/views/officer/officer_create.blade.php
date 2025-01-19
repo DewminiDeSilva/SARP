@@ -34,7 +34,8 @@
     </style>
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -64,7 +65,7 @@
                     <label for="actions_taken">Actions Taken</label>
                     <textarea name="actions_taken" id="actions_taken" class="form-control" rows="4" required></textarea>
                 </div>
-                
+
                 <input type="hidden" name="action_taken_date" id="action_taken_date" class="form-control">
 
                 <div class="form-group">

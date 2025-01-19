@@ -284,7 +284,8 @@
 
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <!-- Include Dashboard -->
         <div class="left-column">
             @include('dashboard.dashboardC')
@@ -422,7 +423,7 @@
     @endif
 </td>
 
-                
+
 
 
 

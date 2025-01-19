@@ -31,7 +31,7 @@
             font-weight: bold;
             margin-bottom: 30px;
             color: #2c3e50;
-            
+
         }
 
         .folder-card {
@@ -151,20 +151,20 @@
             transform: translateX(-50px);
         }
     </style>
-   
-   
+
+
 </head>
 <body>
+@include('dashboard.header')
 
 
-
-      <div class="frame">
+      <div class="frame" style="padding-top: 70px;">
        <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
        </div>
        <div class="right-column">
-       
+
        <a href="{{ route('gallery.index') }}" class="btn-back">
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
@@ -250,7 +250,7 @@
     </div>
     </div>
 
-    
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

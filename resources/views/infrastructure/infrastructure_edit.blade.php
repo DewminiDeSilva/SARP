@@ -139,14 +139,15 @@
     }
 </style>
 
-    <div class="frame">
-        <div class="left-column">
-            @include('dashboard.dashboardC')
-        </div>
+
 
 </head>
 <body>
-
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
+        <div class="left-column">
+            @include('dashboard.dashboardC')
+        </div>
     <div class="right-column">
 
     <a href="{{ route('infrastructure.index') }}" class="btn-back">

@@ -130,12 +130,16 @@
     }
 </style>
 
-    <div class="frame">
+
+</head>
+<body>
+@include('dashboard.header')
+
+<div class="frame" style="padding-top: 70px;">
       <div class="left-column">
          @include('dashboard.dashboardC')
       </div>
-</head>
-<body>
+
 	<div class="right-column">
 
     <a href="{{ route('tank_rehabilitation.index') }}" class="btn-back">

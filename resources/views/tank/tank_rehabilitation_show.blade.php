@@ -224,7 +224,8 @@
 
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
@@ -372,7 +373,7 @@
                                     </div>
                                 </div>
                                 <!-- Add more tank details here if needed -->
-                            
+
 
                         <!-- Image fields -->
                         <div class="construction-images">

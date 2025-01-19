@@ -261,14 +261,15 @@
     </style>
 </head>
 <body>
-     <div class="frame">
+@include('dashboard.header')
+     <div class="frame" style="padding-top: 70px;">
        <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
        </div>
        <div class="right-column">
 
-       
+
        <a href="{{ route('gallery.album', ['album' => $album]) }}" class="btn-back">
 
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
@@ -279,23 +280,23 @@
         <div class="album-header">
             <h1>{{ $folder->folder_name }}</h1>
             <br>
-            
+
         </div>
 
         <!-- Card Section for Additional Information -->
         <div class="card mt-4">
-          
+
             <div class="card-body">
-               
+
                 @if ($folder->description)
                 <p class="text-muted" >{{ $folder->description }}</p>
             @else
                 <p class="text-muted">No description available for this folder.</p>
             @endif
             <br>
-              
+
             </div>
-            
+
         </div>
 
         <!-- Upload Form -->
@@ -311,7 +312,7 @@
             <button type="submit" id="uploadButton" disabled>Upload Images</button>
         </form> -->
 
-      
+
         <div class="container mt-4">
         <!-- Import Images Button -->
         <div class="import-button" data-bs-toggle="modal" data-bs-target="#uploadModal">
@@ -367,8 +368,8 @@
         </div>
         </div>
         </div>
-    
-    
+
+
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

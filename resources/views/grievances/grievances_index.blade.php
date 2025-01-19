@@ -76,7 +76,7 @@
     justify-content: space-between; /* Equal spacing between cards */
     align-items: flex-start; /* Align items at the top */
     margin: 20px 0;
-    
+
 }
 .summary-card {
     width: 30%; /* Adjust card width as needed */
@@ -134,7 +134,8 @@
     </style>
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf

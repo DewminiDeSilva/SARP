@@ -65,8 +65,8 @@
     </style>
 </head>
 <body>
-
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -116,11 +116,11 @@
                         <!-- Production Focus -->
                         <div class="mb-3">
                             <label for="production_focus" class="form-label">Production Focus</label>
-                            <input type="text" class="form-control" id="production_focus" name="production_focus" 
+                            <input type="text" class="form-control" id="production_focus" name="production_focus"
                                    value="{{ $productionFocus }}" readonly>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <!-- Newly added Livestock Commencement Date -->

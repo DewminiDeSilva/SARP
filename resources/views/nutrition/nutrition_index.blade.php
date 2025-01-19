@@ -198,7 +198,7 @@
     display: flex;
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
-    
+
     margin: 0 auto; /* Centers the container */
     width: 100%; /* Full width */
     position: relative; /* Allows positioning adjustments */
@@ -252,8 +252,8 @@
 
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -267,12 +267,12 @@
         <div class="">
             <h2 style="color: green; font-weight: bold; text-align: center;">Nutrition Program List</h2>
 
-           
+
             <div class="container">
                 <div class="justify-content-center">
                     <div class="container mt-4">
                         <div class="d-flex justify-content-center">
-                
+
                             <div class="card text-center" style="width: 18rem; margin-right: 20px;">
                                 <div class="card-header">
                                     Total Nutrition Programs
@@ -291,14 +291,14 @@
                 <h5 class="card-title">{{ number_format($totalCost, 2) }}</h5>
                 <p>Total cost of all nutrition programs.</p>
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </div>
-    
+
         </br>
     </div>
-            
-</div>         
+
+</div>
 
             <!-- Add New Program Button -->
             <div class="d-flex justify-content-between mb-3">
@@ -341,9 +341,9 @@
                     </select>
                     <label for="entriesSelect">entries</label>
                 </div>
-            
+
             </div>
-        
+
 
 
             <!-- Table for displaying Nutrition Program records -->

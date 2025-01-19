@@ -298,8 +298,8 @@
 
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -309,7 +309,7 @@
     <a href="{{ route('nutrition.index') }}" class="btn-back">
         <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
     </a>
-    
+
         <div class="container mt-5 border rounded custom-border p-4">
             <h2 style="color: green; font-weight: bold; text-align: center;">Edit Nutrition Program</h2>
 
