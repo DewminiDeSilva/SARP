@@ -152,7 +152,8 @@
 </script>
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -188,7 +189,7 @@
 </div>
 
     <div class="container mt-5 border rounded border-primary p-4 border-green shadow-custom">
-        
+
         <form class="form-horizontal" method="POST" action="{{ route('farmer_member.update', $farmer_member->id) }}">
 
     @csrf

@@ -306,7 +306,7 @@ td {
     display: flex;
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
-    
+
     margin: 0 auto; /* Centers the container */
     width: 100%; /* Full width */
     position: relative; /* Allows positioning adjustments */
@@ -360,8 +360,8 @@ td {
 
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -462,7 +462,7 @@ td {
                 </div>
             </div>
         </div>
-       
+
         {{-- <div class="summary-card-container">
             <div class="summary-card">
                 <h4>Total CDF Records</h4>
@@ -475,7 +475,7 @@ td {
             <div class="justify-content-center">
                 <div class="container mt-4">
                     <div class="d-flex justify-content-center">
-            
+
                         <div class="card text-center" style="width: 18rem; margin-right: 20px;">
                             <div class="card-header">
                                 Total CDF Records
@@ -485,14 +485,14 @@ td {
                             </div>
                         </div>
                     </div>
-                </div>   
+                </div>
             </div>
         </div>
 
     </br>
-        
 
-    
+
+
 
         <!--serch and csv files-->
 

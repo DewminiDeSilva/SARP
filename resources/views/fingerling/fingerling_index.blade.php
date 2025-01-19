@@ -109,7 +109,8 @@
 </style>
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
     </div>
@@ -124,12 +125,12 @@
 
             <form method="GET" action="{{ route('fingerling.searchFingerling') }}" class="form-inline">
                 <div class="input-group">
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        name="search" 
-                        placeholder="Search Tanks" 
-                        value="{{ request('search') }}" 
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="search"
+                        placeholder="Search Tanks"
+                        value="{{ request('search') }}"
                     >
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-outline-success">Search</button>
@@ -167,7 +168,7 @@
                                 <td class="buttonline">
                                     <!-- View Data Button -->
                                     <a href="{{ route('fingerling.show', ['tank_id' => $tank->id]) }}" class="btn btn-info btn-sm">View Data</a>
-                                    
+
                                     <!-- Add Data Button -->
                                     <a href="{{ route('fingerling.create', $tank->id) }}" class="btn btn-primary btn-sm button-a">Add Data</a>
                                 </td>

@@ -132,7 +132,8 @@
     </script>
 </head>
 <body>
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
@@ -169,7 +170,7 @@
 
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
             <form class="form-horizontal" action="/family/{{ $family->id }}" method="POST">
-                
+
 
                 @csrf
                 @method('PUT')

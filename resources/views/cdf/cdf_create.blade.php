@@ -114,21 +114,22 @@
     </style>
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
         </div>
-    
+
         <div class="right-column">
-    
+
         <a href="{{ route('cdf.index') }}" class="btn-back">
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
 
         <div class="container mt-5 mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">
             <h3 style="font-size: 2rem; color: green;">CDF Registration</h3>
-    
+
         <form class="form-horizontal" method="POST" action="{{ route('cdf.store') }}">
             @csrf
             <div class="row">

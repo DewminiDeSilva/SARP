@@ -8,7 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<div class="container mt-5">
+@include('dashboard.header')
+<div class="container mt-5" style="padding-top: 70px;">
     <h2 class="text-center text-success">Add Fingerling Data</h2>
     <form action="{{ route('fingerling.store') }}" method="POST">
         @csrf

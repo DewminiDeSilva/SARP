@@ -100,8 +100,8 @@
     </style>
 </head>
 <body>
-   
-    <div class="content">
+@include('dashboard.header')
+    <div class="content" style="padding-top: 70px;">
         <h1>{{ $cdf->cdf_name }} Details</h1>
         <p><strong>Address:</strong> {{ $cdf->cdf_address }}</p>
         <p><strong>Province:</strong> {{ $cdf->province_name }}</p>

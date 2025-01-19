@@ -40,7 +40,8 @@
     </style>
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
@@ -51,12 +52,12 @@
                     <h2 class="mb-4">CDF Member List</h2>
                     <a href="{{ route('cdfmembers.create') }}" class="btn btn-primary mb-4">Add New Member</a>
                 </div>
-                
+
                 <table class="table table-striped">
     <thead>
         <tr>
             <th>CDF Name</th>
-            <th>CDF Address</th> 
+            <th>CDF Address</th>
             <th>Member Name</th>
             <th>NIC Number</th>
             <th>Address</th>
@@ -104,7 +105,7 @@
     </tbody>
 </table>
 
-             
+
             </div>
         </div>
     </div>

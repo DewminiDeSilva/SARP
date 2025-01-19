@@ -23,7 +23,7 @@
             padding: 30px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .frame {
             display: flex;
             flex-direction: row;
@@ -138,8 +138,8 @@
 
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
