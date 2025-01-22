@@ -156,8 +156,13 @@
                     <!-- Staff Type and Photo -->
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="staff_type" class="form-label">Staff Type</label>
-                            <input type="text" class="form-control" id="staff_type" name="staff_type" placeholder="Enter Staff Type" required>
+                            <select class="form-control" id="staff_type" name="staff_type" required>
+                                <option value="" disabled selected>Select Staff Type</option>
+                                <option value="Carder Position">Carder Position</option>
+                                <option value="Consultant">Consultant</option>
+                                <option value="Daily Basis">Daily Basis</option>
+                                <option value="Internship">Internship</option>
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label for="photo" class="form-label">Photo</label>
@@ -208,7 +213,7 @@
                             <input type="text" class="form-control" id="mobile_fixed" name="mobile_fixed" placeholder="Enter Mobile Fixed">
                         </div>
                         <div class="col-md-4">
-                            <label for="email_address" class="form-label">Email Address</label>
+                            <label for="email_address" class="form-label">Official Email Address</label>
                             <input type="email" class="form-control" id="email_address" name="email_address" placeholder="Enter Email Address">
                         </div>
                     </div>
