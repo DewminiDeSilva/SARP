@@ -108,20 +108,23 @@
 
             </nav>
 
-            
+
         </div>
     </div>
 </div>
+<div class="left-column">
+            @include('dashboard.dashboardC')
+        </div>
 <div>
     <h1>Dashboard</h1>
     <p>Dashboard content goes hereLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nisl nisi, condimentum lobortis rutrum ut, accumsan nec lacus. Ut sem neque, egestas quis metus nec, consequat vulputate quam. Suspendisse vel auctor augue, non dictum elit. Pellentesque suscipit arcu at lacus vulputate maximus. Donec fermentum porta dui eu accumsan. Praesent pharetra pulvinar metus eu semper. Nunc venenatis nunc turpis, id sodales lectus bibendum nec. Nam nisl mauris, tristique sit amet nisi et, porttitor bibendum nisl. In ullamcorper nec dolor ac convallis. Quisque varius tellus diam, at hendrerit lectus faucibus sit amet. Ut sit amet mauris elementum risus dictum pulvinar ac id ligula. Aenean cursus eu erat a gravida. Proin in ultricies tellus.
 
         Donec augue nunc, hendrerit et pulvinar eget, tempor at ipsum. Praesent vel risus id elit sagittis blandit. Vivamus in leo in purus sagittis aliquam. Donec et diam a risus faucibus tempus id et ipsum. Integer fringilla nisi eu mi lobortis tincidunt. Fusce in tortor et risus fringilla iaculis. Ut dictum nulla libero, in vehicula orci tempus in. Maecenas pharetra condimentum leo. Vivamus nec bibendum risus. Sed sit amet arcu congue, sollicitudin nibh ut, luctus nisi. Morbi vitae ultrices felis. Integer in mauris dapibus, sodales urna id, sagittis nisl. Donec augue eros, luctus at leo eget, posuere rutrum quam.
-        
+
         In ligula leo, euismod id consequat et, blandit vitae magna. Donec ac ultricies libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tincidunt lorem lectus, ac porttitor urna tempor in. Fusce sagittis fringilla venenatis. Maecenas lobortis varius leo gravida efficitur. Suspendisse non felis sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer ac purus et nisl dignissim semper et vel sem.
-        
+
         Praesent neque tortor, dictum vel commodo quis, imperdiet eu ex. Morbi consequat malesuada fermentum. Ut non vehicula justo. Aenean sed ligula pharetra, gravida est eget, sodales tortor. Vestibulum sagittis sit amet urna quis mattis. Suspendisse ac ex malesuada metus tristique mollis nec hendrerit ligula. Vivamus et aliquam enim, eget congue justo. Etiam tempus mattis fringilla. Mauris rutrum ultricies mauris, vel semper velit. Mauris mattis commodo orci, blandit faucibus turpis suscipit quis.
-        
+
         Duis cursus hendrerit rhoncus. Ut nisi est, posuere a erat non, convallis egestas neque. Ut est sem, efficitur eget nibh quis, feugiat bibendum diam. Aliquam a arcu et sem vulputate interdum vitae eu turpis. Praesent quis quam interdum, iaculis sem nec, faucibus felis. Vivamus volutpat metus leo, eget consequat sapien consectetur sed. Pellentesque malesuada magna at felis tincidunt efficitur. Nam ultricies purus arcu, at porta massa aliquet eu.</p>
 </body>
 
