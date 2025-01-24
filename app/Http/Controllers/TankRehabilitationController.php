@@ -349,7 +349,15 @@ public function uploadCsv(Request $request)
                 $tankData = array_combine($header, $row);
 
                 // Convert date format for 'awarded_date'
-                $awardedDate = isset($tankData['Awarded Date']) ? Carbon::createFromFormat('m/d/Y', $tankData['Awarded Date'])->format('Y-m-d') : null;
+                  // Convert date format for 'awarded_date'
+                  $awardedDate = null;
+                  if (isset($tankData['Awarded Date']) && !empty($tankData['Awarded Date'])) {
+                      try {
+                          $awardedDate = Carbon::createFromFormat('m/d/Y', trim($tankData['Awarded Date']))->format('Y-m-d');
+                      } catch (\Exception $e) {
+                          // Log the error for debugging
+                          \Log::error("Invalid date format in CSV: " . $tankData['Awarded Date']);
+                      }
 
                 // Insert into TankRehabilitation model
                 TankRehabilitation::create([
@@ -389,7 +397,7 @@ public function uploadCsv(Request $request)
     return redirect()->back()->with('success', 'CSV uploaded and records added successfully.');
     }
 
-
+    }
 
 
 
