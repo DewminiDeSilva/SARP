@@ -61,8 +61,11 @@ use App\Http\Controllers\LivestockDataController;
 
 // Default Route
 Route::get('/', function () {
-    return redirect('/welcome');
+    return redirect('/login');
 });
+// Route::get('/', function () {
+//     return redirect('/welcome');
+// });
 
 // Welcome Page
 Route::get('/welcome', function () {
