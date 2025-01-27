@@ -70,7 +70,11 @@ li:hover {
 
 
     <div class="sidebar" id="sidebar">
+<<<<<<< HEAD
     <!-- <h2>Management Information System</h2>
+=======
+    <!-- <h2>Management Information System</h2> -->
+>>>>>>> ravindu
         <div class="logoframe" style="cursor: pointer;">
         <div class="img">
             <img src="{{ asset('assets/images/sarp2.png') }}" alt="SARP Logo" class="logo" style="border-radius: 15px; top: 10px" class= "imgsize">
