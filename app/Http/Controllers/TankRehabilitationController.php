@@ -6,6 +6,8 @@ use App\Models\TankRehabilitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 class TankRehabilitationController extends Controller
 {
@@ -348,16 +350,16 @@ public function uploadCsv(Request $request)
             if (count($row) === count($header)) {
                 $tankData = array_combine($header, $row);
 
-                // Convert date format for 'awarded_date'
                   // Convert date format for 'awarded_date'
                   $awardedDate = null;
                   if (isset($tankData['Awarded Date']) && !empty($tankData['Awarded Date'])) {
                       try {
-                          $awardedDate = Carbon::createFromFormat('m/d/Y', trim($tankData['Awarded Date']))->format('Y-m-d');
+                          $awardedDate = Carbon::createFromFormat('Y-m-d', trim($tankData['Awarded Date']))->format('Y-m-d');
                       } catch (\Exception $e) {
-                          // Log the error for debugging
-                          \Log::error("Invalid date format in CSV: " . $tankData['Awarded Date']);
+                          Log::info('Invalid Awarded Date Format: ', ['awarded_date' => $tankData['Awarded Date']]);
                       }
+                  }
+                  
 
                 // Insert into TankRehabilitation model
                 TankRehabilitation::create([
@@ -382,7 +384,7 @@ public function uploadCsv(Request $request)
                     'status' => $tankData['Status'] ?? null,
                     'remarks' => $tankData['Remarks'] ?? null,
                     'open_ref_no' => $tankData['Open Ref No'] ?? null,
-                    'awarded_date' => $awardedDate,
+                    'awarded_date' => $awardedDate['Awarded Date']?? null,
                     'cumulative_amount' => !empty($tankData['Cumulative Amount']) ? $tankData['Cumulative Amount'] : null,
                     'paid_advanced_amount' => !empty($tankData['Paid Advanced Amount']) ? $tankData['Paid Advanced Amount'] : null,
                     'recommended_ipc_no' => $tankData['Recommended IPC No'] ?? null,
@@ -397,7 +399,7 @@ public function uploadCsv(Request $request)
     return redirect()->back()->with('success', 'CSV uploaded and records added successfully.');
     }
 
-    }
+    
 
 
 
@@ -416,6 +418,8 @@ public function uploadCsv(Request $request)
         }
         return 0;
     }
+
+
 
 
 }
