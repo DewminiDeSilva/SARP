@@ -251,23 +251,51 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-crops/{category}', [AgriController::class, 'getCropsByCategory']);
 
 
-    Route::resource('livestocks', LivestockController::class);
-    Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
+    // Route::resource('livestocks', LivestockController::class);
+    // Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
+    // Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestock.list');
+    // Route::get('/livestocks/create/{beneficiary_id}', [LivestockController::class, 'create'])->name('livestocks.create');
+    // Route::post('/livestocks/store', [LivestockController::class, 'store'])->name('livestocks.store');
+    // Route::get('/livestocks/gn-division/{beneficiary_id}', [LivestockController::class, 'getGnDivisionName'])->name('livestock.getGnDivisionName');
+    // Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestock.update');
+    // Route::get('/livestock/{id}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    // Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
+    // Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    // Route::delete('/livestocks/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestocks.index');
+    // Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestocks.list');
+    // Route::put('/livestocks/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
+    // Route::delete('/livestocks/{livestock_id}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
+    // Route::get('/livestocks/{id}', [LivestockController::class, 'show']);
+    // Route::get('/livestocks/{id}', [LivestockController::class, 'index']);
+    // Route::get('/livestocks/{id}', [LivestockController::class, 'show']);
+
     Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestock.list');
     Route::get('/livestocks/create/{beneficiary_id}', [LivestockController::class, 'create'])->name('livestocks.create');
+     Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
     Route::post('/livestocks/store', [LivestockController::class, 'store'])->name('livestocks.store');
     Route::get('/livestocks/gn-division/{beneficiary_id}', [LivestockController::class, 'getGnDivisionName'])->name('livestock.getGnDivisionName');
+    Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    Route::put('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'update'])->name('livestocks.update');
     Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
     Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestock.update');
-    Route::get('/livestock/{id}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    //Route::get('/livestock/{id}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
     Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
-    Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    //Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
     Route::delete('/livestocks/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    //Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestock.livestock_index');
     Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestocks.index');
     Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestocks.list');
     Route::put('/livestocks/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
     Route::delete('/livestocks/{livestock_id}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    Route::get('/livestocks/{beneficiary_id}/{livestock_id}/edit', [LivestockController::class, 'edit'])
+    ->name('livestocks.edit');
+
     Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
+    
 
 
     //add agriculture routes
