@@ -25,6 +25,10 @@
         @endif
 
         <form action="{{ route('livestocks.update', $livestock->id) }}" method="POST">
+
+            @csrf
+            @method('PUT') <!-- Ensure method spoofing for PUT request -->
+        
             @csrf
             @method('PUT') <!-- Method spoofing for PUT request -->
 
