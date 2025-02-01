@@ -547,5 +547,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
     Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
     Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
+    Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.index');
+    Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock.index');
 
 });
