@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- font Noto Sans-->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
     .entries-container {
@@ -338,29 +340,42 @@
         }
     </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
 
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
 
 </head>
 <body>
 
-<!-- Header -->
-<div class="fixed-header">
-
-    <div class="left-section">
-        <img src="{{ asset('assets/images/name ministry png.png') }}" alt="Ministry Logo" class="ministry-logo custom-ministry-logo">
-        <img src="{{ asset('assets/images/ifad.png') }}" alt="IFAD Logo" class="ifad-logo">
-        <img src="{{ asset('assets/images/sarp2.png') }}" alt="SHARP Logo" class="sharp-logo">
-    </div>
-
-        <div class="logo-container">
-
-            <h1>Management Information System</h1>
-        </div>
-        <div class="profile">
-            <img src="{{ asset('assets/images/LinkedIn_Profile_Photo.jpg') }}" alt="Profile">
-            <span>Ravindu</span>
-        </div>
-    </div>
+@include('dashboard.header')
 
 
 <div class="frame" style="padding-top: 70px;">
@@ -669,7 +684,27 @@
             </div>
 
         </div>
+        <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
 
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
 
 </div>
 </body>
