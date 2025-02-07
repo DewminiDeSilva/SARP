@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+.profile {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    gap: 10px;
+}
+
+.profile img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-btn, .logout-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.profile-btn:hover, .logout-btn:hover {
+    background-color: #ddd;
+}
 
 </style>
 
@@ -23,9 +51,21 @@
         <h1>Management Information System</h1>
     </div>
     <div class="profile">
-        <img src="{{ asset('assets/images/LinkedIn_Profile_Photo.jpg') }}" alt="Profile">
-        <span>Ravindu</span>
-    </div>
+    <img src="{{ asset('assets/images/LinkedIn_Profile_Photo.jpg') }}" alt="Profile">
+
+    <!-- Display Logged-in User Name -->
+    <span>{{ Auth::user()->name ?? 'Guest' }}</span>
+
+    <!-- Profile Button -->
+    <a href="{{ route('profile.edit') }}" class="profile-btn">Profile</a>
+
+    <!-- Sign Out Button (Form) -->
+    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+        @csrf
+        <button type="submit" class="logout-btn">Sign Out</button>
+    </form>
+</div>
+
 </div>
 
 <style>
