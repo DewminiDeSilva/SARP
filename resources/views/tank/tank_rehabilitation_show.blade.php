@@ -76,7 +76,7 @@
             border: 1px solid #dee2e6;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             border-radius: 10px;
-            background-color: #C1FFAC;
+            background-color:rgb(119, 213, 130);
         }
 
         .card-body {
@@ -336,10 +336,23 @@
                                     <label>Agency:</label>
                                     <p>{{$tankRehabilitation->agency}}</p>
                                 </div>
+                            </div>
+                            </div>
+
+                            <div class="tank-section my-4 custom-frame">
+
+                            <div class="tank-details">
                                 <div class="info">
                                     <label>No. of Families:</label>
                                     <p>{{$tankRehabilitation->no_of_family}}</p>
                                 </div>
+
+                            </div>
+                            </div>
+
+                            <div class="tank-section my-4 custom-frame">
+                            <div class="tank-details">
+
                                 <div class="info">
                                     <label>Longitude:</label>
                                     <p>{{$tankRehabilitation->longitude}}</p>
@@ -357,10 +370,14 @@
                                         </a>
                                     </p>
                                 </div>
+                            </div>
+                            </div>
                                 <!-- <div class="info">
                                     <label>Progress:</label>
                                     <p>{{$tankRehabilitation->progress}}</p>
                                 </div> -->
+                            <div class="tank-section my-4 custom-frame">
+                            <div class="tank-details">
                                 <div class="info">
                                     <label>Contractor:</label>
                                     <p>{{$tankRehabilitation->contractor}}</p>
@@ -398,6 +415,10 @@
 
 
 </div>
+</div>
+                            </div>
+
+
                                 <!-- Add two horizontal cards below Remarks -->
                                 <div class="row mt-4">
                                     <div class="col-md-6">
@@ -422,7 +443,8 @@
                                 </div>
                                 <!-- Add more tank details here if needed -->
 
-
+                <div class="tank-section my-4 custom-frame">
+                    <div class="tank-details">
                         <!-- Image fields -->
                         <div class="construction-images">
 
@@ -457,6 +479,8 @@
                         @endif
                     </div>
                 </div>
+                </div>
+                                </div>
             </div>
         </div>
     </div>
