@@ -15,10 +15,11 @@
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
         }
-        .container {
-            max-width: 900px;
+        .container-fluid {
+            max-width: 1000px;
             margin: auto;
             padding-top: 7px;
+            margin-bottom: 10px;
         }
         .tank-section {
             background-color: #F0F0F0;
@@ -113,7 +114,8 @@
             /*align-items: center;*/
             justify-content: center;
             margin: 20px auto; /* Center horizontally and add vertical margin */
-            max-width: 800px; /* Optional: set a maximum width */
+            max-width: 1000px; /* Optional: set a maximum width */
+
         }
 
         .header-row {
@@ -287,7 +289,7 @@
         <h2 class="header-title" style="color: green;">Tank Details View</h2>
         </div>
 
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <!-- Tank Details Section -->

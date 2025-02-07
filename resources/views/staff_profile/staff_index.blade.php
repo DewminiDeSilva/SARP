@@ -547,9 +547,7 @@
                     <div>
                         Showing {{ $staffProfiles->firstItem() }} to {{ $staffProfiles->lastItem() }} of {{ $staffProfiles->total() }} entries
                     </div>
-                    <div>
-                        {{ $staffProfiles->links() }}
-                    </div>
+                    
                 </div>
             </div>
         </div>
