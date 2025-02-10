@@ -102,12 +102,12 @@
 }
 
 
-        .button-container {
+.button-container {
             display: flex;
             gap: 10px;
         }
 
-        .custom-button {
+.custom-button {
             background-color: white;
             color: red;
             border: 2px solid transparent;
@@ -122,12 +122,12 @@
             background-color: #f5c6cb;
         }
 
-        .custom-button:hover {
+.custom-button:hover {
             border-color: red;
             background-color: #f5c6cb;
         }
 
-        .edit-button {
+.edit-button {
             background-color: white;
             color: orange;
             border: 2px solid transparent;
@@ -141,12 +141,12 @@
             background-color: #ffeeba;
         }
 
-        .edit-button:hover {
+.edit-button:hover {
             border-color: orange;
             background-color: #ffeeba;
         }
 
-        .view-button {
+.view-button {
             background-color: white;
             color: orange;
             border: 2px solid transparent;
@@ -160,58 +160,58 @@
             background-color: #60C267;
         }
 
-        .view-button:hover {
+.view-button:hover {
             border-color: green;
             background-color: #60C267;
         }
 
         /* Pagination CSS */
-        .pagination .page-item {
+.pagination .page-item {
             margin: 0px;
         }
 
-        .pagination .page-link {
+.pagination .page-link {
             padding: 5px 10px;
         }
 
-        .page-item {
+.page-item {
             background-color: white;
             padding: 0px;
         }
 
-        .pagination:hover {
+.pagination:hover {
             border-color: #fff;
             background-color: #fff;
         }
 
-        .page-item:hover {
+.page-item:hover {
             border-color: #fff;
             background-color: #fff;
             cursor: pointer;
         }
 
-        .page-link {
+.page-link {
             color: #28a745;
         }
 
-        .page-item.active .page-link {
+.page-item.active .page-link {
             z-index: 3;
             color: #fff;
             background-color: #126926;
             border-color: #126926;
         }
 
-        .pagination-container {
+.pagination-container {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
 
-        .pagination-container nav {
+.pagination-container nav {
             margin-bottom: 10px;
         }
 
-        #tableInfo {
+#tableInfo {
             text-align: center;
             width: 100%;
         }
@@ -416,7 +416,6 @@
 
 </style>
 
-
 </head>
 <body>
 @include('dashboard.header')
@@ -428,18 +427,22 @@
 
     <div class="right-column">
 
+    <div class="d-flex align-items-center mb-3">
 
-    <!-- <div class="d-flex align-items-center mb-3">
+	<!-- Sidebar Toggle Button -->
 
+    <!-- <button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button> -->
+	
+	<a href="{{ route('infrastructure.index') }}" class="btn-back">
+		<img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+	</a>
+
+</div>
+
+   
     
-    <button id="sidebarToggle" class="btn btn-secondary mr-2">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <a href="{{ route('agro.index') }}" class="btn-back">
-            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
-</div> -->
 
     <div class="container-fluid">
     <div class="row mt-4">

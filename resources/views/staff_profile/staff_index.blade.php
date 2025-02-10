@@ -340,7 +340,7 @@
 
 	<!-- Back Button -->
 
-    <a href="{{ route('dashboard') }}" class="btn-back">
+    <a href="{{ route('staff_profile.index') }}" class="btn-back">
         <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
 
