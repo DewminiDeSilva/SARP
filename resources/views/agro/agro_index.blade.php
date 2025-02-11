@@ -63,69 +63,71 @@
             justify-content: space-between;
             width: 100%;
         }
+
         .right-column {
             flex: 0 0 80%;
             padding: 20px;
         }
+
         .left-column {
             flex: 0 0 20%;
             border-right: 1px solid #dee2e6;
         }
         .submitbtton {
             color: #fff;
-    background-color: #198754;
-    border-color: #198754;
-    padding: 6px 12px; /* Adjust padding for balanced look */
-    font-size: 16px; /* Font size adjustment */
-    height: 38px; /* Match height with input field */
-}
-
-
-.submitbtton:hover,
-.submitbtton:active {
-    background-color: #145c32;
-    border-color: #145c32;
-}
-
-.container-fluid h2 {
-    color: green;
-}
-
-.card {
-    border: 1px solid #dee2e6;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.card-title {
-    font-size: 2rem;
-    color: #333;
-}
-
-
-.button-container {
-            display: flex;
-            gap: 10px;
+            background-color: #198754;
+            border-color: #198754;
+            padding: 6px 12px; /* Adjust padding for balanced look */
+            font-size: 16px; /* Font size adjustment */
+            height: 38px; /* Match height with input field */
         }
 
-.custom-button {
-            background-color: white;
-            color: red;
-            border: 2px solid transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            transition: border 0.3s ease;
-            width: 60px;
-            height: 40px;
-            box-sizing: border-box;
-            background-color: #f5c6cb;
+
+        .submitbtton:hover,
+        .submitbtton:active {
+            background-color: #145c32;
+            border-color: #145c32;
         }
 
-.custom-button:hover {
-            border-color: red;
-            background-color: #f5c6cb;
+        .container-fluid h2 {
+            color: green;
         }
+
+        .card {
+            border: 1px solid #dee2e6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 2rem;
+            color: #333;
+        }
+
+
+        .button-container {
+                    display: flex;
+                    gap: 10px;
+                }
+
+        .custom-button {
+                    background-color: white;
+                    color: red;
+                    border: 2px solid transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px;
+                    transition: border 0.3s ease;
+                    width: 60px;
+                    height: 40px;
+                    box-sizing: border-box;
+                    background-color: #f5c6cb;
+                }
+
+        .custom-button:hover {
+                    border-color: red;
+                    background-color: #f5c6cb;
+                }
 
 .edit-button {
             background-color: white;
@@ -393,6 +395,7 @@
         transform: translateX(-100%); /* Move sidebar out of view */
     }
 
+    /* Update the CSS for the sidebar toggle button */
     #sidebarToggle {
         background-color: #126926; /* Match the back button color */
         color: white;
@@ -400,6 +403,8 @@
         padding: 10px;
         border-radius: 5px;
         cursor: pointer;
+        width: auto; /* Ensure the button width is auto */
+        display: inline-block; /* Ensure the button doesn't take full width */
     }
 
     #sidebarToggle:hover {
@@ -427,22 +432,22 @@
 
     <div class="right-column">
 
-    <div class="d-flex align-items-center mb-3">
+        <div class="d-flex align-items-center mb-3">
 
-	<!-- Sidebar Toggle Button -->
+            <!-- Sidebar Toggle Button -->
 
-    <!-- <button id="sidebarToggle" class="btn btn-secondary mr-2">
-		<i class="fas fa-bars"></i>
-	</button> -->
-	
-	<a href="{{ route('infrastructure.index') }}" class="btn-back">
-		<img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-	</a>
+            <button id="sidebarToggle" class="btn btn-secondary mr-2">
+                <i class="fas fa-bars"></i>
+            </button>
 
-</div>
+            <a href="{{ route('infrastructure.index') }}" class="btn-back">
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            </a>
 
-   
-    
+        </div>
+
+
+
 
     <div class="container-fluid">
     <div class="row mt-4">
