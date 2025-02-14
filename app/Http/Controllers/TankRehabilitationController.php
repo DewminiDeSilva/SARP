@@ -414,7 +414,7 @@ public function uploadCsv(Request $request)
         $cumulative_amount = (float) $cumulative_amount;
 
         if ($cumulative_amount > 0) {
-            return ($cumulative_amount / $payment) * 100;
+            return round(($cumulative_amount / $payment) * 100, 0);
         }
         return 0;
     }
