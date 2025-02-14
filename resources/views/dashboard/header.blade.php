@@ -52,7 +52,10 @@
         <h1>Management Information System</h1>
     </div>
     <div class="profile">
-        <img src="{{ asset('assets/images/LinkedIn_Profile_Photo.jpg') }}" alt="Profile">
+    <img src="{{ Auth::user()->profile_image }}" alt="Profile Image" class="profile-img">
+        <!-- <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('assets/images/default_profile.png') }}"
+             alt="Profile Image"
+             class="profile-img"> -->
         <span id="profile-trigger">{{ Auth::user()->name }}<i class="arrow"></i></span>
 
 
@@ -144,21 +147,22 @@
 
 
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const profileMenu = document.getElementById("profile-dropdown");
-            const profileTrigger = document.getElementById("profile-trigger");
+    document.addEventListener("DOMContentLoaded", function () {
+        const profileMenu = document.getElementById("profile-dropdown");
+        const profileTrigger = document.getElementById("profile-trigger");
 
-            profileTrigger.addEventListener("click", function () {
-                profileMenu.classList.toggle("show");
-            });
-
-            document.addEventListener("click", function (event) {
-                if (!profileTrigger.contains(event.target) && !profileMenu.contains(event.target)) {
-                    profileMenu.classList.remove("show");
-                }
-            });
+        profileTrigger.addEventListener("click", function () {
+            profileMenu.classList.toggle("show");
         });
-    </script>
+
+        document.addEventListener("click", function (event) {
+            if (!profileTrigger.contains(event.target) && !profileMenu.contains(event.target)) {
+                profileMenu.classList.remove("show");
+            }
+        });
+    });
+</script>
+
 
     <style>
         .fixed-header .profile img {

@@ -10,33 +10,18 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role', // Added to allow mass assignment
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -46,18 +31,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user has the 'admin' role.
+     * Relationship with StaffProfile.
+     * Assumes 'email' in users matches 'email_address' in staff_profiles.
      */
-    public function isAdmin(): bool
+    public function staffProfile()
     {
-        return $this->role === 'admin';
+        return $this->hasOne(StaffProfile::class, 'email_address', 'email');
     }
 
     /**
-     * Check if the user has the 'user' role.
+     * Get the user's profile image.
      */
-    public function isUser(): bool
+    public function getProfileImageAttribute()
     {
-        return $this->role === 'user';
+        return $this->staffProfile && $this->staffProfile->photo
+            ? asset('storage/' . $this->staffProfile->photo)
+            : asset('assets/images/default_profile.png');
     }
 }
