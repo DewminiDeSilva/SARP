@@ -12,9 +12,9 @@ class GalleryController extends Controller
     {
         $albums = [
             'Kurunegala' => ['key' => 'kurunegala', 'image' => 'assets/images/kurunegala.jpg'],
-            'Vawniya' => ['key' => 'vawniya', 'image' => 'assets/images/vawniya.jpg'],
+            'Vavuniya' => ['key' => 'vawniya', 'image' => 'assets/images/vawniya.jpg'],
             'Mannar' => ['key' => 'mannar', 'image' => 'assets/images/mannar.jpg'],
-            'Mathale' => ['key' => 'mathale', 'image' => 'assets/images/mathale.jpg'],
+            'Matale' => ['key' => 'mathale', 'image' => 'assets/images/mathale.jpg'],
             'Anuradhapura' => ['key' => 'anuradhapura', 'image' => 'assets/images/anuradhapura.jpg'],
             'Puttalam' => ['key' => 'puttalam', 'image' => 'assets/images/puttalam.jpg'],
             'Special Events' => ['key' => 'special_events', 'image' => 'assets/images/special_events.jpg'],
