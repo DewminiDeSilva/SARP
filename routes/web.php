@@ -52,6 +52,7 @@ use App\Models\FarmerOrganization;
 use App\Models\Nutrition;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
+use App\Http\Controllers\AWPBController;
 
 
 
@@ -295,7 +296,7 @@ Route::middleware(['auth'])->group(function () {
     ->name('livestocks.edit');
 
     Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
-    
+
 
 
     //add agriculture routes
@@ -449,6 +450,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bene', function () {
         return view('bene_form.bene');
     });
+
+    //AWPB
+
+    Route::get('/awpb', [AWPBController::class, 'index'])->name('awpb.index');
+    Route::get('/awpb/create', [AWPBController::class, 'create'])->name('awpb.create');
+    Route::post('/awpb/store', [AWPBController::class, 'store'])->name('awpb.store');
+    Route::get('/awpb/show/{year}', [AWPBController::class, 'show'])->name('awpb.show');
+    Route::get('/awpb/download/{id}', [AWPBController::class, 'download'])->name('awpb.download');
 
 
 
