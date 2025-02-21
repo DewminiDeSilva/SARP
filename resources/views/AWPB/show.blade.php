@@ -168,26 +168,71 @@
             <h2 class="header-title" style="color: green;">List of AWPB {{ $year }}</h2>
         </div>
 
-        <div class="list-group mt-4">
-            @foreach($files as $file)
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <span><i class="fas fa-file-excel"></i> Version {{ $file->version }}</span>
-                    <div>
-                        <!-- Download Button -->
-                        <a href="{{ route('awpb.download', $file->id) }}" class="btn btn-success btn-sm">
-                            <i class="fas fa-download"></i> Download
-                        </a>
+        <!-- Table for Uploaded Files -->
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered">
+                <thead class="table-success">
+                    <tr>
+                        <th>Uploaded File</th>
+                        <th>Upload Date</th>
+                        <th>Download</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($files as $file)
+                        <tr>
+                            <td><strong>Version {{ $file->version }}</strong></td>
+                            <td>{{ $file->created_at->format('Y-m-d') }}</td>
+                            <td>
+                            <a href="{{ route('awpb.download', $file->id) }}" class="btn btn-success btn-sm">
+                                    Download
+                                </a>
+                            </td>
+                            </td>
+                            <td>
+                                <a href="https://view.officeapps.live.com/op/view.aspx?src={{ urlencode(asset('storage/' . $file->file_path)) }}"
+                                target="_blank"
+                                class="btn btn-primary btn-sm">
+                                View
+                                </a>
+                            </td>
 
-                        <!-- View Button -->
-                        <!-- <button class="btn btn-primary btn-sm view-file-btn"
-                            data-file="{{ asset('storage/' . $file->file_path) }}"
-                            data-version="Version {{ $file->version }}">
-                            <i class="fas fa-eye"></i> View
-                        </button> -->
-                    </div>
-                </div>
-            @endforeach
+
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+
+
+        @if(isset($metadata[$file->id]))
+            <table class="metadata-table">
+                <tr>
+                    <th>File Name</th>
+                    <td>{{ $metadata[$file->id]['file_name'] }}</td>
+                </tr>
+                <tr>
+                    <th>File Size</th>
+                    <td>{{ $metadata[$file->id]['file_size'] }}</td>
+                </tr>
+                <tr>
+                    <th>Total Sheets</th>
+                    <td>{{ $metadata[$file->id]['total_sheets'] }}</td>
+                </tr>
+                <tr>
+                    <th>Sheet Names</th>
+                    <td>{{ implode(', ', $metadata[$file->id]['sheet_names']) }}</td>
+                </tr>
+                <tr>
+                    <th>First 5 Rows (Sheet 1)</th>
+                    <td>
+                        <pre>{{ json_encode($metadata[$file->id]['preview_rows'], JSON_PRETTY_PRINT) }}</pre>
+                    </td>
+                </tr>
+            </table>
+        @endif
+
 
         <!-- Frame to display the selected Excel version -->
         <div class="text-center">
@@ -203,17 +248,16 @@
             var fileUrl = $(this).data('file');
             var versionTitle = $(this).data('version');
 
-            // Convert file path for Google Docs Viewer
             var encodedUrl = encodeURIComponent(fileUrl);
             var viewerUrl = "https://docs.google.com/gview?url=" + encodedUrl + "&embedded=true";
 
-            // Show the file in the iframe
             $('#file-viewer').attr('src', viewerUrl);
             $('#iframe-title').text(versionTitle).show();
             $('#file-viewer').show();
         });
     });
 </script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
