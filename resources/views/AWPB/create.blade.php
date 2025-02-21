@@ -195,10 +195,10 @@
                 </div>
 
                 <!-- Version Field (Auto-Generated) -->
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Version</label>
                     <input type="number" id="versionInput" name="version" class="form-control" readonly>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <label>Upload File (.xlsx)</label>

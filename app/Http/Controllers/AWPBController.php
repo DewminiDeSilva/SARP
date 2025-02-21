@@ -49,8 +49,19 @@ class AWPBController extends Controller
     }
 
     public function download($id)
-    {
-        $file = AWPBFile::findOrFail($id);
-        return Storage::download($file->file_path);
+{
+    $file = AWPBFile::findOrFail($id);
+
+    // Define the renamed file name format
+    $newFileName = "AWPB_{$file->year}_Version_{$file->version}.xlsx";
+
+    // Ensure file exists in storage
+    if (!Storage::exists($file->file_path)) {
+        return redirect()->back()->with('error', 'File not found.');
     }
+
+    // Return response for downloading with a new filename
+    return Storage::download($file->file_path, $newFileName);
+}
+
 }
