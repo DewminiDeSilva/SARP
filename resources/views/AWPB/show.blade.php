@@ -165,7 +165,7 @@
     </div>
 
         <div class="col-md-12 text-center">
-            <h2 class="header-title" style="color: green;">AWPB Files for {{ $year }}</h2>
+            <h2 class="header-title" style="color: green;">List of AWPB {{ $year }}</h2>
         </div>
 
         <div class="list-group mt-4">
