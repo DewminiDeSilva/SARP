@@ -87,7 +87,7 @@ li:hover {
             <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
             <li><a href="/staff_profile" style="color: #FFFFFF">Staff Profile</a></li>
             <li><a href="/gallery" style="color: #FFFFFF">Gallery</a></li>
-            <li><a href="/awpb" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
+
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Beneficiary</a>
                 <ul class="nested">
@@ -194,6 +194,17 @@ li:hover {
 
                 </ul>
             </li>
+
+            <li class="submenu">
+                <a href="#" style="color: #FFFFFF">Project Documents</a>
+                <ul class="nested">
+                    <li href="/awpb"><a href="/awpb" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
+                    <li href="/costtab"><a href="/costtab" style="color: #FFFFFF">Cost TAB</a></li>
+                    <li href="/projectdesignreport"><a href="/projectdesignreport" style="color: #FFFFFF">Project Design Report</a></li>
+                </ul>
+
+            </li>
+
 
         </ul>
     </div>
