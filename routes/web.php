@@ -54,6 +54,7 @@ use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\AWPBController;
 use App\Http\Controllers\CostTabController;
+use App\Http\Controllers\ProjectDesignReportController;
 
 
 
@@ -468,6 +469,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/show/{id}', [CostTabController::class, 'show'])->name('costtab.show');
         Route::get('/download/{id}', [CostTabController::class, 'download'])->name('costtab.download');
     });
+
+
+    //Project Design Report
+    Route::prefix('projectdesignreport')->group(function () {
+        Route::get('/', [ProjectDesignReportController::class, 'index'])->name('projectdesignreport.index');
+        Route::get('/create', [ProjectDesignReportController::class, 'create'])->name('projectdesignreport.create');
+        Route::post('/store', [ProjectDesignReportController::class, 'store'])->name('projectdesignreport.store');
+        Route::get('/show/{id}', [ProjectDesignReportController::class, 'show'])->name('projectdesignreport.show');
+        Route::get('/download/{id}', [ProjectDesignReportController::class, 'download'])->name('projectdesignreport.download');
+    });
+
 
     //nrm training
 

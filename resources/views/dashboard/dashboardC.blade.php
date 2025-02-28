@@ -198,11 +198,11 @@ li:hover {
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Project Documents</a>
                 <ul class="nested">
-                    <li href="/awpb"><a href="/nutrition" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
-                    <li href="/costtab"><a href="/nutrition" style="color: #FFFFFF">Cost TAB</a></li>
-                    <li href="/awpb"><a href="/nutrition" style="color: #FFFFFF">Project Design Report</a></li>
+                    <li href="/awpb"><a href="/awpb" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
+                    <li href="/costtab"><a href="/costtab" style="color: #FFFFFF">Cost TAB</a></li>
+                    <li href="/projectdesignreport"><a href="/projectdesignreport" style="color: #FFFFFF">Project Design Report</a></li>
                 </ul>
-                
+
             </li>
 
 
