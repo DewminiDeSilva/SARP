@@ -308,10 +308,16 @@
                     <!-- CSV Upload Form -->
                     <form action="{{ route('tank_rehabilitation.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
+                        <button id="deleteSelectedBtn" class="btn btn-danger">
+                            Delete Selected
+                        </button>
                         <div class="form-group mr-2">
                             <input type="file" name="csv_file" class="form-control" required>
                         </div>
+                       
                         <button type="submit" class="btn btn-success">Upload CSV</button>
+                        
+                        
                     </form>
                     <!-- Search form -->
                     <form method="GET" action="{{ route('searchTank') }}" class="form-inline">
@@ -355,6 +361,9 @@
                         <table class="table table-bordered">
                             <thead class="thead-light">
                                 <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                    </th>
                                     <th>Tank Id</th>
                                     <th>Tank Name</th>
                                     <th>River Basin</th>
@@ -388,6 +397,10 @@
                             <tbody>
                                 @foreach ($tankRehabilitations as $tankRehabilitation)
                                 <tr>
+                                    <td>
+                                        <input type="checkbox" class="record-checkbox" name="selected_ids[]" value="{{ $tankRehabilitation->id }}">
+                                    </td>
+                                    
                                     <td>{{ $tankRehabilitation->tank_id }}</td>
                                     <td>{{ $tankRehabilitation->tank_name }}</td>
                                     <td>{{ $tankRehabilitation->river_basin }}</td>
@@ -585,6 +598,48 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+        // Select all checkboxes
+        $('#selectAll').click(function () {
+            $('.record-checkbox').prop('checked', this.checked);
+        });
+
+        // Handle bulk delete action
+        $('#deleteSelectedBtn').click(function () {
+            let selectedIds = [];
+            $('.record-checkbox:checked').each(function () {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length === 0) {
+                alert('No records selected.');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete selected records?')) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route("tank_rehabilitation.bulk_delete") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    ids: selectedIds
+                },
+                success: function (response) {
+                    alert(response.success);
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('Error deleting records.');
+                }
+            });
+        });
+    });
+</script>
+
 
 
 
