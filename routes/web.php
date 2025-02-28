@@ -53,6 +53,7 @@ use App\Models\Nutrition;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\AWPBController;
+use App\Http\Controllers\CostTabController;
 
 
 
@@ -459,8 +460,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/awpb/show/{year}', [AWPBController::class, 'show'])->name('awpb.show');
     Route::get('/awpb/download/{id}', [AWPBController::class, 'download'])->name('awpb.download');
 
-
-
+    //Cost Tab
+    Route::prefix('costtab')->group(function () {
+        Route::get('/', [CostTabController::class, 'index'])->name('costtab.index');
+        Route::get('/create', [CostTabController::class, 'create'])->name('costtab.create');
+        Route::post('/store', [CostTabController::class, 'store'])->name('costtab.store');
+        Route::get('/show/{id}', [CostTabController::class, 'show'])->name('costtab.show');
+        Route::get('/download/{id}', [CostTabController::class, 'download'])->name('costtab.download');
+    });
 
     //nrm training
 
