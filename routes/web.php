@@ -141,6 +141,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/searchTank', [TankRehabilitationController::class, 'search'])->name('searchTank');
     Route::get('reportCsv', [TankRehabilitationController::class, 'reportCsv'])->name('downloadtank.csv');
     Route::post('/tank_rehabilitation/upload-csv', [TankRehabilitationController::class, 'uploadCsv'])->name('tank_rehabilitation.upload_csv');
+    Route::post('/tank_rehabilitation/bulk-delete', [TankRehabilitationController::class, 'bulkDelete'])
+    ->name('tank_rehabilitation.bulk_delete');
 
     // Training and Participants
     Route::resource('training', TrainingController::class);

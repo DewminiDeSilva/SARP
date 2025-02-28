@@ -418,7 +418,20 @@ public function uploadCsv(Request $request)
         }
         return 0;
     }
-
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+    
+        if (empty($ids)) {
+            return response()->json(['error' => 'No records selected.'], 400);
+        }
+    
+        // Delete selected records
+        TankRehabilitation::whereIn('id', $ids)->delete();
+    
+        return response()->json(['success' => 'Selected records deleted successfully.']);
+    }
+    
 
 
 
