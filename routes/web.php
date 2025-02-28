@@ -457,6 +457,15 @@ Route::middleware(['auth'])->group(function () {
 
     //AWPB
 
+    // Route::get('/awpb', [AWPBController::class, 'index'])->name('awpb.index');
+    // Route::get('/awpb/create', [AWPBController::class, 'create'])->name('awpb.create');
+    // Route::post('/awpb/store', [AWPBController::class, 'store'])->name('awpb.store');
+    // Route::get('/awpb/show/{year}', [AWPBController::class, 'show'])->name('awpb.show');
+    // Route::get('/awpb/download/{id}', [AWPBController::class, 'download'])->name('awpb.download');
+
+
+    //AWPB
+
     Route::get('/awpb', [AWPBController::class, 'index'])->name('awpb.index');
     Route::get('/awpb/create', [AWPBController::class, 'create'])->name('awpb.create');
     Route::post('/awpb/store', [AWPBController::class, 'store'])->name('awpb.store');
