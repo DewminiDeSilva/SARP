@@ -559,8 +559,8 @@
                             <th scope="col">NIC</th>
                             <th scope="col">Name with Initials</th>
                             <th scope="col">Gender</th>
-                            <th scope="col">Date Of Birth</th>
-                            <th scope="col">Age</th>
+                            <!-- <th scope="col">Date Of Birth</th> -->
+                            <!-- <th scope="col">Age</th> -->
                             <th scope="col">Address</th>
                             <th scope="col">Phone</th>
                             <th scope="col">Crop Name/Production Focus
@@ -601,8 +601,8 @@
                             <td>{{ $beneficiary->nic }}</td>
                             <td>{{ $beneficiary->name_with_initials }}</td>
                             <td>{{ $beneficiary->gender }}</td>
-                            <td>{{ $beneficiary->dob }}</td>
-                            <td>{{ $beneficiary->age }}</td>
+                            <!-- <td>{{ $beneficiary->dob }}</td> -->
+                            <!-- <td>{{ $beneficiary->age }}</td> -->
                             <td>{{ $beneficiary->address }}</td>
                             <td>{{ $beneficiary->phone }}</td>
                             <td>{{ $beneficiary->input3 }}</td>
