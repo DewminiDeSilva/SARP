@@ -539,11 +539,12 @@ td {
     </br>
 
 
-
+ 
 
         <!--serch and csv files-->
 
         <div class="d-flex justify-content-between mb-3">
+        <a href="{{ route('cdf.create') }}" class="btn submitbtton"> + Add New </button>
                     <!--<a href="{{route('cdf.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add</a>-->
                     <a href="{{route('downloadcdf.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
                 </div>
