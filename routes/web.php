@@ -252,8 +252,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/agriculture/{id}/edit', [AgriController::class, 'edit'])->name('agriculture.edit');
     Route::delete('/agriculture/{id}', [AgriController::class, 'destroy'])->name('agriculture.destroy');
     Route::put('/agriculture/{id}', [AgriController::class, 'update'])->name('agriculture.update');
-    Route::get('/agriculture/search', [AgriController::class, 'search'])->name('agriculture.search');
+    // Route::get('/agriculture/search', [AgriController::class, 'search'])->name('agriculture.search');
     Route::get('/get-crops/{category}', [AgriController::class, 'getCropsByCategory']);
+    Route::get('/agriculture', [AgriController::class, 'index'])->name('agriculture.index');
 
 
     // Route::resource('livestocks', LivestockController::class);
@@ -586,7 +587,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
     Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
     Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
-    Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.index');
+   //Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.index');
     Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock.index');
+    Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.data.index');
 
 });

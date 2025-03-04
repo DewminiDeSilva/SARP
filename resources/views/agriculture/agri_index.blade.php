@@ -348,15 +348,7 @@
 
         <div class="container-fluid">
 
-            <!-- Search form -->
-            <form method="GET" action="{{ route('agriculture.search') }}" class="form-inline">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search" name="search">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
+          
 
             <!-- Success Message Popup -->
             @if(session('success'))
@@ -382,8 +374,15 @@
 
             </div>
 
-
-
+            <form method="GET" action="{{ route('agriculture.index') }}" class="form-inline">
+            <input type="text" name="search" class="form-control form-control-sm" 
+            value="{{ request('search') }}" style="width: 250px;">
+           <button type="submit" class="btn btn-success btn-sm ml-2">Search</button>
+           @if(request('search'))
+               <a href="{{ route('agriculture.index') }}" class="btn btn-secondary btn-sm ml-2">Clear</a>
+            @endif
+             </form>
+            <br>
             <!-- Beneficiaries Table -->
             <div class="row table-container">
                 <div class="col">
