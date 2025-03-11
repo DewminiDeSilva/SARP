@@ -442,8 +442,8 @@
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                     </a>
 
-                                    <a href="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" class="btn btn-danger edit-button" title="Edit">
-                                        <img src="{{ asset('assets/images/edit2.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
+                                    <a href="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" class="btn btn-danger edit-button" title="Update">
+                                        <img src="{{ asset('assets/images/update.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                     </a>
                                     <form action="/tank_rehabilitation/{{ $tankRehabilitation->id }}" method="POST">
                                      @csrf

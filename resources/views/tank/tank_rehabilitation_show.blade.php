@@ -407,8 +407,8 @@
                                 <!-- New fields -->
                         <div class="info"><label>Open Reference Number:</label><p>{{ $tankRehabilitation->open_ref_no }}</p></div>
                         <div class="info"><label>Awarded Date:</label><p>{{ $tankRehabilitation->awarded_date }}</p></div>
-                        <div class="info"><label>Cumulative Paid Amount:</label><p>{{ $tankRehabilitation->cumulative_amount }}</p></div>
-                        <div class="info"><label>Paid Advanced Amount:</label><p>{{ $tankRehabilitation->paid_advanced_amount }}</p></div>
+                        <div class="info"><label>Cumulative Paid Amount:</label><p>Rs. {{ $tankRehabilitation->cumulative_amount }}</p></div>
+                        <div class="info"><label>Paid Advanced Amount:</label><p>Rs. {{ $tankRehabilitation->paid_advanced_amount }}</p></div>
                         <div class="info"><label>Recommended IPC Number:</label><p>{{ $tankRehabilitation->recommended_ipc_no }}</p></div>
                         <div class="info"><label>Recommended IPC Amount:</label><p>{{ $tankRehabilitation->recommended_ipc_amount }}</p></div>
 
@@ -435,7 +435,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">Finance Progress as at</br> <span id="currentDate2"></span></h5>
 
-                                                <p class="card-text">Paid Amount: {{$tankRehabilitation->payment}}</p>
+                                                <p class="card-text">Paid Amount: Rs. {{$tankRehabilitation->payment}}</p>
                                                 <p class="card-text">Percentage: {{$percentage}}%</p>
                                             </div>
                                         </div>
