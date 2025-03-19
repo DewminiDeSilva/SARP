@@ -275,7 +275,7 @@
                                     <option value="Identified">Identified</option>
                                     <option value="Started">Started</option>
                                     <option value="On Going">On Going</option>
-                                    <option value="Finished">Finished</option>
+                                    <option value="Completed">Completed</option>
                                     <option value="PIR Completed">PIR Completed</option>
                                     <option value="Survey Completed">Survey Completed</option>
                                     <option value="Engineering Serveys">Engineering Serveys</option>

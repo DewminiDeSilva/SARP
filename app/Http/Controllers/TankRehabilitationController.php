@@ -20,7 +20,7 @@ class TankRehabilitationController extends Controller
         $tankRehabilitations = TankRehabilitation::latest()->paginate($entries)->appends(['entries' => $entries]);
         $totalTanks = TankRehabilitation::count();
         $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
-        $completedCount = TankRehabilitation::where('status', 'Finished')->count();
+        $completedCount = TankRehabilitation::where('status', 'Completed')->count();
 
         
         $tankLocations = TankRehabilitation::select('tank_id', 'tank_name', 'latitude', 'longitude', 'progress', 'status')->get();
@@ -323,7 +323,7 @@ public function reportCsv()
     // Add the counts for ongoing and completed rehabilitations
     $totalTanks = TankRehabilitation::count();
     $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
-    $completedCount = TankRehabilitation::where('status', 'Finished')->count();
+    $completedCount = TankRehabilitation::where('status', 'Completed')->count();
 
     $tankLocations = TankRehabilitation::select('tank_name', 'latitude', 'longitude')->get();
 
