@@ -437,11 +437,10 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">Finance Progress as at</br> <span id="currentDate2"></span></h5>
 
-<<<<<<< HEAD
-                                                <p class="card-text">Paid Amount: {{number_format($tankRehabilitation->payment, 2)}}</p>
-=======
-                                                <p class="card-text">Paid Amount: Rs. {{$tankRehabilitation->payment}}</p>
->>>>>>> 338b082cd68c52ecf3342bdb047aac2e31b3271b
+
+                                                <p class="card-text">Paid Amount: Rs.{{number_format($tankRehabilitation->payment, 2)}}</p>
+
+
                                                 <p class="card-text">Percentage: {{$percentage}}%</p>
                                             </div>
                                         </div>
