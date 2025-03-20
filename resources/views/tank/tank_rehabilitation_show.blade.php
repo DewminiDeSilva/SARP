@@ -384,16 +384,23 @@
                                 </div>
                                 <div class="info">
                                     <label>Total Contract Value:</label>
-                                    <p>{{ number_format($tankRehabilitation->payment, 2) }}</p>
+                                    <p>
+                                        {{ is_numeric($tankRehabilitation->payment) ? number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}
+                                    </p>
+                                    
                                 </div>
                                 <div class="info">
                                     <label>EOT:</label>
                                     <p>{{$tankRehabilitation->eot}}</p>
                                 </div>
                                 <div class="info">
-                                    <label>Contract Period:</label>
-                                    <p>{{$tankRehabilitation->contract_period}}</p>
+                                    <label>Total Contract Value:</label>
+                                    <p>
+                                        {{ !empty($tankRehabilitation->payment) && is_numeric($tankRehabilitation->payment) ? 
+                                            number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}
+                                    </p>
                                 </div>
+                                
                                 <div class="info">
                                     <label>Status:</label>
                                     <p>{{$tankRehabilitation->status}}</p>
@@ -408,7 +415,7 @@
                         <div class="info"><label>Open Reference Number:</label><p>{{ $tankRehabilitation->open_ref_no }}</p></div>
                         <div class="info"><label>Awarded Date:</label><p>{{ $tankRehabilitation->awarded_date }}</p></div>
 
-                        <div class="info"><label>Cumulative Paid Amount:</label><p>RS.{{ number_format($tankRehabilitation->payment, 2) }}</p></div>
+                        <div class="info"><label>Cumulative Paid Amount:</label><p>RS.{{ !empty($tankRehabilitation->payment) && is_numeric($tankRehabilitation->payment) ? number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}</p></div>
                         <div class="info"><label>Paid Advanced Amount:</label><p>RS.{{ number_format($tankRehabilitation->paid_advanced_amount, 2) }}</p></div>
 
                         <div class="info"><label>Recommended IPC Number:</label><p>{{ $tankRehabilitation->recommended_ipc_no }}</p></div>
@@ -438,8 +445,10 @@
                                                 <h5 class="card-title">Finance Progress as at</br> <span id="currentDate2"></span></h5>
 
 
-                                                <p class="card-text">Paid Amount: Rs.{{number_format($tankRehabilitation->payment, 2)}}</p>
-
+                                                <p class="card-text">Paid Amount: Rs.
+                                                    {{ !empty($tankRehabilitation->payment) && is_numeric($tankRehabilitation->payment) ? number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}
+                                                </p>
+                                               
 
                                                 <p class="card-text">Percentage: {{$percentage}}%</p>
                                             </div>
