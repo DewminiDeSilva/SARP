@@ -276,7 +276,8 @@
             </button>
 
 
-            <a href="{{ route('beneficiary.index') }}" class="btn-back">
+            <a hre
+            +f="{{ route('beneficiary.index') }}" class="btn-back">
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
 
