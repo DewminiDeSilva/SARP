@@ -55,6 +55,7 @@ use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\AWPBController;
 use App\Http\Controllers\CostTabController;
 use App\Http\Controllers\ProjectDesignReportController;
+use App\Http\Controllers\EOIController;
 
 
 
@@ -590,5 +591,15 @@ Route::middleware(['auth'])->group(function () {
    //Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.index');
     Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock.index');
     Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.data.index');
+
+    Route::prefix('expressions')->group(function () {
+        Route::get('/', [EOIController::class, 'index'])->name('expressions.index');
+        Route::get('/create', [EOIController::class, 'create'])->name('expressions.create');
+        Route::post('/', [EOIController::class, 'store'])->name('expressions.store');
+        Route::get('/{id}', [EOIController::class, 'show'])->name('expressions.show');
+        Route::get('/{id}/edit', [EOIController::class, 'edit'])->name('expressions.edit');
+        Route::put('/{id}', [EOIController::class, 'update'])->name('expressions.update');
+        Route::delete('/{id}', [EOIController::class, 'destroy'])->name('expressions.destroy');
+    });
 
 });
