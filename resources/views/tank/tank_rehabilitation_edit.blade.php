@@ -243,7 +243,7 @@
                     <div class="col">
                         <div class="dropdown">
                             <label for="tank">Tank Name</label>
-                            <select class="form-control btn btn-secondary" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;">
+                            <select class="form-control btn btn-secondary" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; " disabled>
                                 <option value="{{ $tankRehabilitation->tank_name }}">{{ $tankRehabilitation->tank_name }}</option>
                             </select>
                         </div>
@@ -252,24 +252,26 @@
                     <div class="col">
                             <div class="dropdown">
                                 <label for="tank">Tank Status</label>
-                                <select class="form-control btn btn-success" name="status" data-bs-toggle="dropdown" aria-expanded="false" required>
+                                <select class="form-control btn btn-success" name="status" required>
                                     <option value="">Tank Status</option>
-                                    <option value="Identified">Identified</option>
-                                    <option value="Started">Started</option>
-                                    <option value="On Going">On Going</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="PIR Completed">PIR Completed</option>
-                                    <option value="Survey Completed">Survey Completed</option>
-                                    <option value="Engineering Serveys">Engineering Serveys</option>
-                                    <option value="Drawings and Designs Completed">Drawings and Designs Completed</option>
-                                    <option value="BOQ Completed">BOQ Completed</option>
-                                    <option value="Ratification meeting completed">Ratification meeting completed</option>
-                                    <option value="Bidding documents completed">Bidding documents completed</option>
-                                    <option value="IFAD no objection received">IFAD no objection received</option>
-                                    <option value="Paper advertised">Paper advertised</option>
-                                    <option value="Evalution of bids">Evalution of bids</option>
-                                    <option value="Agreement Sign">Agreement Sign</option>
+                                    <option value="Identified" {{ $tankRehabilitation->status == 'Identified' ? 'selected' : '' }}>Identified</option>
+                                    <option value="Started" {{ $tankRehabilitation->status == 'Started' ? 'selected' : '' }}>Started</option>
+                                    <option value="On Going" {{ $tankRehabilitation->status == 'On Going' ? 'selected' : '' }}>On Going</option>
+                                    <option value="Completed" {{ $tankRehabilitation->status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="PIR Completed" {{ $tankRehabilitation->status == 'PIR Completed' ? 'selected' : '' }}>PIR Completed</option>
+                                    <option value="Survey Completed" {{ $tankRehabilitation->status == 'Survey Completed' ? 'selected' : '' }}>Survey Completed</option>
+                                    <option value="Engineering Serveys" {{ $tankRehabilitation->status == 'Engineering Serveys' ? 'selected' : '' }}>Engineering Serveys</option>
+                                    <option value="Drawings and Designs Completed" {{ $tankRehabilitation->status == 'Drawings and Designs Completed' ? 'selected' : '' }}>Drawings and Designs Completed</option>
+                                    <option value="BOQ Completed" {{ $tankRehabilitation->status == 'BOQ Completed' ? 'selected' : '' }}>BOQ Completed</option>
+                                    <option value="Ratification meeting completed" {{ $tankRehabilitation->status == 'Ratification meeting completed' ? 'selected' : '' }}>Ratification meeting completed</option>
+                                    <option value="Bidding documents completed" {{ $tankRehabilitation->status == 'Bidding documents completed' ? 'selected' : '' }}>Bidding documents completed</option>
+                                    <option value="IFAD no objection received" {{ $tankRehabilitation->status == 'IFAD no objection received' ? 'selected' : '' }}>IFAD no objection received</option>
+                                    <option value="Paper advertised" {{ $tankRehabilitation->status == 'Paper advertised' ? 'selected' : '' }}>Paper advertised</option>
+                                    <option value="Evalution of bids" {{ $tankRehabilitation->status == 'Evalution of bids' ? 'selected' : '' }}>Evalution of bids</option>
+                                    <option value="Agreement Sign" {{ $tankRehabilitation->status == 'Agreement Sign' ? 'selected' : '' }}>Agreement Sign</option>
                                 </select>
+                                
+                                
                             </div>
                         </div>
                     <div class="col">
