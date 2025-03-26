@@ -41,3 +41,4 @@ class CreateExpressionsOfInterestTable extends Migration
         Schema::dropIfExists('expressions_of_interest');
     }
 }
+////////////////////////////////
