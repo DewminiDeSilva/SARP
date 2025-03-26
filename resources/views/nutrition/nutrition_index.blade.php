@@ -9,6 +9,8 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Custom Styles -->
     <style>
@@ -198,7 +200,7 @@
     display: flex;
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
-    
+
     margin: 0 auto; /* Centers the container */
     width: 100%; /* Full width */
     position: relative; /* Allows positioning adjustments */
@@ -250,29 +252,73 @@
 
     </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
     </div>
     <div class="right-column">
 
-        <a href="{{ route('nutrition.index') }}" class="btn-back">
+    <div class="d-flex align-items-center mb-3">
+
+	<!-- Sidebar Toggle Button -->
+	<button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button>
+
+
+	<a href="{{ route('nutrition.index') }}" class="btn-back">
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
+
+</div>
+
+
 
         <div class="">
             <h2 style="color: green; font-weight: bold; text-align: center;">Nutrition Program List</h2>
 
-           
+
             <div class="container">
                 <div class="justify-content-center">
                     <div class="container mt-4">
                         <div class="d-flex justify-content-center">
-                
+
                             <div class="card text-center" style="width: 18rem; margin-right: 20px;">
                                 <div class="card-header">
                                     Total Nutrition Programs
@@ -291,14 +337,14 @@
                 <h5 class="card-title">{{ number_format($totalCost, 2) }}</h5>
                 <p>Total cost of all nutrition programs.</p>
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </div>
-    
+
         </br>
     </div>
-            
-</div>         
+
+</div>
 
             <!-- Add New Program Button -->
             <div class="d-flex justify-content-between mb-3">
@@ -341,9 +387,9 @@
                     </select>
                     <label for="entriesSelect">entries</label>
                 </div>
-            
+
             </div>
-        
+
 
 
             <!-- Table for displaying Nutrition Program records -->
@@ -484,6 +530,29 @@
         window.location.href = url.href;
     });
    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
+
 
 </body>
 </html>

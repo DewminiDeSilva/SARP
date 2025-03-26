@@ -12,6 +12,11 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- font Noto Sans-->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <style>
     .entries-container {
         display: flex;
@@ -225,18 +230,174 @@
     }
 </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
+<style>
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to bottom,rgb(76, 167, 88), #a8d5ba); /* Vertical gradient */
+            color: black; /* Text color */
+            z-index: 1000; /* Ensures header stays above other elements */
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 20px; /* Adjust this value for more/less curve */
+            border-bottom-right-radius: 20px; /* Adjust this value for more/less curve */
+        }
+
+        /* Logo and Text */
+        .fixed-header .logo-container {
+            display: flex;
+            align-items: center;
+            font-family: 'Noto Sans', sans-serif; /* Apply Noto Sans font */
+            font-size: 1.8rem; /* Adjust the font size */
+            margin: 0;
+            color: black; /* Text color */
+            font-weight: bold; /* Ensure the title stands out */
+            text-align: center;
+        }
+
+        .fixed-header img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .fixed-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: black; /* Header text color */
+        }
+
+        /* Profile Section */
+        .fixed-header .profile {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .fixed-header .profile img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Padding to prevent overlap */
+        .content {
+            margin-top: 80px; /* Adjust based on header height */
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Add space between the logos */
+        }
+
+        .ministry-logo, .ifad-logo, .sharp-logo {
+            height: 50px; /* Ensure all logos are of the same height */
+            max-width: 70px; /* Limit the width to ensure proportions are maintained */
+        }
+
+        /* Custom width for the Ministry logo */
+        .custom-ministry-logo {
+            max-width: 120px; /* Adjust the width as needed */
+        }
+    </style>
+
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
 
 </head>
 <body>
-<div class="frame">
+
+@include('dashboard.header')
+
+
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
     </div>
     <div class="right-column">
+
+    <div class="d-flex align-items-center mb-3">
+
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebarToggle" class="btn btn-secondary mr-2">
+        <i class="fas fa-bars"></i>
+    </button>
+
+
     <a href="{{ route('infrastructure.index') }}" class="btn-back">
-            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
+        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+    </a>
+
+    </div>
         <div class="container-fluid">
             <div class="center-heading text-center">
                 <h1 style="font-size: 2.5rem; color: green;">Infrastructure Details</h1>
@@ -278,7 +439,7 @@
         </div>
     </div>
 </div>
->
+
 
             <div class="right-column">
                 <div class="container-fluid top-left">
@@ -493,11 +654,37 @@
                                     window.location.search = urlParams.toString();
                                 }
                             </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
+
+
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+        
 </div>
 </body>
 </html>

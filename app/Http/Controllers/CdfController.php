@@ -28,7 +28,7 @@ class CDFController extends Controller
      */
     public function create()
     {
-        return view('cdf.cdf_index');
+        return view('cdf.cdf_create');
     }
 
     /**

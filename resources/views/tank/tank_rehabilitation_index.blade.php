@@ -8,6 +8,10 @@
  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
  <!-- Add Bootstrap JS -->
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -15,6 +19,7 @@
  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
  <!-- Font Awesome -->
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
  <style>
     .entries-container {
         display: flex;
@@ -172,19 +177,69 @@
 
 </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
+
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
         </div>
         <div class="right-column">
+
+        <div class="d-flex align-items-center mb-3">
+
+	<!-- Sidebar Toggle Button -->
+	<button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button>
+
+
+	<a href="{{ route('tank_rehabilitation.index') }}" class="btn btn-outline-success mb-3">
+        <i class="fas fa-arrow-left"></i> Back to Tank List
+    </a>
+    
+
+</div>
+
             <div class="container-fluid">
                 <div class="center-heading text-center">
                     <h1 style="font-size: 2.5rem; color: green;">Tank Rehabilitation Details</h1>
                 </div>
-                
+
                 <div class="container">
     <div class="row justify-content-center mt-4">
         <!-- Total Tanks Card -->
@@ -260,10 +315,16 @@
                     <!-- CSV Upload Form -->
                     <form action="{{ route('tank_rehabilitation.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
+                        <button id="deleteSelectedBtn" class="btn btn-danger">
+                            Delete Selected
+                        </button>
                         <div class="form-group mr-2">
                             <input type="file" name="csv_file" class="form-control" required>
                         </div>
+                       
                         <button type="submit" class="btn btn-success">Upload CSV</button>
+                        
+                        
                     </form>
                     <!-- Search form -->
                     <form method="GET" action="{{ route('searchTank') }}" class="form-inline">
@@ -276,14 +337,23 @@
                     </form>
                 </div>
 
+                
                 <!-- Success Message Popup -->
                 @if(session('success'))
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            alert('{{ session('success') }}');
-                        });
-                    </script>
-                @endif
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+            confirmButtonColor: '#28a745'
+        }).then(() => {
+            window.location.href = "{{ route('tank_rehabilitation.index') }}";
+        });
+    });
+</script>
+@endif
+
 
 
 
@@ -307,6 +377,9 @@
                         <table class="table table-bordered">
                             <thead class="thead-light">
                                 <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                    </th>
                                     <th>Tank Id</th>
                                     <th>Tank Name</th>
                                     <th>River Basin</th>
@@ -340,6 +413,10 @@
                             <tbody>
                                 @foreach ($tankRehabilitations as $tankRehabilitation)
                                 <tr>
+                                    <td>
+                                        <input type="checkbox" class="record-checkbox" name="selected_ids[]" value="{{ $tankRehabilitation->id }}">
+                                    </td>
+                                    
                                     <td>{{ $tankRehabilitation->tank_id }}</td>
                                     <td>{{ $tankRehabilitation->tank_name }}</td>
                                     <td>{{ $tankRehabilitation->river_basin }}</td>
@@ -357,10 +434,11 @@
                                     <!-- <td>{{ $tankRehabilitation->contractor }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->open_ref_no }}</td> New field -->
                                     <td>{{ $tankRehabilitation->awarded_date }}</td> <!-- New field -->
-                                    <td>{{ $tankRehabilitation->cumulative_amount }}</td> <!-- New field -->
+                                    <td>RS.{{ !empty($tankRehabilitation->cumulative_amount) && is_numeric($tankRehabilitation->cumulative_amount) ? number_format((float) $tankRehabilitation->cumulative_amount, 2) : 'N/A' }}</td>
                                     <td>{{ $tankRehabilitation->paid_advanced_amount }}</td> <!-- New field -->
                                     <td>{{ $tankRehabilitation->recommended_ipc_no }}</td> <!-- New field -->
-                                    <td>{{ $tankRehabilitation->recommended_ipc_amount }}</td> <!-- New field -->
+                                    <td>{{ number_format($tankRehabilitation->recommended_ipc_amount, 2) }}</td>
+                                    
                                     <!-- <td>{{ $tankRehabilitation->payment }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->eot }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->contract_period }}</td> -->
@@ -381,15 +459,26 @@
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                     </a>
 
-                                    <a href="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" class="btn btn-danger edit-button" title="Edit">
-                                        <img src="{{ asset('assets/images/edit2.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
+                                     
+                                        
+
+                                    <a href="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" title="Update">
+                                        <button type="button" class="btn btn-success update-confirm" data-url="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" style="height: 40px; width: 120px; font-size: 16px;">
+                                            Update
+                                        </button>
                                     </a>
-                                    <form action="/tank_rehabilitation/{{ $tankRehabilitation->id }}" method="POST">
-                                     @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger custom-button" title="Delete">
-                                        <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
-                                    </button>
+
+
+                                    <form class="delete-form d-inline" method="POST" action="{{ route('tank_rehabilitation.destroy', $tankRehabilitation->id) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger custom-button delete-confirm" title="Delete">
+                                            <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
+                                        </button>
+                                    </form>
+                                    
+                                    
+                                    
                                     </td>
                                 </tr>
                                 @endforeach
@@ -454,7 +543,52 @@
                                 <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
                             </div>
                         </div>
+                        <script>
 
+                            $(document).ready(function () {
+                                    // SweetAlert delete confirmation
+                                    $(document).on('click', '.delete-confirm', function (e) {
+                                        e.preventDefault();
+                            
+                                        const form = $(this).closest('form');
+                            
+                                        Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: "You won't be able to undo this delete!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                            confirmButtonText: 'Yes, delete it!'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                form.submit();
+                                            }
+                                        });
+                                    });
+                                });
+                                // UPDATE Confirm
+                            $(document).on('click', '.update-confirm', function (e) {
+                                e.preventDefault();
+                                const url = $(this).data('url');
+                                Swal.fire({
+                                    title: 'Proceed to update?',
+                                    text: "Do you want to update this record?",
+                                    icon: 'question',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#28a745',
+                                    cancelButtonColor: '#6c757d',
+                                    confirmButtonText: 'Yes, go ahead!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = url;
+                                    }
+                                });
+                            });
+                            
+                               
+                            </script>
+                            
                         <!-- Delete yes no script -->
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
@@ -487,10 +621,7 @@
                                     });
                                 });
 
-                                // Display success message if available
-                                @if(session('success'))
-                                    alert('{{ session('success') }}');
-                                @endif
+                                
                             });
                         </script>
 <script>
@@ -537,6 +668,76 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+    // Select/Deselect all checkboxes
+    $('#selectAll').click(function () {
+        $('.record-checkbox').prop('checked', this.checked);
+    });
+
+    // Handle bulk delete
+    $('#deleteSelectedBtn').click(function (e) {
+        e.preventDefault(); // Prevent form submission
+
+        let selectedIds = [];
+        $('.record-checkbox:checked').each(function () {
+            selectedIds.push($(this).val());
+        });
+
+        if (selectedIds.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'No Records Selected',
+                text: 'Please select at least one record to delete.',
+                confirmButtonColor: '#d33'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will permanently delete the selected records.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete them!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform AJAX request to delete
+                $.ajax({
+                    url: '{{ route("tank_rehabilitation.bulk_delete") }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        ids: selectedIds
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: response.success,
+                            confirmButtonColor: '#28a745'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong while deleting records.',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
+</script>
+
 
 
 
@@ -598,7 +799,29 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
 
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </body>

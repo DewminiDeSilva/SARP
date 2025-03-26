@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>CDF Details</title>
     <style>
         body {
@@ -98,10 +100,43 @@
             background-color: #45a049;
         }
     </style>
+
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
 </head>
 <body>
-   
-    <div class="content">
+@include('dashboard.header')
+    <div class="content" style="padding-top: 70px;">
         <h1>{{ $cdf->cdf_name }} Details</h1>
         <p><strong>Address:</strong> {{ $cdf->cdf_address }}</p>
         <p><strong>Province:</strong> {{ $cdf->province_name }}</p>

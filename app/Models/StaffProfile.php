@@ -36,4 +36,14 @@ class StaffProfile extends Model
         'cv',
         'status',
     ];
+
+    /**
+     * Get the full URL of the profile image or return a default one.
+     */
+    public function getProfileImageAttribute()
+    {
+        return $this->photo
+            ? asset('storage/' . $this->photo)
+            : asset('assets/images/default_profile.jpg');  // Default profile image
+    }
 }

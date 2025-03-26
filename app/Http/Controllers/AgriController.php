@@ -29,12 +29,25 @@ class AgriController extends Controller
     //     return view('agriculture.agri_index', compact('agricultureData', 'totalAgricultureData', 'entries', 'beneficiaries', 'totalCrops', 'totalBeneficiaries', 'totalGnDivisions','input1','agriculture'));
     // }
 
-    public function index()
+    public function index(Request $request)
 {
-    $entries = request()->get('entries', 10);
+    $entries = $request->get('entries', 10);
+    $search = $request->input('search');
 
     // Fetch only beneficiaries where input1 is 'agriculture'
-    $beneficiaries = Beneficiary::where('input1', 'agriculture')->paginate($entries);
+    $query = Beneficiary::where('input1', 'agriculture');
+
+    // Apply search filter
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('nic', 'like', "%{$search}%")
+              ->orWhere('name_with_initials', 'like', "%{$search}%")
+              ->orWhere('gn_division_name', 'like', "%{$search}%")
+              ->orWhere('input3', 'like', "%{$search}%"); // Crop Name stored in input3
+        });
+    }
+
+    $beneficiaries = $query->paginate($entries)->appends(['search' => $search]);
 
     // Agriculture Data Pagination
     $agricultureData = AgricultureData::latest()->paginate($entries)->appends(['entries' => $entries]);
@@ -45,7 +58,6 @@ class AgriController extends Controller
     $totalBeneficiaries = Beneficiary::where('input1', 'agriculture')->count();
     $totalGnDivisions = AgricultureData::distinct('gn_division_name')->count('gn_division_name');
 
-    // Pass data to the view
     return view('agriculture.agri_index', compact(
         'agricultureData', 
         'totalAgricultureData', 
@@ -53,9 +65,12 @@ class AgriController extends Controller
         'beneficiaries', 
         'totalCrops', 
         'totalBeneficiaries', 
-        'totalGnDivisions'
+        'totalGnDivisions', 
+        'search'
     ));
 }
+
+    
 
 
 
@@ -355,52 +370,7 @@ public function store(Request $request)
         return redirect()->back()->with('success', 'Record deleted successfully.');
     }
 
-    public function search(Request $request)
-    {
-        $search = $request->get('search');
-        $entries = $request->get('entries', 10);
-
-        $agricultureDataQuery = AgricultureData::query();
-        $beneficiaryQuery = Beneficiary::query();
-
-        if ($search) {
-            $beneficiaryIds = $beneficiaryQuery->where(function($query) use ($search) {
-                $query->where('nic', 'like', '%' . $search . '%')
-                    ->orWhere('name_with_initials', 'like', '%' . $search . '%')
-                    ->orWhere('gn_division_name', 'like', '%' . $search . '%');
-            })->pluck('id');
-
-            $agricultureDataQuery->where(function($query) use ($search, $beneficiaryIds) {
-                $query->where('category', 'like', '%' . $search . '%')
-                    ->orWhere('crop_name', 'like', '%' . $search . '%')
-                    ->orWhere('total_acres', 'like', '%' . $search . '%')
-                   // ->orWhere('total_production', 'like', '%' . $search . '%')
-                    ->orWhereIn('beneficiary_id', $beneficiaryIds);
-            });
-        }
-
-        $agricultureData = $agricultureDataQuery->paginate($entries)
-            ->appends(['search' => $search, 'entries' => $entries]);
-
-        $filteredBeneficiaryIds = $agricultureData->pluck('beneficiary_id')->unique();
-
-        $beneficiaries = Beneficiary::where(function($query) use ($search) {
-                $query->where('nic', 'like', '%' . $search . '%')
-                    ->orWhere('name_with_initials', 'like', '%' . $search . '%');
-                 
-            })
-            ->orWhereIn('id', $filteredBeneficiaryIds)
-            ->paginate($entries)
-            ->appends(['search' => $search, 'entries' => $entries]);
-
-        $totalCrops = AgricultureData::distinct('crop_name')->count('crop_name');
-        //$totalBeneficiaries = Beneficiary::count();
-        $totalBeneficiaries = $filteredBeneficiaryIds->count();
-        $totalGnDivisions = AgricultureData::distinct('gn_division_name')->count('gn_division_name');
-
-        return view('agriculture.agri_index', compact('agricultureData', 'search', 'entries', 'beneficiaries', 'totalCrops', 'totalBeneficiaries', 'totalGnDivisions'));
-    }
-
+   
    
 
     // public function showByBeneficiary($beneficiaryId)

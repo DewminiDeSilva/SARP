@@ -15,10 +15,11 @@
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
         }
-        .container {
-            max-width: 900px;
+        .container-fluid {
+            max-width: 1000px;
             margin: auto;
             padding-top: 7px;
+            margin-bottom: 10px;
         }
         .tank-section {
             background-color: #F0F0F0;
@@ -75,7 +76,7 @@
             border: 1px solid #dee2e6;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             border-radius: 10px;
-            background-color: #C1FFAC;
+            background-color:rgb(119, 213, 130);
         }
 
         .card-body {
@@ -113,7 +114,8 @@
             /*align-items: center;*/
             justify-content: center;
             margin: 20px auto; /* Center horizontally and add vertical margin */
-            max-width: 800px; /* Optional: set a maximum width */
+            max-width: 1000px; /* Optional: set a maximum width */
+
         }
 
         .header-row {
@@ -222,9 +224,43 @@
     }
 </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
+
 </head>
 <body>
-    <div class="frame">
+@include('dashboard.header')
+    <div class="frame" style="padding-top: 70px;">
         <div class="left-column">
             @include('dashboard.dashboardC')
             @csrf
@@ -232,15 +268,28 @@
 
         <div class="right-column">
 
-        <a href="{{ route('tank_rehabilitation.index') }}" class="btn-back">
+        <div class="d-flex align-items-center mb-3">
+
+	<!-- Sidebar Toggle Button -->
+	<button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button>
+
+
+	<a href="{{ route('tank_rehabilitation.index') }}" class="btn-back">
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
+
+</div>
+
+
+
 
         <div class="col-md-12 text-center">
         <h2 class="header-title" style="color: green;">Tank Details View</h2>
         </div>
 
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <!-- Tank Details Section -->
@@ -287,10 +336,23 @@
                                     <label>Agency:</label>
                                     <p>{{$tankRehabilitation->agency}}</p>
                                 </div>
+                            </div>
+                            </div>
+
+                            <div class="tank-section my-4 custom-frame">
+
+                            <div class="tank-details">
                                 <div class="info">
                                     <label>No. of Families:</label>
                                     <p>{{$tankRehabilitation->no_of_family}}</p>
                                 </div>
+
+                            </div>
+                            </div>
+
+                            <div class="tank-section my-4 custom-frame">
+                            <div class="tank-details">
+
                                 <div class="info">
                                     <label>Longitude:</label>
                                     <p>{{$tankRehabilitation->longitude}}</p>
@@ -308,26 +370,37 @@
                                         </a>
                                     </p>
                                 </div>
+                            </div>
+                            </div>
                                 <!-- <div class="info">
                                     <label>Progress:</label>
                                     <p>{{$tankRehabilitation->progress}}</p>
                                 </div> -->
+                            <div class="tank-section my-4 custom-frame">
+                            <div class="tank-details">
                                 <div class="info">
                                     <label>Contractor:</label>
                                     <p>{{$tankRehabilitation->contractor}}</p>
                                 </div>
                                 <div class="info">
                                     <label>Total Contract Value:</label>
-                                    <p>{{$tankRehabilitation->payment}}</p>
+                                    <p>
+                                        {{ is_numeric($tankRehabilitation->payment) ? number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}
+                                    </p>
+                                    
                                 </div>
                                 <div class="info">
                                     <label>EOT:</label>
                                     <p>{{$tankRehabilitation->eot}}</p>
                                 </div>
                                 <div class="info">
-                                    <label>Contract Period:</label>
-                                    <p>{{$tankRehabilitation->contract_period}}</p>
+                                    <label>Total Contract Value:</label>
+                                    <p>
+                                        {{ !empty($tankRehabilitation->payment) && is_numeric($tankRehabilitation->payment) ? 
+                                            number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}
+                                    </p>
                                 </div>
+                                
                                 <div class="info">
                                     <label>Status:</label>
                                     <p>{{$tankRehabilitation->status}}</p>
@@ -341,14 +414,20 @@
                                 <!-- New fields -->
                         <div class="info"><label>Open Reference Number:</label><p>{{ $tankRehabilitation->open_ref_no }}</p></div>
                         <div class="info"><label>Awarded Date:</label><p>{{ $tankRehabilitation->awarded_date }}</p></div>
-                        <div class="info"><label>Cumulative Paid Amount:</label><p>{{ $tankRehabilitation->cumulative_amount }}</p></div>
-                        <div class="info"><label>Paid Advanced Amount:</label><p>{{ $tankRehabilitation->paid_advanced_amount }}</p></div>
+
+                        <div class="info"><label>Cumulative Paid Amount:</label><p>RS.{{ !empty($tankRehabilitation->payment) && is_numeric($tankRehabilitation->payment) ? number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}</p></div>
+                        <div class="info"><label>Paid Advanced Amount:</label><p>RS.{{ number_format($tankRehabilitation->paid_advanced_amount, 2) }}</p></div>
+
                         <div class="info"><label>Recommended IPC Number:</label><p>{{ $tankRehabilitation->recommended_ipc_no }}</p></div>
-                        <div class="info"><label>Recommended IPC Amount:</label><p>{{ $tankRehabilitation->recommended_ipc_amount }}</p></div>
+                        <div class="info"><label>Recommended IPC Amount:</label><p>{{ number_format($tankRehabilitation->recommended_ipc_amount, 2) }}</p></div>
 
 
 
 </div>
+</div>
+                            </div>
+
+
                                 <!-- Add two horizontal cards below Remarks -->
                                 <div class="row mt-4">
                                     <div class="col-md-6">
@@ -365,15 +444,21 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">Finance Progress as at</br> <span id="currentDate2"></span></h5>
 
-                                                <p class="card-text">Paid Amount: {{$tankRehabilitation->payment}}</p>
+
+                                                <p class="card-text">Paid Amount: Rs.
+                                                    {{ !empty($tankRehabilitation->payment) && is_numeric($tankRehabilitation->payment) ? number_format((float) $tankRehabilitation->payment, 2) : 'N/A' }}
+                                                </p>
+                                               
+
                                                 <p class="card-text">Percentage: {{$percentage}}%</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Add more tank details here if needed -->
-                            
 
+                <div class="tank-section my-4 custom-frame">
+                    <div class="tank-details">
                         <!-- Image fields -->
                         <div class="construction-images">
 
@@ -408,6 +493,8 @@
                         @endif
                     </div>
                 </div>
+                </div>
+                                </div>
             </div>
         </div>
     </div>
@@ -438,5 +525,26 @@ function displayCurrentDate() {
 displayCurrentDate();
 
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
 </body>
 </html>

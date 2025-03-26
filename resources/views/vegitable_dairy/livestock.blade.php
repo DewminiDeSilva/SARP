@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Custom styles for your application */
         .entries-container {
@@ -88,16 +89,62 @@
         }
 
     </style>
+    <style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
+
+
+
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
     </div>
 
     <div class="right-column">
+
+    
+<div class="d-flex align-items-center mb-3">
+
+<!-- Sidebar Toggle Button -->
+<button id="sidebarToggle" class="btn btn-secondary mr-2">
+    <i class="fas fa-bars"></i>
+</button>
+
+</div>
+
         <div class="container mt-5 mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">
             <h3 style="font-size: 2rem; color: green;">Add Live Stock</h3>
         </div>
@@ -121,14 +168,14 @@
         <div class="container mt-5">
     <h1 class="text-center">Livestock Data</h1>
 
-    
+
 
     <!-- Dairy Table -->
     <h3 class="mt-5">Dairy</h3>
     <table class="table table-bordered">
         <thead>
             <tr>
-                
+
                 <th>Dairy Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -136,7 +183,7 @@
         <tbody>
             @foreach($dairies as $dairy)
             <tr>
-                
+
                 <td>{{ $dairy->dairy_name }}</td>
                 <td>{{ $dairy->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -149,7 +196,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-             
+
                 <th>Poultry Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -157,7 +204,7 @@
         <tbody>
             @foreach($poultaries as $poultary)
             <tr>
-               
+
                 <td>{{ $poultary->poultary_name }}</td>
                 <td>{{ $poultary->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -170,7 +217,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-              
+
                 <th>Goat Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -178,7 +225,7 @@
         <tbody>
             @foreach($goats as $goat)
             <tr>
-               
+
                 <td>{{ $goat->goat_name }}</td>
                 <td>{{ $goat->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -191,7 +238,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-               
+
                 <th>Aqua Culture Name</th>
                 <th>Date Registered</th>
             </tr>
@@ -199,7 +246,7 @@
         <tbody>
             @foreach($aquacultures as $aquaculture)
             <tr>
-             
+
                 <td>{{ $aquaculture->aquaculture_name }}</td>
                 <td>{{ $aquaculture->created_at->format('Y-m-d') }}</td>
             </tr>
@@ -211,7 +258,7 @@
     </div>
 
     </div>
-    
+
 <!-- jQuery and DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -221,6 +268,33 @@
     });
 </script>
 
+
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

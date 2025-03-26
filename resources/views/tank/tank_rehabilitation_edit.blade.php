@@ -13,6 +13,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
         /* Custom styles */
@@ -130,17 +132,67 @@
     }
 </style>
 
-    <div class="frame">
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
+
+
+</head>
+<body>
+@include('dashboard.header')
+
+<div class="frame" style="padding-top: 70px;">
       <div class="left-column">
          @include('dashboard.dashboardC')
       </div>
-</head>
-<body>
+
 	<div class="right-column">
 
-    <a href="{{ route('tank_rehabilitation.index') }}" class="btn-back">
-            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
+    <div class="d-flex align-items-center mb-3">
+
+	<!-- Sidebar Toggle Button -->
+	<button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button>
+
+
+	<a href="{{ route('tank_rehabilitation.index') }}" class="btn-back">
+        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+    </a>
+
+</div>
+
+
+
 
         <div class="col-md-12 text-center">
         <h2 class="header-title" style="color: green;">Edit Tank Details</h2>
@@ -191,7 +243,7 @@
                     <div class="col">
                         <div class="dropdown">
                             <label for="tank">Tank Name</label>
-                            <select class="form-control btn btn-secondary" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;">
+                            <select class="form-control btn btn-secondary" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; " disabled>
                                 <option value="{{ $tankRehabilitation->tank_name }}">{{ $tankRehabilitation->tank_name }}</option>
                             </select>
                         </div>
@@ -200,24 +252,26 @@
                     <div class="col">
                             <div class="dropdown">
                                 <label for="tank">Tank Status</label>
-                                <select class="form-control btn btn-success" name="status" data-bs-toggle="dropdown" aria-expanded="false" required>
+                                <select class="form-control btn btn-success" name="status" required>
                                     <option value="">Tank Status</option>
-                                    <option value="Identified">Identified</option>
-                                    <option value="Started">Started</option>
-                                    <option value="On Going">On Going</option>
-                                    <option value="Finished">Finished</option>
-                                    <option value="PIR Completed">PIR Completed</option>
-                                    <option value="Survey Completed">Survey Completed</option>
-                                    <option value="Engineering Serveys">Engineering Serveys</option>
-                                    <option value="Drawings and Designs Completed">Drawings and Designs Completed</option>
-                                    <option value="BOQ Completed">BOQ Completed</option>
-                                    <option value="Ratification meeting completed">Ratification meeting completed</option>
-                                    <option value="Bidding documents completed">Bidding documents completed</option>
-                                    <option value="IFAD no objection received">IFAD no objection received</option>
-                                    <option value="Paper advertised">Paper advertised</option>
-                                    <option value="Evalution of bids">Evalution of bids</option>
-                                    <option value="Agreement Sign">Agreement Sign</option>
+                                    <option value="Identified" {{ $tankRehabilitation->status == 'Identified' ? 'selected' : '' }}>Identified</option>
+                                    <option value="Started" {{ $tankRehabilitation->status == 'Started' ? 'selected' : '' }}>Started</option>
+                                    <option value="On Going" {{ $tankRehabilitation->status == 'On Going' ? 'selected' : '' }}>On Going</option>
+                                    <option value="Completed" {{ $tankRehabilitation->status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="PIR Completed" {{ $tankRehabilitation->status == 'PIR Completed' ? 'selected' : '' }}>PIR Completed</option>
+                                    <option value="Survey Completed" {{ $tankRehabilitation->status == 'Survey Completed' ? 'selected' : '' }}>Survey Completed</option>
+                                    <option value="Engineering Serveys" {{ $tankRehabilitation->status == 'Engineering Serveys' ? 'selected' : '' }}>Engineering Serveys</option>
+                                    <option value="Drawings and Designs Completed" {{ $tankRehabilitation->status == 'Drawings and Designs Completed' ? 'selected' : '' }}>Drawings and Designs Completed</option>
+                                    <option value="BOQ Completed" {{ $tankRehabilitation->status == 'BOQ Completed' ? 'selected' : '' }}>BOQ Completed</option>
+                                    <option value="Ratification meeting completed" {{ $tankRehabilitation->status == 'Ratification meeting completed' ? 'selected' : '' }}>Ratification meeting completed</option>
+                                    <option value="Bidding documents completed" {{ $tankRehabilitation->status == 'Bidding documents completed' ? 'selected' : '' }}>Bidding documents completed</option>
+                                    <option value="IFAD no objection received" {{ $tankRehabilitation->status == 'IFAD no objection received' ? 'selected' : '' }}>IFAD no objection received</option>
+                                    <option value="Paper advertised" {{ $tankRehabilitation->status == 'Paper advertised' ? 'selected' : '' }}>Paper advertised</option>
+                                    <option value="Evalution of bids" {{ $tankRehabilitation->status == 'Evalution of bids' ? 'selected' : '' }}>Evalution of bids</option>
+                                    <option value="Agreement Sign" {{ $tankRehabilitation->status == 'Agreement Sign' ? 'selected' : '' }}>Agreement Sign</option>
                                 </select>
+                                
+                                
                             </div>
                         </div>
                     <div class="col">
@@ -601,5 +655,26 @@
       });
   });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
 </body>
 </html>

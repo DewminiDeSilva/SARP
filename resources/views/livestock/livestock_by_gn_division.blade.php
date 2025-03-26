@@ -8,6 +8,8 @@
     <title>Livestock by GN Division</title>
 </head>
 <body>
+@include('dashboard.header')
+<div style="padding-top: 70px;">
     <h2>Livestock in {{ $gn_division_name }}</h2>
     <table>
         <thead>
@@ -41,5 +43,6 @@
             @endforelse
         </tbody>
     </table>
+</div>
 </body>
 </html>

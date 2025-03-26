@@ -9,7 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
+@include('dashboard.header')
+    <div class="container mt-5" style="padding-top: 70px;">
         <h2>Edit Livestock Data</h2>
 
         <!-- Display validation errors -->
@@ -24,6 +25,10 @@
         @endif
 
         <form action="{{ route('livestocks.update', $livestock->id) }}" method="POST">
+
+            @csrf
+            @method('PUT') <!-- Ensure method spoofing for PUT request -->
+        
             @csrf
             @method('PUT') <!-- Method spoofing for PUT request -->
 

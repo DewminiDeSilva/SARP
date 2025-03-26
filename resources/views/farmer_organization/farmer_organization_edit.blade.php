@@ -13,6 +13,8 @@
     <!-- Include jQuery UI library -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 
 
@@ -302,6 +304,39 @@
         }
     </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
+
     <script>
         $(function() {
             // Initialize datepicker
@@ -316,8 +351,8 @@
 
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
 
     <div class="left-column">
         @include('dashboard.dashboardC')
@@ -325,9 +360,21 @@
 
     <div class="right-column">
 
-    <a href="{{ route('farmerorganization.index') }}" class="btn-back">
+    <div class="d-flex align-items-center mb-3">
+
+	<!-- Sidebar Toggle Button -->
+	<button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button>
+
+
+	<a href="{{ route('farmerorganization.index') }}" class="btn-back">
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
+
+</div>
+
+
 
         <div class="center-heading" style="text-align: center;">
             <h1 style="font-size: 2.5rem; color: green;">Edit Farmer Organization</h1>
@@ -770,6 +817,28 @@
 
                 $('#tankDropdown').append(option);
             });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
         });
     });
 </script>

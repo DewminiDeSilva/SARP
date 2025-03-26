@@ -51,6 +51,10 @@ li:hover {
     cursor: pointer; /* Change cursor to pointer on hover */
 }
 
+.container {
+            margin-top: 80px; /* Adjust based on header height */
+        }
+
 
 
     </style>
@@ -65,8 +69,9 @@ li:hover {
 
 
 
-    <div class="sidebar">
-    <h2>Management Information System</h2>
+    <div class="sidebar" id="sidebar">
+    <!-- <h2>Management Information System</h2> -->
+
         <div class="logoframe" style="cursor: pointer;">
         <div class="img">
             <img src="{{ asset('assets/images/sarp2.png') }}" alt="SARP Logo" class="logo" style="border-radius: 15px; top: 10px" class= "imgsize">
@@ -81,6 +86,8 @@ li:hover {
             <li><a href="/dashboard" style="color: #FFFFFF">Dashboard</a></li>
             <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
             <li><a href="/staff_profile" style="color: #FFFFFF">Staff Profile</a></li>
+            <li><a href="/gallery" style="color: #FFFFFF">Gallery</a></li>
+
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Beneficiary</a>
                 <ul class="nested">
@@ -141,10 +148,10 @@ li:hover {
                         <a href="#" style="color: #FFFFFF">Agriculture</a>
                         <ul class="nested">
                             <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
-                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li> 
+                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li>
                         </ul>
                     </li>
-                        
+
                         <li class="submenu">
                         <a href="#" style="color: #FFFFFF">Livestock</a>
                         <ul class="nested">
@@ -187,6 +194,17 @@ li:hover {
 
                 </ul>
             </li>
+
+            <li class="submenu">
+                <a href="#" style="color: #FFFFFF">Project Documents</a>
+                <ul class="nested">
+                    <li href="/awpb"><a href="/awpb" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
+                    <li href="/costtab"><a href="/costtab" style="color: #FFFFFF">Cost TAB</a></li>
+                    <li href="/projectdesignreport"><a href="/projectdesignreport" style="color: #FFFFFF">Project Design Report</a></li>
+                </ul>
+
+            </li>
+
 
         </ul>
     </div>

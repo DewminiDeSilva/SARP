@@ -120,11 +120,15 @@ class LivestockController extends Controller
     }
 
     // Method to show the form to edit an existing livestock record
-    public function edit($id)
+    public function edit($beneficiary_id, $livestock_id)
     {
-        $livestock = Livestock::findOrFail($id);
+        $livestock = Livestock::where('id', $livestock_id)
+                              ->where('beneficiary_id', $beneficiary_id)
+                              ->firstOrFail();
+    
         return view('livestock.livestock_edit', compact('livestock'));
     }
+    
 
     // Method to update an existing livestock record
     public function update(Request $request, $id)

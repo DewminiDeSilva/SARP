@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Custom CSS based on provided template -->
     <style>
@@ -61,71 +63,73 @@
             justify-content: space-between;
             width: 100%;
         }
+
         .right-column {
             flex: 0 0 80%;
             padding: 20px;
         }
+
         .left-column {
             flex: 0 0 20%;
             border-right: 1px solid #dee2e6;
         }
         .submitbtton {
             color: #fff;
-    background-color: #198754;
-    border-color: #198754;
-    padding: 6px 12px; /* Adjust padding for balanced look */
-    font-size: 16px; /* Font size adjustment */
-    height: 38px; /* Match height with input field */
-}
+            background-color: #198754;
+            border-color: #198754;
+            padding: 6px 12px; /* Adjust padding for balanced look */
+            font-size: 16px; /* Font size adjustment */
+            height: 38px; /* Match height with input field */
+        }
 
 
-.submitbtton:hover,
-.submitbtton:active {
-    background-color: #145c32;
-    border-color: #145c32;
-}
+        .submitbtton:hover,
+        .submitbtton:active {
+            background-color: #145c32;
+            border-color: #145c32;
+        }
 
-.container-fluid h2 {
-    color: green;
-}
+        .container-fluid h2 {
+            color: green;
+        }
 
-.card {
-    border: 1px solid #dee2e6;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        .card {
+            border: 1px solid #dee2e6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-.card-title {
-    font-size: 2rem;
-    color: #333;
-}
+        .card-title {
+            font-size: 2rem;
+            color: #333;
+        }
 
 
         .button-container {
-            display: flex;
-            gap: 10px;
-        }
+                    display: flex;
+                    gap: 10px;
+                }
 
         .custom-button {
-            background-color: white;
-            color: red;
-            border: 2px solid transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            transition: border 0.3s ease;
-            width: 60px;
-            height: 40px;
-            box-sizing: border-box;
-            background-color: #f5c6cb;
-        }
+                    background-color: white;
+                    color: red;
+                    border: 2px solid transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px;
+                    transition: border 0.3s ease;
+                    width: 60px;
+                    height: 40px;
+                    box-sizing: border-box;
+                    background-color: #f5c6cb;
+                }
 
         .custom-button:hover {
-            border-color: red;
-            background-color: #f5c6cb;
-        }
+                    border-color: red;
+                    background-color: #f5c6cb;
+                }
 
-        .edit-button {
+.edit-button {
             background-color: white;
             color: orange;
             border: 2px solid transparent;
@@ -139,12 +143,12 @@
             background-color: #ffeeba;
         }
 
-        .edit-button:hover {
+.edit-button:hover {
             border-color: orange;
             background-color: #ffeeba;
         }
 
-        .view-button {
+.view-button {
             background-color: white;
             color: orange;
             border: 2px solid transparent;
@@ -158,58 +162,58 @@
             background-color: #60C267;
         }
 
-        .view-button:hover {
+.view-button:hover {
             border-color: green;
             background-color: #60C267;
         }
 
         /* Pagination CSS */
-        .pagination .page-item {
+.pagination .page-item {
             margin: 0px;
         }
 
-        .pagination .page-link {
+.pagination .page-link {
             padding: 5px 10px;
         }
 
-        .page-item {
+.page-item {
             background-color: white;
             padding: 0px;
         }
 
-        .pagination:hover {
+.pagination:hover {
             border-color: #fff;
             background-color: #fff;
         }
 
-        .page-item:hover {
+.page-item:hover {
             border-color: #fff;
             background-color: #fff;
             cursor: pointer;
         }
 
-        .page-link {
+.page-link {
             color: #28a745;
         }
 
-        .page-item.active .page-link {
+.page-item.active .page-link {
             z-index: 3;
             color: #fff;
             background-color: #126926;
             border-color: #126926;
         }
 
-        .pagination-container {
+.pagination-container {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
 
-        .pagination-container nav {
+.pagination-container nav {
             margin-bottom: 10px;
         }
 
-        #tableInfo {
+#tableInfo {
             text-align: center;
             width: 100%;
         }
@@ -382,24 +386,69 @@
 
 </style>
 
+<style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    /* Update the CSS for the sidebar toggle button */
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: auto; /* Ensure the button width is auto */
+        display: inline-block; /* Ensure the button doesn't take full width */
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+
+</style>
+
 </head>
 <body>
-
-<div class="frame">
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
     </div>
 
     <div class="right-column">
-    @if (request()->get('page', 1) > 1)
-    <a href="{{ route('agro.index', ['page' => 1]) }}" class="btn-back">
-        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back">
-        <span class="btn-text">Back</span>
-    </a>
-     @endif
 
-    </a>
+        <div class="d-flex align-items-center mb-3">
+
+            <!-- Sidebar Toggle Button -->
+
+            <button id="sidebarToggle" class="btn btn-secondary mr-2">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <a href="{{ route('infrastructure.index') }}" class="btn-back">
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            </a>
+
+        </div>
+
+
+
+
     <div class="container-fluid">
     <div class="row mt-4">
         <div class="col-md-12 text-center">
@@ -649,6 +698,29 @@
         window.location.search = urlParams.toString();
     }
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            // Toggle the 'hidden' class on the sidebar
+            sidebar.classList.toggle('hidden');
+
+            // Adjust the width of the content
+            if (sidebar.classList.contains('hidden')) {
+                content.style.flex = '0 0 100%'; // Expand to full width
+                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+            } else {
+                content.style.flex = '0 0 80%'; // Default width
+                content.style.padding = '20px'; // Reset padding
+            }
+        });
+    });
+</script>
+
 
 </body>
 </html>
