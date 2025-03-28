@@ -174,6 +174,41 @@
             background-color: #126926;
             border-color: #126926;
         }
+/* Style checkboxes nicely */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    transform: scale(1.1);
+    accent-color: green;
+}
+
+/* Align the checkbox column properly */
+table th:first-child, table td:first-child {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Add hover effect for rows */
+.table tbody tr:hover {
+    background-color: #f2fdf2; /* Light green shade */
+}
+
+/* Style for the Delete Selected button */
+#deleteSelectedBtn {
+    background-color: #dc3545; /* Bootstrap red */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+#deleteSelectedBtn:hover {
+    background-color: #c82333;
+}
+
 
 </style>
 
@@ -315,9 +350,10 @@
                     <!-- CSV Upload Form -->
                     <form action="{{ route('tank_rehabilitation.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
-                        <button id="deleteSelectedBtn" class="btn btn-danger">
+                        <button id="deleteSelectedBtn" class="btn btn-danger" title="Delete selected tanks">
                             Delete Selected
                         </button>
+                        
                         <div class="form-group mr-2">
                             <input type="file" name="csv_file" class="form-control" required>
                         </div>
