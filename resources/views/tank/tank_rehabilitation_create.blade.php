@@ -256,63 +256,67 @@
                     </div>
                 </div>
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <div class="dropdown">
-                                <label for="tank">Select Tank Name</label>
-                                <select class="form-control btn btn-success" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required>
-                                    <option value="">Select Tank</option>
-                                </select>
-                            </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="dropdown">
+                            <label for="river_basin" class="form-label dropdown-label">River Basin</label>
+                            <select class="form-control btn btn-success" name="river_basin" id="river_basin" required>
+                                <option value="">Select River Basin</option>
+                                <option value="Mee Oya">Mee Oya</option>
+                                <option value="Daduru Oya">Daduru Oya</option>
+                                <option value="Malwathu Oya">Malwathu Oya</option>
+                            </select>
                         </div>
-
-                        <div class="col">
-                            <div class="dropdown">
-                                <label for="tank">Tank Status</label>
-                                <select class="form-control btn btn-success" name="status" data-bs-toggle="dropdown" aria-expanded="false" required>
-                                    <option value="">Tank Status</option>
-                                    <option value="Identified">Identified</option>
-                                    <option value="Started">Started</option>
-                                    <option value="On Going">On Going</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="PIR Completed">PIR Completed</option>
-                                    <option value="Survey Completed">Survey Completed</option>
-                                    <option value="Engineering Serveys">Engineering Serveys</option>
-                                    <option value="Drawings and Designs Completed">Drawings and Designs Completed</option>
-                                    <option value="BOQ Completed">BOQ Completed</option>
-                                    <option value="Ratification meeting completed">Ratification meeting completed</option>
-                                    <option value="Bidding documents completed">Bidding documents completed</option>
-                                    <option value="IFAD no objection received">IFAD no objection received</option>
-                                    <option value="Paper advertised">Paper advertised</option>
-                                    <option value="Evalution of bids">Evalution of bids</option>
-                                    <option value="Agreement Sign">Agreement Sign</option>
-                                </select>
-                            </div>
+                    </div>
+                
+                    <div class="col">
+                        <div class="dropdown">
+                            <label for="tank">Tank Status</label>
+                            <select class="form-control btn btn-success" name="status" required>
+                                <option value="">Tank Status</option>
+                                <option value="Identified">Identified</option>
+                                <option value="Started">Started</option>
+                                <option value="On Going">On Going</option>
+                                <option value="Completed">Completed</option>
+                                <option value="PIR Completed">PIR Completed</option>
+                                <option value="Survey Completed">Survey Completed</option>
+                                <option value="Engineering Serveys">Engineering Serveys</option>
+                                <option value="Drawings and Designs Completed">Drawings and Designs Completed</option>
+                                <option value="BOQ Completed">BOQ Completed</option>
+                                <option value="Ratification meeting completed">Ratification meeting completed</option>
+                                <option value="Bidding documents completed">Bidding documents completed</option>
+                                <option value="IFAD no objection received">IFAD no objection received</option>
+                                <option value="Paper advertised">Paper advertised</option>
+                                <option value="Evalution of bids">Evalution of bids</option>
+                                <option value="Agreement Sign">Agreement Sign</option>
+                            </select>
                         </div>
-                        <div class="col">
-                            <div class="dropdown">
-                                <label for="tank">Implementing Agency</label>
-                                <select class="form-control btn btn-success" name="agency" data-bs-toggle="dropdown" aria-expanded="false" required>
-                                    <option value="">Implementing Agency</option>
-                                    <option value="Central(ID)">Central(ID)</option>
-                                    <option value="DAD">DAD</option>
-                                    <option value="PID">PID</option>
-                                    <option value="ID">ID</option>
-                                    <option value="DI">DI</option>
-                                </select>
-                            </div>
+                    </div>
+                
+                    <div class="col">
+                        <div class="dropdown">
+                            <label for="agency" class="form-label dropdown-label">Implementing Agency</label>
+                            <select class="form-control btn btn-success" name="agency" required>
+                                <option value="">Implementing Agency</option>
+                                <option value="Central(ID)">Central(ID)</option>
+                                <option value="DAD">DAD</option>
+                                <option value="PID">PID</option>
+                                <option value="ID">ID</option>
+                                <option value="DI">DI</option>
+                            </select>
                         </div>
-                        <div class="col">
-                            <div class="dropdown">
-                                <label for="tank">Cascade Name</label>
-                                <select class="form-control btn btn-success" id="cascadeDropdown" name="cascade_name" data-bs-toggle="dropdown" aria-expanded="false" required>
-                                    <option value="">Select Cascade name</option>
-                                </select>
-                            </div>
+                    </div>
+                
+                    <div class="col">
+                        <div class="dropdown">
+                            <label for="cascadeDropdown" class="form-label dropdown-label">Cascade Name</label>
+                            <select class="form-control btn btn-success" id="cascadeDropdown" name="cascade_name" required>
+                                <option value="">Select Cascade name</option>
+                            </select>
                         </div>
                     </div>
                 </div>
+                
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -324,10 +328,13 @@
                       <input type="text" class="form-control" id="tankProgress" name="progress" required>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="river_basin" class="form-label">River basin</label>
-                    <input type="text" class="form-control" name="river_basin" id="river_basin" required>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="tank_name">Tank Name</label>
+                        <input type="text" class="form-control" id="tank_name" name="tank_name" required>
+                    </div>
                 </div>
+                
 
                 <h2 class="mt-5 mb-4">Contract Information</h2>
 
