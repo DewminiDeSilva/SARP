@@ -44,9 +44,9 @@ class TankRehabilitationController extends Controller
     {
         // Validate new fields including image uploads
         $request->validate([
-            'pre_construction_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'during_construction_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'post_construction_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'pre_construction_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'during_construction_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'post_construction_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         // Handle image uploads for three stages
@@ -122,9 +122,9 @@ class TankRehabilitationController extends Controller
     {
         // Validate new fields including image uploads
         $request->validate([
-            'image_pre_construction' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image_during_construction' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image_post_construction' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_pre_construction' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'image_during_construction' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'image_post_construction' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         // Handle image uploads
