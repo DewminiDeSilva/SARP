@@ -170,6 +170,8 @@
 <body>
 @include('dashboard.header')
 
+
+
 <div class="frame" style="padding-top: 70px;">
       <div class="left-column">
          @include('dashboard.dashboardC')
@@ -191,7 +193,15 @@
 
 </div>
 
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 
         <div class="col-md-12 text-center">
@@ -280,7 +290,7 @@
                     <div class="col">
                         <div class="dropdown">
                             <label for="tank">Implementing Agency</label>
-                            <select class="form-control btn btn-secondary"  name="agency" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;">
+                            <select class="form-control btn btn-secondary"  name="agency" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;" disabled>
                                 <option value="{{ $tankRehabilitation->agency }}">{{ $tankRehabilitation->agency }}</option>
                                 <!-- Agency options -->
                             </select>

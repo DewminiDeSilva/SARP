@@ -276,8 +276,7 @@
             </button>
 
 
-            <a hre
-            +f="{{ route('beneficiary.index') }}" class="btn-back">
+            <a href="{{ route('beneficiary.index') }}" class="btn-back">
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
 
@@ -478,6 +477,51 @@
         </div>
     </div>
 </div>
+<form method="GET" action="{{ route('beneficiary.index') }}" class="mb-3">
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('beneficiary.index') }}" class="btn btn-outline-secondary me-2">Show All</a>
+        <a href="{{ route('beneficiary.index', ['duplicates' => '1']) }}" class="btn btn-danger">Show Only Duplicates</a>
+    </div>
+</form>
+
+@php
+    $convertedNicMap = [];
+    $nicMap = [];
+
+    foreach ($allBeneficiaries as $b) {
+        $nic = $b->nic;
+        $converted = null;
+
+        // Convert old NIC to new format
+        if (preg_match('/^(\d{2})(\d{3})(\d{4})[VXvx]?$/', $nic, $matches)) {
+            $converted = '19' . $matches[1] . $matches[2] . '0' . $matches[3];
+        }
+
+        $nicMap[$nic][] = $b->id;
+        if ($converted) {
+            $nicMap[$converted][] = $b->id;
+            $convertedNicMap[$b->id] = $converted;
+        }
+    }
+
+    $duplicateNics = [];
+    foreach ($nicMap as $nic => $ids) {
+        if (count($ids) > 1) {
+            $duplicateNics[$nic] = true;
+        }
+    }
+
+    $filteredBeneficiaries = $beneficiaries;
+
+    if (request('duplicates')) {
+        $filteredBeneficiaries = $beneficiaries->filter(function ($b) use ($duplicateNics, $convertedNicMap) {
+            $nic = $b->nic;
+            $converted = $convertedNicMap[$b->id] ?? null;
+            return isset($duplicateNics[$nic]) || ($converted && isset($duplicateNics[$converted]));
+        });
+    }
+@endphp
+
 
 
 
@@ -597,9 +641,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($beneficiaries as $beneficiary)
-                        <tr>
-                            <td>{{ $beneficiary->nic }}</td>
+                        @foreach ($filteredBeneficiaries as $beneficiary)
+        @php
+            $nic = $beneficiary->nic;
+            $converted = $convertedNicMap[$beneficiary->id] ?? null;
+            $isDuplicate = isset($duplicateNics[$nic]) || ($converted && isset($duplicateNics[$converted]));
+        @endphp
+        <tr>
+            <td style="color: {{ $isDuplicate ? 'red' : 'inherit' }}">
+                {{ $beneficiary->nic }}
+                @if ($isDuplicate && $converted)
+                    <br>
+                    <span style="color: red;">→ {{ $converted }}</span>
+                @endif
+            </td>
+            
                             <td>{{ $beneficiary->name_with_initials }}</td>
                             <td>{{ $beneficiary->gender }}</td>
                             <!-- <td>{{ $beneficiary->dob }}</td> -->
@@ -808,6 +864,21 @@
 
 
 <script>
+document.getElementById('entriesSelect').addEventListener('change', function () {
+    const perPage = this.value;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('entries', perPage);
+
+    if (window.location.search.includes('duplicates=1')) {
+        urlParams.set('duplicates', '1');
+    }
+
+    window.location.search = urlParams.toString();
+});
+
+
+
+
     $(document).ready(function() {
         $('#entriesSelect').change(function() {
             var perPage = $(this).val(); // Get selected value
