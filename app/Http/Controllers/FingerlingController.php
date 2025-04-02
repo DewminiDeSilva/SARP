@@ -11,23 +11,38 @@ class FingerlingController extends Controller
     /**
      * Display a listing of tank records in the Fingerling module.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch relevant data from the TankRehabilitation model
-        $tanks = TankRehabilitation::select(
-            'id', // Primary key
-            'tank_id', // Earlier tank ID (19/11/T/W/11)
-            'tank_name',
-            'ds_division_name',
-            'gn_division_name',
-            'as_centre',
-            'river_basin',
-            'cascade_name'
-        )->paginate(10); // Use pagination for the records
+    $query = TankRehabilitation::select(
+        'id',
+        'tank_id',
+        'tank_name',
+        'ds_division_name',
+        'gn_division_name',
+        'as_centre',
+        'river_basin',
+        'cascade_name'
+    );
 
-        // Return the index view with tank data
-        return view('fingerling.fingerling_index', compact('tanks'));
+    // Apply search filter if provided
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('tank_id', 'like', "%$search%")
+              ->orWhere('tank_name', 'like', "%$search%")
+              ->orWhere('ds_division_name', 'like', "%$search%")
+              ->orWhere('gn_division_name', 'like', "%$search%")
+              ->orWhere('as_centre', 'like', "%$search%")
+              ->orWhere('cascade_name', 'like', "%$search%")
+              ->orWhere('river_basin', 'like', "%$search%");
+        });
     }
+
+    $tanks = $query->paginate(10)->appends(['search' => $request->search]);
+
+    return view('fingerling.fingerling_index', compact('tanks'));
+    }
+
 
     /**
      * Show the form to add fingerling data for a specific tank.
@@ -196,21 +211,7 @@ class FingerlingController extends Controller
     return redirect()->route('fingerling.show', $fingerling->tank_id)->with('success', 'Fingerling data updated successfully.');
     }
 
-    public function searchFingerling(Request $request)
-    {
-    $search = $request->input('search');
-
-    // Query to search tanks using TankRehabilitation model
-    $tanks = TankRehabilitation::where('tank_name', 'LIKE', "%{$search}%")
-        ->orWhere('ds_division_name', 'LIKE', "%{$search}%")
-        ->orWhere('gn_division_name', 'LIKE', "%{$search}%")
-        ->orWhere('as_centre', 'LIKE', "%{$search}%")
-        ->orWhere('river_basin', 'LIKE', "%{$search}%")
-        ->orWhere('cascade_name', 'LIKE', "%{$search}%")
-        ->paginate(10); // Paginate results
-
-    return view('fingerling.fingerling_index', compact('tanks'));
-    }
+    
 
 
 

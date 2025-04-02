@@ -179,7 +179,7 @@
                 <h1 style="font-size: 2.5rem; color: green;">Fingerling Tank Details</h1>
             </div>
 
-            <form method="GET" action="{{ route('fingerling.searchFingerling') }}" class="form-inline">
+            <form method="GET" action="{{ route('fingerling.index') }}" class="form-inline">
                 <div class="input-group">
                     <input
                         type="text"

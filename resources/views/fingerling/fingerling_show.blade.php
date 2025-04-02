@@ -324,25 +324,9 @@
 
     <div class="right-column">
 
-<<<<<<< HEAD
     <a href="{{ route('fingerling.index') }}" class="btn-back">
     <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
 </a>
-=======
-    <div class="d-flex align-items-center mb-3">
-
-	<!-- Sidebar Toggle Button -->
-	<button id="sidebarToggle" class="btn btn-secondary mr-2">
-		<i class="fas fa-bars"></i>
-	</button>
-
-
-	<a href="{{ route('fingerling.index') }}" class="btn-back">
-        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-    </a>
-
-</div>
->>>>>>> 3a5dafb8d91e40ec1762230fc51598d42a4abdd4
 
 
     <div class="container-fluid">
@@ -361,12 +345,6 @@
             </div>
         </div>
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 3a5dafb8d91e40ec1762230fc51598d42a4abdd4
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead class="thead-light">
