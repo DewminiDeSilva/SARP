@@ -170,6 +170,8 @@
 <body>
 @include('dashboard.header')
 
+
+
 <div class="frame" style="padding-top: 70px;">
       <div class="left-column">
          @include('dashboard.dashboardC')
@@ -191,7 +193,15 @@
 
 </div>
 
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 
         <div class="col-md-12 text-center">
@@ -242,9 +252,12 @@
                 <div class="row">
                     <div class="col">
                         <div class="dropdown">
-                            <label for="tank">Tank Name</label>
-                            <select class="form-control btn btn-secondary" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; " disabled>
-                                <option value="{{ $tankRehabilitation->tank_name }}">{{ $tankRehabilitation->tank_name }}</option>
+                            <label for="river_basin" class="form-label dropdown-label">River Basin</label>
+                            <select class="form-control btn btn-success" name="river_basin" id="river_basin" required>
+                                <option value="">Select River Basin</option>
+                                <option value="Mee Oya" {{ $tankRehabilitation->river_basin == 'Mee Oya' ? 'selected' : '' }}>Mee Oya</option>
+                                <option value="Daduru Oya" {{ $tankRehabilitation->river_basin == 'Daduru Oya' ? 'selected' : '' }}>Daduru Oya</option>
+                                <option value="Malwathu Oya" {{ $tankRehabilitation->river_basin == 'Malwathu Oya' ? 'selected' : '' }}>Malwathu Oya</option>
                             </select>
                         </div>
                     </div>
@@ -277,20 +290,14 @@
                     <div class="col">
                         <div class="dropdown">
                             <label for="tank">Implementing Agency</label>
-                            <select class="form-control btn btn-secondary"  name="agency" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;">
+                            <select class="form-control btn btn-secondary"  name="agency" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;" disabled>
                                 <option value="{{ $tankRehabilitation->agency }}">{{ $tankRehabilitation->agency }}</option>
                                 <!-- Agency options -->
                             </select>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="dropdown">
-                            <label for="tank">Cascade Name</label>
-                            <select class="form-control btn btn-secondary" id="cascadeDropdown" name="cascade_name" data-bs-toggle="dropdown" aria-expanded="false" required  style="background-color: green; color: white;">
-                                <option value="{{ $tankRehabilitation->cascade_name }}">{{ $tankRehabilitation->cascade_name }}</option>
-                            </select>
-                        </div>
-                    </div>
+                   
+                    
                 </div>
             </div>
 
@@ -305,10 +312,12 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="river_basin" class="form-label">River Basin</label>
-                <input type="text" class="form-control" name="river_basin" id="river_basin" value="{{ $tankRehabilitation->river_basin }}" required>
-            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="contractor" class="form-label">Tank Name</label>
+                    <input type="text" class="form-control" name="tank_name" value="{{ $tankRehabilitation->tank_name }}" required>
+                </div>
+                
 
             <h2 class="text-center mt-5" style="font-family: Arial, sans-serif; font-weight: bold;">Contract Information</h2>
 

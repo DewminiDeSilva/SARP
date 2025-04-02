@@ -59,19 +59,36 @@ class BeneficiaryController extends Controller
             ->orWhere('input3', 'like', '%' . $search . '%') // New input
             ->paginate(10);
                             
-            $input3Summary = Beneficiary::where('input3', 'like', '%'.$search.'%')
-                    ->select('input3', DB::raw('COUNT(*) as count'))
-                    ->groupBy('input3')
-                    ->get();
+            $allBeneficiaries = Beneficiary::all();
 
-                    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
-    ->groupBy('tank_name')
-    ->get();
-
-return view('beneficiary.beneficiary_index', compact('beneficiaries', 'search', 'input3Summary', 'tankNameSummary'));
-
-        
+    $convertedMap = [];
+    foreach ($allBeneficiaries as $b) {
+        $nic = $b->nic;
+        if (preg_match('/^(\d{2})(\d{3})(\d{4})[VXvx]?$/', $nic, $matches)) {
+            $convertedMap[$b->id] = '19' . $matches[1] . $matches[2] . '0' . $matches[3];
+        }
     }
+
+    $input3Summary = Beneficiary::where('input3', 'like', '%'.$search.'%')
+        ->select('input3', DB::raw('COUNT(*) as count'))
+        ->groupBy('input3')
+        ->get();
+
+    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
+        ->groupBy('tank_name')
+        ->get();
+
+    return view('beneficiary.beneficiary_index', compact(
+        'beneficiaries',
+        'search',
+        'input3Summary',
+        'tankNameSummary',
+        'allBeneficiaries',
+        'convertedMap'
+    ));
+}
+        
+    
         // Check if you want to return the beneficiary_index or beneficiary_list view
         
     
@@ -228,25 +245,72 @@ public function generateCsv()
     ]);
 }
 
-public function index()
-{
-    $search = ''; // Default value
-    $entries = request()->get('entries', 10);
-    $beneficiaries = Beneficiary::latest()->paginate($entries)->appends(['entries' => $entries]);
+public function index(Request $request)
+    {
+        $search = '';
+        $entries = $request->get('entries', 10);
+        $showDuplicates = $request->get('duplicates');
 
-    // Grouped summary (optional if you use it here)
-    $input3Summary = Beneficiary::select('input3', DB::raw('COUNT(*) as count'))
-                                ->groupBy('input3')
-                                ->get();
+        $query = Beneficiary::query();
 
-    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
-                                ->groupBy('tank_name')
-                                ->get();
+        // Get all beneficiaries (for duplicate detection)
+        $allBeneficiaries = Beneficiary::all();
 
-    return view('beneficiary.beneficiary_index', compact(
-        'beneficiaries', 'search', 'input3Summary','tankNameSummary'
-    ));
-}
+        // Map for tracking NICs and converted NICs
+        $nicMap = [];
+        $convertedMap = [];
+
+        foreach ($allBeneficiaries as $beneficiary) {
+            $nic = $beneficiary->nic;
+            $converted = null;
+
+            if (preg_match('/^(\d{2})(\d{3})(\d{4})[VXvx]?$/', $nic, $matches)) {
+                $converted = '19' . $matches[1] . $matches[2] . '0' . $matches[3];
+                $convertedMap[$beneficiary->id] = $converted;
+            }
+
+            $nicMap[$nic][] = $beneficiary->id;
+            if ($converted) {
+                $nicMap[$converted][] = $beneficiary->id;
+            }
+        }
+
+        // Find all duplicate NICs
+        $duplicateNICs = [];
+        foreach ($nicMap as $nic => $ids) {
+            if (count($ids) > 1) {
+                foreach ($ids as $id) {
+                    $duplicateNICs[] = $id;
+                }
+            }
+        }
+
+        // Filter only duplicates if requested
+        if ($showDuplicates) {
+            $query->whereIn('id', $duplicateNICs);
+        }
+
+        $beneficiaries = $query->latest()->paginate($entries)->appends([
+            'entries' => $entries,
+            'duplicates' => $showDuplicates
+        ]);
+
+        $input3Summary = Beneficiary::select('input3', DB::raw('COUNT(*) as count'))
+                                    ->groupBy('input3')->get();
+
+        $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
+                                    ->groupBy('tank_name')->get();
+
+        return view('beneficiary.beneficiary_index', compact(
+            'beneficiaries',
+            'allBeneficiaries',
+            'input3Summary',
+            'tankNameSummary',
+            'convertedMap',
+            'duplicateNICs'
+        ));
+    }
+
 
 
 
