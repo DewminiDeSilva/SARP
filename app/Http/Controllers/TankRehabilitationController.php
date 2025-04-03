@@ -318,7 +318,8 @@ public function reportCsv()
         ->orWhere('longitude', 'like', '%' . $search . '%')
         ->orWhere('latitude', 'like', '%' . $search . '%')
         ->orWhere('remarks', 'like', '%' . $search . '%')
-        ->paginate(10);
+        ->paginate(10)->appends(['search' => $search]);
+
 
     // Add the counts for ongoing and completed rehabilitations
     $totalTanks = TankRehabilitation::count();

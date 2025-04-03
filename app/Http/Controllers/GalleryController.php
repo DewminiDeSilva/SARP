@@ -18,7 +18,7 @@ class GalleryController extends Controller
             'Anuradhapura' => ['key' => 'anuradhapura', 'image' => 'assets/images/anuradhapura.jpg'],
             'Puttalam' => ['key' => 'puttalam', 'image' => 'assets/images/puttalam.jpg'],
             'Special Events' => ['key' => 'special_events', 'image' => 'assets/images/special_events.jpg'],
-            'Others' => ['key' => 'others', 'image' => 'assets/images/other.jpg'],
+            'Others' => ['key' => 'others', 'image' => 'assets/images/special_events.jpg'],
         ];
         return view('gallery.gallery_index', compact('albums'));
     }
