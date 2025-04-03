@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NRMParticipant;
+use App\Models\NrmParticipant;
 use App\Models\NrmTraining;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
@@ -25,7 +25,7 @@ class NrmParticipantController extends Controller
         $entries = $request->get('entries', 10);
 
         // Fetch participants with pagination
-        $nrmParticipants = NRMParticipant::where('nrm_training_id', $nrmTrainingId)
+        $nrmParticipants = NrmParticipant::where('nrm_training_id', $nrmTrainingId)
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
                              ->orWhere('nic', 'like', "%{$search}%")
@@ -97,7 +97,7 @@ class NrmParticipantController extends Controller
     public function destroy($nrmTrainingId, $nrmParticipantId)
     {
         $nrmTraining = NrmTraining::findOrFail($nrmTrainingId);
-        $nrmParticipant = NRMParticipant::where('nrm_training_id', $nrmTrainingId)->findOrFail($nrmParticipantId);
+        $nrmParticipant = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->findOrFail($nrmParticipantId);
 
         $nrmParticipant->delete();
 
@@ -188,7 +188,7 @@ class NrmParticipantController extends Controller
         // Get 'entries' from request (for pagination), default to 10 if not present
         $entries = $request->get('entries', 10);
 
-        $nrmParticipants = NRMParticipant::where('nrm_training_id', $nrmTrainingId) // Ensure scope to specific training program
+        $nrmParticipants = NrmParticipant::where('nrm_training_id', $nrmTrainingId) // Ensure scope to specific training program
             ->when($search, function ($query, $search) {
                 return $query->where(function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")
