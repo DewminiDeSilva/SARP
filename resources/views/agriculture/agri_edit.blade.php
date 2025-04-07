@@ -178,7 +178,7 @@
             <!-- Total Acres Cultivated Field -->
             <div class="mb-3">
                 <label for="total_acres" class="form-label">Total Acres Cultivated</label>
-                <input type="number" class="form-control" id="total_acres" name="total_acres" value="{{ old('total_acres', $agricultureData->total_acres) }}" required>
+                <input type="number" class="form-control" id="total_acres" name="total_acres" value="{{ old('total_acres', $agricultureData->total_acres) }}" step="0.01" min="0"required>
             </div>
 
 
