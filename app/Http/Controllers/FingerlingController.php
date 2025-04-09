@@ -105,8 +105,8 @@ class FingerlingController extends Controller
             'wholesale_total_income_rs' => $request->wholesale_total_income_rs,
         ]);
 
-        // Redirect to the index page with a success message
-        return redirect()->route('fingerling.index')->with('success', 'Fingerling data added successfully.');
+        // Redirect to the show page with a success message
+        return redirect()->route('fingerling.show', $request->tank_id)->with('success', 'Fingerling data added successfully.');
     }
 
     /**
@@ -114,19 +114,24 @@ class FingerlingController extends Controller
      *
      * @param int $id The ID of the tank whose data is being viewed.
      */
+
     public function show($id)
     {
-        // Fetch the fingerling data by matching the foreign key 'tank_id'
-        $fingerlings = Fingerling::where('tank_id', $id)->get(); // Fetch all related fingerling records
-        $tank = TankRehabilitation::find($id); // Fetch tank details for display
+    // Fetch all fingerlings for the selected tank
+    $fingerlings = Fingerling::where('tank_id', $id)->get();
 
-        if ($fingerlings->isEmpty()) {
-            return redirect()->route('fingerling.index')->with('error', 'No fingerling data found for this tank.');
-        }
+    // Fetch the tank details
+    $tank = TankRehabilitation::find($id);
 
-        // Pass the fingerling data and tank details to the 'fingerling_show' view
-        return view('fingerling.fingerling_show', compact('fingerlings', 'tank'));
+    // If the tank does not exist, redirect back
+    if (!$tank) {
+        return redirect()->route('fingerling.index')->with('error', 'Tank not found.');
     }
+
+    // Load the show view, even if fingerlings are empty
+    return view('fingerling.fingerling_show', compact('fingerlings', 'tank'));
+    }
+
 
 
     public function destroy($id)
