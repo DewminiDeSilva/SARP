@@ -1,6 +1,5 @@
 <?php
 
-// Migration: create_expressions_of_interest_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,21 +23,28 @@ class CreateExpressionsOfInterestTable extends Migration
             $table->text('background_info')->nullable();
             $table->text('project_justification');
             $table->text('project_benefits');
+
+            // JSON structured fields
             $table->json('risks')->nullable();
-            $table->json('mitigations')->nullable();// Store risks and mitigations as JSON
-            $table->text('project_coverage')->nullable();
-            $table->text('expected_outputs')->nullable();
-            $table->text('expected_outcomes')->nullable();
-            $table->text('investment_breakdown')->nullable();
-            $table->text('funding_source')->nullable();
-            $table->text('implementation_plan')->nullable();
-            $table->text('assistance_required')->nullable();
+            $table->json('mitigations')->nullable();
+            $table->json('project_coverage')->nullable();
+            $table->json('expected_outputs')->nullable();
+            $table->json('expected_outcomes')->nullable();
+            $table->json('investment_breakdown')->nullable();
+            $table->json('funding_source')->nullable();
+            $table->json('assistance_required')->nullable();
+
+            // New fields
+            $table->json('risk_factors')->nullable(); // newly added
+            $table->string('implementation_plan')->nullable(); // file name (PDF)
+            $table->string('status')->nullable(); // newly added
+
             $table->timestamps();
         });
     }
+
     public function down()
     {
         Schema::dropIfExists('expressions_of_interest');
     }
 }
-////////////////////////////////

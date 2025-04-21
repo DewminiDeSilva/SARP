@@ -179,49 +179,127 @@
                 <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
             </div>
 
+            
+
             <div class="table-responsive">
                 <table class="table table-bordered">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Organization Name</th>
-                            <th>Contact Person</th>
-                            <th>Mobile Phone</th>
-                            <th>Market Problem</th>
-                            <th>Business Title</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+                <thead class="thead-light">
+    <tr>
+        <th>ID</th>
+        <th>Organization Name</th>
+        <th>Contact Person</th>
+        <th>Mobile Phone</th>
+        <th>Market Problem</th>
+        <th>Business Title</th>
+        <th>Status</th> <!-- status column first -->
+        <th>Actions</th> <!-- then actions -->
+    </tr>
+</thead>
                     <tbody>
                         @foreach($expressions as $expression)
                         <tr>
-                            <td>{{ $expression->id }}</td>
-                            <td>{{ $expression->organization_name }}</td>
-                            <td>{{ $expression->contact_person }}</td>
-                            <td>{{ $expression->mobile_phone }}</td>
-                            <td>{{ Str::limit($expression->market_problem, 50) }}</td>
-                            <td>{{ $expression->business_title }}</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
-                                        <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
-                                    </a>
-                                    <a href="{{ route('expressions.edit', $expression->id) }}" class="btn btn-sm edit-button" title="Edit">
-                                        <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
-                                    </a>
-                                    <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm custom-button" title="Delete" onclick="return confirm('Are you sure?')">
-                                            <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+    <td>{{ $expression->id }}</td>
+    <td>{{ $expression->organization_name }}</td>
+    <td>{{ $expression->contact_person }}</td>
+    <td>{{ $expression->mobile_phone }}</td>
+    <td>{{ Str::limit($expression->market_problem, 50) }}</td>
+    <td>{{ $expression->business_title }}</td>
+
+    <!-- ✅ Status Column -->
+    <td>
+        <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <select name="status" onchange="this.form.submit()" class="form-control form-control-sm">
+                <option value="Evaluation Completed" {{ $expression->status == 'Evaluation Completed' ? 'selected' : '' }}>Evaluation Completed</option>
+                <option value="Internal Review Committee Approved" {{ $expression->status == 'Internal Review Committee Approved' ? 'selected' : '' }}>Internal Review Committee Approved</option>
+                <option value="Business Proposal Submitted" {{ $expression->status == 'Business Proposal Submitted' ? 'selected' : '' }}>Business Proposal Submitted</option>
+                <option value="BPEC Evaluation" {{ $expression->status == 'BPEC Evaluation' ? 'selected' : '' }}>BPEC Evaluation</option>
+                <option value="BPEC Approved" {{ $expression->status == 'BPEC Approved' ? 'selected' : '' }}>BPEC Approved</option>
+                <option value="NSC Approved" {{ $expression->status == 'NSC Approved' ? 'selected' : '' }}>NSC Approved</option>
+                <option value="IFAD Approved" {{ $expression->status == 'IFAD Approved' ? 'selected' : '' }}>IFAD Approved</option>
+                <option value="Agreement Signed" {{ $expression->status == 'Agreement Signed' ? 'selected' : '' }}>Agreement Signed</option>
+            </select>
+        </form>
+    </td>
+
+    <!-- ✅ Action Buttons -->
+    <td>
+        <div class="action-buttons">
+            <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
+                <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
+            </a>
+            <a href="{{ route('expressions.edit', $expression->id) }}" class="btn btn-sm edit-button" title="Edit">
+                <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
+            </a>
+            <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-sm custom-button" title="Delete" onclick="return confirm('Are you sure?')">
+                    <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
+                </button>
+            </form>
+        </div>
+    </td>
+</tr>
+                
                         @endforeach
                     </tbody>
                 </table>
+
+                <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {{ $expressions->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $expressions->previousPageUrl() }}" tabindex="-1">Previous</a>
+        </li>
+
+        @php
+            $currentPage = $expressions->currentPage();
+            $lastPage = $expressions->lastPage();
+            $startPage = max($currentPage - 2, 1);
+            $endPage = min($currentPage + 2, $lastPage);
+        @endphp
+
+        @if ($startPage > 1)
+            <li class="page-item"><a class="page-link" href="{{ $expressions->url(1) }}">1</a></li>
+            @if ($startPage > 2)
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            @endif
+        @endif
+
+        @for ($i = $startPage; $i <= $endPage; $i++)
+            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                <a class="page-link" href="{{ $expressions->url($i) }}">{{ $i }}</a>
+            </li>
+        @endfor
+
+        @if ($endPage < $lastPage)
+            @if ($endPage < $lastPage - 1)
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            @endif
+            <li class="page-item"><a class="page-link" href="{{ $expressions->url($lastPage) }}">{{ $lastPage }}</a></li>
+        @endif
+
+        <li class="page-item {{ $expressions->hasMorePages() ? '' : 'disabled' }}">
+            <a class="page-link" href="{{ $expressions->nextPageUrl() }}">Next</a>
+        </li>
+    </ul>
+</nav>
+@php
+    $currentPage = $expressions->currentPage();
+    $perPage = $expressions->perPage();
+    $total = $expressions->total();
+    $startingNumber = ($currentPage - 1) * $perPage + 1;
+    $endingNumber = min($total, $currentPage * $perPage);
+@endphp
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div id="tableInfo" class="text-right">
+        <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
+    </div>
+</div>
+
+
             </div>
         </div>
 

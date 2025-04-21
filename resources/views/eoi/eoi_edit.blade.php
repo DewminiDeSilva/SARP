@@ -210,6 +210,21 @@
                         <label class="form-label">Business Objectives</label>
                         <textarea class="form-control" name="business_objectives" required>{{ $expression->business_objectives }}</textarea>
                     </div>
+                    <div class="mb-3">
+    <label class="form-label">Background Information</label>
+    <textarea class="form-control" name="background_info" rows="3">{{ $expression->background_info }}</textarea>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Project Justification</label>
+    <textarea class="form-control" name="project_justification" rows="3">{{ $expression->project_justification }}</textarea>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Project Benefits</label>
+    <textarea class="form-control" name="project_benefits" rows="3">{{ $expression->project_benefits }}</textarea>
+</div>
+
 
                     {{-- Risk & Investment --}}
                     @php
@@ -263,23 +278,90 @@
                         </table>
                     </div>
 
-                    {{-- Textareas --}}
-                    @foreach ([
-                        'background_info' => 'Background Information',
-                        'project_justification' => 'Project Justification',
-                        'project_benefits' => 'Project Benefits',
-                        'project_coverage' => 'Project Coverage',
-                        'expected_outputs' => 'Expected Outputs',
-                        'expected_outcomes' => 'Expected Outcomes',
-                        'funding_source' => 'Funding Source',
-                        'implementation_plan' => 'Implementation Plan',
-                        'assistance_required' => 'Assistance Required'
-                    ] as $field => $label)
-                        <div class="mb-3">
-                            <label class="form-label">{{ $label }}</label>
-                            <textarea class="form-control" name="{{ $field }}">{{ $expression->$field }}</textarea>
-                        </div>
-                    @endforeach
+@php
+    $projectCoverage = json_decode($expression->project_coverage, true) ?? [];
+    $expectedOutputs = json_decode($expression->expected_outputs, true) ?? [];
+    $expectedOutcomes = json_decode($expression->expected_outcomes, true) ?? [];
+    $fundingSource = json_decode($expression->funding_source, true) ?? [];
+@endphp
+
+<!-- Project Coverage -->
+<div class="mb-4">
+    <label class="form-label">Project Coverage</label>
+    <table class="table table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>Area</th>
+                <th>No. of Farmers</th>
+                <th>Acreage</th>
+                <th><button type="button" class="btn btn-success add-coverage">+</button></th>
+            </tr>
+        </thead>
+        <tbody id="coverage-table">
+            @foreach ($projectCoverage as $index => $coverage)
+                <tr>
+                    <td><input type="text" name="project_coverage[{{ $index }}][area]" class="form-control" value="{{ $coverage['area'] ?? '' }}"></td>
+                    <td><input type="number" name="project_coverage[{{ $index }}][farmers]" class="form-control" value="{{ $coverage['farmers'] ?? 0 }}"></td>
+                    <td><input type="number" name="project_coverage[{{ $index }}][acreage]" class="form-control" value="{{ $coverage['acreage'] ?? 0 }}"></td>
+                    <td><button type="button" class="btn btn-danger remove-coverage">-</button></td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<!-- Expected Outputs -->
+<div class="mb-3">
+    <label class="form-label">Expected Outputs</label>
+    <div id="outputs-wrapper">
+        @foreach ($expectedOutputs as $output)
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outputs[]" class="form-control" value="{{ $output }}">
+                <button type="button" class="btn btn-danger remove-output">-</button>
+            </div>
+        @endforeach
+    </div>
+    <button type="button" class="btn btn-success add-output">+ Add Output</button>
+</div>
+
+<!-- Expected Outcomes -->
+<div class="mb-3">
+    <label class="form-label">Expected Outcomes</label>
+    <div id="outcomes-wrapper">
+        @foreach ($expectedOutcomes as $outcome)
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outcomes[]" class="form-control" value="{{ $outcome }}">
+                <button type="button" class="btn btn-danger remove-outcome">-</button>
+            </div>
+        @endforeach
+    </div>
+    <button type="button" class="btn btn-success add-outcome">+ Add Outcome</button>
+</div>
+
+<!-- Funding Source -->
+<div class="mb-3">
+    <label class="form-label">Funding Source</label>
+    <table class="table table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>Type</th>
+                <th>Own Fund (Rs.)</th>
+                <th>Credit Fund (Rs.)</th>
+                <th><button type="button" class="btn btn-success add-fund">+</button></th>
+            </tr>
+        </thead>
+        <tbody id="funding-table">
+            @foreach ($fundingSource as $index => $fund)
+                <tr>
+                    <td><input type="text" name="funding_source[{{ $index }}][type]" class="form-control" value="{{ $fund['type'] ?? '' }}"></td>
+                    <td><input type="number" name="funding_source[{{ $index }}][own]" class="form-control" value="{{ $fund['own'] ?? 0 }}"></td>
+                    <td><input type="number" name="funding_source[{{ $index }}][credit]" class="form-control" value="{{ $fund['credit'] ?? 0 }}"></td>
+                    <td><button type="button" class="btn btn-danger remove-fund">-</button></td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary px-5">Update</button>
@@ -328,5 +410,69 @@
         });
     });
 </script>
+<script>
+$(document).ready(function () {
+    let coverageIndex = {{ count($projectCoverage) }};
+    $(document).on('click', '.add-coverage', function () {
+        $('#coverage-table').append(`
+            <tr>
+                <td><input type="text" name="project_coverage[${coverageIndex}][area]" class="form-control"></td>
+                <td><input type="number" name="project_coverage[${coverageIndex}][farmers]" class="form-control"></td>
+                <td><input type="number" name="project_coverage[${coverageIndex}][acreage]" class="form-control"></td>
+                <td><button type="button" class="btn btn-danger remove-coverage">-</button></td>
+            </tr>
+        `);
+        coverageIndex++;
+    });
+
+    $(document).on('click', '.remove-coverage', function () {
+        $(this).closest('tr').remove();
+    });
+
+    // Expected Outputs
+    $(document).on('click', '.add-output', function () {
+        $('#outputs-wrapper').append(`
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outputs[]" class="form-control">
+                <button type="button" class="btn btn-danger remove-output">-</button>
+            </div>
+        `);
+    });
+    $(document).on('click', '.remove-output', function () {
+        $(this).closest('.input-group').remove();
+    });
+
+    // Expected Outcomes
+    $(document).on('click', '.add-outcome', function () {
+        $('#outcomes-wrapper').append(`
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outcomes[]" class="form-control">
+                <button type="button" class="btn btn-danger remove-outcome">-</button>
+            </div>
+        `);
+    });
+    $(document).on('click', '.remove-outcome', function () {
+        $(this).closest('.input-group').remove();
+    });
+
+    // Funding Source
+    let fundIndex = {{ count($fundingSource) }};
+    $(document).on('click', '.add-fund', function () {
+        $('#funding-table').append(`
+            <tr>
+                <td><input type="text" name="funding_source[${fundIndex}][type]" class="form-control"></td>
+                <td><input type="number" name="funding_source[${fundIndex}][own]" class="form-control"></td>
+                <td><input type="number" name="funding_source[${fundIndex}][credit]" class="form-control"></td>
+                <td><button type="button" class="btn btn-danger remove-fund">-</button></td>
+            </tr>
+        `);
+        fundIndex++;
+    });
+    $(document).on('click', '.remove-fund', function () {
+        $(this).closest('tr').remove();
+    });
+});
+</script>
+
 </body>
 </html>
