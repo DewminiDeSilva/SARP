@@ -115,7 +115,8 @@
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">
             <h3 style="font-size: 2rem; color: green;">Expression of Interest</h3>
 
-            <form action="{{ route('expressions.store') }}" method="POST">
+            <form action="{{ route('expressions.store') }}" method="POST" enctype="multipart/form-data">
+
                 @csrf
 
                 <!-- Form fields here -->
@@ -153,7 +154,7 @@
                         <input type="email" class="form-control" name="email">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Problem in the Marketplace</label>
+                        <label class="form-label">Name of the valur changing</label>
                         <textarea class="form-control" name="market_problem" required></textarea>
                     </div>
                     <div class="mb-3">
@@ -170,7 +171,7 @@
                             <thead>
                                 <tr>
                                     <th>Risk</th>
-                                    <th>Mitigation</th>
+                                    <th>Mitigation Measure</th>
                                     <th><button type="button" class="btn btn-success add-risk">+</button></th>
                                 </tr>
                             </thead>
@@ -184,7 +185,7 @@
                         </table>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Investment Breakdown</label>
+                        <label class="form-label">Total Investment and Breakdown</label>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -220,35 +221,132 @@
     <textarea class="form-control" name="project_benefits" required></textarea>
 </div>
 
-<div class="mb-3">
+<!-- <div class="mb-3">
     <label class="form-label">Project Coverage</label>
     <textarea class="form-control" name="project_coverage"></textarea>
-</div>
+</div> -->
 
+<!-- ✅ Project Coverage Table -->
 <div class="mb-3">
+        <label class="form-label">Project Coverage</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>No. of Farmers</th>
+                    <th>Acreage</th>
+                    <th><button type="button" class="btn btn-success add-coverage">+</button></th>
+                </tr>
+            </thead>
+            <tbody id="coverage-table">
+                <tr>
+                    <td><input type="text" name="project_coverage[0][area]" class="form-control" required></td>
+                    <td><input type="number" name="project_coverage[0][farmers]" class="form-control" required></td>
+                    <td><input type="number" name="project_coverage[0][acreage]" class="form-control" required></td>
+                    <td><button type="button" class="btn btn-danger remove-coverage">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<!-- <div class="mb-3">
     <label class="form-label">Expected Outputs</label>
     <textarea class="form-control" name="expected_outputs"></textarea>
-</div>
+</div> -->
 
+<!-- ✅ Expected Outputs -->
 <div class="mb-3">
+        <label class="form-label">Expected Outputs</label>
+        <div id="outputs-wrapper">
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outputs[]" class="form-control" placeholder="Enter expected output" required>
+                <button type="button" class="btn btn-success add-output">+</button>
+            </div>
+        </div>
+    </div>
+
+<!-- <div class="mb-3">
     <label class="form-label">Expected Outcomes</label>
     <textarea class="form-control" name="expected_outcomes"></textarea>
-</div>
+</div> -->
 
+<!-- ✅ Expected Outcomes -->
 <div class="mb-3">
+        <label class="form-label">Expected Outcomes</label>
+        <div id="outcomes-wrapper">
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outcomes[]" class="form-control" placeholder="Enter expected outcome" required>
+                <button type="button" class="btn btn-success add-outcome">+</button>
+            </div>
+        </div>
+    </div>
+
+<!-- <div class="mb-3">
     <label class="form-label">Funding Source</label>
     <textarea class="form-control" name="funding_source"></textarea>
-</div>
-
+</div> -->
+<!-- ✅ Funding Source Table -->
 <div class="mb-3">
+        <label class="form-label">Funding Source</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Type of Fund</th>
+                    <th>Own Fund (Rs.)</th>
+                    <th>Credit Fund (Rs.)</th>
+                    <th><button type="button" class="btn btn-success add-fund">+</button></th>
+                </tr>
+            </thead>
+            <tbody id="funding-table">
+                <tr>
+                    <td><input type="text" name="funding_source[0][type]" class="form-control" required></td>
+                    <td><input type="number" name="funding_source[0][own]" class="form-control" required></td>
+                    <td><input type="number" name="funding_source[0][credit]" class="form-control" required></td>
+                    <td><button type="button" class="btn btn-danger remove-fund">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<!-- <div class="mb-3">
     <label class="form-label">Implementation Plan</label>
     <textarea class="form-control" name="implementation_plan"></textarea>
-</div>
+</div> -->
 
-<div class="mb-3">
+ <!-- ✅ Implementation Plan (PDF Upload) -->
+ <div class="mb-3">
+        <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
+        <input type="file" class="form-control" name="implementation_plan" accept="application/pdf" required>
+    </div>
+
+<!-- <div class="mb-3">
     <label class="form-label">Assistance Required</label>
     <textarea class="form-control" name="assistance_required"></textarea>
-</div>
+</div> -->
+
+<!-- ✅ Assistance Required Table -->
+<div class="mb-3">
+        <label class="form-label">Assistance Required</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Type of Assistance</th>
+                    <th>SARP (Rs.)</th>
+                    <th>Other (Rs.)</th>
+                    <th><button type="button" class="btn btn-success add-assistance">+</button></th>
+                </tr>
+            </thead>
+            <tbody id="assistance-table">
+                <tr>
+                    <td><input type="text" name="assistance_required[0][type]" class="form-control" required></td>
+                    <td><input type="number" name="assistance_required[0][sarp]" class="form-control" required></td>
+                    <td><input type="number" name="assistance_required[0][other]" class="form-control" required></td>
+                    <td><button type="button" class="btn btn-danger remove-assistance">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 
 
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -304,6 +402,85 @@
         });
     });
 </script>
+<script>
+$(document).ready(function () {
+    // Project Coverage
+    $('.add-coverage').on('click', function () {
+        let index = $('#coverage-table tr').length;
+        $('#coverage-table').append(`
+            <tr>
+                <td><input type="text" name="project_coverage[${index}][area]" class="form-control" required></td>
+                <td><input type="number" name="project_coverage[${index}][farmers]" class="form-control" required></td>
+                <td><input type="number" name="project_coverage[${index}][acreage]" class="form-control" required></td>
+                <td><button type="button" class="btn btn-danger remove-coverage">-</button></td>
+            </tr>
+        `);
+    });
+
+    $(document).on('click', '.remove-coverage', function () {
+        $(this).closest('tr').remove();
+    });
+
+    // Expected Outputs
+    $('.add-output').on('click', function () {
+        $('#outputs-wrapper').append(`
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outputs[]" class="form-control" placeholder="Enter expected output" required>
+                <button type="button" class="btn btn-danger remove-field">-</button>
+            </div>
+        `);
+    });
+
+    // Expected Outcomes
+    $('.add-outcome').on('click', function () {
+        $('#outcomes-wrapper').append(`
+            <div class="input-group mb-2">
+                <input type="text" name="expected_outcomes[]" class="form-control" placeholder="Enter expected outcome" required>
+                <button type="button" class="btn btn-danger remove-field">-</button>
+            </div>
+        `);
+    });
+
+    $(document).on('click', '.remove-field', function () {
+        $(this).closest('.input-group').remove();
+    });
+
+    // Funding Source
+    $('.add-fund').on('click', function () {
+        let index = $('#funding-table tr').length;
+        $('#funding-table').append(`
+            <tr>
+                <td><input type="text" name="funding_source[${index}][type]" class="form-control" required></td>
+                <td><input type="number" name="funding_source[${index}][own]" class="form-control" required></td>
+                <td><input type="number" name="funding_source[${index}][credit]" class="form-control" required></td>
+                <td><button type="button" class="btn btn-danger remove-fund">-</button></td>
+            </tr>
+        `);
+    });
+
+    $(document).on('click', '.remove-fund', function () {
+        $(this).closest('tr').remove();
+    });
+
+    // Assistance Required
+    $('.add-assistance').on('click', function () {
+        let index = $('#assistance-table tr').length;
+        $('#assistance-table').append(`
+            <tr>
+                <td><input type="text" name="assistance_required[${index}][type]" class="form-control" required></td>
+                <td><input type="number" name="assistance_required[${index}][sarp]" class="form-control" required></td>
+                <td><input type="number" name="assistance_required[${index}][other]" class="form-control" required></td>
+                <td><button type="button" class="btn btn-danger remove-assistance">-</button></td>
+            </tr>
+        `);
+    });
+
+    $(document).on('click', '.remove-assistance', function () {
+        $(this).closest('tr').remove();
+    });
+});
+</script>
+
 
 </body>
 </html>

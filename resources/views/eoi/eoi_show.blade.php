@@ -132,7 +132,22 @@
 
         #sidebarToggle:hover {
             background-color: #0a4818;
+
+            
         }
+        .clean-list {
+    background-color: transparent !important;
+    padding-left: 20px;
+    list-style-type: disc;
+    margin: 0;
+}
+
+.clean-item {
+    background-color: transparent !important;
+    color: #212529; /* or customize */
+    font-size: 1rem;
+}
+
     </style>
 </head>
 <body>
@@ -171,12 +186,152 @@
             <div class="info"><label>Background Information:</label> <p>{{ $expression->background_info ?? 'N/A' }}</p></div>
             <div class="info"><label>Project Justification:</label> <p>{{ $expression->project_justification ?? 'N/A' }}</p></div>
             <div class="info"><label>Project Benefits:</label> <p>{{ $expression->project_benefits ?? 'N/A' }}</p></div>
-            <div class="info"><label>Project Coverage:</label> <p>{{ $expression->project_coverage ?? 'N/A' }}</p></div>
-            <div class="info"><label>Expected Outputs:</label> <p>{{ $expression->expected_outputs ?? 'N/A' }}</p></div>
-            <div class="info"><label>Expected Outcomes:</label> <p>{{ $expression->expected_outcomes ?? 'N/A' }}</p></div>
-            <div class="info"><label>Funding Source:</label> <p>{{ $expression->funding_source ?? 'N/A' }}</p></div>
-            <div class="info"><label>Implementation Plan:</label> <p>{{ $expression->implementation_plan ?? 'N/A' }}</p></div>
-            <div class="info"><label>Assistance Required:</label> <p>{{ $expression->assistance_required ?? 'N/A' }}</p></div>
+            <!-- <div class="info"><label>Project Coverage:</label> <p>{{ $expression->project_coverage ?? 'N/A' }}</p></div> -->
+
+            @php
+    $coverage = json_decode($expression->project_coverage, true) ?? [];
+    $outputs = $expression->expected_outputs ?? [];
+    $outcomes = $expression->expected_outcomes ?? [];
+    $funding = json_decode($expression->funding_source, true) ?? [];
+    $assistance = json_decode($expression->assistance_required, true) ?? [];
+@endphp
+
+<!-- ✅ Project Coverage Table -->
+<div class="my-4">
+    <h5><strong>Project Coverage</strong></h5>
+    <table class="table table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>Area</th>
+                <th>No. of Farmers</th>
+                <th>Acreage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($coverage as $row)
+                <tr>
+                    <td>{{ $row['area'] ?? 'N/A' }}</td>
+                    <td>{{ $row['farmers'] ?? '0' }}</td>
+                    <td>{{ $row['acreage'] ?? '0' }}</td>
+                </tr>
+            @empty
+                <tr><td colspan="3">No project coverage data</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+            <!-- <div class="info"><label>Expected Outputs:</label> <p>{{ $expression->expected_outputs ?? 'N/A' }}</p></div> -->
+             <!-- ✅ Expected Outputs -->
+<div class="my-4">
+    <h5><strong>Expected Outputs</strong></h5>
+    <ul class="clean-list">
+    @forelse (json_decode($outputs, true) ?? [] as $output)
+        <li class="clean-item">{{ $output }}</li>
+    @empty
+        <li class="clean-item">No outputs provided</li>
+    @endforelse
+</ul>
+
+</div>
+            <!-- <div class="info"><label>Expected Outcomes:</label> <p>{{ $expression->expected_outcomes ?? 'N/A' }}</p></div> -->
+             <!-- ✅ Expected Outcomes -->
+<div class="my-4">
+    <h5><strong>Expected Outcomes</strong></h5>
+    <ul class="clean-list">
+    @forelse (json_decode($outcomes, true) ?? [] as $outcome)
+        <li class="clean-item">{{ $outcome }}</li>
+    @empty
+        <li class="clean-item">No outcomes provided</li>
+    @endforelse
+</ul>
+
+</div>
+            <!-- <div class="info"><label>Funding Source:</label> <p>{{ $expression->funding_source ?? 'N/A' }}</p></div> -->
+
+            @php
+    $fundingSources = json_decode($expression->funding_source, true);
+@endphp
+
+@if (!empty($fundingSources))
+    <div class="my-4">
+        <h5><strong>Funding Source</strong></h5>
+        <table class="table table-bordered">
+            <thead class="table-success">
+                <tr>
+                    <th>Type of Fund</th>
+                    <th>Own Fund (Rs.)</th>
+                    <th>Credit Fund (Rs.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($fundingSources as $fund)
+                    <tr>
+                        <td>{{ $fund['type'] ?? 'N/A' }}</td>
+                        <td>{{ number_format($fund['own'] ?? 0, 2) }}</td>
+                        <td>{{ number_format($fund['credit'] ?? 0, 2) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@else
+    <div class="info"><label>Funding Source:</label> <p>N/A</p></div>
+@endif
+
+            <!-- <div class="info"><label>Implementation Plan:</label> <p>{{ $expression->implementation_plan ?? 'N/A' }}</p></div> -->
+             <!-- ✅ Implementation Plan -->
+       
+             <div class="info"><label>Implementation Plan (PDF)</label></div>
+             
+        @if($expression->implementation_plan)
+            <a href="{{ asset('uploads/implementation_plans/' . $expression->implementation_plan) }}" target="_blank">
+               View PDF
+            </a>
+           @else
+            <p>No file uploaded.</p>
+          @endif
+   
+
+            <!-- <div class="info"><label>Assistance Required:</label> <p>{{ $expression->assistance_required ?? 'N/A' }}</p></div> -->
+             <!-- ✅ Assistance Required Table -->
+<div class="my-4">
+    <h5><strong>Assistance Required</strong></h5>
+    <table class="table table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>Type of Assistance</th>
+                <th>SARP (Rs.)</th>
+                <th>Other (Rs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php $sarpTotal = 0; $otherTotal = 0; @endphp
+            @forelse ($assistance as $assist)
+                @php
+                    $sarp = $assist['sarp'] ?? 0;
+                    $other = $assist['other'] ?? 0;
+                    $sarpTotal += $sarp;
+                    $otherTotal += $other;
+                @endphp
+                <tr>
+                    <td>{{ $assist['type'] ?? 'N/A' }}</td>
+                    <td>{{ number_format($sarp, 2) }}</td>
+                    <td>{{ number_format($other, 2) }}</td>
+                </tr>
+            @empty
+                <tr><td colspan="3">No assistance data</td></tr>
+            @endforelse
+            @if (count($assistance))
+                <tr class="table-secondary">
+                    <th>Total</th>
+                    <th>{{ number_format($sarpTotal, 2) }}</th>
+                    <th>{{ number_format($otherTotal, 2) }}</th>
+                </tr>
+            @endif
+        </tbody>
+    </table>
+</div>
 
             {{-- Decode JSON --}}
             @php
