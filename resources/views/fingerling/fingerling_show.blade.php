@@ -367,74 +367,61 @@
                 </tr>
                     </thead>
                     <tbody>
-                    @foreach ($fingerlings as $fingerling)
-                    <tr>
-                        <td>{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->livestock_type }}</td>
-                        <td>{{ $fingerling->stocking_type }}</td>
-                        <td>{{ $fingerling->stocking_date }}</td>
-                        <td>
-                            @if (!empty($fingerling->stocking_details) && is_string($fingerling->stocking_details))
-                                @php
-                                    $stockingDetails = json_decode($fingerling->stocking_details, true);
-                                @endphp
-                                @if (is_array($stockingDetails))
-                                    @foreach ($stockingDetails as $detail)
-                                        <p>{{ $detail['variety'] ?? 'N/A' }}</p>
-                                    @endforeach
-                                @else
-                                    <p>N/A</p>
-                                @endif
-                            @else
-                                <p>N/A</p>
-                            @endif
-                        </td>
-                        <td>
-                            @if (!empty($fingerling->stocking_details) && is_string($fingerling->stocking_details))
-                                @php
-                                    $stockingDetails = json_decode($fingerling->stocking_details, true);
-                                @endphp
-                                @if (is_array($stockingDetails))
-                                    @foreach ($stockingDetails as $detail)
-                                        <p>{{ $detail['stock_number'] ?? 'N/A' }}</p>
-                                    @endforeach
-                                @else
-                                    <p>N/A</p>
-                                @endif
-                            @else
-                                <p>N/A</p>
-                            @endif
-                        </td>
-
-
-                        <td>{{ $fingerling->harvest_date }}</td>
-                        <td>{{ $fingerling->variety_harvest_kg ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->unit_price_rs ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->wholesale_unit_price_rs ?? 'N/A' }}</td>
-                        <td>{{ $fingerling->wholesale_total_income_rs ?? 'N/A' }}</td>
-                        <td class="button-container">
-                            <!-- <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn btn-warning btn-sm">Edit</a> -->
-                            <!-- Edit Button -->
-                    <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                        
-                            <!-- Delete Button -->
-                            <form action="{{ route('fingerling.destroy', $fingerling->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-action delete" title="Delete" onclick="return confirm('Are you sure you want to delete this staff profile?');">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-
-                        </td>
-                    </tr>
+    @forelse ($fingerlings as $fingerling)
+    <tr>
+        <td>{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
+        <td>{{ $fingerling->livestock_type }}</td>
+        <td>{{ $fingerling->stocking_type }}</td>
+        <td>{{ $fingerling->stocking_date }}</td>
+        <td>
+            @php
+                $stockingDetails = is_string($fingerling->stocking_details) ? json_decode($fingerling->stocking_details, true) : null;
+            @endphp
+            @if (is_array($stockingDetails))
+                @foreach ($stockingDetails as $detail)
+                    <p>{{ $detail['variety'] ?? 'N/A' }}</p>
                 @endforeach
-                </tbody>
+            @else
+                <p>N/A</p>
+            @endif
+        </td>
+        <td>
+            @if (is_array($stockingDetails))
+                @foreach ($stockingDetails as $detail)
+                    <p>{{ $detail['stock_number'] ?? 'N/A' }}</p>
+                @endforeach
+            @else
+                <p>N/A</p>
+            @endif
+        </td>
+        <td>{{ $fingerling->harvest_date }}</td>
+        <td>{{ $fingerling->variety_harvest_kg ?? 'N/A' }}</td>
+        <td>{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
+        <td>{{ $fingerling->unit_price_rs ?? 'N/A' }}</td>
+        <td>{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
+        <td>{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
+        <td>{{ $fingerling->wholesale_unit_price_rs ?? 'N/A' }}</td>
+        <td>{{ $fingerling->wholesale_total_income_rs ?? 'N/A' }}</td>
+        <td class="button-container">
+            <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
+                <i class="fas fa-edit"></i>
+            </a>
+            <form action="{{ route('fingerling.destroy', $fingerling->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-action delete" title="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </form>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="15" class="text-center text-muted">No fingerlings added yet for this tank.</td>
+    </tr>
+    @endforelse
+</tbody>
+
             </table>
         </div>
 

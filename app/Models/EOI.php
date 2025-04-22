@@ -22,14 +22,31 @@ class EOI extends Model
         'market_problem',
         'business_title',
         'business_objectives',
+        'background_info',
+        'project_justification',
+        'project_benefits',
         'risks',
         'mitigations',
+        'project_coverage',
+        'expected_outputs',
+        'expected_outcomes',
         'investment_breakdown',
+        'funding_source',
+        'assistance_required',
+        'risk_factors',
+        'implementation_plan',
+        'status',
     ];
 
     protected $casts = [
         'risks' => 'array',
         'mitigations' => 'array',
+        'project_coverage' => 'array',
+        'expected_outputs' => 'array',
+        'expected_outcomes' => 'array',
         'investment_breakdown' => 'array',
+        'funding_source' => 'array',
+        'assistance_required' => 'array',
+        'risk_factors' => 'array',
     ];
 }

@@ -157,7 +157,15 @@ li:hover {
                         <ul class="nested">
                             <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
                             <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
-                            <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Stocking Details Fingerlings</a></li>
+                        
+                        </ul>
+                    </li>
+
+                    <li class="submenu">
+                        <a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a>
+                        <ul class="nested">
+                           
+                            <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a></li>
                         </ul>
                     </li>
 

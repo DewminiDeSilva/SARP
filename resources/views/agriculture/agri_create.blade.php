@@ -259,7 +259,8 @@
             <div class="row mt-3">
                 <div class="col">
                     <label for="totalAcres" class="form-label bold-label">Total Number of Acres Cultivated</label>
-                    <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" required>
+                    <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" min="0" required>
+
                 </div>
             </div>
 

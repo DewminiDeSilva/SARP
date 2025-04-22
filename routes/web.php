@@ -601,6 +601,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}', [EOIController::class, 'update'])->name('expressions.update');
         Route::delete('/{id}', [EOIController::class, 'destroy'])->name('expressions.destroy');
     });
+    Route::patch('/expressions/{id}/update-status', [EOIController::class, 'updateStatus'])->name('expressions.updateStatus');
+
 
 });
 
