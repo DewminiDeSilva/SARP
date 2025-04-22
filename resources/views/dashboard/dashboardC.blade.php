@@ -142,7 +142,7 @@ li:hover {
             </li>
 
             <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Agriculture and Livestock</a>
+                <a href="#" style="color: #FFFFFF">Resilience Projects</a>
                 <ul class="nested">
                 <li class="submenu">
                         <a href="#" style="color: #FFFFFF">Agriculture</a>
@@ -171,6 +171,23 @@ li:hover {
 
                 </ul>
             </li>
+            <li class="submenu">
+                <a href="#" style="color: #FFFFFF">4p Agri Business Development Projects</a>
+                <ul class="nested">
+                    <li href="/expressions"><a href="/expressions" style="color: #FFFFFF">Expression Of Interest (EOI)</a></li>
+                    
+                    <li class="submenu">
+                        <a href="#" style="color: #FFFFFF">Establish 4p Projects</a>
+                        <ul class="nested">
+                            <li href=""><a href="" style="color: #FFFFFF">Registration of 4P Project</a></li>
+                        
+                        </ul>
+                    </li>
+
+        
+                </ul>
+
+            </li>
 
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Agro Enterprice</a>
@@ -181,14 +198,14 @@ li:hover {
             </li>
 
             <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Natural Resource Managment</a>
+                <a href="#" style="color: #FFFFFF">Natural Resource Managment (NRM)</a>
                 <ul class="nested">
                     <li href="/nrmtraining"><a href="/nrmtraining" style="color: #FFFFFF">Training Program Details</a></li>
 
                 </ul>
             </li>
             <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Farmer Field Schools</a>
+                <a href="#" style="color: #FFFFFF">Farmer Field Schools (FFS)</a>
                 <ul class="nested">
                     <li href="/ffs-training"><a href="/ffs-training" style="color: #FFFFFF">FFS Training Program Details</a></li>
 
@@ -213,15 +230,7 @@ li:hover {
 
             </li>
              
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">4P</a>
-                <ul class="nested">
-                    <li href="/expressions"><a href="/expressions" style="color: #FFFFFF">EOI</a></li>
-        
-        
-                </ul>
-
-            </li>
+            
 
 
         </ul>
