@@ -117,15 +117,22 @@ class FamilyController extends Controller
         
         $family->save();
 
-        return redirect('/family')->with('success', 'Family member updated successfully!');
+        return redirect('/beneficiary')->with('success', 'Family member updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Family $family)
-    {
-        $family->delete();
-        return redirect('/family')->with('success', 'Family member deleted successfully!');
-    }
+{
+    // Get beneficiary ID before deleting
+    $beneficiaryId = $family->beneficiary_id;
+
+    // Now delete the family member
+    $family->delete();
+
+    // Redirect to the show page for the beneficiary
+    return redirect()->route('beneficiary.show', $beneficiaryId)
+                     ->with('success', 'Family member deleted successfully.');
+}
 }
