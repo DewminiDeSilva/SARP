@@ -154,6 +154,37 @@
             vertical-align: middle;
             white-space: nowrap;
         }
+
+        .pagination .page-link {
+            padding: 5px 10px; /* Adjust padding to control button size */
+        }
+
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
+
+        .page-item:hover {
+            border-color: #fff;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .page-link {
+            color : #28a745;
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #126926;
+            border-color: #126926;
+        }
     </style>
 </head>
 <body>
