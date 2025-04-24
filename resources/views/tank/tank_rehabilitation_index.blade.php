@@ -443,7 +443,10 @@ table th:first-child, table td:first-child {
                                     <th>Status</th>
                                     <!-- <th>Remarks</th> -->
                                     <!-- <th>Image</th> -->
+                                    <th style="width: 150px; background-color: #fff3cd; text-align: center;">Last Updated</th>
+
                                     <th>Action</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -479,6 +482,11 @@ table th:first-child, table td:first-child {
                                     <!-- <td>{{ $tankRehabilitation->eot }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->contract_period }}</td> -->
                                     <td>{{ $tankRehabilitation->status }}</td>
+                                    <td style="background-color: #fff3cd; font-size: 12px; text-align: center;">
+                                        {{ \Carbon\Carbon::parse($tankRehabilitation->updated_at)->timezone('Asia/Colombo')->format('Y-m-d H:i') }}
+                                    </td>
+                                    
+                                    
                                     <!-- <td>{{ $tankRehabilitation->remarks }}</td> -->
 
                                     <!-- <td>

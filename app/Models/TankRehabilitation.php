@@ -45,8 +45,11 @@ class TankRehabilitation extends Model
         'pre_construction_image',  // Pre-construction image
         'during_construction_image',  // During-construction image
         'post_construction_image',  // Post-construction image
-    ];
 
+        
+    ];
+    
+    public $timestamps = true;
     /**
      * Relationship with Fingerling model.
      */
