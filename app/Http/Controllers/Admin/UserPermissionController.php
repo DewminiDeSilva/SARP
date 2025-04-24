@@ -21,45 +21,14 @@ class UserPermissionController extends Controller
     {
         // Define the modules and actions
         $modules = [
-            'staff_profile',
-            'beneficiary',
-            'training',
-            'livestock',
-            'nutrition',
-            'nutrition_trainee',
-            'ffs_training',
-            'ffs_participants',
-            'cdf',
-            'cdfmembers',
-            'farmerorganization',
-            'farmermember',
-            'asc_registration',
-            'grievances',
-            'officer',
-            'tank_rehabilitation',
-            'fingerling',
-            'infrastructure',
-            'gallery',
-            'agro',
-            'shareholder',
-            'bene_form',
-            'nrm',
-            'nrm_participants',
-            'awpb',
-            'costtab',
-            'projectdesignreport',
-            'vegitable',
-            'fruit',
-            'goat',
-            'dairy',
-            'poultary',
-            'aquaculture',
-            'homegarden',
-            'other_crops',
-            'agriculture',
-            'livestocks',
-            'expressions'
+            'staff_profile', 'beneficiary', 'family', 'training', 'livestock', 'nutrition', 'nutrition_trainee',
+            'ffs_training', 'ffs_participants', 'cdf', 'cdfmembers', 'farmerorganization', 'farmermember',
+            'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'fingerling', 'infrastructure',
+            'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'awpb',
+            'costtab', 'projectdesignreport', 'vegitable', 'fruit', 'goat', 'dairy', 'poultary',
+            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions'
         ];
+
 
         $actions = ['view', 'edit', 'delete', 'upload_csv'];
 

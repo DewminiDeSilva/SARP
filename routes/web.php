@@ -56,6 +56,7 @@ use App\Http\Controllers\AWPBController;
 use App\Http\Controllers\CostTabController;
 use App\Http\Controllers\ProjectDesignReportController;
 use App\Http\Controllers\EOIController;
+use App\Http\Controllers\Admin\UserPermissionController;
 
 
 
@@ -97,32 +98,120 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Beneficiary Routes
-    Route::resource('beneficiary', BeneficiaryController::class);
+    // Route::resource('beneficiary', BeneficiaryController::class);
     Route::get('/search', [BeneficiaryController::class, 'search'])->name('search');
-    Route::get('/generateCsv', [BeneficiaryController::class, 'generateCsv'])->name('download.csv');
+    // Route::get('/generateCsv', [BeneficiaryController::class, 'generateCsv'])->name('download.csv');
     Route::get('generateCsv', [BeneficiaryController::class, 'generateCsv'])->name('download.csv');
-    Route::get('search', [BeneficiaryController::class, 'search'])->name('search');
-    Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
-    Route::get('/beneficiaries', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
-    Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
-        Route::get('/', [BeneficiaryController::class, 'index'])->name('index');
-        Route::get('/create', [BeneficiaryController::class, 'create'])->name('create');
-        Route::post('/', [BeneficiaryController::class, 'store'])->name('store');
-        Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])->name('show');
-        Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])->name('edit');
-        Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update');
-        Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy');
-        Route::get('/search', [BeneficiaryController::class, 'search'])->name('search');
-        Route::post('/upload-csv', [BeneficiaryController::class, 'uploadCsv'])->name('uploadCsv');
-        Route::get('/generate-csv', [BeneficiaryController::class, 'generateCsv'])->name('generateCsv');
-        Route::get('/report-csv', [BeneficiaryController::class, 'reportCsv'])->name('reportCsv');
-        Route::get('/list', [BeneficiaryController::class, 'list'])->name('list');
+    // Route::get('search', [BeneficiaryController::class, 'search'])->name('search');
+    // Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
+    // Route::get('/beneficiaries', [BeneficiaryController::class, 'list'])->name('beneficiary.list');
+    // Route::prefix('beneficiary')->name('beneficiary.')->group(function () {
+    //     Route::get('/', [BeneficiaryController::class, 'index'])->name('index');
+    //     Route::get('/create', [BeneficiaryController::class, 'create'])->name('create');
+    //     Route::post('/', [BeneficiaryController::class, 'store'])->name('store');
+    //     Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])->name('show');
+    //     Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])->name('edit');
+    //     Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update');
+    //     Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy');
+    //     Route::get('/search', [BeneficiaryController::class, 'search'])->name('search');
+    // Route::post('/upload-csv', [BeneficiaryController::class, 'uploadCsv'])->name('uploadCsv');
+    //     Route::get('/generate-csv', [BeneficiaryController::class, 'generateCsv'])->name('generateCsv');
+    //     Route::get('/report-csv', [BeneficiaryController::class, 'reportCsv'])->name('reportCsv');
+    //     Route::get('/list', [BeneficiaryController::class, 'list'])->name('list');
+    // });
+    Route::prefix('beneficiary')->name('beneficiary.')->middleware('auth')->group(function () {
+        Route::get('/', [BeneficiaryController::class, 'index'])
+            ->name('index')
+            ->middleware('check.permission:beneficiary,view');
+
+        Route::get('/create', [BeneficiaryController::class, 'create'])
+            ->name('create')
+            ->middleware('check.permission:beneficiary,edit');
+
+        Route::post('/', [BeneficiaryController::class, 'store'])
+            ->name('store')
+            ->middleware('check.permission:beneficiary,edit');
+
+        Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])
+            ->name('show')
+            ->middleware('check.permission:beneficiary,view');
+
+        Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])
+            ->name('edit')
+            ->middleware('check.permission:beneficiary,edit');
+
+        Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])
+            ->name('update')
+            ->middleware('check.permission:beneficiary,edit');
+
+        Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('check.permission:beneficiary,delete');
+
+        // Route::get('/search', [BeneficiaryController::class, 'search'])
+        //     ->name('search')
+        //     ->middleware('check.permission:beneficiary,view');
+
+        // Route::post('/upload-csv', [BeneficiaryController::class, 'uploadCsv'])
+        //     ->name('uploadCsv')
+        //     ->middleware('check.permission:beneficiary,upload_csv');
+
+        Route::get('/generate-csv', [BeneficiaryController::class, 'generateCsv'])
+            ->name('generateCsv')
+            ->middleware('check.permission:beneficiary,upload_csv');
+
+        Route::get('/report-csv', [BeneficiaryController::class, 'reportCsv'])
+            ->name('reportCsv')
+            ->middleware('check.permission:beneficiary,upload_csv');
+
+        Route::get('/list', [BeneficiaryController::class, 'list'])
+            ->name('list')
+            ->middleware('check.permission:beneficiary,view');
     });
 
-    Route::resource('family', FamilyController::class);
-    Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])->name('family/create');
-    Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])->name('family/create');
-    Route::resource('family', FamilyController::class);
+    Route::prefix('beneficiary')
+    ->name('beneficiary.')
+    ->middleware('auth', 'check.permission:beneficiary,upload_csv')
+    ->group(function () {
+        Route::post('/upload-csv', [BeneficiaryController::class, 'uploadCsv'])->name('uploadCsv');
+
+    });
+
+
+
+    // Route::resource('family', FamilyController::class);
+    // Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])->name('family/create');
+    // Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])->name('family/create');
+    // Route::resource('family', FamilyController::class);
+
+    Route::middleware(['auth', 'check.permission:family,view'])->group(function () {
+
+        // Family resource routes (with index, show, store, update, destroy)
+        Route::resource('family', FamilyController::class);
+
+        // Custom create route with beneficiary ID — can be considered 'update' permission
+        Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])
+        ->name('family.create.by.beneficiary')
+        ->middleware(['auth', 'check.permission:family,edit']);
+
+
+    });
+
+    Route::middleware(['auth'])->prefix('family')->name('family.')->group(function () {
+
+        // Edit route for family member
+        Route::get('/{family}/edit', [FamilyController::class, 'edit'])
+            ->name('edit')
+            ->middleware('check.permission:family,edit');
+
+        // Delete route for family member
+        Route::delete('/{family}', [FamilyController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('check.permission:family,delete');
+
+    });
+
+
 
 
     // Province, District, and Division Routes
@@ -137,16 +226,75 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/gn-divisions', [GNDivisionController::class, 'getGNByDS']);
     Route::resource('tank_rehabilitation', TankRehabilitationController::class);
 
-    // Tank Rehabilitation Routes
-    Route::resource('tank_rehabilitation', TankRehabilitationController::class);
-    Route::get('/tank_rehabilitation/search', [TankRehabilitationController::class, 'search'])->name('searchTank');
-    Route::get('searchTank', [TankRehabilitationController::class, 'search'])->name('searchTank');
-    Route::get('/tank_rehabilitation', [TankRehabilitationController::class, 'index'])->name('tank_rehabilitation.index');
+    // // Tank Rehabilitation Routes
+    // Route::resource('tank_rehabilitation', TankRehabilitationController::class);
+    // Route::get('/tank_rehabilitation/search', [TankRehabilitationController::class, 'search'])->name('searchTank');
+    // Route::get('searchTank', [TankRehabilitationController::class, 'search'])->name('searchTank');
+    // Route::get('/tank_rehabilitation', [TankRehabilitationController::class, 'index'])->name('tank_rehabilitation.index');
     Route::get('/searchTank', [TankRehabilitationController::class, 'search'])->name('searchTank');
     Route::get('reportCsv', [TankRehabilitationController::class, 'reportCsv'])->name('downloadtank.csv');
-    Route::post('/tank_rehabilitation/upload-csv', [TankRehabilitationController::class, 'uploadCsv'])->name('tank_rehabilitation.upload_csv');
-    Route::post('/tank_rehabilitation/bulk-delete', [TankRehabilitationController::class, 'bulkDelete'])
-    ->name('tank_rehabilitation.bulk_delete');
+    // Route::post('/tank_rehabilitation/upload-csv', [TankRehabilitationController::class, 'uploadCsv'])->name('tank_rehabilitation.upload_csv');
+    // Route::post('/tank_rehabilitation/bulk-delete', [TankRehabilitationController::class, 'bulkDelete'])
+    // ->name('tank_rehabilitation.bulk_delete');
+
+    Route::middleware(['auth'])->prefix('tank_rehabilitation')->name('tank_rehabilitation.')->group(function () {
+
+        // View all tank rehabilitation entries
+        Route::get('/', [TankRehabilitationController::class, 'index'])
+            ->name('index')
+            ->middleware('check.permission:tank_rehabilitation,view');
+
+        // Create new entry
+        Route::get('/create', [TankRehabilitationController::class, 'create'])
+            ->name('create')
+            ->middleware('check.permission:tank_rehabilitation,edit');
+
+        // Store new entry
+        Route::post('/', [TankRehabilitationController::class, 'store'])
+            ->name('store')
+            ->middleware('check.permission:tank_rehabilitation,edit');
+
+        // Show a single tank record
+        Route::get('/{tank_rehabilitation}', [TankRehabilitationController::class, 'show'])
+            ->name('show')
+            ->middleware('check.permission:tank_rehabilitation,view');
+
+        // Edit form
+        Route::get('/{tank_rehabilitation}/edit', [TankRehabilitationController::class, 'edit'])
+            ->name('edit')
+            ->middleware('check.permission:tank_rehabilitation,edit');
+
+        // Update record
+        Route::put('/{tank_rehabilitation}', [TankRehabilitationController::class, 'update'])
+            ->name('update')
+            ->middleware('check.permission:tank_rehabilitation,edit');
+
+        // Delete record
+        Route::delete('/{tank_rehabilitation}', [TankRehabilitationController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('check.permission:tank_rehabilitation,delete');
+
+        // Upload CSV
+        Route::post('/upload-csv', [TankRehabilitationController::class, 'uploadCsv'])
+            ->name('upload_csv')
+            ->middleware('check.permission:tank_rehabilitation,upload_csv');
+
+        // Bulk delete
+        Route::post('/bulk-delete', [TankRehabilitationController::class, 'bulkDelete'])
+            ->name('bulk_delete')
+            ->middleware('check.permission:tank_rehabilitation,delete');
+
+        // Report CSV
+        Route::get('/report-csv', [TankRehabilitationController::class, 'reportCsv'])
+            ->name('reportCsv')
+            ->middleware('check.permission:tank_rehabilitation,view');
+
+        // Search functionality
+        Route::get('/search', [TankRehabilitationController::class, 'search'])
+            ->name('search')
+            ->middleware('check.permission:tank_rehabilitation,view');
+    });
+
 
     // Training and Participants
     Route::resource('training', TrainingController::class);
@@ -573,24 +721,83 @@ Route::middleware(['auth'])->group(function () {
 
     //staff profile
 
-    Route::prefix('staff_profile')->group(function () {
-        Route::get('/', [StaffProfileController::class, 'index'])->name('staff_profile.index');        // List all profiles
-        Route::get('/create', [StaffProfileController::class, 'create'])->name('staff_profile.create'); // Create form
-        Route::post('/store', [StaffProfileController::class, 'store'])->name('staff_profile.store');   // Store new profile
-        Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff_profile.show'); // View profile
-        Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit'); // Edit form
-        Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update'); // Update profile
-        Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff_profile.destroy'); // Delete profile
+    // Route::prefix('staff_profile')->group(function () {
+    //     Route::get('/', [StaffProfileController::class, 'index'])->name('staff_profile.index');        // List all profiles
+    //     Route::get('/create', [StaffProfileController::class, 'create'])->name('staff_profile.create'); // Create form
+    //     Route::post('/store', [StaffProfileController::class, 'store'])->name('staff_profile.store');   // Store new profile
+    //     Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff_profile.show'); // View profile
+    //     Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit'); // Edit form
+    //     Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update'); // Update profile
+    //     Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff_profile.destroy'); // Delete profile
+    // });
+    // Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
+    // Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
+    // Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
+    // Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
+    // Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
+    // Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
+
+    // View all staff profiles — for users with view access
+
+    // Staff Profile Module Routes with Permission Middleware
+    Route::prefix('staff_profile')->middleware('auth')->group(function () {
+        Route::get('/', [StaffProfileController::class, 'index'])
+            ->name('staff_profile.index')
+            ->middleware('check.permission:staff_profile,view');
+
+        Route::get('/create', [StaffProfileController::class, 'create'])
+            ->name('staff_profile.create')
+            ->middleware('check.permission:staff_profile,update');
+
+        Route::post('/store', [StaffProfileController::class, 'store'])
+            ->name('staff_profile.store')
+            ->middleware('check.permission:staff_profile,update');
+
+        Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])
+            ->name('staff_profile.show')
+            ->middleware('check.permission:staff_profile,view');
+
+        Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])
+            ->name('staff_profile.edit')
+            ->middleware('check.permission:staff_profile,update');
+
+        Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])
+            ->name('staff_profile.update')
+            ->middleware('check.permission:staff_profile,update');
+
+        Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])
+            ->name('staff_profile.destroy')
+            ->middleware('check.permission:staff_profile,delete');
+
+        Route::get('/summary', [StaffProfileController::class, 'summary'])
+            ->name('staff_profile.summary')
+            ->middleware('check.permission:staff_profile,view');
+
+        Route::patch('/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])
+            ->name('staff_profile.updateStatus')
+            ->middleware('check.permission:staff_profile,update');
+
+        Route::post('/status/{id}', [StaffProfileController::class, 'updateStatus'])
+            ->middleware('check.permission:staff_profile,update');
+
+        Route::get('/search', [StaffProfileController::class, 'search'])
+            ->name('searchstaff')
+            ->middleware('check.permission:staff_profile,view');
     });
-    Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
-    Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
-    Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
-    Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
-    Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
-    Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
-   //Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.index');
-    Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock.index');
-    Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agriculture.data.index');
+
+
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [UserPermissionController::class, 'index'])->name('admin.users');
+    Route::get('/users/{user}/permissions', [UserPermissionController::class, 'edit'])->name('permissions.edit');
+    Route::post('/users/{user}/permissions', [UserPermissionController::class, 'update'])->name('assign.permissions');
+});
+
+
+
+Route::get('/test-role', function () {
+    return 'You passed the role check!';
+})->middleware(['auth', 'role:admin']);
 
     Route::prefix('expressions')->group(function () {
         Route::get('/', [EOIController::class, 'index'])->name('expressions.index');
@@ -617,21 +824,21 @@ Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestoc
 
 //Route::get('/agriculture-data', [AgricultureDataController::class, 'index'])->name('agriculture.data');
 
-Route::prefix('staff_profile')->group(function () {
-    Route::get('/', [StaffProfileController::class, 'index'])->name('staff_profile.index');        // List all profiles
-    Route::get('/create', [StaffProfileController::class, 'create'])->name('staff_profile.create'); // Create form
-    Route::post('/store', [StaffProfileController::class, 'store'])->name('staff_profile.store');   // Store new profile
-    Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff_profile.show'); // View profile
-    Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit'); // Edit form
-    Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update'); // Update profile
-    Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff_profile.destroy'); // Delete profile
-});
-Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
-Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
+// Route::prefix('staff_profile')->group(function () {
+//     Route::get('/', [StaffProfileController::class, 'index'])->name('staff_profile.index');        // List all profiles
+//     Route::get('/create', [StaffProfileController::class, 'create'])->name('staff_profile.create'); // Create form
+//     Route::post('/store', [StaffProfileController::class, 'store'])->name('staff_profile.store');   // Store new profile
+//     Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])->name('staff_profile.show'); // View profile
+//     Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit'); // Edit form
+//     Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update'); // Update profile
+//     Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])->name('staff_profile.destroy'); // Delete profile
+// });
+// Route::get('/staff_profile/{staffProfile}/edit', [StaffProfileController::class, 'edit'])->name('staff_profile.edit');
+// Route::put('/staff_profile/{staffProfile}', [StaffProfileController::class, 'update'])->name('staff_profile.update');
 
-Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
+// Route::get('/searchstaff', [StaffProfileController::class, 'search'])->name('searchstaff');
 
-Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
+// Route::get('/staff_profile/summary', [StaffProfileController::class, 'summary'])->name('staff_profile.summary');
 
 //Fingerling
 
@@ -646,7 +853,7 @@ Route::get('/fingerling/{id}/edit', [FingerlingController::class, 'edit'])->name
 
 // Route to update the fingerling record
 Route::put('/fingerling/{id}', [FingerlingController::class, 'update'])->name('fingerling.update');
-//  
+//
 
 
 

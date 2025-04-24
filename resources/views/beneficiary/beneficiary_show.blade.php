@@ -586,12 +586,17 @@
                                         <td>{{$familyMember->income}}</td>
                                         <td>{{$familyMember->nutrition_level}}</td>
                                         <td  class="button-container" style="display: flex; gap: 5px; align-items: center;">
+                                        @if(auth()->user()->hasPermission('family', 'edit'))
                                             <a href='/family/{{$familyMember->id}}/edit' class="btn btn-primary btn-sm">Edit</a>
+                                        @endif
+
+                                        @if(auth()->user()->hasPermission('family', 'delete'))
                                             <form action="/family/{{ $familyMember->id }}" method="POST" style="margin: 0;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
