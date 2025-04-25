@@ -30,7 +30,7 @@ class UserPermissionController extends Controller
         ];
 
 
-        $actions = ['view', 'edit', 'delete', 'upload_csv'];
+        $actions = ['view', 'edit', 'delete', 'upload_csv', 'add'];
 
         return view('admin.user_permissions', compact('user', 'modules', 'actions'));
     }

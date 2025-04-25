@@ -247,12 +247,12 @@ Route::middleware(['auth'])->group(function () {
         // Create new entry
         Route::get('/create', [TankRehabilitationController::class, 'create'])
             ->name('create')
-            ->middleware('check.permission:tank_rehabilitation,edit');
+            ->middleware('check.permission:tank_rehabilitation,add');
 
         // Store new entry
         Route::post('/', [TankRehabilitationController::class, 'store'])
             ->name('store')
-            ->middleware('check.permission:tank_rehabilitation,edit');
+            ->middleware('check.permission:tank_rehabilitation,add');
 
         // Show a single tank record
         Route::get('/{tank_rehabilitation}', [TankRehabilitationController::class, 'show'])
