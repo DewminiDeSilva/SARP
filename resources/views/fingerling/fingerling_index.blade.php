@@ -149,9 +149,23 @@
 .right-column {
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
+.btn[disabled] {
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+.btn[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.gap-2 > * {
+    margin-right: 0.5rem;
+}
 
 </style>
+
 </head>
+
 <body>
 @include('dashboard.header')
 <div class="frame" style="padding-top: 70px;">
@@ -206,14 +220,24 @@
                                 <th>AS Centre</th>
                                 <th>River Basin</th>
                                 <th>Cascade Name</th>
+                                <th>Status</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($tanks as $tank)
-                            <tr>
-                                <!-- Show Earlier Tank ID -->
-                                <td>{{ $tank->tank_id }}</td> <!-- Shows 19/11/T/W/11 -->
+    @php
+        // Check if the current tank has fingerling data
+        $hasData = $tanksWithFingerlings->contains($tank->id);
+    @endphp
+    <tr @if($hasData) style="background-color: #fff3cd;" @endif> {{-- Highlight tanks with data --}}
+        <td>
+            @if($hasData)
+                <strong>{{ $tank->tank_id }}</strong> {{-- Bold if data exists --}}
+            @else
+                {{ $tank->tank_id }}
+            @endif
+        </td>
 
                                 <td>{{ $tank->tank_name }}</td>
                                 <td>{{ $tank->ds_division_name }}</td>
@@ -221,13 +245,35 @@
                                 <td>{{ $tank->as_centre }}</td>
                                 <td>{{ $tank->river_basin }}</td>
                                 <td>{{ $tank->cascade_name }}</td>
-                                <td class="buttonline">
-                                    <!-- View Data Button -->
-                                    <a href="{{ route('fingerling.show', ['tank_id' => $tank->id]) }}" class="btn btn-info btn-sm">View Data</a>
-
-                                    <!-- Add Data Button -->
-                                    <a href="{{ route('fingerling.create', $tank->id) }}" class="btn btn-primary btn-sm button-a">Add Data</a>
+                                <td>
+                                    <form action="{{ route('fingerling.updateStatus', $tank->id) }}" method="POST" class="status-form">
+                                        @csrf
+                                        @method('POST')
+                                        <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                                            <option value="">Select</option>
+                                            <option value="Full" {{ (isset($statuses[$tank->id]) && $statuses[$tank->id] === 'Full') ? 'selected' : '' }}>Full</option>
+                                            <option value="Partial" {{ (isset($statuses[$tank->id]) && $statuses[$tank->id] === 'Partial') ? 'selected' : '' }}>Partial</option>
+                                            <option value="Not Harvested Yet" {{ (isset($statuses[$tank->id]) && $statuses[$tank->id] === 'Not Harvested Yet') ? 'selected' : '' }}>Not Harvested Yet</option>
+                                        </select>
+                                    </form>
                                 </td>
+
+                                <td class="buttonline text-center">
+                                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                        {{-- View Data button (only if tank has fingerling data) --}}
+                                        @if ($hasData)
+                                            <a href="{{ route('fingerling.show', ['tank_id' => $tank->id]) }}" class="btn btn-info btn-sm">View Data</a>
+                                        @endif
+                                
+                                        {{-- Add Data button (always enabled) --}}
+                                        <form action="{{ route('fingerling.create', $tank->id) }}" method="GET" style="display:inline;">
+                                            <button type="submit" class="btn btn-primary btn-sm">Add Data</button>
+                                        </form>
+                                    </div>
+                                </td>
+                                
+                                
+                                 
                             </tr>
                             @endforeach
                         </tbody>

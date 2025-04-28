@@ -114,115 +114,107 @@
                     <input type="text" name="tank_name" id="tank_name" class="form-control" value="{{ $tank->tank_name }}" readonly>
                 </div>
 
-                <div class="form-group">
-                    <label for="livestock_type">Livestock Type</label>
-                    <input type="text" name="livestock_type" id="livestock_type" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="stocking_type">Stocking Type</label>
-                    <input type="text" name="stocking_type" id="stocking_type" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="stocking_date">Stocking Date</label>
-                    <input type="date" name="stocking_date" id="stocking_date" class="form-control" required>
-                </div>
 
                <!-- Stocking Details Section -->
-<div class="card mb-4 card-custom">
-    <div class="card-header bg-success text-white">
-        Stocking Details
-    </div>
-    <div class="card-body">
-        <div id="stocking-details-container">
-            <!-- Initial Row (non-removable) -->
-            <div class="row stock-group align-items-center">
-                <div class="col-md-6 form-group">
-                    <label for="stocking_details[0][variety]">Variety</label>
-                    <input type="text" name="stocking_details[0][variety]" class="form-control" required>
+                <div class="card mb-4 mt-5 card-custom">
+                    <div class="card-header bg-success text-white">
+                        Stocking Details
+                    </div>
+                    <div class="card-body">
+                        <div id="stocking-details-container">
+                            <!-- First Row -->
+                            <div class="row stock-group align-items-center">
+                                <div class="col-md-4 form-group">
+                                    <label>Stocking Date</label>
+                                    <input type="date" name="stocking_details[0][stocking_date]" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Variety</label>
+                                    <input type="text" name="stocking_details[0][variety]" class="form-control" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Stock Number</label>
+                                    <input type="number" name="stocking_details[0][stock_number]" class="form-control" required>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-center">
+                                    <!-- No remove button for first row -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-start mt-3">
+                            <button type="button" id="add-more-stocking" class="btn btn-success">Add More Stocking Details</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label for="stocking_details[0][stock_number]">Stock Number</label>
-                    <input type="number" name="stocking_details[0][stock_number]" class="form-control" required>
-                </div>
-                <div class="col-md-2 form-group d-flex align-items-center">
-                    <!-- No Remove Button for Initial Row -->
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between mt-3">
-            <button type="button" id="add-more-stocking" class="btn btn-success">Add More Stocking Details</button>
-        </div>
-    </div>
-</div>
 
 
 
 
 
                 <!-- Harvest Details -->
-                <div class="card card-custom">
-                    <div class="card-header bg-success text-white">
-                        Harvest Details
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="harvest_date">Harvest Date</label>
-                            <input type="date" name="harvest_date" id="harvest_date" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="variety_harvest_kg">Variety Harvest (kg)</label>
-                            <input type="number" name="variety_harvest_kg" id="variety_harvest_kg" class="form-control">
-                        </div>
-                    </div>
+                <!-- Harvest Details Section -->
+<div class="card mb-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Harvest Details
+    </div>
+    <div class="card-body">
+        <div id="harvest-details-container">
+            <!-- First Row -->
+            <div class="row harvest-group align-items-center">
+                <div class="col-md-4 form-group">
+                    <label>Harvest Date</label>
+                    <input type="date" name="harvest_details[0][harvest_date]" class="form-control" required>
                 </div>
+                <div class="col-md-4 form-group">
+                    <label>Variety</label>
+                    <input type="text" name="harvest_details[0][variety]" class="form-control" required>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>Harvest (kg)</label>
+                    <input type="number" name="harvest_details[0][variety_harvest_kg]" class="form-control" required>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                    <!-- No remove button for first row -->
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+            <button type="button" id="add-more-harvest" class="btn btn-success">Add More Harvest Details</button>
+        </div>
 
-                <!-- Income Details -->
-                <div class="card card-custom">
-                    <div class="card-header bg-success text-white">
-                        Income Details
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="amount_cumulative_kg">Cumulative Amount (kg)</label>
-                            <input type="number" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="unit_price_rs">Unit Price (Rs.)</label>
-                            <input type="number" name="unit_price_rs" id="unit_price_rs" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="total_income_rs">Total Income (Rs.)</label>
-                            <input type="number" name="total_income_rs" id="total_income_rs" class="form-control">
-                        </div>
-                    </div>
-                </div>
+        <div class="form-group mt-4">
+            <label for="amount_cumulative_kg">Total Harvest (kg)</label>
+            <input type="number" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control" readonly>
+        </div>
+    </div>
+</div>
 
-                <!-- Wholesale Details -->
-                <div class="card card-custom">
-                    <div class="card-header bg-success text-white">
-                        Wholesale Details
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="wholesale_quantity_kg">Wholesale Quantity (kg)</label>
-                            <input type="number" name="wholesale_quantity_kg" id="wholesale_quantity_kg" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="wholesale_unit_price_rs">Wholesale Unit Price (Rs.)</label>
-                            <input type="number" name="wholesale_unit_price_rs" id="wholesale_unit_price_rs" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="wholesale_total_income_rs">Wholesale Total Income (Rs.)</label>
-                            <input type="number" name="wholesale_total_income_rs" id="wholesale_total_income_rs" class="form-control">
-                        </div>
-                    </div>
-                </div>
+
+        <div class="form-group">
+            <label for="community_distribution_kg">Community Distribution (kg)</label>
+            <input type="number" name="community_distribution_kg" id="community_distribution_kg" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="wholesale_quantity_kg">Wholesale Quantity (kg)</label>
+            <input type="number" name="wholesale_quantity_kg" id="wholesale_quantity_kg" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="total_income_rs">Total Income (Rs.)</label>
+            <input type="number" name="total_income_rs" id="total_income_rs" class="form-control">
+        </div>
+
+
+        <div class="form-group">
+            <label for="no_of_families_benefited">No. of Families Benefited</label>
+            <input type="number" name="no_of_families_benefited" id="no_of_families_benefited" class="form-control">
+        </div>
 
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-success mt-3">Submit</button>
                 </div>
+                
             </form>
         </div>
     </div>
@@ -232,42 +224,23 @@
 
 <script>
     $(document).ready(function () {
-        let stockingIndex = 1;
-
-        $('#add-stock').click(function () {
-            const html = `
-                <div class="row stock-group mt-3">
-                    <div class="col-5 form-group">
-                        <label for="stocking_details[${stockingIndex}][variety]">Variety</label>
-                        <input type="text" class="form-control" name="stocking_details[${stockingIndex}][variety]" required>
-                    </div>
-                    <div class="col-5 form-group">
-                        <label for="stocking_details[${stockingIndex}][stock_number]">Stock Number</label>
-                        <input type="number" class="form-control" name="stocking_details[${stockingIndex}][stock_number]" required>
-                    </div>
-                </div>`;
-            $('#stock-fields').append(html);
-            stockingIndex++;
-        });
-    });
-
-
-    $(document).ready(function () {
     let stockingIndex = 1;
+    let harvestIndex = 1;
 
-    // Add more stocking details
+    // Add more stocking rows
     $('#add-more-stocking').click(function () {
         const html = `
             <div class="row stock-group align-items-center mt-3">
-                <div class="col-md-6 form-group">
-                    <label for="stocking_details[${stockingIndex}][variety]">Variety</label>
+                <div class="col-md-4 form-group">
+                    <input type="date" name="stocking_details[${stockingIndex}][stocking_date]" class="form-control" required>
+                </div>
+                <div class="col-md-4 form-group">
                     <input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label for="stocking_details[${stockingIndex}][stock_number]">Stock Number</label>
+                <div class="col-md-3 form-group">
                     <input type="number" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required>
                 </div>
-                <div class="col-md-2  form-group d-flex align-items-center">
+                <div class="col-md-1 d-flex align-items-center">
                     <button type="button" class="btn btn-danger remove-stock-btn">Remove</button>
                 </div>
             </div>
@@ -276,11 +249,39 @@
         stockingIndex++;
     });
 
-    // Remove newly added stock details
+    // Remove stocking row
     $(document).on('click', '.remove-stock-btn', function () {
         $(this).closest('.stock-group').remove();
     });
+
+    // Add more harvest rows
+    $('#add-more-harvest').click(function () {
+        const html = `
+            <div class="row harvest-group align-items-center mt-3">
+                <div class="col-md-4 form-group">
+                    <input type="date" name="harvest_details[${harvestIndex}][harvest_date]" class="form-control" required>
+                </div>
+                <div class="col-md-4 form-group">
+                    <input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control" required>
+                </div>
+                <div class="col-md-3 form-group">
+                    <input type="number" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control" required>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                    <button type="button" class="btn btn-danger remove-harvest-btn">Remove</button>
+                </div>
+            </div>
+        `;
+        $('#harvest-details-container').append(html);
+        harvestIndex++;
+    });
+
+    // Remove harvest row
+    $(document).on('click', '.remove-harvest-btn', function () {
+        $(this).closest('.harvest-group').remove();
+    });
 });
+
 
 
 </script>
@@ -306,5 +307,37 @@
         });
     });
 </script>
+
+<script>
+    function updateCumulativeAmount() {
+        let total = 0;
+        $('input[name*="[variety_harvest_kg]"]').each(function () {
+            const val = parseFloat($(this).val());
+            if (!isNaN(val)) total += val;
+        });
+        $('#amount_cumulative_kg').val(total.toFixed(2));
+    }
+
+    $(document).ready(function () {
+        // Initial update on page load
+        updateCumulativeAmount();
+
+        // Update on input
+        $(document).on('input', 'input[name*="[variety_harvest_kg]"]', function () {
+            updateCumulativeAmount();
+        });
+
+        // Also update after adding harvest rows
+        $('#add-more-harvest').click(function () {
+            setTimeout(updateCumulativeAmount, 100); // slight delay to ensure DOM renders
+        });
+
+        // Optional: Update after removing harvest
+        $(document).on('click', '.remove-harvest-btn', function () {
+            setTimeout(updateCumulativeAmount, 50);
+        });
+    });
+</script>
+
 </body>
 </html>

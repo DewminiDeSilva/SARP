@@ -11,18 +11,13 @@ class Fingerling extends Model
 
     protected $fillable = [
         'tank_id',
-        'livestock_type',
-        'stocking_type',
-        'stocking_date',
         'stocking_details',
-        'harvest_date',
-        'variety_harvest_kg',
+        'harvest_details',
+        'community_distribution_kg',
         'amount_cumulative_kg',
-        'unit_price_rs',
         'total_income_rs',
         'wholesale_quantity_kg',
-        'wholesale_unit_price_rs',
-        'wholesale_total_income_rs',
+        'no_of_families_benefited',
     ];
 
     /**

@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Fingerling;
 use App\Models\TankRehabilitation;
 use Illuminate\Http\Request;
+use App\Models\FingerlingStatus;
+
+
 
 class FingerlingController extends Controller
 {
     /**
      * Display a listing of tank records in the Fingerling module.
      */
+
     public function index(Request $request)
     {
     $query = TankRehabilitation::select(
@@ -24,7 +28,6 @@ class FingerlingController extends Controller
         'cascade_name'
     );
 
-    // Apply search filter if provided
     if ($request->has('search') && !empty($request->search)) {
         $search = $request->search;
         $query->where(function ($q) use ($search) {
@@ -40,8 +43,14 @@ class FingerlingController extends Controller
 
     $tanks = $query->paginate(10)->appends(['search' => $request->search]);
 
-    return view('fingerling.fingerling_index', compact('tanks'));
+    $tanksWithFingerlings = Fingerling::pluck('tank_id')->unique();
+
+    // 👇 Add this: Get all statuses
+    $statuses = FingerlingStatus::pluck('status', 'tank_id')->toArray();
+
+    return view('fingerling.fingerling_index', compact('tanks', 'tanksWithFingerlings', 'statuses'));
     }
+
 
 
     /**
@@ -67,46 +76,40 @@ class FingerlingController extends Controller
      *
      * @param \Illuminate\Http\Request $request The request containing form data.
      */
+
     public function store(Request $request)
     {
-        // Validate the form data
-        $request->validate([
-            'tank_id' => 'required|exists:tank_rehabilation,id', // Ensure the foreign key is valid
-            'livestock_type' => 'required|string',
-            'stocking_type' => 'required|string',
-            'stocking_date' => 'required|date',
-            'stocking_details' => 'nullable|array',
-            'stocking_details.*.variety' => 'nullable|string',
-            'stocking_details.*.stock_number' => 'nullable|integer',
-            'harvest_date' => 'nullable|date',
-            'variety_harvest_kg' => 'nullable|numeric',
-            'amount_cumulative_kg' => 'nullable|numeric',
-            'unit_price_rs' => 'nullable|numeric',
-            'total_income_rs' => 'nullable|numeric',
-            'wholesale_quantity_kg' => 'nullable|numeric',
-            'wholesale_unit_price_rs' => 'nullable|numeric',
-            'wholesale_total_income_rs' => 'nullable|numeric',
-        ]);
+    $request->validate([
+        'tank_id' => 'required|exists:tank_rehabilation,id',
+        'stocking_details' => 'nullable|array',
+        'stocking_details.*.stocking_date' => 'nullable|date',
+        'stocking_details.*.variety' => 'nullable|string',
+        'stocking_details.*.stock_number' => 'nullable|integer',
 
-        // Create a new fingerling record
-        Fingerling::create([
-            'tank_id' => $request->tank_id,
-            'livestock_type' => $request->livestock_type,
-            'stocking_type' => $request->stocking_type,
-            'stocking_date' => $request->stocking_date,
-            'stocking_details' => json_encode($request->stocking_details), // Encode as JSON
-            'harvest_date' => $request->harvest_date,
-            'variety_harvest_kg' => $request->variety_harvest_kg,
-            'amount_cumulative_kg' => $request->amount_cumulative_kg,
-            'unit_price_rs' => $request->unit_price_rs,
-            'total_income_rs' => $request->total_income_rs,
-            'wholesale_quantity_kg' => $request->wholesale_quantity_kg,
-            'wholesale_unit_price_rs' => $request->wholesale_unit_price_rs,
-            'wholesale_total_income_rs' => $request->wholesale_total_income_rs,
-        ]);
+        'harvest_details' => 'nullable|array',
+        'harvest_details.*.harvest_date' => 'nullable|date',
+        'harvest_details.*.variety' => 'nullable|string',
+        'harvest_details.*.variety_harvest_kg' => 'nullable|numeric',
 
-        // Redirect to the show page with a success message
-        return redirect()->route('fingerling.show', $request->tank_id)->with('success', 'Fingerling data added successfully.');
+        'community_distribution_kg' => 'nullable|numeric',
+        'amount_cumulative_kg' => 'nullable|numeric',
+        'total_income_rs' => 'nullable|numeric',
+        'wholesale_quantity_kg' => 'nullable|numeric',
+        'no_of_families_benefited' => 'nullable|integer',
+    ]);
+
+    Fingerling::create([
+        'tank_id' => $request->tank_id,
+        'stocking_details' => json_encode($request->stocking_details),
+        'harvest_details' => json_encode($request->harvest_details),
+        'community_distribution_kg' => $request->community_distribution_kg,
+        'amount_cumulative_kg' => $request->amount_cumulative_kg,
+        'total_income_rs' => $request->total_income_rs,
+        'wholesale_quantity_kg' => $request->wholesale_quantity_kg,
+        'no_of_families_benefited' => $request->no_of_families_benefited,
+    ]);
+
+    return redirect()->route('fingerling.show', $request->tank_id)->with('success', 'Fingerling data added successfully.');
     }
 
     /**
@@ -171,53 +174,59 @@ class FingerlingController extends Controller
 
     public function update(Request $request, $id)
     {
-    // Validate the form data
     $request->validate([
-        'livestock_type' => 'required|string',
-        'stocking_type' => 'required|string',
-        'stocking_date' => 'required|date',
         'stocking_details' => 'nullable|array',
+        'stocking_details.*.stocking_date' => 'nullable|date',
         'stocking_details.*.variety' => 'nullable|string',
         'stocking_details.*.stock_number' => 'nullable|integer',
-        'harvest_date' => 'nullable|date',
-        'variety_harvest_kg' => 'nullable|numeric',
+
+        'harvest_details' => 'nullable|array',
+        'harvest_details.*.harvest_date' => 'nullable|date',
+        'harvest_details.*.variety' => 'nullable|string',
+        'harvest_details.*.variety_harvest_kg' => 'nullable|numeric',
+
+        'community_distribution_kg' => 'nullable|numeric',
         'amount_cumulative_kg' => 'nullable|numeric',
-        'unit_price_rs' => 'nullable|numeric',
         'total_income_rs' => 'nullable|numeric',
         'wholesale_quantity_kg' => 'nullable|numeric',
-        'wholesale_unit_price_rs' => 'nullable|numeric',
-        'wholesale_total_income_rs' => 'nullable|numeric',
+        'no_of_families_benefited' => 'nullable|integer',
     ]);
 
-    // Find the fingerling record by its ID
     $fingerling = Fingerling::find($id);
 
     if (!$fingerling) {
         return redirect()->route('fingerling.index')->with('error', 'Fingerling record not found.');
     }
 
-    // Update the fingerling record with validated data
     $fingerling->update([
-        'livestock_type' => $request->livestock_type,
-        'stocking_type' => $request->stocking_type,
-        'stocking_date' => $request->stocking_date,
-        'stocking_details' => json_encode($request->stocking_details), // Encode as JSON
-        'harvest_date' => $request->harvest_date,
-        'variety_harvest_kg' => $request->variety_harvest_kg,
+        'stocking_details' => json_encode($request->stocking_details),
+        'harvest_details' => json_encode($request->harvest_details),
+        'community_distribution_kg' => $request->community_distribution_kg,
         'amount_cumulative_kg' => $request->amount_cumulative_kg,
-        'unit_price_rs' => $request->unit_price_rs,
         'total_income_rs' => $request->total_income_rs,
         'wholesale_quantity_kg' => $request->wholesale_quantity_kg,
-        'wholesale_unit_price_rs' => $request->wholesale_unit_price_rs,
-        'wholesale_total_income_rs' => $request->wholesale_total_income_rs,
+        'no_of_families_benefited' => $request->no_of_families_benefited,
     ]);
 
-    // Redirect to the show page with a success message
     return redirect()->route('fingerling.show', $fingerling->tank_id)->with('success', 'Fingerling data updated successfully.');
     }
 
     
-
+    public function updateStatus(Request $request, $tank_id)
+    {
+        $request->validate([
+            'status' => 'nullable|string',
+        ]);
+    
+        // Update or create status
+        FingerlingStatus::updateOrCreate(
+            ['tank_id' => $tank_id],
+            ['status' => $request->status]
+        );
+    
+        return back()->with('success', 'Status updated successfully.');
+    }
+    
 
 
 }

@@ -646,6 +646,9 @@ Route::get('/fingerling/{id}/edit', [FingerlingController::class, 'edit'])->name
 
 // Route to update the fingerling record
 Route::put('/fingerling/{id}', [FingerlingController::class, 'update'])->name('fingerling.update');
+Route::post('/fingerling/update-status/{tank}', [FingerlingController::class, 'updateStatus'])->name('fingerling.updateStatus');
+
+
 //  
 
 
