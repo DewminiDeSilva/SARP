@@ -180,7 +180,7 @@ public function store(Request $request)
         'product_name.*' => 'required|string|max:255',
         'total_production.*' => 'required|numeric|min:0',
         'total_income.*' => 'required|numeric|min:0',
-        'profit.*' => 'required|numeric|min:0',
+        'profit.*' => 'required|numeric',
     ]);
 
     DB::beginTransaction();
@@ -309,7 +309,7 @@ public function store(Request $request)
         'product_name.*' => 'required|string|max:255', // Validate product name
         'total_production.*' => 'required|numeric|min:0', // Validate product total production
         'total_income.*' => 'required|numeric|min:0', // Validate product total income
-        'profit.*' => 'required|numeric|min:0', // Validate product profit
+        'profit.*' => 'required|numeric', // Validate product profit
     ]);
 
     // Find the AgricultureData record
