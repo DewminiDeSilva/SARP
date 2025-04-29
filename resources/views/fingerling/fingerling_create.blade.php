@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .frame {
             display: flex;
@@ -101,7 +102,7 @@
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
         <div class="col-md-12 text-center">
-            <h2 class="header-title" style="color: green;">Fingerling Registration</h2>
+            <h2 class="header-title" style="color: green;">Fingerling Stock Registration</h2>
         </div>
         <br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
@@ -163,15 +164,15 @@
             <div class="row harvest-group align-items-center">
                 <div class="col-md-4 form-group">
                     <label>Harvest Date</label>
-                    <input type="date" name="harvest_details[0][harvest_date]" class="form-control" required>
+                    <input type="date" name="harvest_details[0][harvest_date]" class="form-control">
                 </div>
                 <div class="col-md-4 form-group">
                     <label>Variety</label>
-                    <input type="text" name="harvest_details[0][variety]" class="form-control" required>
+                    <input type="text" name="harvest_details[0][variety]" class="form-control">
                 </div>
                 <div class="col-md-3 form-group">
                     <label>Harvest (kg)</label>
-                    <input type="number" name="harvest_details[0][variety_harvest_kg]" class="form-control" required>
+                    <input type="number" name="harvest_details[0][variety_harvest_kg]" class="form-control">
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
                     <!-- No remove button for first row -->
@@ -338,6 +339,32 @@
         });
     });
 </script>
+
+<script>
+  $(function(){
+    const frm = $('form.form-horizontal');
+
+    frm.on('submit', function(e){
+      e.preventDefault();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to submit these fingerling details?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, submit it!',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#28a745',  // theme green
+        cancelButtonColor:  '#dc3545'   // theme red
+      }).then((result) => {
+        if (result.isConfirmed) {
+          frm.off('submit');
+          frm.submit();
+        }
+      });
+    });
+  });
+</script>
+
 
 </body>
 </html>

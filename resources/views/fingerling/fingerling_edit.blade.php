@@ -8,6 +8,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .frame {
             display: flex;
@@ -103,7 +106,7 @@
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
         <div class="col-md-12 text-center">
-            <h2 class="header-title" style="color: green;">Edit Fingerling Details</h2>
+            <h2 class="header-title" style="color: green;">Edit Fingerlings Stocking Details</h2>
         </div>
         <br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
@@ -272,6 +275,65 @@
     });
 </script>
 
+<script>
+$(function(){
+  // 1) Intercept the “Update” form submission
+  const frm = $('form');  // if you have other forms, you can target more specifically
+  frm.on('submit', function(e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to save these changes?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#28a745',  // your theme green
+      cancelButtonColor:  '#dc3545'   // your theme red
+    }).then((result) => {
+      if (result.isConfirmed) {
+        frm.off('submit');  // unbind so it can actually submit
+        frm.submit();
+      }
+    });
+  });
+
+  // 2) Show a toast if update was successful
+  @if(session('success'))
+    Swal.fire({
+      icon: 'success',
+      title: 'Updated!',
+      text: '{{ session('success') }}',
+      timer: 2000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
+  @endif
+});
+</script>
+
+<script>
+$(function(){
+  const frm = $('form');
+  frm.on('submit', function(e){
+    // … your confirm logic …
+  });
+
+  // ←– THIS right here shows the toast
+  @if(session('success'))
+    Swal.fire({
+      icon: 'success',
+      title: 'Updated!',
+      text: '{{ session('success') }}',
+      timer: 2000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
+  @endif
+});
+</script>
 
 </body>
 </html>

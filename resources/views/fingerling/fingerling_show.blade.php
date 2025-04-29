@@ -6,6 +6,7 @@
     <title>Fingerlings Details</title>
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Add DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <!-- Font Awesome -->
@@ -335,10 +336,12 @@ table.table {
         margin-bottom: 10px;
         border-radius: 5px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        text-align: left;
     }
     .table .sub-detail strong {
         color: #145c32;
         font-weight: 600;
+        
     }
     .button-container {
     display: flex;
@@ -409,7 +412,7 @@ table.table {
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="text-center">
-                    <h3 style="font-size: 2rem; color: green;">Fingerlings Details</h3>
+                    <h3 style="font-size: 2rem; color: green;">Fingerlings Stocking Details</h3>
                 </div>
             </div>
         </div>
@@ -478,13 +481,18 @@ table.table {
         <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
             <i class="fas fa-edit"></i>
         </a>
-        <form action="{{ route('fingerling.destroy', $fingerling->id) }}" method="POST" style="margin: 0;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn-action delete" title="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </form>
+        <form action="{{ route('fingerling.destroy', $fingerling->id) }}"
+      method="POST"
+      class="delete-form"
+      style="margin:0;">
+    @csrf
+    @method('DELETE')
+    <button type="submit"
+            class="btn-action delete"
+            title="Delete">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+</form>
     </div>
 </td>
 </tr>
@@ -538,5 +546,30 @@ table.table {
         });
     });
 </script>
+
+<script>
+$(function(){
+  $('.delete-form').on('submit', function(e){
+    e.preventDefault();               // stop immediate form submit
+    const form = this;
+
+    Swal.fire({
+      title: 'Confirm Deletion',
+      text: "This will permanently delete the record!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc3545',  // theme red
+      cancelButtonColor: '#6c757d'    // grey
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();               // now submit for real
+      }
+    });
+  });
+});
+</script>
+
 </body>
 </html>

@@ -15,8 +15,14 @@ class FingerlingController extends Controller
      * Display a listing of tank records in the Fingerling module.
      */
 
-    public function index(Request $request)
-    {
+     /**
+ * Display a listing of tank records in the Fingerling module,
+ * with text search, status filter, newest‐first by fingerling entry,
+ * stocked‐first secondary sort, pagination, and summary counts.
+ */
+public function index(Request $request)
+{
+    // 1) Base query + count & latest timestamp of related fingerlings
     $query = TankRehabilitation::select(
         'id',
         'tank_id',
@@ -26,31 +32,67 @@ class FingerlingController extends Controller
         'as_centre',
         'river_basin',
         'cascade_name'
-    );
+    )
+    ->withCount('fingerlings')                   // adds fingerlings_count
+    ->withMax('fingerlings', 'created_at');      // adds fingerlings_max_created_at
 
-    if ($request->has('search') && !empty($request->search)) {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->where('tank_id', 'like', "%$search%")
-              ->orWhere('tank_name', 'like', "%$search%")
-              ->orWhere('ds_division_name', 'like', "%$search%")
-              ->orWhere('gn_division_name', 'like', "%$search%")
-              ->orWhere('as_centre', 'like', "%$search%")
-              ->orWhere('cascade_name', 'like', "%$search%")
-              ->orWhere('river_basin', 'like', "%$search%");
+    // 2) Text search across several columns
+    if ($request->filled('search')) {
+        $term = $request->search;
+        $query->where(function($q) use ($term) {
+            $q->where('tank_id', 'like', "%{$term}%")
+              ->orWhere('tank_name', 'like', "%{$term}%")
+              ->orWhere('ds_division_name', 'like', "%{$term}%")
+              ->orWhere('gn_division_name', 'like', "%{$term}%")
+              ->orWhere('as_centre', 'like', "%{$term}%")
+              ->orWhere('cascade_name', 'like', "%{$term}%")
+              ->orWhere('river_basin', 'like', "%{$term}%");
         });
     }
 
-    $tanks = $query->paginate(10)->appends(['search' => $request->search]);
-
-    $tanksWithFingerlings = Fingerling::pluck('tank_id')->unique();
-
-    // 👇 Add this: Get all statuses
-    $statuses = FingerlingStatus::pluck('status', 'tank_id')->toArray();
-
-    return view('fingerling.fingerling_index', compact('tanks', 'tanksWithFingerlings', 'statuses'));
+    // 3) Status filter
+    if ($request->filled('status')) {
+        $tankIds = FingerlingStatus::where('status', $request->status)
+                                   ->pluck('tank_id');
+        $query->whereIn('id', $tankIds);
     }
 
+    // 4) Sort: newest fingerling entries first, then by stocked count
+    $query
+        ->orderByDesc('fingerlings_max_created_at')
+        ->orderByDesc('fingerlings_count');
+
+    // 5) Paginate and preserve filters in the query string
+    $tanks = $query->paginate(10)->appends([
+        'search' => $request->search,
+        'status' => $request->status,
+    ]);
+
+    // 6) Additional data for the view
+    $tanksWithFingerlings = Fingerling::pluck('tank_id')->unique();
+    $statuses            = FingerlingStatus::pluck('status', 'tank_id')->toArray();
+
+    // Summary card values
+    $totalStocked = $tanksWithFingerlings->count();
+    $fullCount    = FingerlingStatus::where('status', 'Full')->count();
+    $partialCount = FingerlingStatus::where('status', 'Partial')->count();
+    $notYetCount  = FingerlingStatus::where('status', 'Not Harvested Yet')->count();
+
+    // Passable status options for the filter dropdown
+    $statusOptions = ['Full', 'Partial', 'Not Harvested Yet'];
+
+    // 7) Render the index view
+    return view('fingerling.fingerling_index', compact(
+        'tanks',
+        'tanksWithFingerlings',
+        'statuses',
+        'totalStocked',
+        'fullCount',
+        'partialCount',
+        'notYetCount',
+        'statusOptions'
+    ));
+}
 
 
     /**
@@ -214,17 +256,16 @@ class FingerlingController extends Controller
     
     public function updateStatus(Request $request, $tank_id)
     {
-        $request->validate([
-            'status' => 'nullable|string',
-        ]);
-    
-        // Update or create status
-        FingerlingStatus::updateOrCreate(
-            ['tank_id' => $tank_id],
-            ['status' => $request->status]
-        );
-    
-        return back()->with('success', 'Status updated successfully.');
+        if ($request->status === 'Clear' || $request->status === null) {
+            FingerlingStatus::where('tank_id', $tank_id)->delete();
+            return back()->with('cleared', 'Status cleared successfully.');
+        } else {
+            FingerlingStatus::updateOrCreate(
+                ['tank_id' => $tank_id],
+                ['status' => $request->status]
+            );
+            return back()->with('success', 'Status updated successfully.');
+        }
     }
     
 
