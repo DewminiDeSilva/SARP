@@ -6,6 +6,7 @@
     <title>Fingerlings Details</title>
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Add DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <!-- Font Awesome -->
@@ -311,6 +312,84 @@
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
 
+/* Highlighted improvements */
+table.table {
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        font-size: 14px;
+    }
+    table.table th {
+        background-color: #e6f2ec;
+        text-align: center;
+        color: #145c32;
+    }
+    table.table td {
+        background-color: #fdfdfd;
+        vertical-align: top;
+        padding: 10px;
+        border-top: 1px solid #dee2e6;
+    }
+    .table .sub-detail {
+        background-color: #ffffff;
+        border-left: 3px solid #28a745;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        text-align: left;
+    }
+    .table .sub-detail strong {
+        color: #145c32;
+        font-weight: 600;
+        
+    }
+    .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* little more breathing space */
+    flex-wrap: wrap;
+    min-height: 100%;
+    padding: 5px 0;
+    margin: 0;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    color: white;
+    border: none;
+}
+
+.btn-action.edit {
+    background-color: #ffc107; /* Bootstrap warning color */
+}
+
+.btn-action.delete {
+    background-color: #dc3545; /* Bootstrap danger color */
+}
+
+.table td {
+    vertical-align: middle !important;
+    text-align: center;
+    padding: 10px;
+    background-color: #fdfdfd;
+}
+
+.table td:last-child {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+
+    
+
 </style>
 
 </head>
@@ -333,7 +412,7 @@
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="text-center">
-                    <h3 style="font-size: 2rem; color: green;">Fingerlings Details</h3>
+                    <h3 style="font-size: 2rem; color: green;">Fingerlings Stocking Details</h3>
                 </div>
             </div>
         </div>
@@ -347,79 +426,81 @@
 
         <div class="table-responsive">
             <table class="table table-bordered">
-                <thead class="thead-light">
-                <tr>
+            <thead class="thead-light">
+            <tr>
                 <th>Tank Name</th>
-                    <th>Livestock Type</th>
-                    <th>Stocking Type</th>
-                    <th>Stocking Date</th>
-                    <th>Variety</th>
-                    <th>Stock Number</th>
-                    <th>Harvest Date</th>
-                    <th>Variety Harvest (kg)</th>
-                    <th>Cumulative Amount (kg)</th>
-                    <th>Unit Price (Rs.)</th>
-                    <th>Total Income (Rs.)</th>
-                    <th>Wholesale Quantity (kg)</th>
-                    <th>Wholesale Unit Price (Rs.)</th>
-                    <th>Wholesale Total Income (Rs.)</th>
-                    <th>Actions</th>
-                </tr>
-                    </thead>
-                    <tbody>
-    @forelse ($fingerlings as $fingerling)
-    <tr>
-        <td>{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
-        <td>{{ $fingerling->livestock_type }}</td>
-        <td>{{ $fingerling->stocking_type }}</td>
-        <td>{{ $fingerling->stocking_date }}</td>
-        <td>
-            @php
-                $stockingDetails = is_string($fingerling->stocking_details) ? json_decode($fingerling->stocking_details, true) : null;
-            @endphp
-            @if (is_array($stockingDetails))
-                @foreach ($stockingDetails as $detail)
-                    <p>{{ $detail['variety'] ?? 'N/A' }}</p>
-                @endforeach
-            @else
-                <p>N/A</p>
-            @endif
-        </td>
-        <td>
-            @if (is_array($stockingDetails))
-                @foreach ($stockingDetails as $detail)
-                    <p>{{ $detail['stock_number'] ?? 'N/A' }}</p>
-                @endforeach
-            @else
-                <p>N/A</p>
-            @endif
-        </td>
-        <td>{{ $fingerling->harvest_date }}</td>
-        <td>{{ $fingerling->variety_harvest_kg ?? 'N/A' }}</td>
-        <td>{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
-        <td>{{ $fingerling->unit_price_rs ?? 'N/A' }}</td>
-        <td>{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
-        <td>{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
-        <td>{{ $fingerling->wholesale_unit_price_rs ?? 'N/A' }}</td>
-        <td>{{ $fingerling->wholesale_total_income_rs ?? 'N/A' }}</td>
-        <td class="button-container">
-            <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
-                <i class="fas fa-edit"></i>
-            </a>
-            <form action="{{ route('fingerling.destroy', $fingerling->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn-action delete" title="Delete" onclick="return confirm('Are you sure you want to delete this record?');">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </form>
-        </td>
-    </tr>
-    @empty
-    <tr>
-        <td colspan="15" class="text-center text-muted">No fingerlings added yet for this tank.</td>
-    </tr>
-    @endforelse
+                <th>Stocking Details</th>
+                <th>Harvest Details</th>
+                <th>Community Distribution (kg)</th>
+                <th>Cumulative Amount (kg)</th>
+                <th>Total Income (Rs.)</th>
+                <th>Wholesale Quantity (kg)</th>
+                <th>No. of Families Benefited</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+@forelse ($fingerlings as $fingerling)
+<tr>
+    <td class="align-middle text-center">{{ $fingerling->tank->tank_name ?? 'N/A' }}</td>
+    <td>
+        @php $stockingDetails = is_string($fingerling->stocking_details) ? json_decode($fingerling->stocking_details, true) : null; @endphp
+        @if (is_array($stockingDetails))
+            @foreach ($stockingDetails as $detail)
+                <div class="sub-detail">
+                    <strong>Date:</strong> {{ $detail['stocking_date'] ?? 'N/A' }}<br>
+                    <strong>Variety:</strong> {{ $detail['variety'] ?? 'N/A' }}<br>
+                    <strong>Stock No:</strong> {{ $detail['stock_number'] ?? 'N/A' }}
+                </div>
+            @endforeach
+        @else
+            <p class="text-muted">N/A</p>
+        @endif
+    </td>
+    <td>
+        @php $harvestDetails = is_string($fingerling->harvest_details) ? json_decode($fingerling->harvest_details, true) : null; @endphp
+        @if (is_array($harvestDetails))
+            @foreach ($harvestDetails as $detail)
+                <div class="sub-detail">
+                    <strong>Date:</strong> {{ $detail['harvest_date'] ?? 'N/A' }}<br>
+                    <strong>Variety:</strong> {{ $detail['variety'] ?? 'N/A' }}<br>
+                    <strong>Harvest (kg):</strong> {{ $detail['variety_harvest_kg'] ?? 'N/A' }}
+                </div>
+            @endforeach
+        @else
+            <p class="text-muted">N/A</p>
+        @endif
+    </td>
+    <td class="align-middle text-center">{{ $fingerling->community_distribution_kg ?? 'N/A' }}</td>
+    <td class="align-middle text-center">{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
+    <td class="align-middle text-center">{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
+    <td class="align-middle text-center">{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
+    <td class="align-middle text-center">{{ $fingerling->no_of_families_benefited ?? 'N/A' }}</td>
+    <td class="align-middle text-center">
+    <div class="button-container">
+        <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
+            <i class="fas fa-edit"></i>
+        </a>
+        <form action="{{ route('fingerling.destroy', $fingerling->id) }}"
+      method="POST"
+      class="delete-form"
+      style="margin:0;">
+    @csrf
+    @method('DELETE')
+    <button type="submit"
+            class="btn-action delete"
+            title="Delete">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+</form>
+    </div>
+</td>
+</tr>
+@empty
+<tr>
+    <td colspan="9" class="text-center text-muted">No fingerlings added yet for this tank.</td>
+</tr>
+@endforelse
 </tbody>
 
             </table>
@@ -465,5 +546,30 @@
         });
     });
 </script>
+
+<script>
+$(function(){
+  $('.delete-form').on('submit', function(e){
+    e.preventDefault();               // stop immediate form submit
+    const form = this;
+
+    Swal.fire({
+      title: 'Confirm Deletion',
+      text: "This will permanently delete the record!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc3545',  // theme red
+      cancelButtonColor: '#6c757d'    // grey
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();               // now submit for real
+      }
+    });
+  });
+});
+</script>
+
 </body>
 </html>

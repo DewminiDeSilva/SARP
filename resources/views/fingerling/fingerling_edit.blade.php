@@ -8,6 +8,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .frame {
             display: flex;
@@ -38,12 +41,15 @@
             border-color: #bd2130;
         }
         #add-more-stocking {
-            background-color: #28a745; /* Green background */
-            color: white; /* White text */
-        }
-        #add-more-stocking:hover {
-            background-color: #218838; /* Darker green when hovered */
-        }
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #fff !important;
+}
+
+#add-more-stocking:hover {
+    background-color: #0f6c3c !important;
+    border-color: #0f6c3c !important;
+}
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -100,7 +106,7 @@
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
         <div class="col-md-12 text-center">
-            <h2 class="header-title" style="color: green;">Edit Fingerling Details</h2>
+            <h2 class="header-title" style="color: green;">Edit Fingerlings Stocking Details</h2>
         </div>
         <br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
@@ -109,113 +115,97 @@
                 @method('PUT')
 
                 <!-- Tank Name -->
-                <div class="form-group">
+                <div class="form-group mb-5">
                     <label for="tank_name">Tank Name</label>
                     <input type="text" class="form-control" id="tank_name" value="{{ $fingerling->tank->tank_name ?? 'N/A' }}" readonly>
                 </div>
 
-                <!-- Livestock Type -->
-                <div class="form-group">
-                    <label for="livestock_type">Livestock Type</label>
-                    <input type="text" class="form-control" id="livestock_type" name="livestock_type" value="{{ $fingerling->livestock_type }}" required>
-                </div>
-
-                <!-- Stocking Type -->
-                <div class="form-group">
-                    <label for="stocking_type">Stocking Type</label>
-                    <input type="text" class="form-control" id="stocking_type" name="stocking_type" value="{{ $fingerling->stocking_type }}" required>
-                </div>
-
-                <!-- Stocking Date -->
-                <div class="form-group">
-                    <label for="stocking_date">Stocking Date</label>
-                    <input type="date" class="form-control" id="stocking_date" name="stocking_date" value="{{ $fingerling->stocking_date }}" required>
-                </div>
-
-                <!-- Stocking Details Section -->
-                <div class="card mb-4 card-custom">
-                    <div class="card-header bg-success text-white">Stocking Details</div>
-                    <div class="card-body">
-                        <div id="stocking-details-container">
-                            @php
-                                $stockingDetails = json_decode($fingerling->stocking_details, true) ?? [];
-                            @endphp
-                            @foreach ($stockingDetails as $index => $detail)
-                                <div class="row stock-group align-items-center">
-                                    <div class="col-md-6 form-group">
-                                        <label for="stocking_details[{{ $index }}][variety]">Variety</label>
-                                        <input type="text" name="stocking_details[{{ $index }}][variety]" class="form-control" value="{{ $detail['variety'] ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label for="stocking_details[{{ $index }}][stock_number]">Stock Number</label>
-                                        <input type="number" name="stocking_details[{{ $index }}][stock_number]" class="form-control" value="{{ $detail['stock_number'] ?? '' }}" required>
-                                    </div>
-                                    @if ($index > 0)
-                                        <div class="col-md-2 d-flex align-items-center">
-                                            <button type="button" class="btn btn-danger remove-stock-btn">Remove</button>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endforeach
+                <!-- Stocking Details -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Stocking Details</div>
+            <div class="card-body" id="stocking-details-container">
+                @php $stockingDetails = json_decode($fingerling->stocking_details, true) ?? []; @endphp
+                @foreach ($stockingDetails as $index => $detail)
+                    <div class="row stock-group align-items-center mb-2">
+                        <div class="col-md-4">
+                            <input type="date" name="stocking_details[{{ $index }}][stocking_date]" class="form-control" value="{{ $detail['stocking_date'] ?? '' }}" required>
                         </div>
-                        <div class="mt-3">
-                            <button type="button" id="add-more-stocking" class="btn btn-success">Add More Stocking Details</button>
+                        <div class="col-md-4">
+                            <input type="text" name="stocking_details[{{ $index }}][variety]" class="form-control" value="{{ $detail['variety'] ?? '' }}" required>
                         </div>
+                        <div class="col-md-3">
+                            <input type="number" name="stocking_details[{{ $index }}][stock_number]" class="form-control" value="{{ $detail['stock_number'] ?? '' }}" required>
+                        </div>
+                        @if ($index > 0)
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-danger remove-stock-btn">X</button>
+                        </div>
+                        @endif
                     </div>
+                @endforeach
+                <div id="add-more-stocking-container">
+                    <button type="button" id="add-more-stocking" class="btn btn-success mt-2">Add More Stocking</button>
                 </div>
+            </div>
+        </div>
 
                 <!-- Harvest Details -->
-                <div class="card card-custom">
-                    <div class="card-header bg-success text-white">Harvest Details</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="harvest_date">Harvest Date</label>
-                            <input type="date" class="form-control" id="harvest_date" name="harvest_date" value="{{ $fingerling->harvest_date }}">
+        <div class="card mb-5">
+            <div class="card-header bg-success text-white">Harvest Details</div>
+            <div class="card-body" id="harvest-details-container">
+                @php $harvestDetails = json_decode($fingerling->harvest_details, true) ?? []; @endphp
+                @foreach ($harvestDetails as $index => $detail)
+                    <div class="row harvest-group align-items-center mb-2">
+                        <div class="col-md-4">
+                            <input type="date" name="harvest_details[{{ $index }}][harvest_date]" class="form-control" value="{{ $detail['harvest_date'] ?? '' }}" required>
                         </div>
-                        <div class="form-group">
-                            <label for="variety_harvest_kg">Variety Harvest (kg)</label>
-                            <input type="number" class="form-control" id="variety_harvest_kg" name="variety_harvest_kg" value="{{ $fingerling->variety_harvest_kg }}" step="0.01">
+                        <div class="col-md-4">
+                            <input type="text" name="harvest_details[{{ $index }}][variety]" class="form-control" value="{{ $detail['variety'] ?? '' }}" required>
                         </div>
+                        <div class="col-md-3">
+                            <input type="number" name="harvest_details[{{ $index }}][variety_harvest_kg]" class="form-control" value="{{ $detail['variety_harvest_kg'] ?? '' }}" required>
+                        </div>
+                        @if ($index > 0)
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-danger remove-harvest-btn">X</button>
+                        </div>
+                        @endif
                     </div>
-                </div>
+                @endforeach
+                <div id="add-more-harvest-container">
+                    <button type="button" id="add-more-harvest" class="btn btn-success mt-2">Add More Harvest</button>
+            </div> 
+            </div>
+             
+        </div>
 
-                <!-- Income Details -->
-                <div class="card card-custom">
-                    <div class="card-header bg-success text-white">Income Details</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="amount_cumulative_kg">Amount Cumulative (kg)</label>
-                            <input type="number" class="form-control" id="amount_cumulative_kg" name="amount_cumulative_kg" value="{{ $fingerling->amount_cumulative_kg }}" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="unit_price_rs">Unit Price (Rs.)</label>
-                            <input type="number" class="form-control" id="unit_price_rs" name="unit_price_rs" value="{{ $fingerling->unit_price_rs }}" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="total_income_rs">Total Income (Rs.)</label>
-                            <input type="number" class="form-control" id="total_income_rs" name="total_income_rs" value="{{ $fingerling->total_income_rs }}" step="0.01">
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Wholesale Details -->
-                <div class="card card-custom">
-                    <div class="card-header bg-success text-white">Wholesale Details</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="wholesale_quantity_kg">Wholesale Quantity (kg)</label>
-                            <input type="number" class="form-control" id="wholesale_quantity_kg" name="wholesale_quantity_kg" value="{{ $fingerling->wholesale_quantity_kg }}" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="wholesale_unit_price_rs">Wholesale Unit Price (Rs.)</label>
-                            <input type="number" class="form-control" id="wholesale_unit_price_rs" name="wholesale_unit_price_rs" value="{{ $fingerling->wholesale_unit_price_rs }}" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="wholesale_total_income_rs">Wholesale Total Income (Rs.)</label>
-                            <input type="number" class="form-control" id="wholesale_total_income_rs" name="wholesale_total_income_rs" value="{{ $fingerling->wholesale_total_income_rs }}" step="0.01">
-                        </div>
-                    </div>
-                </div>
+<div class="form-group">
+    <label>Cumulative Amount (kg)</label>
+    <input type="number" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control" value="{{ $fingerling->amount_cumulative_kg }}" readonly>
+</div>
+
+<div class="form-group">
+    <label for="community_distribution_kg">Community Distribution (kg)</label>
+    <input type="number" class="form-control" id="community_distribution_kg" name="community_distribution_kg" value="{{ $fingerling->community_distribution_kg }}">
+</div>
+
+<div class="form-group">
+    <label for="total_income_rs">Total Income (Rs.)</label>
+    <input type="number" class="form-control" id="total_income_rs" name="total_income_rs" value="{{ $fingerling->total_income_rs }}">
+</div>
+
+<div class="form-group">
+    <label for="wholesale_quantity_kg">Wholesale Quantity (kg)</label>
+    <input type="number" class="form-control" id="wholesale_quantity_kg" name="wholesale_quantity_kg" value="{{ $fingerling->wholesale_quantity_kg }}">
+</div>
+
+<div class="form-group">
+    <label for="no_of_families_benefited">No. of Families Benefited</label>
+    <input type="number" class="form-control" id="no_of_families_benefited" name="no_of_families_benefited" value="{{ $fingerling->no_of_families_benefited }}">
+</div>
+
+
 
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-success mt-3">Update</button>
@@ -227,31 +217,123 @@
 
 <script>
     $(document).ready(function () {
-        let stockingIndex = {{ count($stockingDetails) }};
+        let stockingIndex = {{ count($stockingDetails ?? []) }};
+        let harvestIndex = {{ count($harvestDetails ?? []) }};
+
+        function updateCumulativeAmount() {
+            let total = 0;
+            $('input[name*="[variety_harvest_kg]"]').each(function () {
+                const val = parseFloat($(this).val());
+                if (!isNaN(val)) total += val;
+            });
+            $('#amount_cumulative_kg').val(total.toFixed(2));
+        }
+
+        // Add more stocking
         $('#add-more-stocking').click(function () {
             const html = `
-                <div class="row stock-group align-items-center mt-3">
-                    <div class="col-md-6 form-group">
-                        <label for="stocking_details[${stockingIndex}][variety]">Variety</label>
-                        <input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="stocking_details[${stockingIndex}][stock_number]">Stock Number</label>
-                        <input type="number" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-danger remove-stock-btn">Remove</button>
-                    </div>
+                <div class="row stock-group align-items-center mb-2">
+                    <div class="col-md-4"><input type="date" name="stocking_details[${stockingIndex}][stocking_date]" class="form-control" required></div>
+                    <div class="col-md-4"><input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required></div>
+                    <div class="col-md-3"><input type="number" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required></div>
+                    <div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-danger remove-stock-btn">X</button></div>
                 </div>`;
-            $('#stocking-details-container').append(html);
+            $(html).insertBefore('#add-more-stocking-container');
             stockingIndex++;
         });
 
-        // Remove stocking detail
+        // Add more harvest
+        $('#add-more-harvest').click(function () {
+            const html = `
+                <div class="row harvest-group align-items-center mb-2">
+                    <div class="col-md-4"><input type="date" name="harvest_details[${harvestIndex}][harvest_date]" class="form-control" required></div>
+                    <div class="col-md-4"><input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control" required></div>
+                    <div class="col-md-3"><input type="number" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control harvest-kg" required></div>
+                    <div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-danger remove-harvest-btn">X</button></div>
+                </div>`;
+            $(html).insertBefore('#add-more-harvest-container');
+            harvestIndex++;
+            setTimeout(updateCumulativeAmount, 100);
+        });
+
+        // Remove stocking row
         $(document).on('click', '.remove-stock-btn', function () {
             $(this).closest('.stock-group').remove();
         });
+
+        // Remove harvest row and recalculate
+        $(document).on('click', '.remove-harvest-btn', function () {
+            $(this).closest('.harvest-group').remove();
+            updateCumulativeAmount();
+        });
+
+        // Recalculate on variety harvest input change
+        $(document).on('input', '.harvest-kg, input[name*="[variety_harvest_kg]"]', updateCumulativeAmount);
+
+        // Initial calculation
+        updateCumulativeAmount();
     });
 </script>
+
+<script>
+$(function(){
+  // 1) Intercept the “Update” form submission
+  const frm = $('form');  // if you have other forms, you can target more specifically
+  frm.on('submit', function(e) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to save these changes?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#28a745',  // your theme green
+      cancelButtonColor:  '#dc3545'   // your theme red
+    }).then((result) => {
+      if (result.isConfirmed) {
+        frm.off('submit');  // unbind so it can actually submit
+        frm.submit();
+      }
+    });
+  });
+
+  // 2) Show a toast if update was successful
+  @if(session('success'))
+    Swal.fire({
+      icon: 'success',
+      title: 'Updated!',
+      text: '{{ session('success') }}',
+      timer: 2000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
+  @endif
+});
+</script>
+
+<script>
+$(function(){
+  const frm = $('form');
+  frm.on('submit', function(e){
+    // … your confirm logic …
+  });
+
+  // ←– THIS right here shows the toast
+  @if(session('success'))
+    Swal.fire({
+      icon: 'success',
+      title: 'Updated!',
+      text: '{{ session('success') }}',
+      timer: 2000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
+  @endif
+});
+</script>
+
 </body>
 </html>
