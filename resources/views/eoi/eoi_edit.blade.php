@@ -210,6 +210,14 @@
                         <label class="form-label">Business Objectives</label>
                         <textarea class="form-control" name="business_objectives" required>{{ $expression->business_objectives }}</textarea>
                     </div>
+                    
+                    <div class="mb-3">
+    <label class="form-label">Category</label>
+    <input type="text" name="category" class="form-control" 
+        value="{{$expression->category}}" required>
+</div>
+
+
                     <div class="mb-3">
     <label class="form-label">Background Information</label>
     <textarea class="form-control" name="background_info" rows="3">{{ $expression->background_info }}</textarea>

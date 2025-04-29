@@ -183,6 +183,7 @@
             <div class="info"><label>Problem in the Marketplace:</label> <p>{{ $expression->market_problem }}</p></div>
             <div class="info"><label>Business Concept Title:</label> <p>{{ $expression->business_title }}</p></div>
             <div class="info"><label>Business Objectives:</label> <p>{{ $expression->business_objectives }}</p></div>
+            <div class="info"><label>Category:</label> <p>{{ $expression->category ?? 'N/A'}}</p></div>
             <div class="info"><label>Background Information:</label> <p>{{ $expression->background_info ?? 'N/A' }}</p></div>
             <div class="info"><label>Project Justification:</label> <p>{{ $expression->project_justification ?? 'N/A' }}</p></div>
             <div class="info"><label>Project Benefits:</label> <p>{{ $expression->project_benefits ?? 'N/A' }}</p></div>
