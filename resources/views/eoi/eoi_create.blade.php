@@ -154,7 +154,7 @@
                         <input type="email" class="form-control" name="email">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Name of the valur changing</label>
+                        <label class="form-label">Name of the value changing</label>
                         <textarea class="form-control" name="market_problem" required></textarea>
                     </div>
                     <div class="mb-3">
@@ -165,6 +165,13 @@
                         <label class="form-label">Business Objectives</label>
                         <textarea class="form-control" name="business_objectives" required></textarea>
                     </div>
+
+                    <div class="mb-3">
+                    <label class="form-label">Category</label>
+                   <input type="text" name="category" class="form-control" >
+    
+                  </div>
+
                     <div class="mb-3">
                         <label class="form-label">Project Risks & Mitigation</label>
                         <table class="table">

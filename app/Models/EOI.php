@@ -36,6 +36,7 @@ class EOI extends Model
         'risk_factors',
         'implementation_plan',
         'status',
+        'category',
     ];
 
     protected $casts = [

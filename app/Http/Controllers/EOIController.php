@@ -40,6 +40,7 @@ class EOIController extends Controller
         'project_justification' => 'required|string',
         'project_benefits' => 'required|string',
         'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+        'category' => 'nullable|string',
     ]);
 
     $expression = new EOI();
@@ -74,6 +75,7 @@ class EOIController extends Controller
         $file->move(public_path('uploads/implementation_plans'), $filename);
         $expression->implementation_plan = $filename;
     }
+    $expression->category = $request->category;
 
     $expression->save();
 
@@ -124,6 +126,7 @@ class EOIController extends Controller
         'assistance_required' => 'nullable|array',
 
         'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+        'category' => 'nullable|string',
     ]);
 
     $expression = EOI::findOrFail($id);
@@ -160,6 +163,7 @@ class EOIController extends Controller
         $file->storeAs('public/implementation_plans', $filename);
         $expression->implementation_plan = $filename;
     }
+    $expression->category = $request->category;
 
     $expression->save();
 
