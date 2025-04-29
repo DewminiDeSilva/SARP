@@ -457,7 +457,7 @@
                                 
                                         {{-- Add Data button (always enabled) --}}
                                         <form action="{{ route('fingerling.create', $tank->id) }}" method="GET" style="display:inline;">
-                                            <button type="submit" class="btn btn-primary btn-sm">Add Data</button>
+                                            <button type="submit" class="btn btn-primary btn-sm">Add Stocking Data</button>
                                         </form>
                                     </div>
                                 </td>

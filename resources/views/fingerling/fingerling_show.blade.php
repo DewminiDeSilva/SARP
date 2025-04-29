@@ -478,7 +478,7 @@ table.table {
     <td class="align-middle text-center">{{ $fingerling->no_of_families_benefited ?? 'N/A' }}</td>
     <td class="align-middle text-center">
     <div class="button-container">
-        <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit">
+        <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit & Add Harvest Data">
             <i class="fas fa-edit"></i>
         </a>
         <form action="{{ route('fingerling.destroy', $fingerling->id) }}"
