@@ -128,6 +128,7 @@
                                 <div class="col-md-4 form-group">
                                     <label>Stocking Date</label>
                                     <input type="date" name="stocking_details[0][stocking_date]" class="form-control" required>
+
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Variety</label>
@@ -135,7 +136,8 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Stock Number</label>
-                                    <input type="number" name="stocking_details[0][stock_number]" class="form-control" required>
+                                    <input type="number" step="0.01" name="stocking_details[0][stock_number]" class="form-control" required>
+
                                 </div>
                                 <div class="col-md-1 d-flex align-items-center">
                                     <!-- No remove button for first row -->
@@ -172,7 +174,8 @@
                 </div>
                 <div class="col-md-3 form-group">
                     <label>Harvest (kg)</label>
-                    <input type="number" name="harvest_details[0][variety_harvest_kg]" class="form-control">
+                    <input type="number" step="0.01" name="harvest_details[0][variety_harvest_kg]" class="form-control">
+
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
                     <!-- No remove button for first row -->
@@ -185,7 +188,8 @@
 
         <div class="form-group mt-4">
             <label for="amount_cumulative_kg">Total Harvest (kg)</label>
-            <input type="number" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control" readonly>
+            <input type="number" step="0.01" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control" readonly>
+
         </div>
     </div>
 </div>
@@ -193,17 +197,20 @@
 
         <div class="form-group">
             <label for="community_distribution_kg">Community Distribution (kg)</label>
-            <input type="number" name="community_distribution_kg" id="community_distribution_kg" class="form-control">
+            <input type="number" step="0.01" name="community_distribution_kg" id="community_distribution_kg" class="form-control">
+
         </div>
 
         <div class="form-group">
             <label for="wholesale_quantity_kg">Wholesale Quantity (kg)</label>
-            <input type="number" name="wholesale_quantity_kg" id="wholesale_quantity_kg" class="form-control">
+            <input type="number" step="0.01" name="wholesale_quantity_kg" id="wholesale_quantity_kg" class="form-control">
+
         </div>
 
         <div class="form-group">
             <label for="total_income_rs">Total Income (Rs.)</label>
-            <input type="number" name="total_income_rs" id="total_income_rs" class="form-control">
+            <input type="number" step="0.01" name="total_income_rs" id="total_income_rs" class="form-control">
+
         </div>
 
 
@@ -239,7 +246,8 @@
                     <input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required>
                 </div>
                 <div class="col-md-3 form-group">
-                    <input type="number" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required>
+                    <input type="number" step="0.01" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required>
+
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
                     <button type="button" class="btn btn-danger remove-stock-btn">Remove</button>
@@ -266,7 +274,8 @@
                     <input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control" required>
                 </div>
                 <div class="col-md-3 form-group">
-                    <input type="number" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control" required>
+                    <input type="number" step="0.01" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control" required>
+
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
                     <button type="button" class="btn btn-danger remove-harvest-btn">Remove</button>

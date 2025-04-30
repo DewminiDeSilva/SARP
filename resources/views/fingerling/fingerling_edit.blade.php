@@ -121,83 +121,167 @@
                 </div>
 
                 <!-- Stocking Details -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Stocking Details</div>
-            <div class="card-body" id="stocking-details-container">
-                @php $stockingDetails = json_decode($fingerling->stocking_details, true) ?? []; @endphp
-                @foreach ($stockingDetails as $index => $detail)
-                    <div class="row stock-group align-items-center mb-2">
-                        <div class="col-md-4">
-                            <input type="date" name="stocking_details[{{ $index }}][stocking_date]" class="form-control" value="{{ $detail['stocking_date'] ?? '' }}" required>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="stocking_details[{{ $index }}][variety]" class="form-control" value="{{ $detail['variety'] ?? '' }}" required>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" name="stocking_details[{{ $index }}][stock_number]" class="form-control" value="{{ $detail['stock_number'] ?? '' }}" required>
-                        </div>
-                        @if ($index > 0)
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-danger remove-stock-btn">X</button>
-                        </div>
-                        @endif
-                    </div>
-                @endforeach
-                <div id="add-more-stocking-container">
-                    <button type="button" id="add-more-stocking" class="btn btn-success mt-2">Add More Stocking</button>
-                </div>
-            </div>
+                <div class="card mb-4">
+    <div class="card-header bg-success text-white">Stocking Details</div>
+    <div class="card-body" id="stocking-details-container">
+
+        {{-- ─── Header Row ─────────────────────────────── --}}
+        <div class="row mb-2">
+            <div class="col-md-4">Stocking Date</div>
+            <div class="col-md-4">Variety</div>
+            <div class="col-md-3">Stock Number</div>
+            <div class="col-md-1"></div>
         </div>
+
+        @php
+            $stockingDetails = json_decode($fingerling->stocking_details, true) ?? [];
+        @endphp
+
+        @foreach ($stockingDetails as $index => $detail)
+            <div class="row stock-group align-items-center mb-2">
+                <div class="col-md-4">
+                    <input
+                        type="date"
+                        name="stocking_details[{{ $index }}][stocking_date]"
+                        class="form-control"
+                        value="{{ $detail['stocking_date'] ?? '' }}"
+                        required
+                    >
+                </div>
+                <div class="col-md-4">
+                    <input
+                        type="text"
+                        name="stocking_details[{{ $index }}][variety]"
+                        class="form-control"
+                        value="{{ $detail['variety'] ?? '' }}"
+                        required
+                    >
+                </div>
+                <div class="col-md-3">
+                <input type="number" step="0.01" name="stocking_details[{{ $index }}][stock_number]" class="form-control" value="{{ $detail['stock_number'] ?? '' }}" required>
+
+                </div>
+                @if ($index > 0)
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-danger remove-stock-btn">X</button>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+
+        <div id="add-more-stocking-container">
+            <button type="button" id="add-more-stocking" class="btn btn-success mt-2">
+                Add More Stocking
+            </button>
+        </div>
+    </div>
+</div>
+
 
                 <!-- Harvest Details -->
-        <div class="card mb-5">
-            <div class="card-header bg-success text-white">Harvest Details</div>
-            <div class="card-body" id="harvest-details-container">
-                @php $harvestDetails = json_decode($fingerling->harvest_details, true) ?? []; @endphp
-                @foreach ($harvestDetails as $index => $detail)
-                    <div class="row harvest-group align-items-center mb-2">
-                        <div class="col-md-4">
-                            <input type="date" name="harvest_details[{{ $index }}][harvest_date]" class="form-control" value="{{ $detail['harvest_date'] ?? '' }}" required>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="harvest_details[{{ $index }}][variety]" class="form-control" value="{{ $detail['variety'] ?? '' }}" required>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" name="harvest_details[{{ $index }}][variety_harvest_kg]" class="form-control" value="{{ $detail['variety_harvest_kg'] ?? '' }}" required>
-                        </div>
-                        @if ($index > 0)
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-danger remove-harvest-btn">X</button>
-                        </div>
-                        @endif
-                    </div>
-                @endforeach
-                <div id="add-more-harvest-container">
-                    <button type="button" id="add-more-harvest" class="btn btn-success mt-2">Add More Harvest</button>
-            </div> 
-            </div>
-             
+        <!-- Harvest Details -->
+<div class="card mb-5">
+    <div class="card-header bg-success text-white">Harvest Details</div>
+    <div class="card-body" id="harvest-details-container">
+
+        {{-- ─── Column Labels (not bold) ────────────────────── --}}
+        <div class="row mb-2">
+            <div class="col-md-4">Harvest Date</div>
+            <div class="col-md-4">Variety</div>
+            <div class="col-md-3">Harvest (kg)</div>
+            <div class="col-md-1"></div>
         </div>
 
+        @php
+            $harvestDetails = json_decode($fingerling->harvest_details, true) ?? [];
+        @endphp
 
-<div class="form-group">
-    <label>Cumulative Amount (kg)</label>
-    <input type="number" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control" value="{{ $fingerling->amount_cumulative_kg }}" readonly>
+        {{-- If no existing rows, show one empty row --}}
+        @if(count($harvestDetails) === 0)
+            <div class="row harvest-group align-items-center mb-2">
+                <div class="col-md-4">
+                    <input type="date"
+                           name="harvest_details[0][harvest_date]"
+                           class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <input type="text"
+                           name="harvest_details[0][variety]"
+                           class="form-control">
+                </div>
+                <div class="col-md-3">
+                <input type="number" step="0.01" name="harvest_details[{{ $index }}][variety_harvest_kg]" class="form-control harvest-kg" value="{{ $detail['variety_harvest_kg'] ?? '' }}">
+
+                </div>
+                <div class="col-md-1">
+                    <button type="button"
+                            class="btn btn-danger remove-harvest-btn">X</button>
+                </div>
+            </div>
+        @endif
+
+        {{-- Render saved rows --}}
+        @foreach ($harvestDetails as $index => $detail)
+            <div class="row harvest-group align-items-center mb-2">
+                <div class="col-md-4">
+                    <input type="date"
+                           name="harvest_details[{{ $index }}][harvest_date]"
+                           class="form-control"
+                           value="{{ $detail['harvest_date'] ?? '' }}">
+                </div>
+                <div class="col-md-4">
+                    <input type="text"
+                           name="harvest_details[{{ $index }}][variety]"
+                           class="form-control"
+                           value="{{ $detail['variety'] ?? '' }}">
+                </div>
+                <div class="col-md-3">
+                <input type="number" step="0.01" name="harvest_details[{{ $index }}][variety_harvest_kg]" class="form-control harvest-kg" value="{{ $detail['variety_harvest_kg'] ?? '' }}">
+
+                </div>
+                <div class="col-md-1">
+                    <button type="button"
+                            class="btn btn-danger remove-harvest-btn">X</button>
+                </div>
+            </div>
+        @endforeach
+
+        {{-- Add-more button --}}
+        <div id="add-more-harvest-container">
+            <button type="button"
+                    id="add-more-harvest"
+                    class="btn btn-success mt-4">
+                Add More Harvest Details
+            </button>
+        </div>
+
+        {{-- Cumulative total --}}
+        <div class="form-group mt-4">
+            <label>Total Harvest (kg)</label>
+            <input type="number" step="0.01" name="amount_cumulative_kg" id="amount_cumulative_kg" class="form-control" value="{{ $fingerling->amount_cumulative_kg }}" readonly>
+
+        </div>
+
+    </div>
 </div>
+
 
 <div class="form-group">
     <label for="community_distribution_kg">Community Distribution (kg)</label>
-    <input type="number" class="form-control" id="community_distribution_kg" name="community_distribution_kg" value="{{ $fingerling->community_distribution_kg }}">
+    <input type="number" step="0.01" class="form-control" id="community_distribution_kg" name="community_distribution_kg" value="{{ $fingerling->community_distribution_kg }}">
+
 </div>
 
 <div class="form-group">
     <label for="total_income_rs">Total Income (Rs.)</label>
-    <input type="number" class="form-control" id="total_income_rs" name="total_income_rs" value="{{ $fingerling->total_income_rs }}">
+    <input type="number" step="0.01" class="form-control" id="total_income_rs" name="total_income_rs" value="{{ $fingerling->total_income_rs }}">
+
 </div>
 
 <div class="form-group">
     <label for="wholesale_quantity_kg">Wholesale Quantity (kg)</label>
-    <input type="number" class="form-control" id="wholesale_quantity_kg" name="wholesale_quantity_kg" value="{{ $fingerling->wholesale_quantity_kg }}">
+    <input type="number" step="0.01" class="form-control" id="wholesale_quantity_kg" name="wholesale_quantity_kg" value="{{ $fingerling->wholesale_quantity_kg }}">
+
 </div>
 
 <div class="form-group">
@@ -235,7 +319,8 @@
                 <div class="row stock-group align-items-center mb-2">
                     <div class="col-md-4"><input type="date" name="stocking_details[${stockingIndex}][stocking_date]" class="form-control" required></div>
                     <div class="col-md-4"><input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required></div>
-                    <div class="col-md-3"><input type="number" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required></div>
+                    <div class="col-md-3"><input type="number" step="0.01" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required></div>
+                                          
                     <div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-danger remove-stock-btn">X</button></div>
                 </div>`;
             $(html).insertBefore('#add-more-stocking-container');
@@ -246,9 +331,9 @@
         $('#add-more-harvest').click(function () {
             const html = `
                 <div class="row harvest-group align-items-center mb-2">
-                    <div class="col-md-4"><input type="date" name="harvest_details[${harvestIndex}][harvest_date]" class="form-control" required></div>
-                    <div class="col-md-4"><input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control" required></div>
-                    <div class="col-md-3"><input type="number" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control harvest-kg" required></div>
+                    <div class="col-md-4"><input type="date" name="harvest_details[${harvestIndex}][harvest_date]" class="form-control"></div>
+                    <div class="col-md-4"><input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control"></div>
+                    <div class="col-md-3"><input type="number" step="0.01" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control harvest-kg"></div>
                     <div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-danger remove-harvest-btn">X</button></div>
                 </div>`;
             $(html).insertBefore('#add-more-harvest-container');
@@ -333,6 +418,26 @@ $(function(){
     });
   @endif
 });
+</script>
+
+<script>
+// Remove any harvest row, recalc, and if none left push a blank one
+$(document).on('click', '.remove-harvest-btn', function() {
+    $(this).closest('.harvest-group').remove();
+    updateCumulativeAmount();
+
+    // if we just removed the last harvest-group, add a blank one
+    if ($('.harvest-group').length === 0) {
+    const html = `
+        <div class="row harvest-group align-items-center mb-2">
+            <div class="col-md-4"><input type="date" name="harvest_details[${harvestIndex}][harvest_date]" class="form-control"></div>
+            <div class="col-md-4"><input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control"></div>
+            <div class="col-md-3"><input type="number" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control harvest-kg"></div>
+            <div class="col-md-1"><button type="button" class="btn btn-danger remove-harvest-btn">X</button></div>
+        </div>`;
+    $(html).insertBefore('#add-more-harvest-container');
+    harvestIndex++;
+}
 </script>
 
 </body>

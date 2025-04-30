@@ -420,7 +420,7 @@ table.table {
         <!-- Generate and Upload CSV, Add ASC Button -->
         <div class="top-section">
             <div class="top-left">
-            <a href="{{ route('fingerling.create', $tank->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Fingerlings</a>
+            <a href="{{ route('fingerling.create', $tank->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Fingerlings Stocking Details</a>
             </div>
         </div>
 
@@ -457,30 +457,62 @@ table.table {
             <p class="text-muted">N/A</p>
         @endif
     </td>
-    <td>
-        @php $harvestDetails = is_string($fingerling->harvest_details) ? json_decode($fingerling->harvest_details, true) : null; @endphp
-        @if (is_array($harvestDetails))
-            @foreach ($harvestDetails as $detail)
-                <div class="sub-detail">
-                    <strong>Date:</strong> {{ $detail['harvest_date'] ?? 'N/A' }}<br>
-                    <strong>Variety:</strong> {{ $detail['variety'] ?? 'N/A' }}<br>
-                    <strong>Harvest (kg):</strong> {{ $detail['variety_harvest_kg'] ?? 'N/A' }}
-                </div>
-            @endforeach
-        @else
-            <p class="text-muted">N/A</p>
-        @endif
-    </td>
-    <td class="align-middle text-center">{{ $fingerling->community_distribution_kg ?? 'N/A' }}</td>
-    <td class="align-middle text-center">{{ $fingerling->amount_cumulative_kg ?? 'N/A' }}</td>
-    <td class="align-middle text-center">{{ $fingerling->total_income_rs ?? 'N/A' }}</td>
-    <td class="align-middle text-center">{{ $fingerling->wholesale_quantity_kg ?? 'N/A' }}</td>
+    <td class="align-middle text-center">
+    @php
+        // Always decode into an array (even if the column is NULL)
+        $rawHarvest = json_decode($fingerling->harvest_details ?? '[]', true) ?: [];
+
+        // Keep only rows where at least one field has something
+        $harvestRows = array_filter($rawHarvest, function($row) {
+            return !empty($row['harvest_date'])
+                || !empty($row['variety'])
+                || !empty($row['variety_harvest_kg']);
+        });
+    @endphp
+
+    @if(count($harvestRows) === 0)
+        {{-- No real harvest data → show one centered N/A --}}
+        <span class="text-muted">N/A</span>
+    @else
+        {{-- Render each valid harvest row --}}
+        @foreach($harvestRows as $detail)
+            <div class="sub-detail">
+                <strong>Date:</strong> {{ $detail['harvest_date'] ?? 'N/A' }}<br>
+                <strong>Variety:</strong> {{ $detail['variety'] ?? 'N/A' }}<br>
+                <strong>Harvest (kg):</strong>
+{{ isset($detail['variety_harvest_kg']) ? rtrim(rtrim(number_format($detail['variety_harvest_kg'], 1), '0'), '.') : 'N/A' }}
+
+            </div>
+        @endforeach
+    @endif
+</td>
+
+
+<td class="align-middle text-center">
+    {{ $fingerling->community_distribution_kg !== null ? rtrim(rtrim(number_format($fingerling->community_distribution_kg, 1), '0'), '.') : 'N/A' }}
+</td>
+<td class="align-middle text-center">
+    {{ $fingerling->amount_cumulative_kg !== null ? rtrim(rtrim(number_format($fingerling->amount_cumulative_kg, 1), '0'), '.') : 'N/A' }}
+</td>
+
+<td class="align-middle text-center">
+    {{ $fingerling->total_income_rs !== null ? rtrim(rtrim(number_format($fingerling->total_income_rs, 1), '0'), '.') : 'N/A' }}
+</td>
+
+<td class="align-middle text-center">
+    {{ $fingerling->wholesale_quantity_kg !== null ? rtrim(rtrim(number_format($fingerling->wholesale_quantity_kg, 1), '0'), '.') : 'N/A' }}
+</td>
+
     <td class="align-middle text-center">{{ $fingerling->no_of_families_benefited ?? 'N/A' }}</td>
     <td class="align-middle text-center">
     <div class="button-container">
-        <a href="{{ route('fingerling.edit', $fingerling->id) }}" class="btn-action edit" title="Edit & Add Harvest Data">
-            <i class="fas fa-edit"></i>
-        </a>
+    <a href="{{ route('fingerling.edit', $fingerling->id) }}"
+   class="btn-action edit"
+   title="Edit & Add Harvest Data"
+   data-toggle="tooltip"
+   data-placement="top">
+  <i class="fas fa-edit"></i>
+</a>
         <form action="{{ route('fingerling.destroy', $fingerling->id) }}"
       method="POST"
       class="delete-form"
@@ -569,6 +601,12 @@ $(function(){
     });
   });
 });
+</script>
+
+<script>
+  $(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
 </script>
 
 </body>
