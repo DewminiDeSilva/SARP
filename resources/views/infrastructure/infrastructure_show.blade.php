@@ -263,9 +263,9 @@
                 <div class="row">
                     <div class="col-12">
                         <!-- Infrastructure Details Section -->
-                        <div class="infrastructure-section n my-4 custom-frame">
-
-                            <div class="infrastructure-details">
+                        <div class="container-fluid">
+                            <div class="custom-frame">
+                                <div class="infrastructure-details">
                                 <div class="info">
                                     <label>Type of Infrastructure:</label>
                                     <p>{{$infrastructure->type_of_infrastructure}}</p>
@@ -302,10 +302,18 @@
                                     <label>Agency:</label>
                                     <p>{{$infrastructure->agency}}</p>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="custom-frame">
+                            <div class="infrastructure-details">
                                 <div class="info">
                                     <label>No. of Family:</label>
                                     <p>{{$infrastructure->no_of_family}}</p>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="custom-frame">
+                            <div class="infrastructure-details">
                                 <div class="info">
                                     <label>Longitude:</label>
                                     <p>{{$infrastructure->longitude}}</p>
@@ -323,6 +331,10 @@
                                         </a>
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="custom-frame">
+                            <div class="infrastructure-details">
                                 <div class="info">
                                     <label>Contractor:</label>
                                     <p>{{$infrastructure->contractor}}</p>
@@ -347,6 +359,8 @@
                                     <label>Remarks:</label>
                                     <p>{{$infrastructure->remarks}}</p>
                                 </div>
+                            </div>
+                        </div>
 
                                 <div class="d-flex justify-content-center mt-4">
 
@@ -356,6 +370,7 @@
                                         <p>No Image</p>
                                     @endif
                                 </div>
+                            </div>
                                 <!-- Add two horizontal cards below Remarks -->
                                 <div class="row mt-4">
                                     <div class="col-md-6">
