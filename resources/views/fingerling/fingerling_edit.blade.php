@@ -36,6 +36,14 @@
             font-size: 0.875rem;
             padding: 0.375rem 0.75rem;
         }
+
+        .remove-harvest-btn {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+        }
+
         .remove-stock-btn:hover {
             background-color: #c82333;
             border-color: #bd2130;
@@ -317,11 +325,18 @@
         $('#add-more-stocking').click(function () {
             const html = `
                 <div class="row stock-group align-items-center mb-2">
-                    <div class="col-md-4"><input type="date" name="stocking_details[${stockingIndex}][stocking_date]" class="form-control" required></div>
-                    <div class="col-md-4"><input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required></div>
-                    <div class="col-md-3"><input type="number" step="0.01" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required></div>
-                                          
-                    <div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-danger remove-stock-btn">X</button></div>
+                    <div class="col-md-4">
+                        <input type="date" name="stocking_details[${stockingIndex}][stocking_date]" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" step="0.01" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required>
+                    </div>                       
+                    <div class="col-md-1 d-flex align-items-center">
+                        <button type="button" class="btn btn-danger remove-stock-btn">X</button>
+                    </div>
                 </div>`;
             $(html).insertBefore('#add-more-stocking-container');
             stockingIndex++;

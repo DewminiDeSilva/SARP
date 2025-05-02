@@ -450,7 +450,9 @@ table.table {
                 <div class="sub-detail">
                     <strong>Date:</strong> {{ $detail['stocking_date'] ?? 'N/A' }}<br>
                     <strong>Variety:</strong> {{ $detail['variety'] ?? 'N/A' }}<br>
-                    <strong>Stock No:</strong> {{ $detail['stock_number'] ?? 'N/A' }}
+                    <strong>Stock No:</strong>
+                    {{ isset($detail['stock_number']) ? rtrim(rtrim(number_format($detail['stock_number'], 1), '0'), '.') : 'N/A' }}
+
                 </div>
             @endforeach
         @else

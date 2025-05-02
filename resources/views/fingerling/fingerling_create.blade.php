@@ -35,6 +35,14 @@
             font-size: 0.875rem;
             padding: 0.375rem 0.75rem;
         }
+
+        .remove-harvest-btn {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+        }
+
         .remove-stock-btn:hover {
             background-color: #c82333;
             border-color: #bd2130;
@@ -125,16 +133,16 @@
                         <div id="stocking-details-container">
                             <!-- First Row -->
                             <div class="row stock-group align-items-center">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-4">
                                     <label>Stocking Date</label>
                                     <input type="date" name="stocking_details[0][stocking_date]" class="form-control" required>
 
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-4">
                                     <label>Variety</label>
                                     <input type="text" name="stocking_details[0][variety]" class="form-control" required>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-3">
                                     <label>Stock Number</label>
                                     <input type="number" step="0.01" name="stocking_details[0][stock_number]" class="form-control" required>
 
@@ -164,15 +172,15 @@
         <div id="harvest-details-container">
             <!-- First Row -->
             <div class="row harvest-group align-items-center">
-                <div class="col-md-4 form-group">
+                <div class="col-md-4 ">
                     <label>Harvest Date</label>
                     <input type="date" name="harvest_details[0][harvest_date]" class="form-control">
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-4 ">
                     <label>Variety</label>
                     <input type="text" name="harvest_details[0][variety]" class="form-control">
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-3 ">
                     <label>Harvest (kg)</label>
                     <input type="number" step="0.01" name="harvest_details[0][variety_harvest_kg]" class="form-control">
 
@@ -239,13 +247,13 @@
     $('#add-more-stocking').click(function () {
         const html = `
             <div class="row stock-group align-items-center mt-3">
-                <div class="col-md-4 form-group">
+                <div class="col-md-4">
                     <input type="date" name="stocking_details[${stockingIndex}][stocking_date]" class="form-control" required>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-4">
                     <input type="text" name="stocking_details[${stockingIndex}][variety]" class="form-control" required>
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-3">
                     <input type="number" step="0.01" name="stocking_details[${stockingIndex}][stock_number]" class="form-control" required>
 
                 </div>
@@ -267,13 +275,13 @@
     $('#add-more-harvest').click(function () {
         const html = `
             <div class="row harvest-group align-items-center mt-3">
-                <div class="col-md-4 form-group">
+                <div class="col-md-4">
                     <input type="date" name="harvest_details[${harvestIndex}][harvest_date]" class="form-control" required>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-4">
                     <input type="text" name="harvest_details[${harvestIndex}][variety]" class="form-control" required>
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-3">
                     <input type="number" step="0.01" name="harvest_details[${harvestIndex}][variety_harvest_kg]" class="form-control" required>
 
                 </div>
