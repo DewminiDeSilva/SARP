@@ -676,7 +676,7 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
     Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestock.list');
     Route::get('/livestocks/create/{beneficiary_id}', [LivestockController::class, 'create'])->name('livestocks.create');
-     Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
+    Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
     Route::post('/livestocks/store', [LivestockController::class, 'store'])->name('livestocks.store');
     Route::get('/livestocks/gn-division/{beneficiary_id}', [LivestockController::class, 'getGnDivisionName'])->name('livestock.getGnDivisionName');
     Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
@@ -1100,6 +1100,10 @@ Route::get('/fingerling/{id}/edit', [FingerlingController::class, 'edit'])->name
 
 // Route to update the fingerling record
 Route::put('/fingerling/{id}', [FingerlingController::class, 'update'])->name('fingerling.update');
+//
+Route::post('/fingerling/update-status/{tank}', [FingerlingController::class, 'updateStatus'])->name('fingerling.updateStatus');
+
+
 //
 
 

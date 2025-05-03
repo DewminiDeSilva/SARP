@@ -245,7 +245,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="program_conductor">Program Conductor</label>
+                    <label for="program_conductor">Resource Person</label>
                     <input type="text" class="form-control" id="program_conductor" name="program_conductor" placeholder="Enter Program Conductor" required>
                 </div>
 
