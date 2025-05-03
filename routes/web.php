@@ -297,50 +297,297 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Training and Participants
-    Route::resource('training', TrainingController::class);
-    Route::resource('training', TrainingController::class);
+    // Route::resource('training', TrainingController::class);
+    // Route::resource('training', TrainingController::class);
     Route::get('/downloadtraining.csv', [TrainingController::class, 'downloadCsv'])->name('downloadtraining.csv');
-    Route::post('/training/upload_csv', [TrainingController::class, 'uploadCsv'])->name('training.upload_csv');
+    // Route::post('/training/upload_csv', [TrainingController::class, 'uploadCsv'])->name('training.upload_csv');
     Route::get('/searchTraining', [TrainingController::class, 'search'])->name('searchTraining');
 
-    Route::get('/training/{trainingId}/participants', [ParticipantController::class, 'listParticipants'])->name('participants.list');
-    Route::post('/training/{trainingId}/participants', [ParticipantController::class, 'store'])->name('participants.store');
-    Route::get('/training/{trainingId}/participants', [ParticipantController::class, 'listParticipants'])->name('participants.list');
-    Route::get('/training/{trainingId}/participants/create', [ParticipantController::class, 'create'])->name('participants.create');
-    Route::post('/training/{trainingId}/participants', [ParticipantController::class, 'store'])->name('participants.store');
-    Route::delete('training/{trainingId}/participants/{participantId}', [ParticipantController::class, 'destroy'])->name('participants.destroy');
-    Route::post('training/{trainingId}/participants/upload_csv', [ParticipantController::class, 'uploadCsv'])->name('participants.upload_csv');
-    Route::get('training/{trainingId}/participants/download_csv', [ParticipantController::class, 'downloadCsv'])->name('participants.download_csv');
-    Route::get('training/{trainingId}/participants/search', [ParticipantController::class, 'listParticipants'])->name('participants.search');
+    // Route::get('/training/{trainingId}/participants', [ParticipantController::class, 'listParticipants'])->name('participants.list');
+    // Route::post('/training/{trainingId}/participants', [ParticipantController::class, 'store'])->name('participants.store');
+    // Route::get('/training/{trainingId}/participants', [ParticipantController::class, 'listParticipants'])->name('participants.list');
+    // Route::get('/training/{trainingId}/participants/create', [ParticipantController::class, 'create'])->name('participants.create');
+    // Route::post('/training/{trainingId}/participants', [ParticipantController::class, 'store'])->name('participants.store');
+    // Route::delete('training/{trainingId}/participants/{participantId}', [ParticipantController::class, 'destroy'])->name('participants.destroy');
+    // Route::post('training/{trainingId}/participants/upload_csv', [ParticipantController::class, 'uploadCsv'])->name('participants.upload_csv');
+    // Route::get('training/{trainingId}/participants/download_csv', [ParticipantController::class, 'downloadCsv'])->name('participants.download_csv');
+    // Route::get('training/{trainingId}/participants/search', [ParticipantController::class, 'listParticipants'])->name('participants.search');
 
-    // CDF and Members
-    Route::resource('cdf', CDFController::class);
-    Route::post('/cdf/upload-csv', [CdfController::class, 'uploadCsv'])->name('cdf.upload_csv');
-    Route::get('/download-cdf-csv', [CdfController::class, 'reportCsv'])->name('downloadcdf.csv');
+    Route::middleware(['auth'])->prefix('training')->name('training.')->group(function () {
+        Route::get('/', [TrainingController::class, 'index'])
+            ->name('index')
+            ->middleware('check.permission:training,view');
+
+        Route::get('/create', [TrainingController::class, 'create'])
+            ->name('create')
+            ->middleware('check.permission:training,add');
+
+        Route::post('/', [TrainingController::class, 'store'])
+            ->name('store')
+            ->middleware('check.permission:training,add');
+
+        Route::get('/{training}', [TrainingController::class, 'show'])
+            ->name('show')
+            ->middleware('check.permission:training,view');
+
+        Route::get('/{training}/edit', [TrainingController::class, 'edit'])
+            ->name('edit')
+            ->middleware('check.permission:training,edit');
+
+        Route::put('/{training}', [TrainingController::class, 'update'])
+            ->name('update')
+            ->middleware('check.permission:training,edit');
+
+        Route::delete('/{training}', [TrainingController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('check.permission:training,delete');
+
+        // Route::get('/download-csv', [TrainingController::class, 'downloadCsv'])
+        //     ->name('download_csv')
+        //     ->middleware('check.permission:training,view');
+
+        Route::post('/upload-csv', [TrainingController::class, 'uploadCsv'])
+            ->name('upload_csv')
+            ->middleware('check.permission:training,upload_csv');
+
+        Route::get('/search', [TrainingController::class, 'search'])
+            ->name('search')
+            ->middleware('check.permission:training,view');
+    });
+
+    Route::middleware(['auth'])->prefix('training/{trainingId}/participants')->name('participants.')->group(function () {
+        Route::get('/', [ParticipantController::class, 'listParticipants'])
+            ->name('list')
+            ->middleware('check.permission:training,view');
+
+        Route::get('/create', [ParticipantController::class, 'create'])
+            ->name('create')
+            ->middleware('check.permission:training,add');
+
+        Route::post('/', [ParticipantController::class, 'store'])
+            ->name('store')
+            ->middleware('check.permission:training,add');
+
+        Route::delete('/{participantId}', [ParticipantController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('check.permission:training,delete');
+
+        Route::post('/upload-csv', [ParticipantController::class, 'uploadCsv'])
+            ->name('upload_csv')
+            ->middleware('check.permission:training,upload_csv');
+
+        Route::get('/download-csv', [ParticipantController::class, 'downloadCsv'])
+            ->name('download_csv')
+            ->middleware('check.permission:training,view');
+
+        Route::get('/search', [ParticipantController::class, 'listParticipants'])
+            ->name('search')
+            ->middleware('check.permission:training,view');
+    });
+
+
+    // // CDF and Members
+    // Route::resource('cdf', CDFController::class);
+    // Route::post('/cdf/upload-csv', [CdfController::class, 'uploadCsv'])->name('cdf.upload_csv');
+    // Route::get('/download-cdf-csv', [CdfController::class, 'reportCsv'])->name('downloadcdf.csv');
     Route::get('searchCDF', [CdfController::class, 'search'])->name('searchCDF');
-    Route::get('cdfs/{cdf}', [CDFController::class, 'show'])->name('cdfs.show');
-    Route::get('/cdf/{cdf_name}/{cdf_address}/members', [CDFController::class, 'showMembers'])->name('cdf.showMembers');
-    Route::get('/cdf-members/{cdf_name}/{cdf_address}', [CDFController::class, 'showMembers']);
+    // Route::get('cdfs/{cdf}', [CDFController::class, 'show'])->name('cdfs.show');
+    // Route::get('/cdf/{cdf_name}/{cdf_address}/members', [CDFController::class, 'showMembers'])->name('cdf.showMembers');
+    // Route::get('/cdf-members/{cdf_name}/{cdf_address}', [CDFController::class, 'showMembers']);
 
-    Route::resource('cdfmembers', CDFMemberController::class);
-    Route::get('/cdfmembers', [CdfMemberController::class, 'index'])->name('cdfmembers.index');
-    Route::get('/cdfmembers/{id}', [CdfMemberController::class, 'show']);
-    Route::get('/cdfmembers/{id}/samearea', [CdfMemberController::class, 'showMembersInSameArea'])->name('cdfmembers.samearea');
-    Route::get('/cdfmembers/name/{name}/samearea', [CdfMemberController::class, 'showMembersInSameAreaByName'])->name('cdfmembers.samearea.name');
+    // Route::resource('cdfmembers', CDFMemberController::class);
+    // Route::get('/cdfmembers', [CdfMemberController::class, 'index'])->name('cdfmembers.index');
+    // Route::get('/cdfmembers/{id}', [CdfMemberController::class, 'show']);
+    // Route::get('/cdfmembers/{id}/samearea', [CdfMemberController::class, 'showMembersInSameArea'])->name('cdfmembers.samearea');
+    // Route::get('/cdfmembers/name/{name}/samearea', [CdfMemberController::class, 'showMembersInSameAreaByName'])->name('cdfmembers.samearea.name');
 
-    // Farmer Organization and Members
-    Route::resource('farmerorganization', FarmerOrganizationController::class);
+    // CDF Module with Permissions
+Route::prefix('cdf')->middleware('auth')->group(function () {
+    Route::get('/', [CDFController::class, 'index'])
+        ->name('cdf.index')
+        ->middleware('check.permission:cdf,view');
+
+    Route::get('/create', [CDFController::class, 'create'])
+        ->name('cdf.create')
+        ->middleware('check.permission:cdf,add');
+
+    Route::post('/', [CDFController::class, 'store'])
+        ->name('cdf.store')
+        ->middleware('check.permission:cdf,add');
+
+    Route::get('/{cdf}', [CDFController::class, 'show'])
+        ->name('cdf.show')
+        ->middleware('check.permission:cdf,view');
+
+    Route::get('/{cdf}/edit', [CDFController::class, 'edit'])
+        ->name('cdf.edit')
+        ->middleware('check.permission:cdf,edit');
+
+    Route::put('/{cdf}', [CDFController::class, 'update'])
+        ->name('cdf.update')
+        ->middleware('check.permission:cdf,edit');
+
+    Route::delete('/{cdf}', [CDFController::class, 'destroy'])
+        ->name('cdf.destroy')
+        ->middleware('check.permission:cdf,delete');
+
+    Route::post('/upload-csv', [CDFController::class, 'uploadCsv'])
+        ->name('cdf.upload_csv')
+        ->middleware('check.permission:cdf,upload_csv');
+
+    Route::get('/csv/download', [CDFController::class, 'reportCsv'])
+        ->name('downloadcdf.csv')
+        ->middleware('check.permission:cdf,view');
+
+    // Route::get('/search', [CDFController::class, 'search'])
+    //     ->name('searchCDF')
+    //     ->middleware('check.permission:cdf,view');
+
+    Route::get('/{cdf_name}/{cdf_address}/members', [CDFController::class, 'showMembers'])
+        ->name('cdf.showMembers')
+        ->middleware('check.permission:cdf,view');
+});
+
+// CDF Members Module with Permissions
+Route::prefix('cdfmembers')->middleware('auth')->group(function () {
+    Route::get('/', [CDFMemberController::class, 'index'])
+        ->name('cdfmembers.index')
+        ->middleware('check.permission:cdfmembers,view');
+
+    Route::get('/create', [CDFMemberController::class, 'create'])
+        ->name('cdfmembers.create')
+        ->middleware('check.permission:cdfmembers,add');
+
+    Route::post('/', [CDFMemberController::class, 'store'])
+        ->name('cdfmembers.store')
+        ->middleware('check.permission:cdfmembers,add');
+
+    Route::get('/{id}', [CDFMemberController::class, 'show'])
+        ->name('cdfmembers.show')
+        ->middleware('check.permission:cdfmembers,view');
+
+    Route::get('/{id}/edit', [CDFMemberController::class, 'edit'])
+        ->name('cdfmembers.edit')
+        ->middleware('check.permission:cdfmembers,edit');
+
+    Route::put('/{id}', [CDFMemberController::class, 'update'])
+        ->name('cdfmembers.update')
+        ->middleware('check.permission:cdfmembers,edit');
+
+    Route::delete('/{id}', [CDFMemberController::class, 'destroy'])
+        ->name('cdfmembers.destroy')
+        ->middleware('check.permission:cdfmembers,delete');
+
+    Route::get('/{id}/samearea', [CDFMemberController::class, 'showMembersInSameArea'])
+        ->name('cdfmembers.samearea')
+        ->middleware('check.permission:cdfmembers,view');
+
+    Route::get('/name/{name}/samearea', [CDFMemberController::class, 'showMembersInSameAreaByName'])
+        ->name('cdfmembers.samearea.name')
+        ->middleware('check.permission:cdfmembers,view');
+});
+
+
+    // // Farmer Organization and Members
+    // Route::resource('farmerorganization', FarmerOrganizationController::class);
     Route::get('/download-farmer-organization-csv', [FarmerOrganizationController::class, 'reportCsv'])->name('downloadfarmerorganization.csv');
-    Route::post('/farmerorganization/upload-csv', [FarmerOrganizationController::class, 'uploadCsv'])->name('farmerorganization.upload_csv');
+    // Route::post('/farmerorganization/upload-csv', [FarmerOrganizationController::class, 'uploadCsv'])->name('farmerorganization.upload_csv');
     Route::get('/farmerorganization/search', [FarmerOrganizationController::class, 'search'])->name('searchFarmerOrganization');
-    Route::resource('farmerorganization', FarmerOrganizationController::class);
-    Route::get('/farmerorganization/{id}', [FarmerOrganizationController::class, 'show'])->name('farmerorganization.show');
+    // Route::resource('farmerorganization', FarmerOrganizationController::class);
+    // Route::get('/farmerorganization/{id}', [FarmerOrganizationController::class, 'show'])->name('farmerorganization.show');
 
-    Route::resource('farmermember', FarmerMemberController::class);
-    Route::get('farmermember/create/{farmerorganization_id}', [FarmerMemberController::class, 'create']);
-    Route::get('farmermember/create/{farmermember_id}', [FarmerMemberController::class, 'create'])->name('farmermember.create');
-    Route::get('farmer_member/{id}', [FarmerMemberController::class, 'show'])->name('farmer_member.show');
-    Route::resource('farmer_member', FarmerMemberController::class);
+    // Route::resource('farmermember', FarmerMemberController::class);
+    // Route::get('farmermember/create/{farmerorganization_id}', [FarmerMemberController::class, 'create']);
+    // Route::get('farmermember/create/{farmermember_id}', [FarmerMemberController::class, 'create'])->name('farmermember.create');
+    // Route::get('farmer_member/{id}', [FarmerMemberController::class, 'show'])->name('farmer_member.show');
+    // Route::resource('farmer_member', FarmerMemberController::class);
+
+    Route::prefix('farmerorganization')->middleware('auth')->group(function () {
+        Route::get('/', [FarmerOrganizationController::class, 'index'])
+            ->name('farmerorganization.index')
+            ->middleware('check.permission:farmerorganization,view');
+
+        Route::get('/create', [FarmerOrganizationController::class, 'create'])
+            ->name('farmerorganization.create')
+            ->middleware('check.permission:farmerorganization,add');
+
+        Route::post('/', [FarmerOrganizationController::class, 'store'])
+            ->name('farmerorganization.store')
+            ->middleware('check.permission:farmerorganization,add');
+
+        Route::get('/{id}', [FarmerOrganizationController::class, 'show'])
+            ->name('farmerorganization.show')
+            ->middleware('check.permission:farmermember,view');
+
+        // Route::get('/{id}/edit', [FarmerOrganizationController::class, 'edit'])
+        //     ->name('farmerorganization.edit')
+        //     ->middleware('check.permission:farmerorganization,edit');
+
+        // Route::put('/{id}', [FarmerOrganizationController::class, 'update'])
+        //     ->name('farmerorganization.update')
+        //     ->middleware('check.permission:farmerorganization,edit');
+
+        Route::delete('/{id}', [FarmerOrganizationController::class, 'destroy'])
+            ->name('farmerorganization.destroy')
+            ->middleware('check.permission:farmerorganization,delete');
+
+        Route::post('/upload-csv', [FarmerOrganizationController::class, 'uploadCsv'])
+            ->name('farmerorganization.upload_csv')
+            ->middleware('check.permission:farmerorganization,upload_csv');
+
+        // Route::get('/download-csv', [FarmerOrganizationController::class, 'reportCsv'])
+        //     ->name('downloadfarmerorganization.csv')
+        //     ->middleware('check.permission:farmerorganization,view');
+
+        // Route::get('/search', [FarmerOrganizationController::class, 'search'])
+        //     ->name('searchFarmerOrganization')
+        //     ->middleware('check.permission:farmerorganization,view');
+    });
+
+    Route::prefix('farmerorganization')->middleware('auth')->group(function () {
+
+        Route::get('/{farmerorganization}/edit', [FarmerOrganizationController::class, 'edit'])
+            ->name('farmerorganization.edit')
+            ->middleware('check.permission:farmerorganization,edit');
+
+        Route::put('/{farmerorganization}', [FarmerOrganizationController::class, 'update'])
+            ->name('farmerorganization.update')
+            ->middleware('check.permission:farmerorganization,edit');
+
+    });
+
+
+    Route::prefix('farmermember')->middleware('auth')->group(function () {
+        Route::get('/', [FarmerMemberController::class, 'index'])
+            ->name('farmermember.index')
+            ->middleware('check.permission:farmermember,view');
+
+        Route::get('/create/{farmerorganization_id}', [FarmerMemberController::class, 'create'])
+        ->name('farmermember.create')
+        ->middleware('check.permission:farmermember,add');
+
+        Route::post('/', [FarmerMemberController::class, 'store'])
+            ->name('farmermember.store')
+            ->middleware('check.permission:farmermember,add');
+
+        Route::get('/{id}', [FarmerMemberController::class, 'show'])
+            ->name('farmermember.show')
+            ->middleware('check.permission:farmermember,view');
+
+        Route::get('/{id}/edit', [FarmerMemberController::class, 'edit'])
+            ->name('farmermember.edit')
+            ->middleware('check.permission:farmermember,edit');
+
+            Route::put('/{id}', [FarmerMemberController::class, 'update'])
+            ->name('farmer_member.update') // ✅ Match blade file
+            ->middleware('check.permission:farmermember,edit');
+
+
+        Route::delete('/{id}', [FarmerMemberController::class, 'destroy'])
+            ->name('farmermember.destroy')
+            ->middleware('check.permission:farmermember,delete');
+    });
+
 
     // Nutrition Routes
     Route::resource('nutrition', NutritionController::class);

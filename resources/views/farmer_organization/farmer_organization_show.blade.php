@@ -297,7 +297,9 @@
                     <th style="color: white;">Gender</th>
                     <th style="color: white;">DOB</th>
                     <th style="color: white;">Youth</th>
+                    @if(auth()->user()->hasPermission('farmermember', 'edit', 'delete'))
                     <th style="color: white;">Actions</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -311,16 +313,23 @@
                     <td>{{ $farmerMember->gender }}</td>
                     <td>{{ $farmerMember->dob }}</td>
                     <td>{{ $farmerMember->youth }}</td>
+                    @if(auth()->user()->hasPermission('farmermember', 'edit', 'delete'))
                     <td>
                     <div class="button-container">
+                    @if(auth()->user()->hasPermission('farmermember', 'edit'))
                         <a class="btn btn-green btn-sm button-spacing inline-buttons" href='/farmermember/{{ $farmerMember->id }}/edit'>Edit</a>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('farmermember', 'delete'))
                         <form action="/farmermember/{{ $farmerMember->id }}" method="POST" class="inline-buttons">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-red btn-sm">Delete</button>
                         </form>
+                    @endif
                         </div>
                     </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>

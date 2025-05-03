@@ -301,12 +301,15 @@
 
             <!-- Actions and Search Section -->
             <div class="d-flex justify-content-between mb-3">
+            @if(auth()->user()->hasPermission('training', 'add'))
                 <a href="{{ route('participants.create', $training->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Participant</a>
+            @endif
                 <a href="{{ route('participants.download_csv', $training->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Download CSV Report</a>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <!-- CSV Upload Form -->
+                @if(auth()->user()->hasPermission('training', 'upload_csv'))
                 <form action="{{ route('participants.upload_csv', $training->id) }}" method="POST" enctype="multipart/form-data" class="form-inline">
                     @csrf
                     <div class="form-group mr-2">
@@ -314,6 +317,7 @@
                     </div>
                     <button type="submit" class="btn btn-success">Upload CSV</button>
                 </form>
+                @endif
 
                 <!-- Search form -->
                 <form method="GET" action="{{ route('participants.search', $training->id) }}" class="form-inline">
@@ -355,11 +359,13 @@
                                 <td>{{ $participant->youth }}</td>
                                 <td>
                                     <!-- Delete Button -->
+                                    @if(auth()->user()->hasPermission('training', 'delete'))
                                     <form action="{{ route('participants.destroy', [$training->id, $participant->id]) }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this participant?')">Delete</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
