@@ -145,7 +145,10 @@
                 <h3>Register Trainee for Nutrition Program</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route('nutrition_trainee.store') }}" method="POST">
+
+                <form action="{{ route('nutrition_trainee.store', ['nutrition_id' => $nutrition_id]) }}" method="POST">
+                    
+
                     @csrf
                     <input type="hidden" name="nutrition_id" value="{{ $nutrition_id }}">
 

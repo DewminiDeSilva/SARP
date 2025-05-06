@@ -590,28 +590,120 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
 
     // Nutrition Routes
-    Route::resource('nutrition', NutritionController::class);
-    Route::get('/nutrition/download-csv', [NutritionController::class, 'downloadCsv'])->name('nutrition.download_csv');
-    Route::post('/nutrition/upload-csv', [NutritionController::class, 'uploadCsv'])->name('nutrition.upload_csv');
-    Route::get('/searchNutrition', [NutritionController::class, 'search'])->name('nutrition.search');
-    Route::get('/nutrition/create', [NutritionController::class, 'create'])->name('nutrition.create');
+    // Route::resource('nutrition', NutritionController::class);
+    // Route::get('/nutrition/download-csv', [NutritionController::class, 'downloadCsv'])->name('nutrition.download_csv');
+    // Route::post('/nutrition/upload-csv', [NutritionController::class, 'uploadCsv'])->name('nutrition.upload_csv');
+    // Route::get('/searchNutrition', [NutritionController::class, 'search'])->name('nutrition.search');
+    // Route::get('/nutrition/create', [NutritionController::class, 'create'])->name('nutrition.create');
     Route::get('reportCsv1', [NutritionController::class, 'reportCsv1'])->name('downloadnutrition.csv');
 
-    Route::resource('nutrition_trainee', NutritionTraineeController::class);
-    Route::get('nutrition/{nutrition_id}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainees.index');
-    Route::get('nutrition/{nutrition}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainee.index');
-    Route::get('nutrition/{nutrition}/trainees/create', [NutritionTraineeController::class, 'create'])->name('nutrition_trainee.create');
-    Route::post('nutrition/trainees', [NutritionTraineeController::class, 'store'])->name('nutrition_trainee.store');
-    Route::get('nutrition/trainees/{trainee}/edit', [NutritionTraineeController::class, 'edit'])->name('nutrition_trainee.edit');
-    Route::put('nutrition/trainees/{trainee}', [NutritionTraineeController::class, 'update'])->name('nutrition_trainee.update');
-    Route::delete('nutrition/trainees/{trainee}', [NutritionTraineeController::class, 'destroy'])->name('nutrition_trainee.destroy');
-    Route::get('/nutrition/{nutrition_id}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainee.index');
-    Route::get('/nutrition/{nutrition_id}/trainees/create', [NutritionTraineeController::class, 'create'])->name('nutrition_trainee.create');
-    Route::get('/nutrition/{nutrition_id}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainee.trainee_index');
-    Route::put('/nutrition_trainee/{id}', [NutritionTraineeController::class, 'update'])->name('nutrition_trainee.update');
-    Route::get('/nutrition/{nutrition_id}/trainees/search', [NutritionTraineeController::class, 'search'])->name('nutrition_trainee.search');
-    Route::get('/nutrition/{nutrition_id}/trainees/download-csv', [NutritionTraineeController::class, 'download_csv'])->name('nutrition_trainee.download_csv');
-    Route::post('/nutrition/{nutrition_id}/trainees/upload-csv', [NutritionTraineeController::class, 'uploadCsv'])->name('nutrition_trainee.upload_csv');
+    // Route::resource('nutrition_trainee', NutritionTraineeController::class);
+    // Route::get('nutrition/{nutrition_id}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainees.index');
+    // Route::get('nutrition/{nutrition}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainee.index');
+    // Route::get('nutrition/{nutrition}/trainees/create', [NutritionTraineeController::class, 'create'])->name('nutrition_trainee.create');
+    // Route::post('nutrition/trainees', [NutritionTraineeController::class, 'store'])->name('nutrition_trainee.store');
+    // Route::get('nutrition/trainees/{trainee}/edit', [NutritionTraineeController::class, 'edit'])->name('nutrition_trainee.edit');
+    // Route::put('nutrition/trainees/{trainee}', [NutritionTraineeController::class, 'update'])->name('nutrition_trainee.update');
+    // Route::delete('nutrition/trainees/{trainee}', [NutritionTraineeController::class, 'destroy'])->name('nutrition_trainee.destroy');
+    // Route::get('/nutrition/{nutrition_id}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainee.index');
+    // Route::get('/nutrition/{nutrition_id}/trainees/create', [NutritionTraineeController::class, 'create'])->name('nutrition_trainee.create');
+    // Route::get('/nutrition/{nutrition_id}/trainees', [NutritionTraineeController::class, 'index'])->name('nutrition_trainee.trainee_index');
+    // Route::put('/nutrition_trainee/{id}', [NutritionTraineeController::class, 'update'])->name('nutrition_trainee.update');
+    // Route::get('/nutrition/{nutrition_id}/trainees/search', [NutritionTraineeController::class, 'search'])->name('nutrition_trainee.search');
+    // Route::get('/nutrition/{nutrition_id}/trainees/download-csv', [NutritionTraineeController::class, 'download_csv'])->name('nutrition_trainee.download_csv');
+    // Route::post('/nutrition/{nutrition_id}/trainees/upload-csv', [NutritionTraineeController::class, 'uploadCsv'])->name('nutrition_trainee.upload_csv');
+
+    //Nutrition Routes
+    Route::prefix('nutrition')->middleware('auth')->group(function () {
+        Route::get('/', [NutritionController::class, 'index'])
+            ->name('nutrition.index')
+            ->middleware('check.permission:nutrition,view');
+
+        Route::get('/create', [NutritionController::class, 'create'])
+            ->name('nutrition.create')
+            ->middleware('check.permission:nutrition,add');
+
+        Route::post('/', [NutritionController::class, 'store'])
+            ->name('nutrition.store')
+            ->middleware('check.permission:nutrition,add');
+
+        Route::get('/{id}', [NutritionController::class, 'show'])
+            ->name('nutrition.show')
+            ->middleware('check.permission:nutrition_trainee,view');
+
+        Route::get('/{id}/edit', [NutritionController::class, 'edit'])
+            ->name('nutrition.edit')
+            ->middleware('check.permission:nutrition,edit');
+
+        Route::put('/{id}', [NutritionController::class, 'update'])
+            ->name('nutrition.update')
+            ->middleware('check.permission:nutrition,edit');
+
+        Route::delete('/{id}', [NutritionController::class, 'destroy'])
+            ->name('nutrition.destroy')
+            ->middleware('check.permission:nutrition,delete');
+
+        Route::post('/upload-csv', [NutritionController::class, 'uploadCsv'])
+            ->name('nutrition.upload_csv')
+            ->middleware('check.permission:nutrition,upload_csv');
+
+        // Route::get('/download-csv', [NutritionController::class, 'downloadCsv'])
+        //     ->name('nutrition.download_csv')
+        //     ->middleware('check.permission:nutrition,view');
+
+        Route::get('/search', [NutritionController::class, 'search'])
+            ->name('nutrition.search')
+            ->middleware('check.permission:nutrition,view');
+
+        // Route::get('/reportCsv1', [NutritionController::class, 'reportCsv1'])
+        //     ->name('downloadnutrition.csv')
+        //     ->middleware('check.permission:nutrition,view');
+    });
+
+    //Nutrition trainee routes
+
+    Route::prefix('nutrition/{nutrition_id}/trainees')->middleware('auth')->group(function () {
+        Route::get('/', [NutritionTraineeController::class, 'index'])
+            ->name('nutrition_trainee.index')
+            ->middleware('check.permission:nutrition_trainee,view');
+
+        Route::get('/create', [NutritionTraineeController::class, 'create'])
+            ->name('nutrition_trainee.create')
+            ->middleware('check.permission:nutrition_trainee,add');
+
+        Route::post('/', [NutritionTraineeController::class, 'store'])
+            ->name('nutrition_trainee.store')
+            ->middleware('check.permission:nutrition_trainee,add');
+
+        Route::get('/search', [NutritionTraineeController::class, 'search'])
+            ->name('nutrition_trainee.search')
+            ->middleware('check.permission:nutrition_trainee,view');
+
+        Route::get('/download-csv', [NutritionTraineeController::class, 'download_csv'])
+            ->name('nutrition_trainee.download_csv')
+            ->middleware('check.permission:nutrition_trainee,view');
+
+        Route::post('/upload-csv', [NutritionTraineeController::class, 'uploadCsv'])
+            ->name('nutrition_trainee.upload_csv')
+            ->middleware('check.permission:nutrition_trainee,upload_csv');
+    });
+
+    // Trainee ID-specific routes outside prefix
+    Route::middleware(['auth'])->group(function () {
+        Route::get('nutrition/trainees/{trainee}/edit', [NutritionTraineeController::class, 'edit'])
+            ->name('nutrition_trainee.edit')
+            ->middleware('check.permission:nutrition_trainee,edit');
+
+        Route::put('nutrition/trainees/{trainee}', [NutritionTraineeController::class, 'update'])
+            ->name('nutrition_trainee.update')
+            ->middleware('check.permission:nutrition_trainee,edit');
+
+        Route::delete('nutrition/trainees/{trainee}', [NutritionTraineeController::class, 'destroy'])
+            ->name('nutrition_trainee.destroy')
+            ->middleware('check.permission:nutrition_trainee,delete');
+    });
+
+
 
     // FFS Training and Participants
     Route::resource('ffs-training', FFSTrainingController::class);
