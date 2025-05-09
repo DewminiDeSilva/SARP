@@ -706,26 +706,108 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
 
     // FFS Training and Participants
-    Route::resource('ffs-training', FFSTrainingController::class);
-    Route::resource('ffs-training', FFSTrainingController::class);
-    Route::get('/searchffs-training', [FFSTrainingController::class, 'search'])->name('searchFFSTraining');
-    Route::get('/ffs-trainingdownload.csv', [FFSTrainingController::class, 'downloadCsv'])->name('downloadffs-training.csv');
-    Route::post('/ffs-training/upload_csv', [FFSTrainingController::class, 'uploadCsv'])->name('ffs-training.upload_csv');
-    Route::get('ffs-training/{ffsTraining}/participants', [FFSTrainingController::class, 'showParticipants'])->name('ffs-participants.list');
-    Route::get('ffs-training/{ffsTraining}/participants/create', [FFSTrainingController::class, 'createParticipant'])->name('ffs-participants.create');
+    // Route::resource('ffs-training', FFSTrainingController::class);
+    // Route::resource('ffs-training', FFSTrainingController::class);
+    // Route::get('/searchffs-training', [FFSTrainingController::class, 'search'])->name('searchFFSTraining');
+    // Route::get('/ffs-trainingdownload.csv', [FFSTrainingController::class, 'downloadCsv'])->name('downloadffs-training.csv');
+    // Route::post('/ffs-training/upload_csv', [FFSTrainingController::class, 'uploadCsv'])->name('ffs-training.upload_csv');
+    // Route::get('ffs-training/{ffsTraining}/participants', [FFSTrainingController::class, 'showParticipants'])->name('ffs-participants.list');
+    // Route::get('ffs-training/{ffsTraining}/participants/create', [FFSTrainingController::class, 'createParticipant'])->name('ffs-participants.create');
 
 
-    Route::prefix('ffs-training/{ffs_training_id}/ffs-participants')->group(function () {
-        Route::get('/', [FFSParticipantController::class, 'listParticipants'])->name('ffs-participants.list');
-        Route::get('/create', [FFSParticipantController::class, 'create'])->name('ffs-participants.create');
-        Route::post('/', [FFSParticipantController::class, 'store'])->name('ffs-participants.store');
-        Route::delete('/{ffs_participant_id}', [FFSParticipantController::class, 'destroy'])->name('ffs-participants.destroy');
-        Route::get('/download-csv', [FFSParticipantController::class, 'downloadCsv'])->name('ffs-participants.download_csv');
-        Route::post('/upload-csv', [FFSParticipantController::class, 'uploadCsv'])->name('ffs-participants.upload_csv');
-        Route::get('/search', [FFSParticipantController::class, 'listParticipants'])->name('ffs-participants.search');
+    // Route::prefix('ffs-training/{ffs_training_id}/ffs-participants')->group(function () {
+    //     Route::get('/', [FFSParticipantController::class, 'listParticipants'])->name('ffs-participants.list');
+    //     Route::get('/create', [FFSParticipantController::class, 'create'])->name('ffs-participants.create');
+    //     Route::post('/', [FFSParticipantController::class, 'store'])->name('ffs-participants.store');
+    //     Route::delete('/{ffs_participant_id}', [FFSParticipantController::class, 'destroy'])->name('ffs-participants.destroy');
+    //     Route::get('/download-csv', [FFSParticipantController::class, 'downloadCsv'])->name('ffs-participants.download_csv');
+    //     Route::post('/upload-csv', [FFSParticipantController::class, 'uploadCsv'])->name('ffs-participants.upload_csv');
+    //     Route::get('/search', [FFSParticipantController::class, 'listParticipants'])->name('ffs-participants.search');
 
+
+    // });
+
+    // FFS Training and Participants
+    Route::prefix('ffs-training')->middleware('auth')->group(function () {
+        Route::get('/', [FFSTrainingController::class, 'index'])
+            ->name('ffs-training.index')
+            ->middleware('check.permission:ffs-training,view');
+
+        Route::get('/create', [FFSTrainingController::class, 'create'])
+            ->name('ffs-training.create')
+            ->middleware('check.permission:ffs-training,add');
+
+        Route::post('/', [FFSTrainingController::class, 'store'])
+            ->name('ffs-training.store')
+            ->middleware('check.permission:ffs-training,add');
+
+        Route::get('/searchffs-training', [FFSTrainingController::class, 'search'])
+            ->name('searchFFSTraining')
+            ->middleware('check.permission:ffs-training,view');
+
+        Route::get('/ffs-trainingdownload.csv', [FFSTrainingController::class, 'downloadCsv'])
+            ->name('downloadffs-training.csv')
+            ->middleware('check.permission:ffs-training,view');
+
+        Route::post('/upload_csv', [FFSTrainingController::class, 'uploadCsv'])
+            ->name('ffs-training.upload_csv')
+            ->middleware('check.permission:ffs-training,upload_csv');
+
+        Route::get('/{id}', [FFSTrainingController::class, 'show'])
+            ->name('ffs-training.show')
+            ->middleware('check.permission:ffs-training,view');
+
+        Route::get('/{ffsTraining}/edit', [FFSTrainingController::class, 'edit'])
+            ->name('ffs-training.edit')
+            ->middleware('check.permission:ffs-training,edit');
+
+
+        Route::put('/{ffsTraining}', [FFSTrainingController::class, 'update'])
+            ->name('ffs-training.update')
+            ->middleware('check.permission:ffs-training,edit');
+
+
+        Route::delete('/{ffsTraining}', [FFSTrainingController::class, 'destroy'])
+            ->name('ffs-training.destroy')
+            ->middleware('check.permission:ffs-training,delete');
 
     });
+
+    Route::prefix('ffs-training/{ffs_training_id}/ffs-participants')->middleware('auth')->group(function () {
+        Route::get('/', [FFSParticipantController::class, 'listParticipants'])
+            ->name('ffs-participants.list')
+            ->middleware('check.permission:ffs-participants,view');
+
+        Route::get('/create', [FFSParticipantController::class, 'create'])
+            ->name('ffs-participants.create')
+            ->middleware('check.permission:ffs-participants,add');
+
+        Route::post('/', [FFSParticipantController::class, 'store'])
+            ->name('ffs-participants.store')
+            ->middleware('check.permission:ffs-participants,add');
+
+        Route::get('/download-csv', [FFSParticipantController::class, 'downloadCsv'])
+            ->name('ffs-participants.download_csv')
+            ->middleware('check.permission:ffs-participants,view');
+
+        Route::post('/upload-csv', [FFSParticipantController::class, 'uploadCsv'])
+            ->name('ffs-participants.upload_csv')
+            ->middleware('check.permission:ffs-participants,upload_csv');
+
+        Route::get('/search', [FFSParticipantController::class, 'listParticipants'])
+            ->name('ffs-participants.search')
+            ->middleware('check.permission:ffs-participants,view');
+
+    });
+
+    // Individual Participant Actions
+    Route::middleware(['auth'])->group(function () {
+        Route::delete('ffs-training/{ffsTraining}/ffs-participants/{ffsParticipant}', [FFSParticipantController::class, 'destroy'])
+            ->name('ffs-participants.destroy')
+            ->middleware('check.permission:ffs-participants,delete');
+
+    });
+
 
     // Agriculture and Livestock
     Route::resource('agriculture', AgriController::class);
