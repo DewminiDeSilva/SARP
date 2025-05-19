@@ -137,13 +137,13 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="total_livestock_area" class="form-label">Total Livestock Area</label>
-                            <input type="number" class="form-control" id="total_livestock_area" name="total_livestock_area" required>
+                            <input type="number" class="form-control" id="total_livestock_area" name="total_livestock_area"  step="0.01" min="0"required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="total_number_of_acres" class="form-label">Total Number of Acres</label>
-                            <input type="number" class="form-control" id="total_number_of_acres" name="total_number_of_acres" required>
+                            <input type="number" class="form-control" id="total_number_of_acres" name="total_number_of_acres" step="0.01" min="0" required>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="total_cost" class="form-label">Total Cost</label>
-                            <input type="number" class="form-control" id="total_cost" name="total_cost" required>
+                            <input type="number" class="form-control" id="total_cost" name="total_cost"  step="0.01" min="0"required>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -196,15 +196,15 @@
                         </div>
                         <div class="col-md-3">
                             <label for="total_production" class="form-label">Total Production</label>
-                            <input type="number" class="form-control" name="total_production[]" required>
+                            <input type="number" class="form-control" name="total_production[]"  step="0.01" min="0"required>
                         </div>
                         <div class="col-md-3">
                             <label for="total_income" class="form-label">Total Income</label>
-                            <input type="number" class="form-control" name="total_income[]" required>
+                            <input type="number" class="form-control" name="total_income[]" step="0.01" min="0"required>
                         </div>
                         <div class="col-md-3">
                             <label for="profit" class="form-label">Profit</label>
-                            <input type="number" class="form-control" name="profit[]" required>
+                            <input type="number" class="form-control" name="profit[]" step="0.01" min="0"required>
                         </div>
                     </div>
                 </div>
