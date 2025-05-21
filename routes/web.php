@@ -875,8 +875,8 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
 
     //add agriculture routes
-    Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
-    Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
+    // Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
+    // Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
 
 
 
@@ -965,66 +965,308 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
     Route::get('/grievances/{grievance}/officers', [OfficerController::class, 'showOfficers'])->name('grievance.officers');
 
 
-    // Vegitable Routes
-    Route::resource('vegitable', VegitableController::class);
+    // // Vegitable Routes
+    // Route::resource('vegitable', VegitableController::class);
 
-    // Fruit Routes
-    Route::resource('fruit', FruitController::class);
+    // // Fruit Routes
+    // Route::resource('fruit', FruitController::class);
 
-    // Homegarden Routes
-    Route::resource('homegarden', HomeGardenController::class);
+    // // Homegarden Routes
+    // Route::resource('homegarden', HomeGardenController::class);
 
-    //other crop routes
-    Route::resource('other_crops', OtherCropController::class);
+    // //other crop routes
+    // Route::resource('other_crops', OtherCropController::class);
 
-    // Dairy Routes
-    Route::resource('dairy', DairyController::class);
+    // // Dairy Routes
+    // Route::resource('dairy', DairyController::class);
 
-    // Poultary Routes
-    Route::resource('poultary', PoultaryController::class);
+    // // Poultary Routes
+    // Route::resource('poultary', PoultaryController::class);
 
-    // Goat Routes
-    Route::resource('goat', GoatController::class);
+    // // Goat Routes
+    // Route::resource('goat', GoatController::class);
 
-    // Goat Routes
-    Route::resource('aquaculture', AquaCultureController::class);
+    // // Goat Routes
+    // Route::resource('aquaculture', AquaCultureController::class);
+
+    // Vegitable
+Route::prefix('vegitable')->middleware('auth')->group(function () {
+    Route::get('/create', [VegitableController::class, 'create'])
+        ->name('vegitable.create')
+        ->middleware('check.permission:vegitable,add');
+
+    Route::post('/', [VegitableController::class, 'store'])
+        ->name('vegitable.store')
+        ->middleware('check.permission:vegitable,add');
+});
+
+// Fruit
+Route::prefix('fruit')->middleware('auth')->group(function () {
+    Route::get('/create', [FruitController::class, 'create'])
+        ->name('fruit.create')
+        ->middleware('check.permission:fruit,add');
+
+    Route::post('/', [FruitController::class, 'store'])
+        ->name('fruit.store')
+        ->middleware('check.permission:fruit,add');
+});
+
+// Home Garden
+Route::prefix('homegarden')->middleware('auth')->group(function () {
+    Route::get('/create', [HomeGardenController::class, 'create'])
+        ->name('homegarden.create')
+        ->middleware('check.permission:homegarden,add');
+
+    Route::post('/', [HomeGardenController::class, 'store'])
+        ->name('homegarden.store')
+        ->middleware('check.permission:homegarden,add');
+});
+
+// Other Crops
+Route::prefix('other_crops')->middleware('auth')->group(function () {
+    Route::get('/create', [OtherCropController::class, 'create'])
+        ->name('other_crops.create')
+        ->middleware('check.permission:other_crops,add');
+
+    Route::post('/', [OtherCropController::class, 'store'])
+        ->name('other_crops.store')
+        ->middleware('check.permission:other_crops,add');
+});
+
+// Dairy
+Route::prefix('dairy')->middleware('auth')->group(function () {
+    Route::get('/create', [DairyController::class, 'create'])
+        ->name('dairy.create')
+        ->middleware('check.permission:dairy,add');
+
+    Route::post('/', [DairyController::class, 'store'])
+        ->name('dairy.store')
+        ->middleware('check.permission:dairy,add');
+});
+
+// Poultry
+Route::prefix('poultary')->middleware('auth')->group(function () {
+    Route::get('/create', [PoultaryController::class, 'create'])
+        ->name('poultary.create')
+        ->middleware('check.permission:poultary,add');
+
+    Route::post('/', [PoultaryController::class, 'store'])
+        ->name('poultary.store')
+        ->middleware('check.permission:poultary,add');
+});
+
+// Goat
+Route::prefix('goat')->middleware('auth')->group(function () {
+    Route::get('/create', [GoatController::class, 'create'])
+        ->name('goat.create')
+        ->middleware('check.permission:goat,add');
+
+    Route::post('/', [GoatController::class, 'store'])
+        ->name('goat.store')
+        ->middleware('check.permission:goat,add');
+});
+
+// Aquaculture
+Route::prefix('aquaculture')->middleware('auth')->group(function () {
+    Route::get('/create', [AquaCultureController::class, 'create'])
+        ->name('aquaculture.create')
+        ->middleware('check.permission:aquaculture,add');
+
+    Route::post('/', [AquaCultureController::class, 'store'])
+        ->name('aquaculture.store')
+        ->middleware('check.permission:aquaculture,add');
+});
 
 
-    Route::get('/agri', function () {
-        return view('vegitable_dairy.agriculture');
-    })->name('agri');
+// Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
+// Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
 
-    Route::get('/lstock', function () {
-        return view('vegitable_dairy.livestock');
-    })->name('livestock');
+Route::get('/agri', [AgricultureDataController::class, 'index'])
+    ->name('agri')
+    ->middleware(['auth', 'check.permission:agri,view']);
+
+Route::get('/lstock', [LivestockDataController::class, 'index'])
+    ->name('livestock')
+    ->middleware(['auth', 'check.permission:livestock,view']);
+
+
+
+
+    // Route::get('/agri', function () {
+    //     return view('vegitable_dairy.agriculture');
+    // })->name('agri');
+
+    // Route::get('/lstock', function () {
+    //     return view('vegitable_dairy.livestock');
+    // })->name('livestock');
+
+    // Route::middleware(['auth'])->group(function () {
+    //     Route::get('/agri', function () {
+    //         return view('vegitable_dairy.agriculture');
+    //     })->name('agri')->middleware('check.permission:agriculture,view');
+
+    //     Route::get('/lstock', function () {
+    //         return view('vegitable_dairy.livestock');
+    //     })->name('livestock')->middleware('check.permission:livestocks,view');
+    // });
+
 
 
     //Agro
-    Route::resource('agro', AgroController::class);
-    Route::resource('agro', AgroController::class);
-    Route::post('agro/{agro}/upload-pdf', [AgroController::class, 'uploadPdf'])->name('agro.upload_pdf');
-    Route::get('agro/{agro}/view-pdf', [AgroController::class, 'viewPdf'])->name('agro.view_pdf');
-    Route::get('/agro/csv/generate', [AgroController::class, 'generateCsv'])->name('agro.csv.generate');
-    Route::post('/agro/csv/upload', [AgroController::class, 'uploadCsv'])->name('agro.csv.upload');
-    Route::get('/agrosearch', [AgroController::class, 'search'])->name('agrosearch');
+    // Route::resource('agro', AgroController::class);
+    // Route::resource('agro', AgroController::class);
+    // Route::post('agro/{agro}/upload-pdf', [AgroController::class, 'uploadPdf'])->name('agro.upload_pdf');
+    // Route::get('agro/{agro}/view-pdf', [AgroController::class, 'viewPdf'])->name('agro.view_pdf');
+    // Route::get('/agro/csv/generate', [AgroController::class, 'generateCsv'])->name('agro.csv.generate');
+    // Route::post('/agro/csv/upload', [AgroController::class, 'uploadCsv'])->name('agro.csv.upload');
+    // Route::get('/agrosearch', [AgroController::class, 'search'])->name('agrosearch');
+
+
+    // // Shareholder Routes
+    // Route::get('agro/{agroId}/shareholders/create', [ShareholderController::class, 'create'])->name('shareholder.create');
+    // Route::post('agro/{agroId}/shareholders', [ShareholderController::class, 'store'])->name('shareholder.store');
+    // Route::get('agro/{agroId}/shareholders', [ShareholderController::class, 'show'])->name('shareholder.view');
+    // Route::get('shareholders/{id}/edit', [ShareholderController::class, 'edit'])->name('shareholder.edit');
+    // Route::put('shareholders/{id}', [ShareholderController::class, 'update'])->name('shareholder.update');
+    // Route::delete('shareholders/{id}', [ShareholderController::class, 'destroy'])->name('shareholder.destroy');
+
+
+    //Agro
+        Route::prefix('agro')->middleware('auth')->group(function () {
+        Route::get('/', [AgroController::class, 'index'])
+            ->name('agro.index')
+            ->middleware('check.permission:agro,view');
+
+        Route::get('/create', [AgroController::class, 'create'])
+            ->name('agro.create')
+            ->middleware('check.permission:agro,add');
+
+        Route::post('/', [AgroController::class, 'store'])
+            ->name('agro.store')
+            ->middleware('check.permission:agro,add');
+
+        Route::get('/{agro}/edit', [AgroController::class, 'edit'])
+            ->name('agro.edit')
+            ->middleware('check.permission:agro,edit');
+
+        Route::put('/{agro}', [AgroController::class, 'update'])
+            ->name('agro.update')
+            ->middleware('check.permission:agro,edit');
+
+        Route::delete('/{agro}', [AgroController::class, 'destroy'])
+            ->name('agro.destroy')
+            ->middleware('check.permission:agro,delete');
+
+        Route::post('/{agro}/upload-pdf', [AgroController::class, 'uploadPdf'])
+            ->name('agro.upload_pdf')
+            ->middleware('check.permission:agro,upload_csv');
+
+        Route::get('/{agro}/view-pdf', [AgroController::class, 'viewPdf'])
+            ->name('agro.view_pdf')
+            ->middleware('check.permission:agro,view');
+
+        Route::get('/csv/generate', [AgroController::class, 'generateCsv'])
+            ->name('agro.csv.generate')
+            ->middleware('check.permission:agro,view');
+
+        Route::post('/csv/upload', [AgroController::class, 'uploadCsv'])
+            ->name('agro.csv.upload')
+            ->middleware('check.permission:agro,upload_csv');
+
+        Route::get('/search', [AgroController::class, 'search'])
+            ->name('agrosearch')
+            ->middleware('check.permission:agro,view');
+    });
 
 
     // Shareholder Routes
-    Route::get('agro/{agroId}/shareholders/create', [ShareholderController::class, 'create'])->name('shareholder.create');
-    Route::post('agro/{agroId}/shareholders', [ShareholderController::class, 'store'])->name('shareholder.store');
-    Route::get('agro/{agroId}/shareholders', [ShareholderController::class, 'show'])->name('shareholder.view');
-    Route::get('shareholders/{id}/edit', [ShareholderController::class, 'edit'])->name('shareholder.edit');
-    Route::put('shareholders/{id}', [ShareholderController::class, 'update'])->name('shareholder.update');
-    Route::delete('shareholders/{id}', [ShareholderController::class, 'destroy'])->name('shareholder.destroy');
+    Route::prefix('agro/{agroId}/shareholders')->middleware('auth')->group(function () {
+    Route::get('/', [ShareholderController::class, 'show'])
+        ->name('shareholder.view')
+        ->middleware('check.permission:shareholder,view');
+
+    Route::get('/create', [ShareholderController::class, 'create'])
+        ->name('shareholder.create')
+        ->middleware('check.permission:shareholder,add');
+
+    Route::post('/', [ShareholderController::class, 'store'])
+        ->name('shareholder.store')
+        ->middleware('check.permission:shareholder,add');
+});
+
+// ID-specific outside prefix
+Route::middleware('auth')->group(function () {
+    Route::get('shareholders/{id}/edit', [ShareholderController::class, 'edit'])
+        ->name('shareholder.edit')
+        ->middleware('check.permission:shareholder,edit');
+
+    Route::put('shareholders/{id}', [ShareholderController::class, 'update'])
+        ->name('shareholder.update')
+        ->middleware('check.permission:shareholder,edit');
+
+    Route::delete('shareholders/{id}', [ShareholderController::class, 'destroy'])
+        ->name('shareholder.destroy')
+        ->middleware('check.permission:shareholder,delete');
+});
+
+
 
 
     // bene form
-    Route::get('/bene-form/search', [BeneFormController::class, 'search'])->name('bene-form.search');
-    Route::resource('bene-form', BeneFormController::class);
+    // Route::get('/bene-form/search', [BeneFormController::class, 'search'])->name('bene-form.search');
+    // Route::resource('bene-form', BeneFormController::class);
 
+    // Route::get('/bene', function () {
+    //     return view('bene_form.bene');
+    // });
+
+    // bene form
+    // Bene Form Routes with Permission Middleware
+    Route::prefix('bene-form')->middleware('auth')->group(function () {
+
+        // View all
+        Route::get('/', [BeneFormController::class, 'index'])
+            ->name('bene-form.index')
+            ->middleware('check.permission:bene_form,view');
+
+        // Create
+        Route::get('/create', [BeneFormController::class, 'create'])
+            ->name('bene-form.create')
+            ->middleware('check.permission:bene_form,add');
+
+        Route::post('/', [BeneFormController::class, 'store'])
+            ->name('bene-form.store')
+            ->middleware('check.permission:bene_form,add');
+
+        // Edit & Update
+        Route::get('/{bene_form}/edit', [BeneFormController::class, 'edit'])
+            ->name('bene-form.edit')
+            ->middleware('check.permission:bene_form,edit');
+
+        Route::put('/{bene_form}', [BeneFormController::class, 'update'])
+            ->name('bene-form.update')
+            ->middleware('check.permission:bene_form,edit');
+
+        // Delete
+        Route::delete('/{bene_form}', [BeneFormController::class, 'destroy'])
+            ->name('bene-form.destroy')
+            ->middleware('check.permission:bene_form,delete');
+
+        // Search
+        Route::get('/search', [BeneFormController::class, 'search'])
+            ->name('bene-form.search')
+            ->middleware('check.permission:bene_form,view');
+
+        Route::get('/{bene_form}', [BeneFormController::class, 'show'])
+        ->name('bene-form.show')
+        ->middleware('check.permission:bene_form,view');
+    });
+
+    // Static page (optional view control if needed)
     Route::get('/bene', function () {
         return view('bene_form.bene');
-    });
+    })->middleware(['auth', 'check.permission:bene_form,view']);
+
 
     //AWPB
 
@@ -1037,101 +1279,264 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
     //AWPB
 
-    Route::get('/awpb', [AWPBController::class, 'index'])->name('awpb.index');
-    Route::get('/awpb/create', [AWPBController::class, 'create'])->name('awpb.create');
-    Route::post('/awpb/store', [AWPBController::class, 'store'])->name('awpb.store');
-    Route::get('/awpb/show/{year}', [AWPBController::class, 'show'])->name('awpb.show');
-    Route::get('/awpb/download/{id}', [AWPBController::class, 'download'])->name('awpb.download');
+    // Route::get('/awpb', [AWPBController::class, 'index'])->name('awpb.index');
+    // Route::get('/awpb/create', [AWPBController::class, 'create'])->name('awpb.create');
+    // Route::post('/awpb/store', [AWPBController::class, 'store'])->name('awpb.store');
+    // Route::get('/awpb/show/{year}', [AWPBController::class, 'show'])->name('awpb.show');
+    // Route::get('/awpb/download/{id}', [AWPBController::class, 'download'])->name('awpb.download');
+
+    //AWPB
+    Route::prefix('awpb')->middleware('auth')->group(function () {
+
+    // View AWPB dashboard/index
+    Route::get('/', [AWPBController::class, 'index'])
+        ->name('awpb.index')
+        ->middleware('check.permission:awpb,view');
+
+    // Show AWPB upload form
+    Route::get('/create', [AWPBController::class, 'create'])
+        ->name('awpb.create')
+        ->middleware('check.permission:awpb,add');
+
+    // Store uploaded AWPB file
+    Route::post('/store', [AWPBController::class, 'store'])
+        ->name('awpb.store')
+        ->middleware('check.permission:awpb,add');
+
+    // Show AWPB by year
+    Route::get('/show/{year}', [AWPBController::class, 'show'])
+        ->name('awpb.show')
+        ->middleware('check.permission:awpb,view');
+
+    // Download a specific AWPB file
+    Route::get('/download/{id}', [AWPBController::class, 'download'])
+        ->name('awpb.download')
+        ->middleware('check.permission:awpb,view');
+});
+
 
     //Cost Tab
-    Route::prefix('costtab')->group(function () {
-        Route::get('/', [CostTabController::class, 'index'])->name('costtab.index');
-        Route::get('/create', [CostTabController::class, 'create'])->name('costtab.create');
-        Route::post('/store', [CostTabController::class, 'store'])->name('costtab.store');
-        Route::get('/show/{id}', [CostTabController::class, 'show'])->name('costtab.show');
-        Route::get('/download/{id}', [CostTabController::class, 'download'])->name('costtab.download');
+    // Route::prefix('costtab')->group(function () {
+    //     Route::get('/', [CostTabController::class, 'index'])->name('costtab.index');
+    //     Route::get('/create', [CostTabController::class, 'create'])->name('costtab.create');
+    //     Route::post('/store', [CostTabController::class, 'store'])->name('costtab.store');
+    //     Route::get('/show/{id}', [CostTabController::class, 'show'])->name('costtab.show');
+    //     Route::get('/download/{id}', [CostTabController::class, 'download'])->name('costtab.download');
+    // });
+
+    //Cost Tab
+    Route::prefix('costtab')->middleware('auth')->group(function () {
+
+        // View list of cost tabs
+        Route::get('/', [CostTabController::class, 'index'])
+            ->name('costtab.index')
+            ->middleware('check.permission:costtab,view');
+
+        // Create form
+        Route::get('/create', [CostTabController::class, 'create'])
+            ->name('costtab.create')
+            ->middleware('check.permission:costtab,add');
+
+        // Store new cost tab
+        Route::post('/store', [CostTabController::class, 'store'])
+            ->name('costtab.store')
+            ->middleware('check.permission:costtab,add');
+
+        // View specific cost tab
+        Route::get('/show/{id}', [CostTabController::class, 'show'])
+            ->name('costtab.show')
+            ->middleware('check.permission:costtab,view');
+
+        // Download PDF
+        Route::get('/download/{id}', [CostTabController::class, 'download'])
+            ->name('costtab.download')
+            ->middleware('check.permission:costtab,view');
+
     });
 
 
     //Project Design Report
-    Route::prefix('projectdesignreport')->group(function () {
-        Route::get('/', [ProjectDesignReportController::class, 'index'])->name('projectdesignreport.index');
-        Route::get('/create', [ProjectDesignReportController::class, 'create'])->name('projectdesignreport.create');
-        Route::post('/store', [ProjectDesignReportController::class, 'store'])->name('projectdesignreport.store');
-        Route::get('/show/{id}', [ProjectDesignReportController::class, 'show'])->name('projectdesignreport.show');
-        Route::get('/download/{id}', [ProjectDesignReportController::class, 'download'])->name('projectdesignreport.download');
-    });
+    // Route::prefix('projectdesignreport')->group(function () {
+    //     Route::get('/', [ProjectDesignReportController::class, 'index'])->name('projectdesignreport.index');
+    //     Route::get('/create', [ProjectDesignReportController::class, 'create'])->name('projectdesignreport.create');
+    //     Route::post('/store', [ProjectDesignReportController::class, 'store'])->name('projectdesignreport.store');
+    //     Route::get('/show/{id}', [ProjectDesignReportController::class, 'show'])->name('projectdesignreport.show');
+    //     Route::get('/download/{id}', [ProjectDesignReportController::class, 'download'])->name('projectdesignreport.download');
+    // });
+
+    //Project Design Report
+    Route::prefix('projectdesignreport')->middleware('auth')->group(function () {
+    Route::get('/', [ProjectDesignReportController::class, 'index'])
+        ->name('projectdesignreport.index')
+        ->middleware('check.permission:projectdesignreport,view');
+
+    Route::get('/create', [ProjectDesignReportController::class, 'create'])
+        ->name('projectdesignreport.create')
+        ->middleware('check.permission:projectdesignreport,add');
+
+    Route::post('/store', [ProjectDesignReportController::class, 'store'])
+        ->name('projectdesignreport.store')
+        ->middleware('check.permission:projectdesignreport,add');
+
+    Route::get('/show/{id}', [ProjectDesignReportController::class, 'show'])
+        ->name('projectdesignreport.show')
+        ->middleware('check.permission:projectdesignreport,view');
+
+    Route::get('/download/{id}', [ProjectDesignReportController::class, 'download'])
+        ->name('projectdesignreport.download')
+        ->middleware('check.permission:projectdesignreport,view');
+});
+
 
 
     //nrm training
 
-    Route::prefix('nrmtraining')->group(function () {
-        // Route for listing all NRM trainings
-        Route::get('/', [NrmController::class, 'index'])->name('nrm.index');
+    // Route::prefix('nrmtraining')->group(function () {
+    //     // Route for listing all NRM trainings
+    //     Route::get('/', [NrmController::class, 'index'])->name('nrm.index');
 
-        // Route for creating a new training program (display form)
-        Route::get('/create', [NrmController::class, 'create'])->name('nrm.create');
+    //     // Route for creating a new training program (display form)
+    //     Route::get('/create', [NrmController::class, 'create'])->name('nrm.create');
 
-        // Route for storing a new training program
-        Route::post('/', [NrmController::class, 'store'])->name('nrm.store');
+    //     // Route for storing a new training program
+    //     Route::post('/', [NrmController::class, 'store'])->name('nrm.store');
 
-        // Route for showing a specific training program
-        Route::get('/{nrmtraining}', [NrmController::class, 'show'])->name('nrm.show');
+    //     // Route for showing a specific training program
+    //     Route::get('/{nrmtraining}', [NrmController::class, 'show'])->name('nrm.show');
 
-        // Route for editing a specific training program (display form)
-        Route::get('/{nrmtraining}/edit', [NrmController::class, 'edit'])->name('nrm.edit');
+    //     // Route for editing a specific training program (display form)
+    //     Route::get('/{nrmtraining}/edit', [NrmController::class, 'edit'])->name('nrm.edit');
 
-        // Route for updating a specific training program
-        Route::put('/{nrmtraining}', [NrmController::class, 'update'])->name('nrm.update');
+    //     // Route for updating a specific training program
+    //     Route::put('/{nrmtraining}', [NrmController::class, 'update'])->name('nrm.update');
 
-        // Route for deleting a specific training program
-        Route::delete('/{nrmtraining}', [NrmController::class, 'destroy'])->name('nrm.destroy');
+    //     // Route for deleting a specific training program
+    //     Route::delete('/{nrmtraining}', [NrmController::class, 'destroy'])->name('nrm.destroy');
 
-        // Route for searching within training programs
-        //Route::get('/search', [NrmController::class, 'search'])->name('nrm.search');
+    //     // Route for searching within training programs
+    //     //Route::get('/search', [NrmController::class, 'search'])->name('nrm.search');
 
-        // Route for exporting training data to CSV
-        //Route::get('/download-csv', [NrmController::class, 'downloadCsv'])->name('nrm.downloadCsv');
+    //     // Route for exporting training data to CSV
+    //     //Route::get('/download-csv', [NrmController::class, 'downloadCsv'])->name('nrm.downloadCsv');
 
 
-        // Route for uploading CSV and importing data
-        Route::post('/upload-csv', [NrmController::class, 'uploadCsv'])->name('nrm.upload_csv');
-    });
-    Route::get('/download.csv', [NrmController::class, 'downloadCsv'])->name('nrmdownload.csv');
-    Route::get('/nrmtraining/search', [NrmController::class, 'search'])->name('nrm.search');
-    //Route::get('/nrmtraining/search', [NrmController::class, 'search'])->name('nrm.search');
+    //     // Route for uploading CSV and importing data
+    //     Route::post('/upload-csv', [NrmController::class, 'uploadCsv'])->name('nrm.upload_csv');
+    // });
+    // Route::get('/download.csv', [NrmController::class, 'downloadCsv'])->name('nrmdownload.csv');
+    // Route::get('/nrmtraining/search', [NrmController::class, 'search'])->name('nrm.search');
+    // //Route::get('/nrmtraining/search', [NrmController::class, 'search'])->name('nrm.search');
+
+
+    // // NRM Participants Routes
+    // Route::prefix('nrm-participants')->group(function () {
+    //     // List all participants for a specific NRM training program
+    //     Route::get('/{nrm_training_id}', [NrmParticipantController::class, 'listParticipants'])
+    //         ->name('nrm-participants.list');
+
+    //     // Show the form to create a new NRM participant
+    //     Route::get('/{nrm_training_id}/create', [NrmParticipantController::class, 'create'])
+    //         ->name('nrm-participants.create');
+
+    //     // Store a new participant for a specific NRM training program
+    //     Route::post('/{nrm_training_id}', [NrmParticipantController::class, 'store'])
+    //         ->name('nrm-participants.store');
+
+    //     // Delete a participant from a specific NRM training program
+    //     Route::delete('/{nrm_training_id}/{nrm_participant_id}', [NrmParticipantController::class, 'destroy'])
+    //         ->name('nrm-participants.destroy');
+
+    //     // Upload CSV and import NRM participants for a specific NRM training program
+    //     Route::post('/{nrm_training_id}/upload-csv', [NrmParticipantController::class, 'uploadCsv'])
+    //         ->name('nrm-participants.upload_csv');
+
+    //     // Download CSV report of all NRM participants for a specific NRM training program
+    //     Route::get('/{nrm_training_id}/download-csv', [NrmParticipantController::class, 'downloadCsv'])
+    //         ->name('nrm-participants.download_csv');
+
+    //     // Search within participants for a specific NRM training program
+    //     Route::get('/{nrm_training_id}/search', [NrmParticipantController::class, 'search'])
+    //         ->name('nrm-participants.search');
+    // });
+
+
+
+    // NRM Training Routes
+    Route::prefix('nrmtraining')->middleware('auth')->group(function () {
+    Route::get('/', [NrmController::class, 'index'])
+        ->name('nrm.index')
+        ->middleware('check.permission:nrm,view');
+
+    Route::get('/create', [NrmController::class, 'create'])
+        ->name('nrm.create')
+        ->middleware('check.permission:nrm,add');
+
+    Route::post('/', [NrmController::class, 'store'])
+        ->name('nrm.store')
+        ->middleware('check.permission:nrm,add');
+
+    Route::get('/{nrmtraining}', [NrmController::class, 'show'])
+        ->name('nrm.show')
+        ->middleware('check.permission:nrm,view');
+
+    Route::get('/{nrmtraining}/edit', [NrmController::class, 'edit'])
+        ->name('nrm.edit')
+        ->middleware('check.permission:nrm,edit');
+
+    Route::put('/{nrmtraining}', [NrmController::class, 'update'])
+        ->name('nrm.update')
+        ->middleware('check.permission:nrm,edit');
+
+    Route::delete('/{nrmtraining}', [NrmController::class, 'destroy'])
+        ->name('nrm.destroy')
+        ->middleware('check.permission:nrm,delete');
+
+    Route::post('/upload-csv', [NrmController::class, 'uploadCsv'])
+        ->name('nrm.upload_csv')
+        ->middleware('check.permission:nrm,upload_csv');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/download.csv', [NrmController::class, 'downloadCsv'])
+        ->name('nrmdownload.csv')
+        ->middleware('check.permission:nrm,view');
+
+    Route::get('/nrmtraining/search', [NrmController::class, 'search'])
+        ->name('nrm.search')
+        ->middleware('check.permission:nrm,view');
+});
 
 
     // NRM Participants Routes
-    Route::prefix('nrm-participants')->group(function () {
-        // List all participants for a specific NRM training program
-        Route::get('/{nrm_training_id}', [NrmParticipantController::class, 'listParticipants'])
-            ->name('nrm-participants.list');
+    Route::prefix('nrm-participants')->middleware('auth')->group(function () {
+    Route::get('/{nrm_training_id}', [NrmParticipantController::class, 'listParticipants'])
+        ->name('nrm-participants.list')
+        ->middleware('check.permission:nrm_participants,view');
 
-        // Show the form to create a new NRM participant
-        Route::get('/{nrm_training_id}/create', [NrmParticipantController::class, 'create'])
-            ->name('nrm-participants.create');
+    Route::get('/{nrm_training_id}/create', [NrmParticipantController::class, 'create'])
+        ->name('nrm-participants.create')
+        ->middleware('check.permission:nrm_participants,add');
 
-        // Store a new participant for a specific NRM training program
-        Route::post('/{nrm_training_id}', [NrmParticipantController::class, 'store'])
-            ->name('nrm-participants.store');
+    Route::post('/{nrm_training_id}', [NrmParticipantController::class, 'store'])
+        ->name('nrm-participants.store')
+        ->middleware('check.permission:nrm_participants,add');
 
-        // Delete a participant from a specific NRM training program
-        Route::delete('/{nrm_training_id}/{nrm_participant_id}', [NrmParticipantController::class, 'destroy'])
-            ->name('nrm-participants.destroy');
+    Route::delete('/{nrm_training_id}/{nrm_participant_id}', [NrmParticipantController::class, 'destroy'])
+        ->name('nrm-participants.destroy')
+        ->middleware('check.permission:nrm_participants,delete');
 
-        // Upload CSV and import NRM participants for a specific NRM training program
-        Route::post('/{nrm_training_id}/upload-csv', [NrmParticipantController::class, 'uploadCsv'])
-            ->name('nrm-participants.upload_csv');
+    Route::post('/{nrm_training_id}/upload-csv', [NrmParticipantController::class, 'uploadCsv'])
+        ->name('nrm-participants.upload_csv')
+        ->middleware('check.permission:nrm_participants,upload_csv');
 
-        // Download CSV report of all NRM participants for a specific NRM training program
-        Route::get('/{nrm_training_id}/download-csv', [NrmParticipantController::class, 'downloadCsv'])
-            ->name('nrm-participants.download_csv');
+    Route::get('/{nrm_training_id}/download-csv', [NrmParticipantController::class, 'downloadCsv'])
+        ->name('nrm-participants.download_csv')
+        ->middleware('check.permission:nrm_participants,view');
 
-        // Search within participants for a specific NRM training program
-        Route::get('/{nrm_training_id}/search', [NrmParticipantController::class, 'search'])
-            ->name('nrm-participants.search');
-    });
+    Route::get('/{nrm_training_id}/search', [NrmParticipantController::class, 'search'])
+        ->name('nrm-participants.search')
+        ->middleware('check.permission:nrm_participants,view');
+});
 
 
 
@@ -1240,8 +1645,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 ///
 
-Route::get('/agri', [AgricultureDataController::class, 'index'])->name('agri');
-Route::get('/lstock', [LivestockDataController::class, 'index'])->name('livestock');
+
 
 //Route::get('/agriculture-data', [AgricultureDataController::class, 'index'])->name('agriculture.data');
 

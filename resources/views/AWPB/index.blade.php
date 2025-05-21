@@ -168,11 +168,13 @@
             <h2 class="header-title" style="color: green;">AWPB Files</h2>
         </div>
 
+        @if(auth()->user()->hasPermission('awpb', 'add'))
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="{{ route('awpb.create') }}" class="btn btn-success">
                 <i class="fas fa-upload"></i> Upload New File
             </a>
         </div>
+        @endif
 
 
 

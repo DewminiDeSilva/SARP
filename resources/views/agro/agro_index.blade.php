@@ -477,6 +477,7 @@
     <div class="col-md-3">
         <!-- Upload CSV Form -->
 
+        @if(auth()->user()->hasPermission('agro', 'upload_csv'))
         <form action="{{ route('agro.csv.upload') }}" method="POST" enctype="multipart/form-data" class="form-inline">
             @csrf
             <div class="file-upload-wrapper d-flex align-items-start">
@@ -484,6 +485,7 @@
                 <button type="submit" class="btn btn-success upload-button">Upload CSV</button>
             </div>
         </form>
+        @endif
 
         <!-- Search Form -->
         <form class="form-inline mb-3" action="{{ route('agrosearch') }}" method="GET">
@@ -497,7 +499,9 @@
 
 
         <!-- Add New Enterprise Button -->
+        @if(auth()->user()->hasPermission('agro', 'add'))
         <a href="{{ route('agro.create') }}" class="btn submitbtton mb-3">Add New Enterprise</a>
+        @endif
     </div>
 
     <!-- Generate CSV Report Button in a Separate Column -->
@@ -593,14 +597,22 @@
                             </td>
                             <td class="button-container"  style="vertical-align: middle; text-align: center; padding: 5px; height: 100%;">
                             <div style="display: flex; justify-content: center; align-items: center; height: 100%; gap: 10px;">
+                                @if(auth()->user()->hasPermission('shareholder', 'add'))
                                 <a href="{{ route('shareholder.create', $agro->id) }}" class="btn btn-primary btn-sm button-a addmember">Add Shareholder</a>
+                                @endif
+                                @if(auth()->user()->hasPermission('shareholder', 'view'))
                                 <a href="{{ route('shareholder.view', $agro->id) }}" title="View Shareholder">
                                     <button class="btn btn-success" style="height: 40px; width: 120px; font-size: 16px;">View Details</button>
                                 </a>
+                                @endif
 
+                                @if(auth()->user()->hasPermission('agro', 'edit'))
                                 <a href="{{ url('/agro/' . $agro->id . '/edit') }}" class="btn btn-danger edit-button" title="Edit">
                                     <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                 </a>
+                                @endif
+
+                                @if(auth()->user()->hasPermission('agro', 'delete'))
                                 <form action="{{ url('/agro/' . $agro->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -608,6 +620,7 @@
                                         <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                     </button>
                                 </form>
+                                @endif
                                 </div>
                             </td>
                         </tr>

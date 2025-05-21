@@ -21,15 +21,17 @@ class VegitableController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'crop_name' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'crop_name' => 'required|string|max:255',
+    ]);
 
-        $vegitable = Vegitable::create($request->all());
+    Vegitable::create($request->all());
 
-        return redirect('/vegitable')->with('success', 'Vegitable registered successfully.');
-    }
+    return redirect()->route('agri')->with('success', 'Vegitable registered successfully.');
+}
+
+
 
     public function show($id)
 {

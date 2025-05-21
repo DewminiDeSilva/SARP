@@ -365,11 +365,16 @@
 
             <!-- Actions and Search Section -->
             <div class="d-flex justify-content-between mb-3">
+            @if(auth()->user()->hasPermission('nutrition_trainee', 'add'))
                 <a href="{{ route('nutrition_trainee.create', $nutrition->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Participant</a>
+            @endif
+            @if(auth()->user()->hasPermission('nutrition_trainee', 'view'))
                 <a href="{{ route('nutrition_trainee.download_csv', $nutrition->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Download CSV Report</a>
+            @endif
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
+            @if(auth()->user()->hasPermission('nutrition_trainee', 'upload_csv'))
                 <!-- CSV Upload Form -->
                 <form action="{{ route('nutrition_trainee.upload_csv', $nutrition->id) }}" method="POST" enctype="multipart/form-data" class="form-inline">
                     @csrf
@@ -378,6 +383,7 @@
                     </div>
                     <button type="submit" class="btn btn-success">Upload CSV</button>
                 </form>
+            @endif
 
 
 
@@ -438,12 +444,17 @@
 
                     <td>
                         <div class="button-container">
+                        @if(auth()->user()->hasPermission('nutrition_trainee', 'edit'))
                             <a href="{{ route('nutrition_trainee.edit', $trainee->id) }}" class="btn btn-primary btn-sm button-spacing">Edit</a>
+                        @endif
+
+                        @if(auth()->user()->hasPermission('nutrition_trainee', 'delete'))
                             <form action="{{ route('nutrition_trainee.destroy', $trainee->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
+                        @endif
                         </div>
                     </td>
                 </tr>

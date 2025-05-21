@@ -157,9 +157,11 @@
             <h2 class="header-title" style="color: green;">List of Project Design Report PDFs</h2>
         </div>
 
+        @if(auth()->user()->hasPermission('projectdesignreport', 'add'))
         <a href="{{ route('projectdesignreport.create') }}" class="btn btn-success">
-        <i class="fas fa-upload"></i> Upload New PDF
-    </a>
+            <i class="fas fa-upload"></i> Upload New PDF
+        </a>
+        @endif
 
         <!-- Table for Uploaded Files -->
         <div class="table-responsive mt-4">

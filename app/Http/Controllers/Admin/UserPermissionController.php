@@ -21,7 +21,7 @@ class UserPermissionController extends Controller
     {
         // Define the modules and actions
         $modules = [
-            'staff_profile', 'beneficiary', 'family', 'training', 'livestock', 'nutrition', 'nutrition_trainee',
+            'staff_profile', 'beneficiary', 'family', 'training', 'livestock', 'agri', 'nutrition', 'nutrition_trainee',
             'ffs-training', 'ffs-participants', 'cdf', 'cdfmembers', 'farmerorganization', 'farmermember',
             'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'fingerling', 'infrastructure',
             'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'awpb',

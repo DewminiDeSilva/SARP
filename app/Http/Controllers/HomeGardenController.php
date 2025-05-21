@@ -26,9 +26,10 @@ class HomeGardenController extends Controller
             'homegarden_name' => 'required|string|max:255',
         ]);
 
-        $homegarden = HomeGarden::create($request->all());
+        HomeGarden::create($request->all());
 
-        return redirect('/homegarden')->with('success', 'Homegarden registered successfully.');
+        // Redirect to agri route (agriculture dashboard)
+        return redirect()->route('agri')->with('success', 'Homegarden registered successfully.');
     }
 
     public function show($id)

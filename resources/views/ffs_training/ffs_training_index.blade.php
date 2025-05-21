@@ -297,12 +297,15 @@
 
                 <!-- Actions and Search Section -->
                 <div class="d-flex justify-content-between mb-3">
+                @if(auth()->user()->hasPermission('ffs-training', 'add'))
                     <a href="{{ route('ffs-training.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add FFS Training Program</a>
+                @endif
                     <a href="{{ route('downloadffs-training.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <!-- CSV Upload Form -->
+                    @if(auth()->user()->hasPermission('ffs-training', 'upload_csv'))
                     <form action="{{ route('ffs-training.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
                         <div class="form-group mr-2">
@@ -310,6 +313,7 @@
                         </div>
                         <button type="submit" class="btn btn-success">Upload CSV</button>
                     </form>
+                    @endif
                     <!-- Search form -->
                     <form method="GET" action="{{ route('searchFFSTraining') }}" class="form-inline">
     <div class="input-group">
@@ -382,15 +386,25 @@
                                     <td>{{ $ffsTraining->gn_division_name}}</td> -->
                                     <td>{{ $ffsTraining->as_center}}</td>
                                     <td class="button-container">
+                                    @if(auth()->user()->hasPermission('ffs-participants', 'add'))
                                         <a href="{{ route('ffs-participants.create', $ffsTraining->id) }}" title="Add Participant">
                                             <button class="btn btn-success" style="height: 40px; width: 150px; font-size: 16px;">Add Participants</button>
                                         </a>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermission('ffs-participants', 'view'))
                                         <a href="{{ route('ffs-participants.list', $ffsTraining->id) }}" title="View Participants">
                                             <button class="btn btn-success" style="height: 40px; width: 120px; font-size: 16px;">View Details</button>
                                         </a>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermission('ffs-training', 'edit'))
                                         <a href="/ffs-training/{{ $ffsTraining->id }}/edit" class="btn btn-danger edit-button" title="Edit">
                                             <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                         </a>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermission('ffs-training', 'delete'))
                                         <form action="/ffs-training/{{ $ffsTraining->id }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -398,6 +412,7 @@
                                                 <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                             </button>
                                         </form>
+                                    @endif
                                     </td>
                                 </tr>
                                 @endforeach

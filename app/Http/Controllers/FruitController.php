@@ -26,10 +26,12 @@ class FruitController extends Controller
             'fruit_name' => 'required|string|max:255',
         ]);
 
-        $fruit = Fruit::create($request->all());
+        Fruit::create($request->all());
 
-        return redirect('/fruit')->with('success', 'Fruit registered successfully.');
+        // Redirect to agriculture overview page
+        return redirect()->route('agri')->with('success', 'Fruit registered successfully.');
     }
+
 
     public function show($id)
 {

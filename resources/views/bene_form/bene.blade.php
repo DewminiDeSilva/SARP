@@ -121,16 +121,22 @@
                 <div class="row">
                     <!-- Beneficiary Registration Form Button -->
                     <div class="col-md-6">
+                        @if(auth()->user()->hasPermission('bene_form', 'add'))
+
                         <a href="{{ route('bene-form.create') }}" class="btn btn-primary btn-large">
                             Beneficiary Registration Form
                         </a>
+                        @endif
                     </div>
                     <!-- Beneficiary View Button -->
-                    <div class="col-md-6">
-                        <a href="{{ route('bene-form.index') }}" class="btn btn-success btn-large">
-                            Beneficiary View
-                        </a>
-                    </div>
+                    @if(auth()->user()->hasPermission('bene_form', 'view'))
+                        <div class="col-md-6">
+                            <a href="{{ route('bene-form.index') }}" class="btn btn-success btn-large">
+                                Beneficiary View
+                            </a>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>

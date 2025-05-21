@@ -309,12 +309,15 @@
 
             <!-- Actions and Search Section -->
             <div class="d-flex justify-content-between mb-3">
+            @if(auth()->user()->hasPermission('ffs-participants', 'add'))
                 <a href="{{ route('ffs-participants.create', $ffsTraining->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Participant</a>
+            @endif
                 <a href="{{ route('ffs-participants.download_csv', $ffsTraining->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Download CSV Report</a>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <!-- CSV Upload Form -->
+                @if(auth()->user()->hasPermission('ffs-participants', 'upload_csv'))
                 <form action="{{ route('ffs-participants.upload_csv', $ffsTraining->id) }}" method="POST" enctype="multipart/form-data" class="form-inline">
                     @csrf
                     <div class="form-group mr-2">
@@ -322,6 +325,7 @@
                     </div>
                     <button type="submit" class="btn btn-success">Upload CSV</button>
                 </form>
+                @endif
 
                 <!-- Search form -->
                 <form method="GET" action="{{ route('ffs-participants.search', $ffsTraining->id) }}" class="form-inline">
@@ -362,12 +366,15 @@
                                 <td>{{ $ffsParticipant->age }}</td>
                                 <td>{{ $ffsParticipant->youth }}</td>
                                 <td>
+
                                     <!-- Delete Button -->
+                                    @if(auth()->user()->hasPermission('ffs-participants', 'delete'))
                                     <form action="{{ route('ffs-participants.destroy', [$ffsTraining->id, $ffsParticipant->id]) }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this participant?')">Delete</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
