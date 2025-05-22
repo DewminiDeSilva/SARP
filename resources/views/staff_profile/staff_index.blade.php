@@ -429,7 +429,7 @@
             <th>NIC Number</th>
             <th>Designation</th>
             <th>Contact Number</th>
-            <th>Salary</th>
+            <!-- <th>Salary</th> -->
             <th>status</th>
             <th>Actions</th>
         </tr>
@@ -449,7 +449,7 @@
                 <td>{{ $staffProfile->nic_number }}</td>
                 <td>{{ $staffProfile->designation }}</td>
                 <td>{{ $staffProfile->contact_number }}</td>
-                <td>{{ $staffProfile->salary ? 'LKR ' . number_format($staffProfile->salary, 2) : 'N/A' }}</td>
+                <!-- <td>{{ $staffProfile->salary ? 'LKR ' . number_format($staffProfile->salary, 2) : 'N/A' }}</td> -->
                 <td>
     @if ($staffProfile->status === 'in_service')
         <button
@@ -481,10 +481,13 @@
                         <i class="fas fa-eye"></i>
                     </a>
                     <!-- Edit Button -->
+                    @if(auth()->user()->hasPermission('staff_profile', 'edit'))
                     <a href="{{ route('staff_profile.edit', $staffProfile->id) }}" class="btn-action edit" title="Edit">
                         <i class="fas fa-edit"></i>
                     </a>
+                    @endif
                     <!-- Delete Button -->
+                    @if(auth()->user()->hasPermission('staff_profile', 'delete'))
                     <form action="{{ route('staff_profile.destroy', $staffProfile->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
@@ -492,6 +495,7 @@
                             <i class="fas fa-trash"></i>
                         </button>
                     </form>
+                    @endif
                 </td>
             </tr>
         @endforeach
@@ -547,7 +551,7 @@
                     <div>
                         Showing {{ $staffProfiles->firstItem() }} to {{ $staffProfiles->lastItem() }} of {{ $staffProfiles->total() }} entries
                     </div>
-                    
+
                 </div>
             </div>
         </div>

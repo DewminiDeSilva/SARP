@@ -82,8 +82,9 @@ class NutritionTraineeController extends Controller
         $nutrition_trainee->save();
 
         // Redirect back to the nutrition trainee index with success message
-        return redirect()->route('nutrition_trainee.index', ['nutrition' => $request->nutrition_id])
+        return redirect()->route('nutrition.show', ['id' => $request->nutrition_id])
     ->with('success', 'Trainee registered successfully.');
+
 
     }
 
@@ -148,8 +149,9 @@ class NutritionTraineeController extends Controller
         $trainee->update($request->all());
 
         // Redirect back to the nutrition program's page with success message
-        return redirect()->route('nutrition.show', ['nutrition' => $trainee->nutrition_id])
-                        ->with('success', 'Trainee updated successfully.');
+        return redirect()->route('nutrition.show', ['id' => $trainee->nutrition_id])
+    ->with('success', 'Trainee updated successfully.');
+
     }
 
 
@@ -161,8 +163,9 @@ class NutritionTraineeController extends Controller
         $trainee = NutritionTrainee::findOrFail($id);
         $trainee->delete();
 
-        return redirect()->route('nutrition_trainee.index', ['nutrition' => $trainee->nutrition_id])
-    ->with('success', 'Trainee updated successfully.');
+        return redirect()->route('nutrition.show', ['id' => $trainee->nutrition_id]);
+
+
 
     }
 

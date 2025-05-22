@@ -28,7 +28,8 @@ class GoatController extends Controller
 
         $goat = Goat::create($request->all());
 
-        return redirect('/goat')->with('success', 'Goat Rearing registered successfully.');
+        return redirect()->route('livestock')->with('success', 'Goat Rearing registered successfully.');
+
     }
 
     public function show($id)

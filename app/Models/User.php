@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Permission;
 
 class User extends Authenticatable
 {
@@ -47,5 +48,23 @@ class User extends Authenticatable
         return $this->staffProfile && $this->staffProfile->photo
             ? asset('storage/' . $this->staffProfile->photo)
             : asset('assets/images/default_profile.png');
+    }
+
+    /**
+     * Relationship with permissions (many-to-many)
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permission');
+    }
+
+    /**
+     * Check if user has specific module + action permission
+     */
+    public function hasPermission($module, $action): bool
+    {
+        return $this->permissions->contains(function ($perm) use ($module, $action) {
+            return $perm->module === $module && $perm->action === $action;
+        });
     }
 }

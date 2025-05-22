@@ -266,14 +266,17 @@
                         <td>{{ $member->representing_organization }}</td>
                         <td class="btn-actions">
                             <!-- Edit Button -->
+                            @if(auth()->user()->hasPermission('cdfmembers', 'edit'))
                             <a href="/cdfmembers/{{ $member->id }}/edit" class="btn btn-sm btn-warning">Edit</a>
-
+                            @endif
                             <!-- Delete Form -->
+                            @if(auth()->user()->hasPermission('cdfmembers', 'delete'))
                             <form action="/cdfmembers/{{ $member->id }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this member?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

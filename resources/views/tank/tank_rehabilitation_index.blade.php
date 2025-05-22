@@ -266,7 +266,7 @@ table th:first-child, table td:first-child {
 	<a href="{{ route('tank_rehabilitation.index') }}" class="btn btn-outline-success mb-3">
         <i class="fas fa-arrow-left"></i> Back to Tank List
     </a>
-    
+
 
 </div>
 
@@ -342,26 +342,29 @@ table th:first-child, table td:first-child {
 
 
                 <div class="d-flex justify-content-between mb-3">
+                @if(auth()->user()->hasPermission('tank_rehabilitation', 'add'))
                     <a href="{{route('tank_rehabilitation.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Tank Details</a>
+                @endif
                     <a href="{{route('downloadtank.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <!-- CSV Upload Form -->
+                    @if(auth()->user()->hasPermission('tank_rehabilitation', 'upload_csv'))
                     <form action="{{ route('tank_rehabilitation.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
-                        <button id="deleteSelectedBtn" class="btn btn-danger" title="Delete selected tanks">
+                        <!-- <button id="deleteSelectedBtn" class="btn btn-danger" title="Delete selected tanks">
                             Delete Selected
-                        </button>
-                        
+                        </button> -->
+
                         <div class="form-group mr-2">
                             <input type="file" name="csv_file" class="form-control" required>
                         </div>
-                       
+
                         <button type="submit" class="btn btn-success">Upload CSV</button>
-                        
-                        
+
                     </form>
+                    @endif
                     <!-- Search form -->
                     <form method="GET" action="{{ route('searchTank') }}" class="form-inline">
                         <div class="input-group">
@@ -373,7 +376,17 @@ table th:first-child, table td:first-child {
                     </form>
                 </div>
 
-                
+                @if(auth()->user()->hasPermission('tank_rehabilitation', 'delete'))
+                <form id="bulkDeleteForm" action="{{ route('tank_rehabilitation.bulk_delete') }}" method="POST">
+                    @csrf
+                    <button type="submit" id="deleteSelectedBtn" class="btn btn-danger" title="Delete selected tanks">
+                        Delete Selected
+                    </button>
+                </form>
+                @endif
+</br>
+
+
                 <!-- Success Message Popup -->
                 @if(session('success'))
 <script>
@@ -413,9 +426,11 @@ table th:first-child, table td:first-child {
                         <table class="table table-bordered">
                             <thead class="thead-light">
                                 <tr>
+                                @if(auth()->user()->hasPermission('tank_rehabilitation', 'delete'))
                                     <th>
                                         <input type="checkbox" id="selectAll">
                                     </th>
+                                    @endif
                                     <th>Tank Id</th>
                                     <th>Tank Name</th>
                                     <th>River Basin</th>
@@ -446,16 +461,18 @@ table th:first-child, table td:first-child {
                                     <th style="width: 150px; background-color: #fff3cd; text-align: center;">Last Updated</th>
 
                                     <th>Action</th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($tankRehabilitations as $tankRehabilitation)
                                 <tr>
+                                @if(auth()->user()->hasPermission('tank_rehabilitation', 'delete'))
                                     <td>
                                         <input type="checkbox" class="record-checkbox" name="selected_ids[]" value="{{ $tankRehabilitation->id }}">
                                     </td>
-                                    
+                                    @endif
+
                                     <td>{{ $tankRehabilitation->tank_id }}</td>
                                     <td>{{ $tankRehabilitation->tank_name }}</td>
                                     <td>{{ $tankRehabilitation->river_basin }}</td>
@@ -477,7 +494,7 @@ table th:first-child, table td:first-child {
                                     <td>{{ $tankRehabilitation->paid_advanced_amount }}</td> <!-- New field -->
                                     <td>{{ $tankRehabilitation->recommended_ipc_no }}</td> <!-- New field -->
                                     <td>{{ number_format($tankRehabilitation->recommended_ipc_amount, 2) }}</td>
-                                    
+
                                     <!-- <td>{{ $tankRehabilitation->payment }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->eot }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->contract_period }}</td> -->
@@ -485,8 +502,8 @@ table th:first-child, table td:first-child {
                                     <td style="background-color: #fff3cd; font-size: 12px; text-align: center;">
                                         {{ \Carbon\Carbon::parse($tankRehabilitation->updated_at)->timezone('Asia/Colombo')->format('Y-m-d H:i') }}
                                     </td>
-                                    
-                                    
+
+
                                     <!-- <td>{{ $tankRehabilitation->remarks }}</td> -->
 
                                     <!-- <td>
@@ -503,16 +520,17 @@ table th:first-child, table td:first-child {
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                     </a>
 
-                                     
-                                        
 
+
+                                    @if(auth()->user()->hasPermission('tank_rehabilitation', 'edit'))
                                     <a href="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" title="Update">
                                         <button type="button" class="btn btn-success update-confirm" data-url="/tank_rehabilitation/{{ $tankRehabilitation->id }}/edit" style="height: 40px; width: 120px; font-size: 16px;">
                                             Update
                                         </button>
                                     </a>
+                                    @endif
 
-
+                                    @if(auth()->user()->hasPermission('tank_rehabilitation', 'delete'))
                                     <form class="delete-form d-inline" method="POST" action="{{ route('tank_rehabilitation.destroy', $tankRehabilitation->id) }}">
                                         @csrf
                                         @method('DELETE')
@@ -520,9 +538,8 @@ table th:first-child, table td:first-child {
                                             <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                         </button>
                                     </form>
-                                    
-                                    
-                                    
+                                    @endif
+
                                     </td>
                                 </tr>
                                 @endforeach
@@ -593,9 +610,9 @@ table th:first-child, table td:first-child {
                                     // SweetAlert delete confirmation
                                     $(document).on('click', '.delete-confirm', function (e) {
                                         e.preventDefault();
-                            
+
                                         const form = $(this).closest('form');
-                            
+
                                         Swal.fire({
                                             title: 'Are you sure?',
                                             text: "You won't be able to undo this delete!",
@@ -629,10 +646,10 @@ table th:first-child, table td:first-child {
                                     }
                                 });
                             });
-                            
-                               
+
+
                             </script>
-                            
+
                         <!-- Delete yes no script -->
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
@@ -665,7 +682,7 @@ table th:first-child, table td:first-child {
                                     });
                                 });
 
-                                
+
                             });
                         </script>
 <script>

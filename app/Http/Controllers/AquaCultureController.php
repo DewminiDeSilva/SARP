@@ -27,10 +27,11 @@ class AquaCultureController extends Controller
             'aquaculture_name' => 'required|string|max:255',
         ]);
 
-        $aquaculture = AquaCulture::create($request->all());
+        AquaCulture::create($request->all());
 
-        return redirect('/aquaculture')->with('success', 'Aqua Culture registered successfully.');
+        return redirect()->route('livestock')->with('success', 'Aqua Culture registered successfully.');
     }
+
 
     public function show($id)
 {

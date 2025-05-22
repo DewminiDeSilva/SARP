@@ -451,8 +451,11 @@
 
 
     <!-- Search and CSV Files -->
+
     <div class="d-flex justify-content-between mb-3">
+    @if(auth()->user()->hasPermission('farmerorganization', 'add'))
         <a href="{{route('farmerorganization.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add New Organization</a>
+    @endif
 
         <a href="{{ route('downloadfarmerorganization.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
     </div>
@@ -460,6 +463,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <!-- CSV Upload Form -->
+        @if(auth()->user()->hasPermission('farmerorganization', 'upload_csv'))
         <form action="{{ route('farmerorganization.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
             @csrf
             <div class="form-group mr-2">
@@ -467,6 +471,7 @@
             </div>
             <button type="submit" class="btn btn-success">Upload CSV</button>
         </form>
+        @endif
         <!-- Search form -->
         <form method="GET" action="{{ route('searchFarmerOrganization') }}" class="form-inline">
             <div class="input-group">
@@ -520,8 +525,11 @@
                                 <th>ASC</th>
                                 <th>Tank Name</th>
                                 <th>Cascade Name</th>
+                                @if(auth()->user()->hasPermission('farmermember', 'add'))
                                 <th></th>
+                                @endif
                                 <th></th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -540,19 +548,28 @@
                                 <td>{{ $farmerorganization->tank_name }}</td>
                                 <td>{{ $farmerorganization->cascade_name }}</td>
 
+                                @if(auth()->user()->hasPermission('farmermember', 'add'))
                                 <td>
-                                <a href="{{ route('farmermember.create', ['farmermember_id' => $farmerorganization->id]) }}" class="btn btn-primary btn-sm button-a addmember">Add Members</a>
+                                <a href="{{ route('farmermember.create', ['farmerorganization_id' => $farmerorganization->id]) }}" class="btn btn-primary btn-sm button-a addmember">Add Members</a>
                                 </td>
+                                @endif
 
 
                                 <td class="button-container">
+                                @if(auth()->user()->hasPermission('farmermember', 'view'))
                                 <a href="{{ route('farmerorganization.show', $farmerorganization->id) }}" class="btn btn-danger button view-button" title="View">
+
                                 <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                    </a>
+                                @endif
+
+                                   @if(auth()->user()->hasPermission('farmerorganization', 'edit'))
                                     <a href="{{ url('/farmerorganization/' . $farmerorganization->id . '/edit') }}" class="btn btn-danger edit-button" title="Edit">
                                         <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                     </a>
+                                    @endif
 
+                                    @if(auth()->user()->hasPermission('farmerorganization', 'delete'))
                                     <form action="{{ url('/farmerorganization/' . $farmerorganization->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
@@ -560,7 +577,9 @@
                                             <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                         </button>
                                     </form>
+                                    @endif
                                 </td>
+
                             </tr>
                             @endforeach
                     </tbody>

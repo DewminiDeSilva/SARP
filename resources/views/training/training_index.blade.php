@@ -263,7 +263,7 @@
 
 </div>
 
-        
+
 
             <div class="container-fluid">
                 <div class="center-heading text-center">
@@ -298,19 +298,25 @@
 
                 <!-- Actions and Search Section -->
                 <div class="d-flex justify-content-between mb-3">
+                @if(auth()->user()->hasPermission('training', 'add'))
                     <a href="{{ route('training.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Training Program</a>
+                @endif
                     <a href="{{ route('downloadtraining.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <!-- CSV Upload Form -->
+                    @if(auth()->user()->hasPermission('training', 'upload_csv'))
                     <form action="{{ route('training.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
                         <div class="form-group mr-2">
                             <input type="file" name="csv_file" class="form-control" required>
                         </div>
+
                         <button type="submit" class="btn btn-success">Upload CSV</button>
+
                     </form>
+                    @endif
                     <!-- Search form -->
                     <form method="GET" action="{{ route('searchTraining') }}" class="form-inline">
                         <div class="input-group">
@@ -382,15 +388,20 @@
                                     <td>{{ $training->gn_division_name}}</td>
                                     <td>{{ $training->as_center}}</td>
                                     <td class="button-container">
+                                    @if(auth()->user()->hasPermission('training', 'add'))
                                         <a href="{{ route('participants.create', $training->id) }}" title="Add Participant">
                                             <button class="btn btn-success" style="height: 40px; width: 150px; font-size: 16px;">Add Participants</button>
                                         </a>
+                                    @endif
                                         <a href="{{ route('participants.list', $training->id) }}" title="View Participants">
                                             <button class="btn btn-success" style="height: 40px; width: 120px; font-size: 16px;">View Details</button>
                                         </a>
+                                        @if(auth()->user()->hasPermission('training', 'edit'))
                                         <a href="/training/{{ $training->id }}/edit" class="btn btn-danger edit-button" title="Edit">
                                             <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                         </a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('training', 'delete'))
                                         <form action="/training/{{ $training->id }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -398,6 +409,7 @@
                                                 <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                             </button>
                                         </form>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

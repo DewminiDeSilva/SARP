@@ -348,12 +348,15 @@
 
             <!-- Add New Program Button -->
             <div class="d-flex justify-content-between mb-3">
+            @if(auth()->user()->hasPermission('nutrition', 'add'))
                 <a href="{{ route('nutrition.create') }}" class="btn btn-custom" style="background-color: green; border-color: green;">Add New Program</a>
+            @endif
                 <a href="{{ route('downloadnutrition.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
 
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
+            @if(auth()->user()->hasPermission('nutrition', 'upload_csv'))
                     <!-- CSV Upload Form for Nutrition -->
                     <form action="{{ route('nutrition.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
@@ -362,6 +365,7 @@
                         </div>
                         <button type="submit" class="btn btn-success">Upload CSV</button>
                     </form>
+            @endif
 
                     <!-- Search form for Nutrition -->
                     <form method="GET" action="{{ route('nutrition.search') }}" class="form-inline">
@@ -430,19 +434,26 @@
 
                                 <td  class="button-container">
 
+                                @if(auth()->user()->hasPermission('nutrition_trainee', 'view'))
                                 <a href="{{ route('nutrition.show', $program->id) }}">
                                         <button class="btn btn-success" style="height: 40px; width: 150px; font-size: 16px;">View participants</button>
                                     </a>
+                                @endif
 
+                                @if(auth()->user()->hasPermission('nutrition_trainee', 'add'))
                                     <!-- Add Trainee Button -->
                                     <a href="{{ route('nutrition_trainee.create', ['nutrition_id' => $program->id]) }}">
                                         <button class="btn btn-success" style="height: 40px; width: 150px; font-size: 16px;">Add Participants</button>
                                     </a>
+                                @endif
 
+                                @if(auth()->user()->hasPermission('nutrition', 'edit'))
                                     <a href="{{ route('nutrition.edit', $program->id) }}"  class="btn btn-danger edit-button" title="Edit">
                                         <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                     </a>
+                                @endif
 
+                                @if(auth()->user()->hasPermission('nutrition', 'delete'))
                                     <form action="{{ route('nutrition.destroy', $program->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -450,6 +461,7 @@
                                             <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                         </button>
                                     </form>
+                                @endif
 
                                 </td>
                             </tr>

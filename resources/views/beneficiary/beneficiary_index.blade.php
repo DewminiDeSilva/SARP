@@ -527,6 +527,7 @@
 
 
               <!-- CSV Upload Form -->
+              @if(auth()->user()->hasPermission('beneficiary', 'upload_csv'))
             <form action="{{ route('beneficiary.uploadCsv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
              @csrf
              <div class="form-group mr-2">
@@ -534,7 +535,7 @@
              </div>
             <button type="submit" class="btn btn-success">Upload CSV</button>
              </form>
-
+             @endif
                  </br>
 
 
@@ -551,7 +552,9 @@
 
                     <div class="form-group">
                         <div class="d-flex justify-content-between">
+                        @if(auth()->user()->hasPermission('beneficiary', 'edit'))
                       <a href="{{ route('beneficiary.create') }}" class="btn submitbtton"> + Add New </button>
+                      @endif
                        <a href="{{route('download.csv')}}"  class="btn submitbtton">Generate CSV Report</a>
                 </div>
 
@@ -638,6 +641,7 @@
                             <th scope="col">Type of Water Resource</th>
                             <th scope="col">Training Details Description</th> -->
                             <th scope="col">Actions</th>
+                            <th scope="col">Edit/Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -655,7 +659,7 @@
                     <span style="color: red;">→ {{ $converted }}</span>
                 @endif
             </td>
-            
+
                             <td>{{ $beneficiary->name_with_initials }}</td>
                             <td>{{ $beneficiary->gender }}</td>
                             <!-- <td>{{ $beneficiary->dob }}</td> -->
@@ -692,12 +696,19 @@
                             <td>{{ $beneficiary->training_details_description }}</td> -->
                             <td class="buttonline">
                                 <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-info btn-sm">View</a>
-                                <a href="{{ route('family/create', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-primary btn-sm button-a">Add Members</a>
+                                @if(auth()->user()->hasPermission('family', 'edit'))
+                                <a href="{{ route('family.create.by.beneficiary', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-primary btn-sm button-a">Add Members</a>
+                                @endif
+
                             </td>
                             <td class="button-group">
+                            @if(auth()->user()->hasPermission('beneficiary', 'edit'))
                                 <a href="beneficiary/{{ $beneficiary->id }}/edit" class="btn btn-primary btn-sm" style="background-color: green;border: 2px solid green;">
                                     <img src="{{ asset('assets/images/edit4.png') }}" alt="Edit Icon" style="width: 20px; height: 20px;">
                                 </a>
+                            @endif
+
+                            @if(auth()->user()->hasPermission('beneficiary', 'delete'))
                                 <form action="beneficiary/{{ $beneficiary->id }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
@@ -705,6 +716,7 @@
                                         <img src="{{ asset('assets/images/delete1.png') }}" alt="Delete Icon" style="width: 20px; height: 20px;">
                                     </button>
                                 </form>
+                            @endif
                             </td>
                         </tr>
                         @endforeach

@@ -158,10 +158,11 @@
         <div class="col-md-12 text-center">
             <h2 class="header-title" style="color: green;">List of Cost Tab PDFs</h2>
         </div>
-
+        @if(auth()->user()->hasPermission('costtab', 'add'))
         <a href="{{ route('costtab.create') }}" class="btn btn-success">
-        <i class="fas fa-upload"></i> Upload New PDF
-    </a>
+            <i class="fas fa-upload"></i> Upload New PDF
+        </a>
+        @endif
 
         <!-- Table for Uploaded Files -->
         <div class="table-responsive mt-4">

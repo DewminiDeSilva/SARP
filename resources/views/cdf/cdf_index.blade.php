@@ -539,18 +539,21 @@ td {
     </br>
 
 
- 
+
 
         <!--serch and csv files-->
 
         <div class="d-flex justify-content-between mb-3">
+        @if(auth()->user()->hasPermission('cdf', 'add'))
         <a href="{{ route('cdf.create') }}" class="btn submitbtton"> + Add New </button>
+        @endif
                     <!--<a href="{{route('cdf.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add</a>-->
                     <a href="{{route('downloadcdf.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <!-- CSV Upload Form -->
+                    @if(auth()->user()->hasPermission('cdf', 'upload_csv'))
                     <form action="{{ route('cdf.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
                         @csrf
                         <div class="form-group mr-2">
@@ -558,6 +561,7 @@ td {
                         </div>
                         <button type="submit" class="btn btn-success">Upload CSV</button>
                     </form>
+                    @endif
                     <!-- Search form -->
                     <form method="GET" action="{{ route('searchCDF') }}" class="form-inline">
                         <div class="input-group">
@@ -638,8 +642,12 @@ td {
 
                                 <td>
                                 <div class="add-member-buttons">
+                                @if(auth()->user()->hasPermission('cdfmembers', 'add'))
                                 <a href="{{ route('cdfmembers.create', ['cdf_name' => $cdf->cdf_name, 'cdf_address' => $cdf->cdf_address]) }}" class="btn btn-primary btn-sm button-a addmember" type="button">Add Members</a>
+                                @endif
+                                @if(auth()->user()->hasPermission('cdfmembers', 'view'))
                                 <a href="{{ route('cdf.showMembers', ['cdf_name' => $cdf->cdf_name, 'cdf_address' => $cdf->cdf_address]) }}" class="btn btn-sm btn-info addmember">View members</a>
+                                @endif
                                 </div>
                                 </td>
                                 <td>
@@ -648,11 +656,12 @@ td {
                                     {{--<a href="{{ route('cdf.show', $cdf->id) }}" class="btn btn-danger button view-button" title="View">
                                         <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                     </a>--}}
-
+                                    @if(auth()->user()->hasPermission('cdf', 'edit'))
                                     <a href="/cdf/{{ $cdf->id }}/edit" class="btn btn-danger edit-button" title="Edit">
                                         <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                     </a>
-
+                                    @endif
+                                    @if(auth()->user()->hasPermission('cdf', 'delete'))
                                     <form action="/cdf/{{ $cdf->id }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
@@ -660,6 +669,7 @@ td {
                                             <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                         </button>
                                     </form>
+                                    @endif
                     </div>
                                 </td>
                             </tr>
