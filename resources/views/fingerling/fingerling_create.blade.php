@@ -97,6 +97,12 @@
         .btn-back:hover img {
             transform: translateX(-50px);
         }
+
+        .is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+        }
+
     </style>
 </head>
 <body>
@@ -362,7 +368,30 @@
     const frm = $('form.form-horizontal');
 
     frm.on('submit', function(e){
-      e.preventDefault();
+  e.preventDefault();
+
+  // Check all variety inputs
+  let valid = true;
+  let varietyFields = $('input[name*="[variety]"]');
+  varietyFields.each(function () {
+    const value = $(this).val().trim();
+    if (!/^[a-zA-Z\s]+$/.test(value)) {
+      valid = false;
+      $(this).addClass('is-invalid');
+    } else {
+      $(this).removeClass('is-invalid');
+    }
+  });
+
+  if (!valid) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Validation Error',
+      text: 'Variety fields must only contain letters.',
+    }); 
+    return;
+  }
+
       Swal.fire({
         title: 'Are you sure?',
         text: "Do you want to submit these fingerling details?",
@@ -382,6 +411,11 @@
   });
 </script>
 
+<script>
+  $(document).on('input', 'input[name*="[variety]"]', function () {
+    this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+  });
+</script>
 
 </body>
 </html>

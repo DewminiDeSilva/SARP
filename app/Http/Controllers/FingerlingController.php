@@ -125,12 +125,12 @@ public function index(Request $request)
              'tank_id'                              => 'required|exists:tank_rehabilation,id',
              'stocking_details'                     => 'nullable|array',
              'stocking_details.*.stocking_date'     => 'nullable|date',
-             'stocking_details.*.variety'           => 'nullable|string',
+             'stocking_details.*.variety' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
              'stocking_details.*.stock_number'      => 'nullable|numeric',    // changed to numeric
      
              'harvest_details'                      => 'nullable|array',
              'harvest_details.*.harvest_date'       => 'nullable|date',
-             'harvest_details.*.variety'            => 'nullable|string',
+             'harvest_details.*.variety' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
              'harvest_details.*.variety_harvest_kg' => 'nullable|numeric',
      
              'community_distribution_kg'            => 'nullable|numeric',
@@ -221,12 +221,12 @@ public function index(Request $request)
     $request->validate([
         'stocking_details'                     => 'nullable|array',
         'stocking_details.*.stocking_date'     => 'nullable|date',
-        'stocking_details.*.variety'           => 'nullable|string',
+        'stocking_details.*.variety' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
         'stocking_details.*.stock_number'      => 'nullable|numeric',   // changed to numeric
 
         'harvest_details'                      => 'nullable|array',
         'harvest_details.*.harvest_date'       => 'nullable|date',
-        'harvest_details.*.variety'            => 'nullable|string',
+        'harvest_details.*.variety' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
         'harvest_details.*.variety_harvest_kg' => 'nullable|numeric',
 
         'community_distribution_kg'            => 'nullable|numeric',
