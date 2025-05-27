@@ -30,19 +30,34 @@ class EOIController extends Controller
       
     public function store(Request $request)
 {
-    $request->validate([
-        'organization_name' => 'required|string',
-        'contact_person' => 'required|string',
-        'mobile_phone' => 'required|string',
-        'market_problem' => 'required|string',
-        'business_title' => 'required|string',
-        'business_objectives' => 'required|string',
-        'project_justification' => 'required|string',
-        'project_benefits' => 'required|string',
-        'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
-        'category' => 'nullable|string',
-    ]);
+   $request->validate([
+    'organization_name' => 'nullable|string|max:255',
+    'registration_details' => 'nullable|string|max:255',
+    'contact_person' => 'nullable|string|max:255',
+    'address' => 'nullable|string',
+    'office_phone' => 'nullable|string|max:20',
+    'mobile_phone' => 'nullable|string|max:20',
+    'email' => 'nullable|email|max:255',
+    'market_problem' => 'nullable|string',
+    'business_title' => 'nullable|string|max:255',
+    'business_objectives' => 'nullable|string',
+    'background_info' => 'nullable|string',
+    'project_justification' => 'nullable|string',
+    'project_benefits' => 'nullable|string',
 
+    'risks' => 'nullable|array',
+    'mitigations' => 'nullable|array',
+    'investment_breakdown' => 'nullable|array',
+    'project_coverage' => 'nullable|array',
+    'expected_outputs' => 'nullable|array',
+    'expected_outcomes' => 'nullable|array',
+    'funding_source' => 'nullable|array',
+    'assistance_required' => 'nullable|array',
+
+    'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+    'category' => 'nullable|string',
+    'status' => 'nullable|string',
+]);
     $expression = new EOI();
     $expression->organization_name = $request->organization_name;
     $expression->registration_details = $request->registration_details;
@@ -105,30 +120,33 @@ class EOIController extends Controller
     public function update(Request $request, $id)
 {
     $request->validate([
-        'organization_name' => 'required|string|max:255',
-        'contact_person' => 'required|string|max:255',
-        'address' => 'required|string',
-        'mobile_phone' => 'required|string|max:20',
-        'market_problem' => 'required|string',
-        'business_title' => 'required|string|max:255',
-        'business_objectives' => 'required|string',
-        'project_justification' => 'required|string',
-        'project_benefits' => 'required|string',
-        'background_info' => 'nullable|string',
+    'organization_name' => 'nullable|string|max:255',
+    'registration_details' => 'nullable|string|max:255',
+    'contact_person' => 'nullable|string|max:255',
+    'address' => 'nullable|string',
+    'office_phone' => 'nullable|string|max:20',
+    'mobile_phone' => 'nullable|string|max:20',
+    'email' => 'nullable|email|max:255',
+    'market_problem' => 'nullable|string',
+    'business_title' => 'nullable|string|max:255',
+    'business_objectives' => 'nullable|string',
+    'background_info' => 'nullable|string',
+    'project_justification' => 'nullable|string',
+    'project_benefits' => 'nullable|string',
 
-        'risks' => 'nullable|array',
-        'mitigations' => 'nullable|array',
-        'investment_breakdown' => 'nullable|array',
-        'project_coverage' => 'nullable|array',
-        'expected_outputs' => 'nullable|array',
-        'expected_outcomes' => 'nullable|array',
-        'funding_source' => 'nullable|array',
-        'assistance_required' => 'nullable|array',
+    'risks' => 'nullable|array',
+    'mitigations' => 'nullable|array',
+    'investment_breakdown' => 'nullable|array',
+    'project_coverage' => 'nullable|array',
+    'expected_outputs' => 'nullable|array',
+    'expected_outcomes' => 'nullable|array',
+    'funding_source' => 'nullable|array',
+    'assistance_required' => 'nullable|array',
 
-        'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
-        'category' => 'nullable|string',
-    ]);
-
+    'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+    'category' => 'nullable|string',
+    'status' => 'nullable|string',
+]);
     $expression = EOI::findOrFail($id);
     $expression->organization_name = $request->organization_name;
     $expression->registration_details = $request->registration_details;
@@ -193,6 +211,11 @@ class EOIController extends Controller
     $expression->save();
 
     return redirect()->back()->with('success', 'Status updated successfully.');
+}
+public function evaluationCompleted()
+{
+    $completedExpressions = EOI::where('status', 'Evaluation Completed')->paginate(10);
+    return view('eoi.evaluation_completed_index', compact('completedExpressions'));
 }
 
 }
