@@ -889,11 +889,68 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
     Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])->name('fingerling.show');
 
     // Infrastructure
-    Route::resource('infrastructure', InfrastructureController::class);
-    Route::resource('infrastructure', InfrastructureController::class);
-    Route::get('reportInfrastructureCsv', [InfrastructureController::class, 'reportCsv'])->name('downloadInfrastructure.csv');
-    Route::post('/infrastructure/upload_csv', [InfrastructureController::class, 'uploadCsv'])->name('infrastructure.upload_csv');
-    Route::get('searchInfrastructure', [InfrastructureController::class, 'search'])->name('searchInfrastructure');
+    // Route::resource('infrastructure', InfrastructureController::class);
+    // Route::resource('infrastructure', InfrastructureController::class);
+    // Route::get('reportInfrastructureCsv', [InfrastructureController::class, 'reportCsv'])->name('downloadInfrastructure.csv');
+    // Route::post('/infrastructure/upload_csv', [InfrastructureController::class, 'uploadCsv'])->name('infrastructure.upload_csv');
+    // Route::get('searchInfrastructure', [InfrastructureController::class, 'search'])->name('searchInfrastructure');
+
+    // Infrastructure
+    Route::prefix('infrastructure')->middleware('auth')->group(function () {
+
+    // View all infrastructures
+    Route::get('/', [InfrastructureController::class, 'index'])
+        ->name('infrastructure.index')
+        ->middleware('check.permission:infrastructure,view');
+
+    // Create form
+    Route::get('/create', [InfrastructureController::class, 'create'])
+        ->name('infrastructure.create')
+        ->middleware('check.permission:infrastructure,add');
+
+    // Store infrastructure
+    Route::post('/', [InfrastructureController::class, 'store'])
+        ->name('infrastructure.store')
+        ->middleware('check.permission:infrastructure,add');
+
+    // Show details
+    Route::get('/{infrastructure}', [InfrastructureController::class, 'show'])
+        ->name('infrastructure.show')
+        ->middleware('check.permission:infrastructure,view');
+
+    // Edit form
+    Route::get('/{infrastructure}/edit', [InfrastructureController::class, 'edit'])
+        ->name('infrastructure.edit')
+        ->middleware('check.permission:infrastructure,edit');
+
+    // Update infrastructure
+    Route::put('/{infrastructure}', [InfrastructureController::class, 'update'])
+        ->name('infrastructure.update')
+        ->middleware('check.permission:infrastructure,edit');
+
+    // Delete infrastructure
+    Route::delete('/{infrastructure}', [InfrastructureController::class, 'destroy'])
+        ->name('infrastructure.destroy')
+        ->middleware('check.permission:infrastructure,delete');
+
+    // Upload CSV
+    Route::post('/upload_csv', [InfrastructureController::class, 'uploadCsv'])
+        ->name('infrastructure.upload_csv')
+        ->middleware('check.permission:infrastructure,upload_csv');
+});
+
+// Outside prefix
+Route::middleware(['auth', 'check.permission:infrastructure,view'])->group(function () {
+    // CSV report download
+    Route::get('reportInfrastructureCsv', [InfrastructureController::class, 'reportCsv'])
+        ->name('downloadInfrastructure.csv');
+
+    // Search
+    Route::get('searchInfrastructure', [InfrastructureController::class, 'search'])
+        ->name('searchInfrastructure');
+});
+
+
 
     // Gallery
     Route::resource('gallery', GalleryController::class);
@@ -946,23 +1003,153 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
     //ASC controller
 
-    Route::get('/asc', [ASCController::class, 'index']);
-    Route::resource('asc_registration', AscRegistrationController::class);
-    Route::get('searchASC', [AscRegistrationController::class, 'search'])->name('searchASC');
-    Route::get('/downloadAscCsv', [AscRegistrationController::class, 'reportCsv'])->name('downloadAscCsv');
-    Route::post('/uploadAscCsv', [AscRegistrationController::class, 'uploadCsv'])->name('uploadAscCsv');
+    // Route::get('/asc', [ASCController::class, 'index']);
+    // Route::resource('asc_registration', AscRegistrationController::class);
+    // Route::get('searchASC', [AscRegistrationController::class, 'search'])->name('searchASC');
+    // Route::get('/downloadAscCsv', [AscRegistrationController::class, 'reportCsv'])->name('downloadAscCsv');
+    // Route::post('/uploadAscCsv', [AscRegistrationController::class, 'uploadCsv'])->name('uploadAscCsv');
+
+    //ASC
+
+    // ASC Management Page (dashboard)
+Route::get('/asc', [ASCController::class, 'index'])
+    ->name('asc.index')
+    ->middleware('auth', 'check.permission:asc_registration,view');
+
+// ASC Registration CRUD + CSV with permissions
+Route::prefix('asc_registration')->middleware('auth')->group(function () {
+    Route::get('/', [AscRegistrationController::class, 'index'])
+        ->name('asc_registration.index')
+        ->middleware('check.permission:asc_registration,view');
+
+    Route::get('/create', [AscRegistrationController::class, 'create'])
+        ->name('asc_registration.create')
+        ->middleware('check.permission:asc_registration,add');
+
+    Route::post('/', [AscRegistrationController::class, 'store'])
+        ->name('asc_registration.store')
+        ->middleware('check.permission:asc_registration,add');
+
+    Route::get('/{asc_registration}', [AscRegistrationController::class, 'show'])
+        ->name('asc_registration.show')
+        ->middleware('check.permission:asc_registration,view');
+
+    Route::get('/{asc_registration}/edit', [AscRegistrationController::class, 'edit'])
+        ->name('asc_registration.edit')
+        ->middleware('check.permission:asc_registration,edit');
+
+    Route::put('/{asc_registration}', [AscRegistrationController::class, 'update'])
+        ->name('asc_registration.update')
+        ->middleware('check.permission:asc_registration,edit');
+
+    Route::delete('/{asc_registration}', [AscRegistrationController::class, 'destroy'])
+        ->name('asc_registration.destroy')
+        ->middleware('check.permission:asc_registration,delete');
+
+    Route::post('/upload', [AscRegistrationController::class, 'uploadCsv'])
+        ->name('asc_registration.upload_csv')
+        ->middleware('check.permission:asc_registration,upload_csv');
+});
+
+// Outside prefix routes with view permission
+Route::middleware('auth')->group(function () {
+    Route::get('/downloadAscCsv', [AscRegistrationController::class, 'reportCsv'])
+        ->name('downloadAscCsv')
+        ->middleware('check.permission:asc_registration,view');
+
+    Route::get('/searchASC', [AscRegistrationController::class, 'search'])
+        ->name('searchASC')
+        ->middleware('check.permission:asc_registration,view');
+});
+
 
     //Grievance controller
 
-    Route::resource('grievances', GrievanceController::class);
-    Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])->name('grievances.report.csv');
-    Route::post('grievances/upload_csv', [GrievanceController::class, 'uploadCsv'])->name('grievances.upload_csv');
-    Route::get('/searchGrievances', [GrievanceController::class, 'search'])->name('searchGrievances');
+    // Route::resource('grievances', GrievanceController::class);
+    // Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])->name('grievances.report.csv');
+    // Route::post('grievances/upload_csv', [GrievanceController::class, 'uploadCsv'])->name('grievances.upload_csv');
+    // Route::get('/searchGrievances', [GrievanceController::class, 'search'])->name('searchGrievances');
 
-    // Officer routes
-    Route::get('/grievances/{grievance}/officer/create', [OfficerController::class, 'create'])->name('officer.create');
-    Route::post('/grievances/{grievance}/officer', [OfficerController::class, 'store'])->name('officer.store');
-    Route::get('/grievances/{grievance}/officers', [OfficerController::class, 'showOfficers'])->name('grievance.officers');
+    // // Officer routes
+    // Route::get('/grievances/{grievance}/officer/create', [OfficerController::class, 'create'])->name('officer.create');
+    // Route::post('/grievances/{grievance}/officer', [OfficerController::class, 'store'])->name('officer.store');
+    // Route::get('/grievances/{grievance}/officers', [OfficerController::class, 'showOfficers'])->name('grievance.officers');
+
+    // Grievance
+
+    Route::prefix('grievances')->middleware('auth')->group(function () {
+
+    // Index (View all)
+    Route::get('/', [GrievanceController::class, 'index'])
+        ->name('grievances.index')
+        ->middleware('check.permission:grievances,view');
+
+    // Create form
+    Route::get('/create', [GrievanceController::class, 'create'])
+        ->name('grievances.create')
+        ->middleware('check.permission:grievances,add');
+
+    // Store new record
+    Route::post('/', [GrievanceController::class, 'store'])
+        ->name('grievances.store')
+        ->middleware('check.permission:grievances,add');
+
+    // Show one record
+    Route::get('/{grievance}', [GrievanceController::class, 'show'])
+        ->name('grievances.show')
+        ->middleware('check.permission:grievances,view');
+
+    // Edit form
+    Route::get('/{grievance}/edit', [GrievanceController::class, 'edit'])
+        ->name('grievances.edit')
+        ->middleware('check.permission:grievances,edit');
+
+    // Update
+    Route::put('/{grievance}', [GrievanceController::class, 'update'])
+        ->name('grievances.update')
+        ->middleware('check.permission:grievances,edit');
+
+    // Delete
+    Route::delete('/{grievance}', [GrievanceController::class, 'destroy'])
+        ->name('grievances.destroy')
+        ->middleware('check.permission:grievances,delete');
+
+    // CSV Upload
+    Route::post('/upload_csv', [GrievanceController::class, 'uploadCsv'])
+        ->name('grievances.upload_csv')
+        ->middleware('check.permission:grievances,upload_csv');
+});
+
+// Outside prefix - CSV Export & Search
+Route::middleware('auth')->group(function () {
+    Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])
+        ->name('grievances.report.csv')
+        ->middleware('check.permission:grievances,view');
+
+    Route::get('/searchGrievances', [GrievanceController::class, 'search'])
+        ->name('searchGrievances')
+        ->middleware('check.permission:grievances,view');
+});
+
+
+Route::prefix('grievances/{grievance}')->middleware('auth')->group(function () {
+
+    // Officer create form
+    Route::get('/officer/create', [OfficerController::class, 'create'])
+        ->name('officer.create')
+        ->middleware('check.permission:officer,add');
+
+    // Store officer
+    Route::post('/officer', [OfficerController::class, 'store'])
+        ->name('officer.store')
+        ->middleware('check.permission:officer,add');
+
+    // Show officers assigned to grievance
+    Route::get('/officers', [OfficerController::class, 'showOfficers'])
+        ->name('grievance.officers')
+        ->middleware('check.permission:officer,view');
+});
+
 
 
     // // Vegitable Routes

@@ -405,9 +405,11 @@
 
         <!-- Generate and Upload CSV, Add ASC Button -->
         <div class="top-section">
+            @if(auth()->user()->hasPermission('asc_registration', 'add'))
             <div class="top-left">
                 <a href="{{ route('asc_registration.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add ASC</a>
             </div>
+            @endif
             <div class="top-right">
                 <form method="GET" action="{{ route('searchASC') }}" class="form-inline">
                     <div class="input-group">
@@ -422,13 +424,16 @@
 
         <div class="bottom-left">
             <a href="{{ route('downloadAscCsv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
-            <form action="{{ route('uploadAscCsv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
+            @if(auth()->user()->hasPermission('asc_registration', 'upload_csv'))
+            <form action="{{ route('asc_registration.upload_csv') }}" method="POST" enctype="multipart/form-data">
+
                 @csrf
                 <div class="form-group mr-2">
                     <input type="file" name="csv_file" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-success">Upload CSV</button>
             </form>
+            @endif
         </div>
 
 
@@ -463,9 +468,13 @@
                         <td>{{ $ascRegistration->contact_number }}</td>
                         <td>{{ $ascRegistration->services_available }}</td>
                         <td class="button-container">
+                            @if(auth()->user()->hasPermission('asc_registration', 'edit'))
                             <a href="/asc_registration/{{ $ascRegistration->id }}/edit" class="btn btn-danger edit-button" title="Edit">
                                 <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                             </a>
+                            @endif
+
+                            @if(auth()->user()->hasPermission('asc_registration', 'delete'))
                             <form action="/asc_registration/{{ $ascRegistration->id }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -473,6 +482,7 @@
                                     <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
