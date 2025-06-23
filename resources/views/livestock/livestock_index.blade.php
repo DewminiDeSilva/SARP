@@ -263,9 +263,9 @@
                     </td>
 
                     <td data-label="Actions">
-                        <a href="{{ route('livestocks.edit', ['beneficiary_id' => $beneficiary->id, 'livestock_id' => $livestock->id]) }}"
+                        <a href="{{ route('livestocks.edit', ['beneficiary_id' => $beneficiary->id, 'livestock' => $livestock->id]) }}"
                             class="btn btn-warning">Edit</a>
-                         
+
                         <form action="{{ route('livestocks.destroy', ['beneficiary_id' => $beneficiary->id, 'livestock_id' => $livestock->id]) }}"
                               method="POST" style="display:inline;">
                             @csrf
