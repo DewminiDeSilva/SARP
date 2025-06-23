@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <style>
         .frame {
             display: flex;
@@ -201,7 +201,7 @@
             <button id="sidebarToggle" class="btn btn-secondary mr-2">
                 <i class="fas fa-bars"></i>
             </button>
-           
+
         </div>
 
         <div class="container-fluid">
@@ -210,7 +210,7 @@
                 <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
             </div>
 
-            
+
 
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -236,23 +236,31 @@
     <td>{{ Str::limit($expression->market_problem, 50) }}</td>
     <td>{{ $expression->business_title }}</td>
 
-    <!-- ✅ Status Column -->
-    <td>
-        <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
-            @csrf
-            @method('PATCH')
-            <select name="status" onchange="this.form.submit()" class="form-control form-control-sm">
-                <option value="Evaluation Completed" {{ $expression->status == 'Evaluation Completed' ? 'selected' : '' }}>Evaluation Completed</option>
-                <option value="Internal Review Committee Approved" {{ $expression->status == 'Internal Review Committee Approved' ? 'selected' : '' }}>Internal Review Committee Approved</option>
-                <option value="Business Proposal Submitted" {{ $expression->status == 'Business Proposal Submitted' ? 'selected' : '' }}>Business Proposal Submitted</option>
-                <option value="BPEC Evaluation" {{ $expression->status == 'BPEC Evaluation' ? 'selected' : '' }}>BPEC Evaluation</option>
-                <option value="BPEC Approved" {{ $expression->status == 'BPEC Approved' ? 'selected' : '' }}>BPEC Approved</option>
-                <option value="NSC Approved" {{ $expression->status == 'NSC Approved' ? 'selected' : '' }}>NSC Approved</option>
-                <option value="IFAD Approved" {{ $expression->status == 'IFAD Approved' ? 'selected' : '' }}>IFAD Approved</option>
-                <option value="Agreement Signed" {{ $expression->status == 'Agreement Signed' ? 'selected' : '' }}>Agreement Signed</option>
-            </select>
-        </form>
-    </td>
+<!-- ✅ Status Column (Only This Affected by 'expressions.edit' Permission) -->
+@php
+    $canEditStatus = auth()->user()->hasPermission('expressions', 'edit');
+@endphp
+
+<td>
+    <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <select name="status"
+                onchange="this.form.submit()"
+                class="form-control form-control-sm"
+                @if (!$canEditStatus) disabled @endif>
+            <option value="Evaluation Completed" {{ $expression->status == 'Evaluation Completed' ? 'selected' : '' }}>Evaluation Completed</option>
+            <option value="Internal Review Committee Approved" {{ $expression->status == 'Internal Review Committee Approved' ? 'selected' : '' }}>Internal Review Committee Approved</option>
+            <option value="Business Proposal Submitted" {{ $expression->status == 'Business Proposal Submitted' ? 'selected' : '' }}>Business Proposal Submitted</option>
+            <option value="BPEC Evaluation" {{ $expression->status == 'BPEC Evaluation' ? 'selected' : '' }}>BPEC Evaluation</option>
+            <option value="BPEC Approved" {{ $expression->status == 'BPEC Approved' ? 'selected' : '' }}>BPEC Approved</option>
+            <option value="NSC Approved" {{ $expression->status == 'NSC Approved' ? 'selected' : '' }}>NSC Approved</option>
+            <option value="IFAD Approved" {{ $expression->status == 'IFAD Approved' ? 'selected' : '' }}>IFAD Approved</option>
+            <option value="Agreement Signed" {{ $expression->status == 'Agreement Signed' ? 'selected' : '' }}>Agreement Signed</option>
+        </select>
+    </form>
+</td>
+
 
     <!-- ✅ Action Buttons -->
     <td>
@@ -273,7 +281,7 @@
         </div>
     </td>
 </tr>
-                
+
                         @endforeach
                     </tbody>
                 </table>
