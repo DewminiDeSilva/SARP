@@ -263,14 +263,17 @@
 
                     <td>
                         <!-- Edit button -->
+                         @if(auth()->user()->hasPermission('agriculture', 'edit'))
                         <a href="{{ route('agriculture.edit', $data->id) }}" class="btn btn-sm btn-warning">Edit</a>
-
+                        @endif
                         <!-- Delete form -->
+                        @if(auth()->user()->hasPermission('agriculture', 'delete'))
                         <form action="{{ route('agriculture.destroy', $data->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

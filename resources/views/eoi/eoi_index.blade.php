@@ -207,7 +207,9 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb-3">
                 <h2 style="color: green;">Expressions of Interest</h2>
+                @if(auth()->user()->hasPermission('expressions', 'add'))
                 <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
+                @endif
             </div>
 
 
@@ -236,7 +238,7 @@
     <td>{{ Str::limit($expression->market_problem, 50) }}</td>
     <td>{{ $expression->business_title }}</td>
 
-<!-- ✅ Status Column (Only This Affected by 'expressions.edit' Permission) -->
+<!-- Status Column (Only This Affected by 'expressions.edit' Permission) -->
 @php
     $canEditStatus = auth()->user()->hasPermission('expressions', 'edit');
 @endphp
@@ -265,12 +267,17 @@
     <!-- ✅ Action Buttons -->
     <td>
         <div class="action-buttons">
+            @if(auth()->user()->hasPermission('expressions', 'view'))
             <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
                 <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
             </a>
+            @endif
+            @if(auth()->user()->hasPermission('expressions', 'edit'))
             <a href="{{ route('expressions.edit', $expression->id) }}" class="btn btn-sm edit-button" title="Edit">
                 <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
             </a>
+            @endif
+            @if(auth()->user()->hasPermission('expressions', 'delete'))
             <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
@@ -278,6 +285,7 @@
                     <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                 </button>
             </form>
+            @endif
         </div>
     </td>
 </tr>

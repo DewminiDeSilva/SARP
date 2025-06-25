@@ -348,7 +348,7 @@
 
         <div class="container-fluid">
 
-          
+
 
             <!-- Success Message Popup -->
             @if(session('success'))
@@ -375,7 +375,7 @@
             </div>
 
             <form method="GET" action="{{ route('agriculture.index') }}" class="form-inline">
-            <input type="text" name="search" class="form-control form-control-sm" 
+            <input type="text" name="search" class="form-control form-control-sm"
             value="{{ request('search') }}" style="width: 250px;">
            <button type="submit" class="btn btn-success btn-sm ml-2">Search</button>
            @if(request('search'))
@@ -405,9 +405,16 @@
                                     <td>{{ $beneficiary->input3 }}</td>
                                     <td class="buttonline">
                                         <div class="button-group">
+                                            @if(auth()->user()->hasPermission('agriculture', 'view'))
                                             <a href="{{ route('agriculture.showByBeneficiary', $beneficiary->id) }}" class="btn btn-info btn-sm">View Details</a>
+                                            @endif
+                                            @if(auth()->user()->hasPermission('agriculture', 'add'))
                                             <a href="{{ route('agriculture.create', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-info btn-sm">Add Agriculture Data</a>
+                                            @endif
+
+                                            @if(auth()->user()->hasPermission('agriculture', 'view'))
                                             <a href="{{ route('crops.by.gn.division', ['gn_division_id' => $beneficiary->gn_division_name]) }}" class="btn btn-info btn-sm">View Crops</a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

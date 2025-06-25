@@ -83,6 +83,10 @@ li:hover {
 
 
         <ul>
+        @if(auth()->user() && auth()->user()->role == 'admin')
+            <li><a href="/admin/users" style="color: #FFFFFF">User Management</a></li>
+        @endif
+
             <li><a href="/dashboard" style="color: #FFFFFF">Dashboard</a></li>
             <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
             <li><a href="/staff_profile" style="color: #FFFFFF">Staff Profile</a></li>
@@ -157,14 +161,14 @@ li:hover {
                         <ul class="nested">
                             <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
                             <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
-                        
+
                         </ul>
                     </li>
 
                     <li class="submenu">
                         <a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a>
                         <ul class="nested">
-                           
+
                             <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a></li>
                         </ul>
                     </li>
@@ -175,16 +179,16 @@ li:hover {
                 <a href="#" style="color: #FFFFFF">4p Agri Business Development Projects</a>
                 <ul class="nested">
                     <li href="/expressions"><a href="/expressions" style="color: #FFFFFF">Expression Of Interest (EOI)</a></li>
-                    
+
                     <li class="submenu">
                         <a href="#" style="color: #FFFFFF">Establish 4p Projects</a>
                         <ul class="nested">
                             <li href=""><a href="" style="color: #FFFFFF">Registration of 4P Project</a></li>
-                        
+
                         </ul>
                     </li>
 
-        
+
                 </ul>
 
             </li>
@@ -229,8 +233,8 @@ li:hover {
                 </ul>
 
             </li>
-             
-            
+
+
 
 
         </ul>

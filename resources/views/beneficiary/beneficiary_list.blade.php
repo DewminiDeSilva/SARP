@@ -366,8 +366,12 @@
                                 <td>{{ $beneficiary->production_focus ?? 'N/A' }}</td>
                                 <td class="btninline">
                                     @if($beneficiary->id)
+                                    @if(auth()->user()->hasPermission('livestocks', 'add'))
                                         <a href="{{ route('livestocks.create', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-green btn-sm">Add Livestock</a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('livestocks', 'view'))
                                         <a href="{{ route('livestocks.list', ['beneficiary_id' => $beneficiary->id]) }}" class="btn btn-blue btn-sm">View Livestock</a>
+                                    @endif
                                     @else
                                         <span class="text-muted">No ID available</span>
                                     @endif

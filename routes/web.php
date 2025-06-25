@@ -126,11 +126,11 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/create', [BeneficiaryController::class, 'create'])
             ->name('create')
-            ->middleware('check.permission:beneficiary,edit');
+            ->middleware('check.permission:beneficiary,add');
 
         Route::post('/', [BeneficiaryController::class, 'store'])
             ->name('store')
-            ->middleware('check.permission:beneficiary,edit');
+            ->middleware('check.permission:beneficiary,add');
 
         Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])
             ->name('show')
@@ -192,7 +192,7 @@ Route::middleware(['auth'])->group(function () {
         // Custom create route with beneficiary ID — can be considered 'update' permission
         Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])
         ->name('family.create.by.beneficiary')
-        ->middleware(['auth', 'check.permission:family,edit']);
+        ->middleware(['auth', 'check.permission:family,add']);
 
 
     });
