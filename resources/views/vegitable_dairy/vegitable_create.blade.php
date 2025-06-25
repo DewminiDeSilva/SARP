@@ -270,7 +270,7 @@
 }
 
 </style>
-    
+
 </head>
 <body>
 @include('dashboard.header')
@@ -281,6 +281,7 @@
     </div>
 
     <div class="right-column">
+        
     <div class="d-flex align-items-center mb-3">
 
 <!-- Sidebar Toggle Button -->

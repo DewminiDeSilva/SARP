@@ -26,10 +26,11 @@ class DairyController extends Controller
             'dairy_name' => 'required|string|max:255',
         ]);
 
-        $dairy = Dairy::create($request->all());
+        Dairy::create($request->all());
 
-        return redirect('/dairy')->with('success', 'Dairy registered successfully.');
+        return redirect()->route('livestock')->with('success', 'Dairy registered successfully.');
     }
+
 
     public function show($id)
 {

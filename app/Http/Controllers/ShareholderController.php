@@ -54,7 +54,9 @@ class ShareholderController extends Controller
         $shareholder = new Shareholder($request->all());
         $agro->shareholders()->save($shareholder);
 
-        return redirect()->route('agro.index')->with('success', 'Shareholder added successfully.');
+        return redirect()->route('shareholder.view', ['agroId' => $agroId])
+                 ->with('success', 'Shareholder added successfully.');
+
     }
 
     // Method to show the shareholders of a specific agro enterprise

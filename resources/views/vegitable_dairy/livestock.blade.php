@@ -135,7 +135,7 @@
 
     <div class="right-column">
 
-    
+
 <div class="d-flex align-items-center mb-3">
 
 <!-- Sidebar Toggle Button -->
@@ -152,18 +152,29 @@
 
         <!-- Button Grid -->
         <div class="button-grid">
+            @if(auth()->user()->hasPermission('dairy', 'add'))
             <button onclick="window.location.href='{{ route('dairy.create') }}';" class="custom-button" style="background-image: url('assets/images/dairy.png'); font-size: 2rem; font-weight: bold;">
                 Dairy
             </button>
+            @endif
+
+            @if(auth()->user()->hasPermission('poultary', 'add'))
             <button onclick="window.location.href='{{ route('poultary.create') }}';" class="custom-button" style="background-image: url('assets/images/poultary.jpg'); font-size: 2rem; font-weight: bold;">
                 Poultary
             </button>
+            @endif
+
+            @if(auth()->user()->hasPermission('goat', 'add'))
             <button onclick="window.location.href='{{ route('goat.create') }}';" class="custom-button" style="background-image: url('assets/images/goat.jpg'); font-size: 2rem; font-weight: bold;">
                 Goat Rearing
             </button>
+            @endif
+
+            @if(auth()->user()->hasPermission('aquaculture', 'add'))
             <button onclick="window.location.href='{{ route('aquaculture.create') }}';" class="custom-button" style="background-image: url('assets/images/aquaculture.jpg'); font-size: 2rem; font-weight: bold;">
                 Aqua Culture
             </button>
+            @endif
         </div>
         <div class="container mt-5">
     <h1 class="text-center">Livestock Data</h1>

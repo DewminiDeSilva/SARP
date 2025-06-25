@@ -13,6 +13,7 @@
      <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+
     <style>
         /* Custom styles for your application */
         .entries-container {
@@ -131,6 +132,24 @@
     </div>
 
     <div class="right-column">
+        @if(session('success'))
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-success">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ session('success') }}
+            </div>
+            </div>
+        </div>
+        </div>
+        @endif
+
     <div class="d-flex align-items-center mb-3">
 
 <!-- Sidebar Toggle Button -->
@@ -147,18 +166,26 @@
 
         <!-- Button Grid -->
         <div class="button-grid">
+            @if(auth()->user()->hasPermission('vegitable', 'add'))
             <button onclick="window.location.href='{{ route('vegitable.create') }}';" class="custom-button" style="background-image: url('assets/images/vegetables.jpg'); font-size: 2rem; font-weight: bold;">
                 Vegitables
             </button>
+            @endif
+            @if(auth()->user()->hasPermission('fruit', 'add'))
             <button onclick="window.location.href='{{ route('fruit.create') }}';" class="custom-button" style="background-image: url('assets/images/fruits.png'); font-size: 2rem; font-weight: bold;">
                 Fruits
             </button>
+            @endif
+            @if(auth()->user()->hasPermission('homegarden', 'add'))
             <button onclick="window.location.href='{{ route('homegarden.create') }}';" class="custom-button" style="background-image: url('assets/images/homegarden.jpeg'); font-size: 2rem; font-weight: bold;">
                 Home Garden
             </button>
+            @endif
+            @if(auth()->user()->hasPermission('other_crops', 'add'))
             <button class="custom-button" onclick="window.location.href='{{ route('other_crops.create') }}';" style="background-image: url('assets/images/others.jpg'); font-size: 2rem; font-weight: bold;">
             Cereals/Legumes
             </button>
+            @endif
         </div>
 
 
@@ -291,5 +318,21 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function () {
+        @if(session('success'))
+            $('#successModal').modal('show');
+
+            // Auto-close the modal after 4 seconds
+            setTimeout(function () {
+                $('#successModal').modal('hide');
+            }, 4000);
+        @endif
+    });
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+
 </body>
 </html>

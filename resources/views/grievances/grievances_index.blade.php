@@ -281,11 +281,14 @@
 
 
             <div class="d-flex justify-content-between mb-3">
+                @if(auth()->user()->hasPermission('grievances', 'add'))
                 <a href="{{ route('grievances.create') }}" class="btn btn-success">Add New Grievance</a>
+                @endif
                 <a href="{{ route('grievances.report.csv') }}" class="btn btn-primary">Generate CSV Report</a>
             </div>
 
             <!-- CSV Upload Form -->
+            @if(auth()->user()->hasPermission('grievances', 'upload_csv'))
             <form action="{{ route('grievances.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline mb-3">
                 @csrf
                 <div class="form-group mr-2">
@@ -293,6 +296,7 @@
                 </div>
                 <button type="submit" class="btn btn-success">Upload CSV</button>
             </form>
+            @endif
 
             <!-- Search Form -->
             <form method="GET" action="{{ route('searchGrievances') }}" class="form-inline mb-3">
@@ -359,9 +363,13 @@
                         <button class="btn btn-secondary" disabled>Complete</button>
                     @else
                         <!-- If not Completed, allow Action Taken -->
+                        @if(auth()->user()->hasPermission('officer', 'add'))
                         <a href="{{ route('officer.create', $grievance->id) }}" class="btn btn-primary mr-2">Action Taken</a>
+                        @endif
                     @endif
+                    @if(auth()->user()->hasPermission('officer', 'view'))
                     <a href="{{ route('grievance.officers', $grievance->id) }}" class="btn btn-success">View</a>
+                    @endif
                                     </div>
                                 </td>
                             </tr>

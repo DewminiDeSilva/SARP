@@ -21,15 +21,17 @@ class OtherCropController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'crop_name' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'crop_name' => 'required|string|max:255',
+    ]);
 
-        $crop = OtherCrop::create($request->all());
+    OtherCrop::create($request->all());
 
-        return redirect('/other_crops')->with('success', 'Crop registered successfully.');
-    }
+    // Redirect to agriculture dashboard instead of /other_crops
+    return redirect()->route('agri')->with('success', 'Crop registered successfully.');
+}
+
 
     public function show($id)
     {

@@ -528,6 +528,7 @@
 
               <!-- CSV Upload Form -->
               @if(auth()->user()->hasPermission('beneficiary', 'upload_csv'))
+
             <form action="{{ route('beneficiary.uploadCsv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
              @csrf
              <div class="form-group mr-2">
@@ -552,7 +553,7 @@
 
                     <div class="form-group">
                         <div class="d-flex justify-content-between">
-                        @if(auth()->user()->hasPermission('beneficiary', 'edit'))
+                        @if(auth()->user()->hasPermission('beneficiary', 'add'))
                       <a href="{{ route('beneficiary.create') }}" class="btn submitbtton"> + Add New </button>
                       @endif
                        <a href="{{route('download.csv')}}"  class="btn submitbtton">Generate CSV Report</a>
@@ -696,7 +697,7 @@
                             <td>{{ $beneficiary->training_details_description }}</td> -->
                             <td class="buttonline">
                                 <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-info btn-sm">View</a>
-                                @if(auth()->user()->hasPermission('family', 'edit'))
+                                @if(auth()->user()->hasPermission('family', 'add'))
                                 <a href="{{ route('family.create.by.beneficiary', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-primary btn-sm button-a">Add Members</a>
                                 @endif
 

@@ -444,19 +444,24 @@
             <div class="right-column">
                 <div class="container-fluid top-left">
                     <div class="d-flex justify-content-between mb-3">
+                        @if(auth()->user()->hasPermission('infrastructure', 'add'))
                         <a href="{{route('infrastructure.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Infrastructure</a>
+                        @endif
                         <a href="{{route('downloadInfrastructure.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <!-- CSV Upload Form -->
+                        @if(auth()->user()->hasPermission('infrastructure', 'upload_csv'))
                         <form action="{{ route('infrastructure.upload_csv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
+
                             @csrf
                             <div class="form-group mr-2">
                                 <input type="file" name="csv_file" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-success">Upload CSV</button>
                         </form>
+                        @endif
                         <!-- Search form -->
                         <form method="GET" action="{{ route('searchInfrastructure') }}" class="form-inline">
                             <div class="input-group">
@@ -521,13 +526,19 @@
                                         <td>{{ $infrastructure->status }}</td>
                                         <td>{{ $infrastructure->remarks }}</td>
                                         <td class="button-container">
+                                            @if(auth()->user()->hasPermission('infrastructure', 'view'))
                                             <a href="{{ route('infrastructure.show', $infrastructure->id) }}" class="btn btn-danger button view-button" title="View">
                                                 <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                             </a>
+                                            @endif
 
+                                            @if(auth()->user()->hasPermission('infrastructure', 'edit'))
                                             <a href="/infrastructure/{{ $infrastructure->id }}/edit" class="btn btn-danger edit-button" title="Edit">
                                                 <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
                                             </a>
+                                            @endif
+
+                                            @if(auth()->user()->hasPermission('infrastructure', 'delete'))
                                             <form action="/infrastructure/{{ $infrastructure->id }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
@@ -535,6 +546,7 @@
                                                     <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                                                 </button>
                                             </form>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -684,7 +696,7 @@
             </div>
 
         </div>
-        
+
 </div>
 </body>
 </html>

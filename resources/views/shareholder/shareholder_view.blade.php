@@ -271,9 +271,11 @@
 
                 </div>
 
+                @if(auth()->user()->hasPermission('shareholder', 'add'))
                 <div class="btn-container">
                     <a href="{{ route('shareholder.create', $agro->id) }}" class="btn btn-success">Add New Shareholder</a>
                 </div>
+                @endif
                 <!-- Executive Staff Section -->
                 <div class="col-md-12 text-center">
                     <h3 class="header-title" style="color: green;">Executive Staff</h3>

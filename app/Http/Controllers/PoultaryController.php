@@ -21,15 +21,16 @@ class PoultaryController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'poultary_name' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'poultary_name' => 'required|string|max:255',
+    ]);
 
-        $poultary = Poultary::create($request->all());
+    Poultary::create($request->all());
 
-        return redirect('/poultary')->with('success', 'Poultary registered successfully.');
-    }
+    return redirect()->route('livestock')->with('success', 'Poultry registered successfully.');
+}
+
 
     public function show($id)
 {

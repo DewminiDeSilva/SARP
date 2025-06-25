@@ -24,13 +24,11 @@
             </div>
         @endif
 
-        <form action="{{ route('livestocks.update', $livestock->id) }}" method="POST">
+        <form action="{{ route('livestocks.update', ['beneficiary_id' => $beneficiary_id, 'livestock' => $livestock->id]) }}" method="POST">
 
             @csrf
-            @method('PUT') <!-- Ensure method spoofing for PUT request -->
-        
-            @csrf
-            @method('PUT') <!-- Method spoofing for PUT request -->
+            @method('PUT')
+
 
             <!-- Livestock Type Field -->
             <div class="mb-3">

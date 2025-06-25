@@ -214,7 +214,9 @@
 
         <!-- Actions and Search Section -->
         <div class="d-flex justify-content-between mb-3">
+            @if(auth()->user()->hasPermission('bene_form', 'add'))
             <a href="{{ route('bene-form.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Beneficiary</a>
+            @endif
             <!-- <a href="" class="btn btn-primary" style="background-color: green; border-color: green;">Download CSV Report</a> -->
         </div>
 
@@ -243,11 +245,13 @@
                             <a href="{{ route('bene-form.show', $beneForm->id) }}">
                                 <button class="btn btn-success" style="height: 40px; width: 150px; font-size: 16px; background-color: #28a745; color: white;">View Details</button>
                             </a>
+                            @if(auth()->user()->hasPermission('bene_form', 'delete'))
                             <form action="{{ route('bene-form.destroy', $beneForm->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

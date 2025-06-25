@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <style>
         .frame {
             display: flex;
@@ -240,19 +240,25 @@
             <button id="sidebarToggle" class="btn btn-secondary mr-2">
                 <i class="fas fa-bars"></i>
             </button>
-           
+
         </div>
 
 
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb-3">
                 <h2 style="color: green;">Expressions of Interest</h2>
+<<<<<<< HEAD
                 <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Completed Evaluations</a>
             </div>
            
             <div class="mb-3">
            
             <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
+=======
+                @if(auth()->user()->hasPermission('expressions', 'add'))
+                <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
+                @endif
+>>>>>>> 082edc16197d236f6587164fdad4157ade96a531
             </div>
 
 
@@ -281,6 +287,7 @@
     <td>{{ Str::limit($expression->market_problem, 50) }}</td>
     <td>{{ $expression->business_title }}</td>
 
+<<<<<<< HEAD
     <!-- ✅ Status Column -->
     <!-- <td>
         <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
@@ -325,6 +332,30 @@
         @csrf
         @method('PATCH')
         <input type="hidden" name="status" id="status-input-{{ $expression->id }}">
+=======
+<!-- Status Column (Only This Affected by 'expressions.edit' Permission) -->
+@php
+    $canEditStatus = auth()->user()->hasPermission('expressions', 'edit');
+@endphp
+
+<td>
+    <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <select name="status"
+                onchange="this.form.submit()"
+                class="form-control form-control-sm"
+                @if (!$canEditStatus) disabled @endif>
+            <option value="Evaluation Completed" {{ $expression->status == 'Evaluation Completed' ? 'selected' : '' }}>Evaluation Completed</option>
+            <option value="Internal Review Committee Approved" {{ $expression->status == 'Internal Review Committee Approved' ? 'selected' : '' }}>Internal Review Committee Approved</option>
+            <option value="Business Proposal Submitted" {{ $expression->status == 'Business Proposal Submitted' ? 'selected' : '' }}>Business Proposal Submitted</option>
+            <option value="BPEC Evaluation" {{ $expression->status == 'BPEC Evaluation' ? 'selected' : '' }}>BPEC Evaluation</option>
+            <option value="BPEC Approved" {{ $expression->status == 'BPEC Approved' ? 'selected' : '' }}>BPEC Approved</option>
+            <option value="NSC Approved" {{ $expression->status == 'NSC Approved' ? 'selected' : '' }}>NSC Approved</option>
+            <option value="IFAD Approved" {{ $expression->status == 'IFAD Approved' ? 'selected' : '' }}>IFAD Approved</option>
+            <option value="Agreement Signed" {{ $expression->status == 'Agreement Signed' ? 'selected' : '' }}>Agreement Signed</option>
+        </select>
+>>>>>>> 082edc16197d236f6587164fdad4157ade96a531
     </form>
 </td>
 
@@ -332,12 +363,17 @@
     <!-- ✅ Action Buttons -->
     <td>
         <div class="action-buttons">
+            @if(auth()->user()->hasPermission('expressions', 'view'))
             <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
                 <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
             </a>
+            @endif
+            @if(auth()->user()->hasPermission('expressions', 'edit'))
             <a href="{{ route('expressions.edit', $expression->id) }}" class="btn btn-sm edit-button" title="Edit">
                 <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
             </a>
+            @endif
+            @if(auth()->user()->hasPermission('expressions', 'delete'))
             <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
@@ -345,10 +381,11 @@
                     <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                 </button>
             </form>
+            @endif
         </div>
     </td>
 </tr>
-                
+
                         @endforeach
                     </tbody>
                 </table>
