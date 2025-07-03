@@ -1934,11 +1934,11 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/create', [StaffProfileController::class, 'create'])
             ->name('staff_profile.create')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,add');
 
         Route::post('/store', [StaffProfileController::class, 'store'])
             ->name('staff_profile.store')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,add');
 
         Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])
             ->name('staff_profile.show')
