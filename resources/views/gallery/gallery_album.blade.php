@@ -221,22 +221,28 @@
 
         <!-- Create Folder -->
         <div class="row">
+            @if(auth()->user()->hasPermission('gallery', 'add'))
             <div class="col-md-3 mb-4">
                 <div class="new-folder-card" data-bs-toggle="modal" data-bs-target="#createFolderModal">
                     + New Folder
                 </div>
             </div>
+            @endif
 
             <!-- Folder Cards -->
             @foreach($folders as $folder)
                 <div class="col-md-3 mb-4">
                     <div class="folder-card">
+                        @if(auth()->user()->hasPermission('gallery', 'view'))
                         <a href="{{ route('gallery.folder', [$album, $folder->id]) }}" class="stretched-link">
                             <h5 class="folder-card-title">{{ $folder->folder_name }}</h5>
                         </a>
+                        @endif
 
                         <!-- Delete Button -->
+                         @if(auth()->user()->hasPermission('gallery', 'delete'))
                         <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteFolderModal-{{ $folder->id }}">Delete</button>
+                        @endif
                     </div>
 
                     <!-- Delete Confirmation Modal -->

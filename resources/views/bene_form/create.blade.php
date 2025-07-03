@@ -166,16 +166,15 @@
 
             <div class="card-header section-title">
             <div class="center-heading text-center">
-                <h3 style="color: green;">කෘෂිකර්ම, ඉඩම්, පශු සම්පත්, වාරි මාර්ග, ධීවර හා ජලජ සම්පත් අමාත්‍යාංශය</h3>
+                <h3 style="color: green;">කෘෂිකර්ම, පශු සම්පත්, ඉඩම් හා වාරිමාර්ග අමාත්‍යාංශය</h3>
             </div>
 
             <div class="center-heading text-center">
-                <h3 style="color: green;">கமத்தொழில், காணி, கால்நடை, நீர்ப்பாசன, மீன்பிடி மற்றும் நீரியல்வளங்கள் அமைச்சு
-                </h3>
+                <h3 style="color: green;">கமத்தொழில், கால்நடைவளங்கள், காணி மற்றும் நீர்ப்பாசன அமைச்சு</h3>
             </div>
 
             <div class="center-heading text-center">
-                <h3 style="color: green;">Ministry of Agriculture, Lands, Livestock, Irrigation, Fisheries and Aquatic Resources</h3>
+                <h3 style="color: green;">Ministry of Agriculture, Livestock, Lands and Irrigation</h3>
             </div>
 
             <div class="center-heading text-center">
@@ -183,15 +182,15 @@
             </div>
 
             <div class="center-heading text-center">
-                <h3 style="color: green;">කුඩා පරිමාණ කෘෂි ව්‍යාපාර සඳහා වන අහිතකර බලපෑම් අවම කිරීමේ ව්‍යාපෘතිය </h3>
+                <h3 style="color: green;">කුඩා පරිමාණ කෘෂි ව්‍යාපාර සඳහා වන අහිතකර බලපෑම් අවම කිරිමේ ව්‍යාපෘතිය</h3>
             </div>
 
             <div class="center-heading text-center">
-                <h3 style="color: green;">சிறியளவிலான விவசாய வணிகம் மற்றும் மீண்டெழல் கருத்திட்டம் </h3>
+                <h3 style="color: green;">சிறியளவிலான விவசாய வணிகம் மற்றும் மீண்டெழல் கருத்திட்டம்</h3>
             </div>
 
             <div class="center-heading text-center">
-                <h3 style="color: green;">Smallholder Agribusiness and Resilience Project </h3>
+                <h3 style="color: green;">Smallholder Agribusiness and Resilience Project</h3>
             </div>
 
             <div class="col-md-12 text-center">

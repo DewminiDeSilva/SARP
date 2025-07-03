@@ -127,7 +127,7 @@
 
                   <div class="mb-3">
                         <label class="form-label">Name of the Organization</label>
-                        <input type="text" class="form-control" name="organization_name" required>
+                        <input type="text" class="form-control" name="organization_name">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Registration Details (if any)</label>
@@ -135,11 +135,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Contact Person</label>
-                        <input type="text" class="form-control" name="contact_person" required>
+                        <input type="text" class="form-control" name="contact_person" >
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Address</label>
-                        <textarea class="form-control" name="address" required></textarea>
+                        <textarea class="form-control" name="address"></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Telephone (Office)</label>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mobile Phone</label>
-                        <input type="text" class="form-control" name="mobile_phone" required>
+                        <input type="text" class="form-control" name="mobile_phone" >
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>
@@ -155,15 +155,15 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Name of the value changing</label>
-                        <textarea class="form-control" name="market_problem" required></textarea>
+                        <textarea class="form-control" name="market_problem" ></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Business Concept Title</label>
-                        <input type="text" class="form-control" name="business_title" required>
+                        <input type="text" class="form-control" name="business_title" >
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Business Objectives</label>
-                        <textarea class="form-control" name="business_objectives" required></textarea>
+                        <textarea class="form-control" name="business_objectives"></textarea>
                     </div>
 
                     <div class="mb-3">
@@ -220,12 +220,12 @@
 
                     <div class="mb-3">
     <label class="form-label">Project Justification</label>
-    <textarea class="form-control" name="project_justification" required></textarea>
+    <textarea class="form-control" name="project_justification" ></textarea>
 </div>
 
 <div class="mb-3">
     <label class="form-label">Project Benefits</label>
-    <textarea class="form-control" name="project_benefits" required></textarea>
+    <textarea class="form-control" name="project_benefits"></textarea>
 </div>
 
 <!-- <div class="mb-3">
@@ -247,9 +247,9 @@
             </thead>
             <tbody id="coverage-table">
                 <tr>
-                    <td><input type="text" name="project_coverage[0][area]" class="form-control" required></td>
-                    <td><input type="number" name="project_coverage[0][farmers]" class="form-control" required></td>
-                    <td><input type="number" name="project_coverage[0][acreage]" class="form-control" required></td>
+                    <td><input type="text" name="project_coverage[0][area]" class="form-control"></td>
+                    <td><input type="number" name="project_coverage[0][farmers]" class="form-control"></td>
+                    <td><input type="number" name="project_coverage[0][acreage]" class="form-control"></td>
                     <td><button type="button" class="btn btn-danger remove-coverage">-</button></td>
                 </tr>
             </tbody>
@@ -266,7 +266,7 @@
         <label class="form-label">Expected Outputs</label>
         <div id="outputs-wrapper">
             <div class="input-group mb-2">
-                <input type="text" name="expected_outputs[]" class="form-control" placeholder="Enter expected output" required>
+                <input type="text" name="expected_outputs[]" class="form-control" placeholder="Enter expected output">
                 <button type="button" class="btn btn-success add-output">+</button>
             </div>
         </div>
@@ -282,7 +282,7 @@
         <label class="form-label">Expected Outcomes</label>
         <div id="outcomes-wrapper">
             <div class="input-group mb-2">
-                <input type="text" name="expected_outcomes[]" class="form-control" placeholder="Enter expected outcome" required>
+                <input type="text" name="expected_outcomes[]" class="form-control" placeholder="Enter expected outcome" >
                 <button type="button" class="btn btn-success add-outcome">+</button>
             </div>
         </div>
@@ -306,9 +306,9 @@
             </thead>
             <tbody id="funding-table">
                 <tr>
-                    <td><input type="text" name="funding_source[0][type]" class="form-control" required></td>
-                    <td><input type="number" name="funding_source[0][own]" class="form-control" required></td>
-                    <td><input type="number" name="funding_source[0][credit]" class="form-control" required></td>
+                    <td><input type="text" name="funding_source[0][type]" class="form-control" ></td>
+                    <td><input type="number" name="funding_source[0][own]" class="form-control" ></td>
+                    <td><input type="number" name="funding_source[0][credit]" class="form-control" ></td>
                     <td><button type="button" class="btn btn-danger remove-fund">-</button></td>
                 </tr>
             </tbody>
@@ -323,7 +323,7 @@
  <!-- ✅ Implementation Plan (PDF Upload) -->
  <div class="mb-3">
         <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
-        <input type="file" class="form-control" name="implementation_plan" accept="application/pdf" required>
+        <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
     </div>
 
 <!-- <div class="mb-3">
@@ -345,9 +345,9 @@
             </thead>
             <tbody id="assistance-table">
                 <tr>
-                    <td><input type="text" name="assistance_required[0][type]" class="form-control" required></td>
-                    <td><input type="number" name="assistance_required[0][sarp]" class="form-control" required></td>
-                    <td><input type="number" name="assistance_required[0][other]" class="form-control" required></td>
+                    <td><input type="text" name="assistance_required[0][type]" class="form-control"></td>
+                    <td><input type="number" name="assistance_required[0][sarp]" class="form-control"></td>
+                    <td><input type="number" name="assistance_required[0][other]" class="form-control"></td>
                     <td><button type="button" class="btn btn-danger remove-assistance">-</button></td>
                 </tr>
             </tbody>
@@ -457,9 +457,9 @@ $(document).ready(function () {
         let index = $('#funding-table tr').length;
         $('#funding-table').append(`
             <tr>
-                <td><input type="text" name="funding_source[${index}][type]" class="form-control" required></td>
-                <td><input type="number" name="funding_source[${index}][own]" class="form-control" required></td>
-                <td><input type="number" name="funding_source[${index}][credit]" class="form-control" required></td>
+                <td><input type="text" name="funding_source[${index}][type]" class="form-control"></td>
+                <td><input type="number" name="funding_source[${index}][own]" class="form-control"></td>
+                <td><input type="number" name="funding_source[${index}][credit]" class="form-control"></td>
                 <td><button type="button" class="btn btn-danger remove-fund">-</button></td>
             </tr>
         `);

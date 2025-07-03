@@ -14,12 +14,12 @@ class LivestockController extends Controller
     {
         $beneficiary_id = $request->route('beneficiary_id');
         $beneficiary = Beneficiary::findOrFail($beneficiary_id);
-    
+
         // Fetch livestock records with related products and contributions
         $livestocks = Livestock::with(['liveProducts', 'liveContributions'])
             ->where('beneficiary_id', $beneficiary_id)
             ->get();
-    
+
         return view('livestock.livestock_index', compact('livestocks', 'beneficiary'));
     }
 
@@ -42,7 +42,7 @@ class LivestockController extends Controller
     return view('livestock.livestock_create', compact('beneficiary', 'livestockType', 'productionFocus'));
 }
 
-    
+
 
     // Method to store a new livestock record in the database
     public function store(Request $request)
@@ -121,20 +121,26 @@ class LivestockController extends Controller
 
     // Method to show the form to edit an existing livestock record
     public function edit($beneficiary_id, $livestock_id)
-    {
-        $livestock = Livestock::where('id', $livestock_id)
-                              ->where('beneficiary_id', $beneficiary_id)
-                              ->firstOrFail();
-    
-        return view('livestock.livestock_edit', compact('livestock'));
-    }
-    
+{
+    $livestock = Livestock::where('id', $livestock_id)
+                          ->where('beneficiary_id', $beneficiary_id)
+                          ->firstOrFail();
+
+    return view('livestock.livestock_edit', [
+        'livestock' => $livestock,
+        'beneficiary_id' => $beneficiary_id, // ✅ pass this explicitly
+    ]);
+}
+
+
 
     // Method to update an existing livestock record
-    public function update(Request $request, $id)
-    {
-        $livestock = Livestock::findOrFail($id);
-        
+    public function update(Request $request, $beneficiary_id, $livestock_id)
+{
+    $livestock = Livestock::where('id', $livestock_id)
+                          ->where('beneficiary_id', $beneficiary_id)
+                          ->firstOrFail();
+
         $validatedData = $request->validate([
             'livestock_type' => 'required|string|max:255',
             'production_focus' => 'required|string|max:255',
@@ -143,7 +149,7 @@ class LivestockController extends Controller
             'inputs' => 'required|string|max:255',
             'total_number_of_acres' => 'required|numeric|min:0',
             'livestock_commencement_date' => 'required|date', // Added validation for start date
-            
+
             // Validate related products (if applicable)
             'product_name.*' => 'nullable|string|max:255',
             'total_production.*' => 'nullable|numeric|min:0',
@@ -182,7 +188,7 @@ class LivestockController extends Controller
                 ]);
             }
         }
-    
+
         return redirect()->route('livestocks.list', ['beneficiary_id' => $livestock->beneficiary_id])
             ->with('success', 'Livestock record updated successfully.');
     }
@@ -206,7 +212,7 @@ class LivestockController extends Controller
     {
         try {
             $options = [];
-    
+
             switch ($type) {
                 case 'Dairy':
                     $options = \App\Models\Dairy::select('id', 'dairy_name as name')
@@ -231,30 +237,30 @@ class LivestockController extends Controller
                 default:
                     return response()->json(['error' => 'Invalid livestock type'], 400);
             }
-    
+
             return response()->json($options);
         } catch (\Exception $e) {
             \Log::error('Error fetching production focus: ' . $e->getMessage());
             return response()->json(['error' => 'Server error while fetching production focus'], 500);
         }
     }
-    
+
     public function searchLivestock(Request $request)
     {
         $search = $request->input('search'); // Get the search query
-    
+
         // Search in Beneficiary fields where input1 is 'livestock'
         $beneficiariesQuery = Beneficiary::select(
-            'id', 
-            'nic', 
-            'name_with_initials', 
-            'address', 
-            'gn_division_name', 
-            'gender', 
-            'dob', 
-            'age', 
-            'phone', 
-            'input2 as livestock_type', 
+            'id',
+            'nic',
+            'name_with_initials',
+            'address',
+            'gn_division_name',
+            'gender',
+            'dob',
+            'age',
+            'phone',
+            'input2 as livestock_type',
             'input3 as production_focus'
         )
         ->where('input1', 'livestock')
@@ -270,28 +276,28 @@ class LivestockController extends Controller
                   ->orWhere('input2', 'like', "%{$search}%") // Search in input2 (livestock_type)
                   ->orWhere('input3', 'like', "%{$search}%"); // Search in input3 (production_focus)
         });
-    
+
         // Paginate the filtered beneficiaries
         $beneficiaries = $beneficiariesQuery->paginate(10);
-    
+
         // Calculate summary statistics based on the filtered query
         $totalLivestocks = Livestock::whereIn('beneficiary_id', $beneficiariesQuery->pluck('id'))->count(); // Livestocks related to filtered beneficiaries
         $totalBeneficiaries = $beneficiariesQuery->count(); // Filtered beneficiaries count
         $totalGnDivisions = $beneficiariesQuery->distinct('gn_division_name')->count('gn_division_name'); // Filtered distinct GN Divisions
-    
+
         // Return the view with data
         return view('beneficiary.beneficiary_list', compact(
-            'beneficiaries', 
-            'search', 
-            'totalLivestocks', 
-            'totalBeneficiaries', 
+            'beneficiaries',
+            'search',
+            'totalLivestocks',
+            'totalBeneficiaries',
             'totalGnDivisions'
         ));
     }
-    
 
 
-  
+
+
 
 
 }

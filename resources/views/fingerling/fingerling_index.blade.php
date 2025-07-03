@@ -204,7 +204,7 @@
         border-radius: 10px;
         color: white;
         cursor: pointer;
-        
+
     }
     .status-badge:hover {
         transform: scale(1.05);
@@ -222,7 +222,7 @@
     .badge-clear {
         background-color: #dc3545;
     }
-    
+
     /* ── SUMMARY CARD STYLES ───────────────────────────── */
 .summary-card {
   border: 1px solid #ddd;
@@ -422,22 +422,35 @@
                                             $badgeClass = 'badge-secondary';
                                         }
                                     @endphp
-                                    
+
                                     <div id="status-{{ $tank->id }}">
-                                        @if($status)
-                                            <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $tank->id }})">
-                                                {{ $status }}
-                                            </span>
-                                        @else
-                                            <select class="form-control form-control-sm" onchange="submitStatus(this, {{ $tank->id }})">
-                                                <option value="">-- Select Status --</option>
-                                                <option value="Full">Full</option>
-                                                <option value="Partial">Partial</option>
-                                                <option value="Not Harvested Yet">Not Harvested Yet</option>
-                                            </select>
-                                        @endif
+                                        @if(auth()->user()->hasPermission('fingerling', 'edit'))
+    @if($status)
+        <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $tank->id }})">
+            {{ $status }}
+        </span>
+    @else
+        <select class="form-control form-control-sm" onchange="submitStatus(this, {{ $tank->id }})">
+            <option value="">-- Select Status --</option>
+            <option value="Full">Full</option>
+            <option value="Partial">Partial</option>
+            <option value="Not Harvested Yet">Not Harvested Yet</option>
+        </select>
+    @endif
+@else
+    @if($status)
+        <span class="badge {{ $badgeClass }} status-badge">
+            {{ $status }}
+        </span>
+    @else
+        <span class="badge badge-secondary status-badge">
+            Not Set
+        </span>
+    @endif
+@endif
+
                                     </div>
-                                    
+
                                     <!-- Hidden form -->
                                     <form id="status-form-{{ $tank->id }}" action="{{ route('fingerling.updateStatus', $tank->id) }}" method="POST" style="display:none;">
                                         @csrf
@@ -454,16 +467,18 @@
                                         @if ($hasData)
                                             <a href="{{ route('fingerling.show', ['tank_id' => $tank->id]) }}" class="btn btn-info btn-sm">View Data</a>
                                         @endif
-                                
+
                                         {{-- Add Data button (always enabled) --}}
+                                        @if(auth()->user()->hasPermission('fingerling', 'add'))
                                         <form action="{{ route('fingerling.create', $tank->id) }}" method="GET" style="display:inline;">
                                             <button type="submit" class="btn btn-primary btn-sm">Add Stocking Data</button>
                                         </form>
+                                        @endif
                                     </div>
                                 </td>
-                                
-                                
-                                 
+
+
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -604,7 +619,7 @@
         // Add a fade-out effect BEFORE submitting
         const badgeContainer = document.getElementById('status-' + tankId);
         badgeContainer.style.transition = "opacity 0.5s ease";
-        badgeContainer.style.opacity = 0; 
+        badgeContainer.style.opacity = 0;
 
         setTimeout(() => {
             form.submit();

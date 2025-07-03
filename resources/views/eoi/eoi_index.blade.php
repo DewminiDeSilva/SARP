@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <style>
         .frame {
             display: flex;
@@ -186,6 +186,45 @@
             border-color: #126926;
         }
     </style>
+    <style>
+/* Badge style for EOI status */
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.status-badge:hover {
+    transform: scale(1.05);
+}
+
+.badge-evaluation-completed {
+    background-color: #28a745;
+}
+.badge-other {
+    background-color: #6c757d;
+}
+
+.status-select {
+    appearance: none;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    width: 150px;
+}
+.status-select:hover {
+    background-color: #f1f1f1;
+    border-color: #28a745;
+}
+</style>
+
 </head>
 <body>
 
@@ -201,21 +240,27 @@
             <button id="sidebarToggle" class="btn btn-secondary mr-2">
                 <i class="fas fa-bars"></i>
             </button>
-           
+
         </div>
+
 
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb-3">
                 <h2 style="color: green;">Expressions of Interest</h2>
-                <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
+                <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Completed Evaluations</a>
+            </div>
+           
+            <div class="mb-3">
+           
+            <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
             </div>
 
-            
+
 
             <div class="table-responsive">
                 <table class="table table-bordered">
                 <thead class="thead-light">
-    <tr>
+        <tr>
         <th>ID</th>
         <th>Organization Name</th>
         <th>Contact Person</th>
@@ -237,7 +282,7 @@
     <td>{{ $expression->business_title }}</td>
 
     <!-- ✅ Status Column -->
-    <td>
+    <!-- <td>
         <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
             @csrf
             @method('PATCH')
@@ -252,17 +297,52 @@
                 <option value="Agreement Signed" {{ $expression->status == 'Agreement Signed' ? 'selected' : '' }}>Agreement Signed</option>
             </select>
         </form>
-    </td>
+    </td> -->
+    <td class="text-center">
+    @php
+        $status = $expression->status;
+        $badgeClass = match($status) {
+            'Evaluation Completed' => 'badge-success',
+            'Internal Review Committee Approved' => 'badge-warning',
+            'Business Proposal Submitted' => 'badge-info',
+            'BPEC Evaluation' => 'badge-secondary',
+            'BPEC Approved' => 'badge-primary',
+            'NSC Approved' => 'badge-dark',
+            'IFAD Approved' => 'badge-light text-dark',
+            'Agreement Signed' => 'badge-success',
+            default => 'badge-secondary'
+        };
+    @endphp
+
+    <div id="status-{{ $expression->id }}">
+        <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $expression->id }})">
+            {{ $status ?? 'Select Status' }}
+        </span>
+    </div>
+
+    <!-- Hidden Form for Submission -->
+    <form id="status-form-{{ $expression->id }}" action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST" style="display:none;">
+        @csrf
+        @method('PATCH')
+        <input type="hidden" name="status" id="status-input-{{ $expression->id }}">
+    </form>
+</td>
+
 
     <!-- ✅ Action Buttons -->
     <td>
         <div class="action-buttons">
+            @if(auth()->user()->hasPermission('expressions', 'view'))
             <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
                 <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
             </a>
+            @endif
+            @if(auth()->user()->hasPermission('expressions', 'edit'))
             <a href="{{ route('expressions.edit', $expression->id) }}" class="btn btn-sm edit-button" title="Edit">
                 <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
             </a>
+            @endif
+            @if(auth()->user()->hasPermission('expressions', 'delete'))
             <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
@@ -270,10 +350,11 @@
                     <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                 </button>
             </form>
+            @endif
         </div>
     </td>
 </tr>
-                
+
                         @endforeach
                     </tbody>
                 </table>
@@ -353,6 +434,86 @@
                 content.style.flex = '0 0 80%';
                 content.style.padding = '20px';
             }
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+function toggleDropdown(eoiId) {
+    const statusDiv = document.getElementById('status-' + eoiId);
+
+    statusDiv.innerHTML = `
+        <select class="form-control form-control-sm" onchange="submitStatus(this, ${eoiId})">
+            <option value="">-- Select Status --</option>
+            <option value="Evaluation Completed">Evaluation Completed</option>
+            <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
+            <option value="Business Proposal Submitted">Business Proposal Submitted</option>
+            <option value="BPEC Evaluation">BPEC Evaluation</option>
+            <option value="BPEC Approved">BPEC Approved</option>
+            <option value="NSC Approved">NSC Approved</option>
+            <option value="IFAD Approved">IFAD Approved</option>
+            <option value="Agreement Signed">Agreement Signed</option>
+            <option value="Clear">Clear Status</option>
+        </select>
+    `;
+}
+
+function submitStatus(select, eoiId) {
+    const value = select.value;
+    const form = document.getElementById('status-form-' + eoiId);
+    const input = document.getElementById('status-input-' + eoiId);
+
+    if (value === 'Clear') {
+        input.value = '';
+    } else {
+        input.value = value;
+    }
+ // Add a fade-out effect BEFORE submitting
+ const badgeContainer = document.getElementById('status-' + eoiId);
+        badgeContainer.style.transition = "opacity 0.5s ease";
+        badgeContainer.style.opacity = 0; 
+    // Optional visual feedback
+    // Swal.fire({
+    //     icon: 'info',
+    //     title: 'Updating...',
+    //     text: `Setting status to "${value}"`,
+    //     timer: 1000,
+    //     showConfirmButton: false
+    // });
+
+    setTimeout(() => {
+        form.submit();
+    }, 800); // short delay for visual feedback
+}
+document.addEventListener('DOMContentLoaded', function () {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('cleared'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Cleared!',
+                text: '{{ session('cleared') }}',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+
+        // When page loads after update, fade-in effect
+        document.querySelectorAll('[id^=status-]').forEach(function(div) {
+            div.style.opacity = 0;
+            div.style.transition = "opacity 0.5s ease";
+            setTimeout(() => {
+                div.style.opacity = 1;
+            }, 100);
         });
     });
 </script>
