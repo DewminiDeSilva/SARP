@@ -247,18 +247,12 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb-3">
                 <h2 style="color: green;">Expressions of Interest</h2>
-<<<<<<< HEAD
                 <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Completed Evaluations</a>
             </div>
            
             <div class="mb-3">
            
             <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
-=======
-                @if(auth()->user()->hasPermission('expressions', 'add'))
-                <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
-                @endif
->>>>>>> 082edc16197d236f6587164fdad4157ade96a531
             </div>
 
 
@@ -287,7 +281,6 @@
     <td>{{ Str::limit($expression->market_problem, 50) }}</td>
     <td>{{ $expression->business_title }}</td>
 
-<<<<<<< HEAD
     <!-- ✅ Status Column -->
     <!-- <td>
         <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
@@ -332,30 +325,6 @@
         @csrf
         @method('PATCH')
         <input type="hidden" name="status" id="status-input-{{ $expression->id }}">
-=======
-<!-- Status Column (Only This Affected by 'expressions.edit' Permission) -->
-@php
-    $canEditStatus = auth()->user()->hasPermission('expressions', 'edit');
-@endphp
-
-<td>
-    <form action="{{ route('expressions.updateStatus', $expression->id) }}" method="POST">
-        @csrf
-        @method('PATCH')
-        <select name="status"
-                onchange="this.form.submit()"
-                class="form-control form-control-sm"
-                @if (!$canEditStatus) disabled @endif>
-            <option value="Evaluation Completed" {{ $expression->status == 'Evaluation Completed' ? 'selected' : '' }}>Evaluation Completed</option>
-            <option value="Internal Review Committee Approved" {{ $expression->status == 'Internal Review Committee Approved' ? 'selected' : '' }}>Internal Review Committee Approved</option>
-            <option value="Business Proposal Submitted" {{ $expression->status == 'Business Proposal Submitted' ? 'selected' : '' }}>Business Proposal Submitted</option>
-            <option value="BPEC Evaluation" {{ $expression->status == 'BPEC Evaluation' ? 'selected' : '' }}>BPEC Evaluation</option>
-            <option value="BPEC Approved" {{ $expression->status == 'BPEC Approved' ? 'selected' : '' }}>BPEC Approved</option>
-            <option value="NSC Approved" {{ $expression->status == 'NSC Approved' ? 'selected' : '' }}>NSC Approved</option>
-            <option value="IFAD Approved" {{ $expression->status == 'IFAD Approved' ? 'selected' : '' }}>IFAD Approved</option>
-            <option value="Agreement Signed" {{ $expression->status == 'Agreement Signed' ? 'selected' : '' }}>Agreement Signed</option>
-        </select>
->>>>>>> 082edc16197d236f6587164fdad4157ade96a531
     </form>
 </td>
 

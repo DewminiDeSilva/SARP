@@ -183,13 +183,8 @@ li:hover {
                     <li class="submenu">
                         <a href="#" style="color: #FFFFFF">Establish 4p Projects</a>
                         <ul class="nested">
-<<<<<<< HEAD
                             <li href=""><a href="/expressions/evaluation-completed" style="color: #FFFFFF">Registration of 4P Project</a></li>
                         
-=======
-                            <li href=""><a href="" style="color: #FFFFFF">Registration of 4P Project</a></li>
-
->>>>>>> 082edc16197d236f6587164fdad4157ade96a531
                         </ul>
                     </li>
 
