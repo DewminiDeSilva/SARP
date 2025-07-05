@@ -542,21 +542,22 @@
 
                                             @if(auth()->user()->hasPermission('infrastructure', 'edit'))
                                             <a href="/infrastructure/{{ $infrastructure->id }}/edit"
-   class="btn btn-success edit-button"
-   style="height: 40px; width: 120px; font-size: 16px; display: flex; align-items: center; justify-content: center;"
-   title="Edit">
-   Update
-</a>
+                                            class="btn btn-success edit-button"
+                                            style="height: 40px; width: 120px; font-size: 16px; display: flex; align-items: center; justify-content: center;"
+                                            title="Edit">
+                                            Update
+                                            </a>
                                             @endif
 
                                             @if(auth()->user()->hasPermission('infrastructure', 'delete'))
-                                            <form action="/infrastructure/{{ $infrastructure->id }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger custom-button" title="Delete">
-                                                    <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
-                                                </button>
-                                            </form>
+                                            <form id="delete-form-{{ $infrastructure->id }}" action="/infrastructure/{{ $infrastructure->id }}" method="POST" style="display:inline;">
+    @csrf
+    @method('DELETE')
+    <button type="button" class="btn btn-danger custom-button" title="Delete" onclick="confirmDelete({{ $infrastructure->id }})">
+        <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
+    </button>
+</form>
+
                                             @endif
                                         </td>
                                     </tr>
@@ -721,6 +722,75 @@
             updateCounter();
         });
     });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if(session('update_success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('update_success') }}',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('update_fail'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ session('update_fail') }}',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Handle delete confirmation
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Delete this record?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Delete it!',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+
+    // Show success message after delete
+    @if(session('delete_success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: '{{ session('delete_success') }}',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    @endif
+
+    // Show error message if delete failed
+    @if(session('delete_fail'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '{{ session('delete_fail') }}',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    @endif
 </script>
 
 

@@ -107,6 +107,7 @@ class InfrastructureController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try {
         $request->validate([
             'pre_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'during_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -150,7 +151,10 @@ class InfrastructureController extends Controller
 
         $infrastructure->save();
 
-        return redirect('/infrastructure')->with('success', 'Infrastructure record updated successfully.');
+        return redirect('/infrastructure')->with('update_success', 'Record updated successfully.');
+        } catch (\Exception $e) {
+        return redirect('/infrastructure')->with('update_fail', 'Record update failed.');
+    }
     }
 
     /**
@@ -158,8 +162,12 @@ class InfrastructureController extends Controller
      */
     public function destroy(Infrastructure $infrastructure)
     {
+        try {
         $infrastructure->delete();
-        return redirect('/infrastructure')->with('success', 'Infrastructure record deleted successfully.');
+        return redirect('/infrastructure')->with('delete_success', 'Record deleted successfully.');
+        } catch (\Exception $e) {
+    return redirect('/infrastructure')->with('delete_fail', 'Record delete failed.');
+}
     }
 
     /**
