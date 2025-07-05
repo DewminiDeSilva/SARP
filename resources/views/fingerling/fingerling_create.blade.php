@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .frame {
             display: flex;
@@ -104,17 +106,60 @@
         }
 
     </style>
+
+    <style>
+    .sidebar {
+        transition: transform 0.3s ease; /* Smooth toggle animation */
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Move sidebar out of view */
+    }
+
+    #sidebarToggle {
+        background-color: #126926; /* Match the back button color */
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #sidebarToggle:hover {
+        background-color: #0a4818; /* Darken the hover color */
+    }
+
+
+    .left-column.hidden {
+    display: none; /* Hide the sidebar */
+}
+.right-column {
+    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+}
+</style>
+
 </head>
 <body>
-<div class="frame">
+    @include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
     </div>
     <div class="right-column">
+
+    <div class="d-flex align-items-center mb-3">
+
+	<!-- Sidebar Toggle Button -->
+	<button id="sidebarToggle" class="btn btn-secondary mr-2">
+		<i class="fas fa-bars"></i>
+	</button>
+
         <a href="{{ route('fingerling.index') }}" class="btn-back">
             <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
         </a>
+    </div>
+    
         <div class="col-md-12 text-center">
             <h2 class="header-title" style="color: green;">Fingerling Stock Registration</h2>
         </div>
@@ -123,7 +168,7 @@
             <form class="form-horizontal" action="{{ route('fingerling.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="tank_id" value="{{ $tank->id }}">
-                
+
                 <div class="form-group">
                     <label for="tank_name">Tank Name</label>
                     <input type="text" name="tank_name" id="tank_name" class="form-control" value="{{ $tank->tank_name }}" readonly>
@@ -236,7 +281,7 @@
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-success mt-3">Submit</button>
                 </div>
-                
+
             </form>
         </div>
     </div>
@@ -388,7 +433,7 @@
       icon: 'error',
       title: 'Validation Error',
       text: 'Variety fields must only contain letters.',
-    }); 
+    });
     return;
   }
 

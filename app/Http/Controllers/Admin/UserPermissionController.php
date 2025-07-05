@@ -29,10 +29,53 @@ class UserPermissionController extends Controller
             'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions'
         ];
 
+        $moduleLabels = [
+    'staff_profile' => 'Staff Profile',
+    'beneficiary' => 'Beneficiary',
+    'family' => 'Family Member',
+    'training' => 'Training Program',
+    'livestock' => 'Livestock',
+    'agri' => 'Agriculture',
+    'nutrition' => 'Nutrition',
+    'nutrition_trainee' => 'Nutrition Trainee',
+    'ffs-training' => 'FFS Training',
+    'ffs-participants' => 'FFS Participants',
+    'cdf' => 'CDF',
+    'cdfmembers' => 'CDF Members',
+    'farmerorganization' => 'Farmer Organization',
+    'farmermember' => 'Farmer Members',
+    'asc_registration' => 'Agrarian Service Center',
+    'grievances' => 'Grievances',
+    'officer' => 'Officer',
+    'tank_rehabilitation' => 'Tank Rehabilitation',
+    'fingerling' => 'Fingerlings',
+    'infrastructure' => 'Infrastructure',
+    'gallery' => 'Gallery',
+    'agro' => 'Agro Enterprise',
+    'shareholder' => 'Shareholder',
+    'bene_form' => 'Beneficiary Form',
+    'nrm' => 'Natural Resource Management',
+    'nrm_participants' => 'NRM Participants',
+    'awpb' => 'Annual Work Plan & Budget (AWPB)',
+    'costtab' => 'Cost Tab',
+    'projectdesignreport' => 'Project Design Report',
+    'vegitable' => 'Vegetables',
+    'fruit' => 'Fruits',
+    'goat' => 'Goat Rearing',
+    'dairy' => 'Dairy Farming',
+    'poultary' => 'Poultry',
+    'aquaculture' => 'Aquaculture',
+    'homegarden' => 'Home Garden',
+    'other_crops' => 'Other Crops',
+    'agriculture' => 'Agriculture List',
+    'livestocks' => 'Livestock List',
+    'expressions' => 'Expression of Interest (EOI)'
+];
 
-        $actions = ['view', 'edit', 'delete', 'upload_csv', 'add'];
 
-        return view('admin.user_permissions', compact('user', 'modules', 'actions'));
+        $actions = ['view', 'add', 'edit', 'delete', 'upload_csv'];
+
+        return view('admin.user_permissions', compact('user', 'modules', 'actions', 'moduleLabels'));
     }
 
     // Handle permission update

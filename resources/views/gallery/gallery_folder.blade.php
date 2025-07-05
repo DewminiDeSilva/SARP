@@ -363,9 +363,11 @@
 
         <div class="container mt-4">
         <!-- Import Images Button -->
+         @if(auth()->user()->hasPermission('gallery', 'add'))
         <div class="import-button" data-bs-toggle="modal" data-bs-target="#uploadModal">
             <span>+ Import Images</span>
         </div>
+        @endif
 
         <!-- Modal -->
         <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
@@ -398,9 +400,11 @@
         <br>
         <div class="uploaded-images">
             <h5>Uploaded Images</h5>
+            @if(auth()->user()->hasPermission('gallery', 'delete'))
             <div class="delete-bar">
                 <button id="deleteSelectedBtn" disabled>Delete Selected</button>
             </div>
+            @endif
             <form id="deleteForm" action="{{ route('gallery.image.delete', [$album, $folder->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')

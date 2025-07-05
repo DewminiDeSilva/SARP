@@ -126,11 +126,11 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/create', [BeneficiaryController::class, 'create'])
             ->name('create')
-            ->middleware('check.permission:beneficiary,edit');
+            ->middleware('check.permission:beneficiary,add');
 
         Route::post('/', [BeneficiaryController::class, 'store'])
             ->name('store')
-            ->middleware('check.permission:beneficiary,edit');
+            ->middleware('check.permission:beneficiary,add');
 
         Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])
             ->name('show')
@@ -192,7 +192,7 @@ Route::middleware(['auth'])->group(function () {
         // Custom create route with beneficiary ID — can be considered 'update' permission
         Route::get('family/create/{beneficiaryId}', [FamilyController::class, 'create'])
         ->name('family.create.by.beneficiary')
-        ->middleware(['auth', 'check.permission:family,edit']);
+        ->middleware(['auth', 'check.permission:family,add']);
 
 
     });
@@ -810,21 +810,73 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
 
     // Agriculture and Livestock
-    Route::resource('agriculture', AgriController::class);
-    Route::get('/agriculture', [AgriController::class, 'index'])->name('agriculture.index');
-    Route::post('/agriculture', [AgriController::class, 'store'])->name('agriculture.store');
-    //Route::get('agriculture/{agricultureData}', [AgriController::class, 'show'])->name('agriculture.show');
-    Route::get('agriculture/beneficiary/{beneficiaryId}', [AgriController::class, 'showByBeneficiary'])->name('agriculture.showByBeneficiary');
-    Route::get('/agriculture/create/{beneficiaryId?}', [AgriController::class, 'create'])->name('agriculture.create');
-    Route::get('/crops-by-gn-division/{gnDivision}', [AgriController::class, 'cropsByGnDivision'])->name('crops.by.gn.division');
-    Route::get('/crops-by-gn-division/{gn_division_id}', [AgriController::class, 'cropsByGnDivision'])->name('crops.by.gn.division');
+    // Route::resource('agriculture', AgriController::class);
+    // Route::get('/agriculture', [AgriController::class, 'index'])->name('agriculture.index');
+    // Route::post('/agriculture', [AgriController::class, 'store'])->name('agriculture.store');
+    // //Route::get('agriculture/{agricultureData}', [AgriController::class, 'show'])->name('agriculture.show');
+    // Route::get('agriculture/beneficiary/{beneficiaryId}', [AgriController::class, 'showByBeneficiary'])->name('agriculture.showByBeneficiary');
+    // Route::get('/agriculture/create/{beneficiaryId?}', [AgriController::class, 'create'])->name('agriculture.create');
+    // Route::get('/crops-by-gn-division/{gnDivision}', [AgriController::class, 'cropsByGnDivision'])->name('crops.by.gn.division');
+    // Route::get('/crops-by-gn-division/{gn_division_id}', [AgriController::class, 'cropsByGnDivision'])->name('crops.by.gn.division');
+    // Route::get('/get-gn-division-name/{beneficiaryId}', [AgriController::class, 'getGnDivisionName']);
+    // Route::get('/agriculture/{id}/edit', [AgriController::class, 'edit'])->name('agriculture.edit');
+    // Route::delete('/agriculture/{id}', [AgriController::class, 'destroy'])->name('agriculture.destroy');
+    // Route::put('/agriculture/{id}', [AgriController::class, 'update'])->name('agriculture.update');
+    // // Route::get('/agriculture/search', [AgriController::class, 'search'])->name('agriculture.search');
+    // Route::get('/get-crops/{category}', [AgriController::class, 'getCropsByCategory']);
+    // Route::get('/agriculture', [AgriController::class, 'index'])->name('agriculture.index');
+
+    Route::prefix('agriculture')->middleware('auth')->group(function () {
+
+    // View all agriculture records
+    Route::get('/', [AgriController::class, 'index'])
+        ->name('agriculture.index')
+        ->middleware('check.permission:agriculture,view');
+
+    // Create form (optionally with beneficiary ID)
+    Route::get('/create/{beneficiaryId?}', [AgriController::class, 'create'])
+        ->name('agriculture.create')
+        ->middleware('check.permission:agriculture,add');
+
+    // Store new agriculture record
+    Route::post('/', [AgriController::class, 'store'])
+        ->name('agriculture.store')
+        ->middleware('check.permission:agriculture,add');
+
+    // Show by beneficiary
+    Route::get('/beneficiary/{beneficiaryId}', [AgriController::class, 'showByBeneficiary'])
+        ->name('agriculture.showByBeneficiary')
+        ->middleware('check.permission:agriculture,view');
+
+    // Edit form
+    Route::get('/{id}/edit', [AgriController::class, 'edit'])
+        ->name('agriculture.edit')
+        ->middleware('check.permission:agriculture,edit');
+
+    // Update record
+    Route::put('/{id}', [AgriController::class, 'update'])
+        ->name('agriculture.update')
+        ->middleware('check.permission:agriculture,edit');
+
+    // Delete record
+    Route::delete('/{id}', [AgriController::class, 'destroy'])
+        ->name('agriculture.destroy')
+        ->middleware('check.permission:agriculture,delete');
+});
+
+Route::middleware('auth')->group(function () {
+
+    // Get GN Division name from beneficiary
     Route::get('/get-gn-division-name/{beneficiaryId}', [AgriController::class, 'getGnDivisionName']);
-    Route::get('/agriculture/{id}/edit', [AgriController::class, 'edit'])->name('agriculture.edit');
-    Route::delete('/agriculture/{id}', [AgriController::class, 'destroy'])->name('agriculture.destroy');
-    Route::put('/agriculture/{id}', [AgriController::class, 'update'])->name('agriculture.update');
-    // Route::get('/agriculture/search', [AgriController::class, 'search'])->name('agriculture.search');
+
+    // Get crops by category
     Route::get('/get-crops/{category}', [AgriController::class, 'getCropsByCategory']);
-    Route::get('/agriculture', [AgriController::class, 'index'])->name('agriculture.index');
+
+    // Get crops by GN Division (avoid duplicate route definitions)
+    Route::get('/crops-by-gn-division/{gn_division_id}', [AgriController::class, 'cropsByGnDivision'])
+        ->name('crops.by.gn.division');
+});
+
 
 
     // Route::resource('livestocks', LivestockController::class);
@@ -848,30 +900,102 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
     // Route::get('/livestocks/{id}', [LivestockController::class, 'index']);
     // Route::get('/livestocks/{id}', [LivestockController::class, 'show']);
 
-    Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestock.list');
-    Route::get('/livestocks/create/{beneficiary_id}', [LivestockController::class, 'create'])->name('livestocks.create');
-    Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
-    Route::post('/livestocks/store', [LivestockController::class, 'store'])->name('livestocks.store');
-    Route::get('/livestocks/gn-division/{beneficiary_id}', [LivestockController::class, 'getGnDivisionName'])->name('livestock.getGnDivisionName');
-    Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
-    Route::put('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'update'])->name('livestocks.update');
-    Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
-    Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestock.update');
-    //Route::get('/livestock/{id}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
-    Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
-    //Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
-    Route::delete('/livestocks/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
-    Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
-    //Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestock.livestock_index');
-    Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestocks.index');
-    Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestocks.list');
-    Route::put('/livestocks/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
-    Route::delete('/livestocks/{livestock_id}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
-    Route::get('/livestocks/{beneficiary_id}/{livestock_id}/edit', [LivestockController::class, 'edit'])
-    ->name('livestocks.edit');
+    // Livestock Routes
 
-    Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
+    // Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestock.list');
+    // Route::get('/livestocks/create/{beneficiary_id}', [LivestockController::class, 'create'])->name('livestocks.create');
+    // Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])->name('beneficiary.searchLivestock');
+    // Route::post('/livestocks/store', [LivestockController::class, 'store'])->name('livestocks.store');
+    // Route::get('/livestocks/gn-division/{beneficiary_id}', [LivestockController::class, 'getGnDivisionName'])->name('livestock.getGnDivisionName');
+    // Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    // Route::put('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'update'])->name('livestocks.update');
+    // Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestock.update');
+    // //Route::get('/livestock/{id}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    // Route::put('/livestock/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
+    // //Route::get('/livestocks/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])->name('livestocks.edit');
+    // Route::delete('/livestocks/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // Route::delete('/livestocks/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // //Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestock.livestock_index');
+    // Route::get('/livestocks', [LivestockController::class, 'index'])->name('livestocks.index');
+    // Route::get('/livestocks/{beneficiary_id}', [LivestockController::class, 'listLivestock'])->name('livestocks.list');
+    // Route::put('/livestocks/{id}', [LivestockController::class, 'update'])->name('livestocks.update');
+    // Route::delete('/livestocks/{livestock_id}', [LivestockController::class, 'destroy'])->name('livestocks.destroy');
+    // Route::get('/livestocks/{beneficiary_id}/{livestock_id}/edit', [LivestockController::class, 'edit'])
+    // ->name('livestocks.edit');
 
+    // Route::get('/livestocks/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType']);
+
+
+    Route::prefix('livestocks')->middleware('auth')->group(function () {
+
+    // View all livestock records
+    Route::get('/', [LivestockController::class, 'index'])
+        ->name('livestocks.index')
+        ->middleware('check.permission:livestocks,view');
+
+    // View livestock by beneficiary
+    Route::get('/{beneficiary_id}', [LivestockController::class, 'listLivestock'])
+        ->name('livestocks.list')
+        ->middleware('check.permission:livestocks,view');
+
+    // Create form
+    Route::get('/create/{beneficiary_id}', [LivestockController::class, 'create'])
+        ->name('livestocks.create')
+        ->middleware('check.permission:livestocks,add');
+
+    // Store new record
+    Route::post('/store', [LivestockController::class, 'store'])
+        ->name('livestocks.store')
+        ->middleware('check.permission:livestocks,add');
+
+    // Edit form
+    Route::get('/{beneficiary_id}/{livestock}/edit', [LivestockController::class, 'edit'])
+        ->name('livestocks.edit')
+        ->middleware('check.permission:livestocks,edit');
+
+    // Update record (by beneficiary context)
+    Route::put('/{beneficiary_id}/{livestock}', [LivestockController::class, 'update'])
+        ->name('livestocks.update')
+        ->middleware('check.permission:livestocks,edit');
+
+    // Update record (by ID only)
+    Route::put('/{id}', [LivestockController::class, 'update'])
+        ->name('livestock.update')
+        ->middleware('check.permission:livestocks,edit');
+
+    // Delete (with beneficiary ID)
+    Route::delete('/{beneficiary_id}/{livestock}', [LivestockController::class, 'destroy'])
+        ->name('livestocks.destroy')
+        ->middleware('check.permission:livestocks,delete');
+
+    // Delete (only livestock ID)
+    Route::delete('/{livestock_id}', [LivestockController::class, 'destroy'])
+        ->name('livestocks.destroy')
+        ->middleware('check.permission:livestocks,delete');
+
+    // Get production focus based on livestock type
+    Route::get('/get-production-focus/{type}', [LivestockController::class, 'getProductionFocusByLivestockType'])
+        ->name('livestocks.getProductionFocus');
+
+    // Get GN Division name of beneficiary
+    Route::get('/gn-division/{beneficiary_id}', [LivestockController::class, 'getGnDivisionName'])
+        ->name('livestocks.getGnDivisionName');
+});
+
+
+Route::middleware('auth')->group(function () {
+
+    // Livestock Search
+    Route::get('/beneficiaries/search-livestock', [LivestockController::class, 'searchLivestock'])
+        ->name('beneficiary.searchLivestock')
+        ->middleware('check.permission:livestocks,view');
+
+    // Beneficiary List (used in livestock module)
+    Route::get('/beneficiaries/list', [BeneficiaryController::class, 'list'])
+        ->name('beneficiary.list')
+        ->middleware('check.permission:livestocks,view');
+});
 
 
     //add agriculture routes
@@ -881,31 +1005,138 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
 
     // Fingerling Module
-    Route::resource('fingerling', FingerlingController::class);
-    Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
-    // Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
-    Route::get('/fingerling/create/{tank_id}', [FingerlingController::class, 'create'])->name('fingerling.create');
-    Route::post('/fingerling/store', [FingerlingController::class, 'store'])->name('fingerling.store');
-    Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])->name('fingerling.show');
+    // Route::resource('fingerling', FingerlingController::class);
+    // Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
+    // // Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
+    // Route::get('/fingerling/create/{tank_id}', [FingerlingController::class, 'create'])->name('fingerling.create');
+    // Route::post('/fingerling/store', [FingerlingController::class, 'store'])->name('fingerling.store');
+    // Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])->name('fingerling.show');
 
     // Infrastructure
-    Route::resource('infrastructure', InfrastructureController::class);
-    Route::resource('infrastructure', InfrastructureController::class);
-    Route::get('reportInfrastructureCsv', [InfrastructureController::class, 'reportCsv'])->name('downloadInfrastructure.csv');
-    Route::post('/infrastructure/upload_csv', [InfrastructureController::class, 'uploadCsv'])->name('infrastructure.upload_csv');
-    Route::get('searchInfrastructure', [InfrastructureController::class, 'search'])->name('searchInfrastructure');
+    // Route::resource('infrastructure', InfrastructureController::class);
+    // Route::resource('infrastructure', InfrastructureController::class);
+    // Route::get('reportInfrastructureCsv', [InfrastructureController::class, 'reportCsv'])->name('downloadInfrastructure.csv');
+    // Route::post('/infrastructure/upload_csv', [InfrastructureController::class, 'uploadCsv'])->name('infrastructure.upload_csv');
+    // Route::get('searchInfrastructure', [InfrastructureController::class, 'search'])->name('searchInfrastructure');
+
+    // Infrastructure
+    Route::prefix('infrastructure')->middleware('auth')->group(function () {
+
+    // View all infrastructures
+    Route::get('/', [InfrastructureController::class, 'index'])
+        ->name('infrastructure.index')
+        ->middleware('check.permission:infrastructure,view');
+
+    // Create form
+    Route::get('/create', [InfrastructureController::class, 'create'])
+        ->name('infrastructure.create')
+        ->middleware('check.permission:infrastructure,add');
+
+    // Store infrastructure
+    Route::post('/', [InfrastructureController::class, 'store'])
+        ->name('infrastructure.store')
+        ->middleware('check.permission:infrastructure,add');
+
+    // Show details
+    Route::get('/{infrastructure}', [InfrastructureController::class, 'show'])
+        ->name('infrastructure.show')
+        ->middleware('check.permission:infrastructure,view');
+
+    // Edit form
+    Route::get('/{infrastructure}/edit', [InfrastructureController::class, 'edit'])
+        ->name('infrastructure.edit')
+        ->middleware('check.permission:infrastructure,edit');
+
+    // Update infrastructure
+    Route::put('/{infrastructure}', [InfrastructureController::class, 'update'])
+        ->name('infrastructure.update')
+        ->middleware('check.permission:infrastructure,edit');
+
+    // Delete infrastructure
+    Route::delete('/{infrastructure}', [InfrastructureController::class, 'destroy'])
+        ->name('infrastructure.destroy')
+        ->middleware('check.permission:infrastructure,delete');
+
+    // Upload CSV
+    Route::post('/upload_csv', [InfrastructureController::class, 'uploadCsv'])
+        ->name('infrastructure.upload_csv')
+        ->middleware('check.permission:infrastructure,upload_csv');
+});
+
+// Outside prefix
+Route::middleware(['auth', 'check.permission:infrastructure,view'])->group(function () {
+    // CSV report download
+    Route::get('reportInfrastructureCsv', [InfrastructureController::class, 'reportCsv'])
+        ->name('downloadInfrastructure.csv');
+
+    // Search
+    Route::get('searchInfrastructure', [InfrastructureController::class, 'search'])
+        ->name('searchInfrastructure');
+});
+
+
 
     // Gallery
-    Route::resource('gallery', GalleryController::class);
-    Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
-    Route::get('/gallery/album/{album}', [GalleryController::class, 'showAlbum'])->name('gallery.album');
-    Route::post('/gallery/album/{album}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
-    Route::delete('/gallery/album/{album}/{id}', [GalleryController::class, 'deleteImage'])->name('gallery.image.delete');
-    Route::post('/gallery/album/{album}/folder', [GalleryController::class, 'storeFolder'])->name('folder.store');
-    Route::get('/gallery/album/{album}/folder/{folder}', [GalleryController::class, 'showFolder'])->name('gallery.folder');
-    Route::post('/gallery/album/{album}/folder/{folder}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
-    Route::delete('/folder/{album}/{folder}', [GalleryController::class, 'destroyFolder'])->name('folder.destroy');
-    Route::delete('/gallery/{album}/{folder}/delete-images', [GalleryController::class, 'deleteImages'])->name('gallery.image.delete');
+    // Route::resource('gallery', GalleryController::class);
+    // Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+    // Route::get('/gallery/album/{album}', [GalleryController::class, 'showAlbum'])->name('gallery.album');
+    // Route::post('/gallery/album/{album}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
+    // Route::delete('/gallery/album/{album}/{id}', [GalleryController::class, 'deleteImage'])->name('gallery.image.delete');
+    // Route::post('/gallery/album/{album}/folder', [GalleryController::class, 'storeFolder'])->name('folder.store');
+    // Route::get('/gallery/album/{album}/folder/{folder}', [GalleryController::class, 'showFolder'])->name('gallery.folder');
+    // Route::post('/gallery/album/{album}/folder/{folder}/upload', [GalleryController::class, 'uploadImage'])->name('gallery.image.upload');
+    // Route::delete('/folder/{album}/{folder}', [GalleryController::class, 'destroyFolder'])->name('folder.destroy');
+    // Route::delete('/gallery/{album}/{folder}/delete-images', [GalleryController::class, 'deleteImages'])->name('gallery.image.delete');
+
+    // Gallery
+    Route::prefix('gallery')->middleware('auth')->group(function () {
+
+    // View Gallery
+    Route::get('/', [GalleryController::class, 'index'])
+        ->name('gallery.index')
+        ->middleware('check.permission:gallery,view');
+
+    // View Album
+    Route::get('/album/{album}', [GalleryController::class, 'showAlbum'])
+        ->name('gallery.album')
+        ->middleware('check.permission:gallery,view');
+
+    // Upload image to album
+    Route::post('/album/{album}/upload', [GalleryController::class, 'uploadImage'])
+        ->name('gallery.image.upload')
+        ->middleware('check.permission:gallery,add');
+
+    // Upload image to folder
+    Route::post('/album/{album}/folder/{folder}/upload', [GalleryController::class, 'uploadImage'])
+        ->name('gallery.image.upload')
+        ->middleware('check.permission:gallery,add');
+
+    // Delete individual image
+    Route::delete('/album/{album}/{id}', [GalleryController::class, 'deleteImage'])
+        ->name('gallery.image.delete')
+        ->middleware('check.permission:gallery,delete');
+
+    // Create folder in album
+    Route::post('/album/{album}/folder', [GalleryController::class, 'storeFolder'])
+        ->name('folder.store')
+        ->middleware('check.permission:gallery,add');
+
+    // View folder
+    Route::get('/album/{album}/folder/{folder}', [GalleryController::class, 'showFolder'])
+        ->name('gallery.folder')
+        ->middleware('check.permission:gallery,view');
+
+    // Delete folder
+    Route::delete('/folder/{album}/{folder}', [GalleryController::class, 'destroyFolder'])
+        ->name('folder.destroy')
+        ->middleware('check.permission:gallery,delete');
+
+    // Bulk delete images from folder
+    Route::delete('/{album}/{folder}/delete-images', [GalleryController::class, 'deleteImages'])
+        ->name('gallery.image.delete')
+        ->middleware('check.permission:gallery,delete');
+});
+
 
     // Protected Admin Routes
     Route::middleware('role:admin')->group(function () {
@@ -946,23 +1177,153 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
 
     //ASC controller
 
-    Route::get('/asc', [ASCController::class, 'index']);
-    Route::resource('asc_registration', AscRegistrationController::class);
-    Route::get('searchASC', [AscRegistrationController::class, 'search'])->name('searchASC');
-    Route::get('/downloadAscCsv', [AscRegistrationController::class, 'reportCsv'])->name('downloadAscCsv');
-    Route::post('/uploadAscCsv', [AscRegistrationController::class, 'uploadCsv'])->name('uploadAscCsv');
+    // Route::get('/asc', [ASCController::class, 'index']);
+    // Route::resource('asc_registration', AscRegistrationController::class);
+    // Route::get('searchASC', [AscRegistrationController::class, 'search'])->name('searchASC');
+    // Route::get('/downloadAscCsv', [AscRegistrationController::class, 'reportCsv'])->name('downloadAscCsv');
+    // Route::post('/uploadAscCsv', [AscRegistrationController::class, 'uploadCsv'])->name('uploadAscCsv');
+
+    //ASC
+
+    // ASC Management Page (dashboard)
+Route::get('/asc', [ASCController::class, 'index'])
+    ->name('asc.index')
+    ->middleware('auth', 'check.permission:asc_registration,view');
+
+// ASC Registration CRUD + CSV with permissions
+Route::prefix('asc_registration')->middleware('auth')->group(function () {
+    Route::get('/', [AscRegistrationController::class, 'index'])
+        ->name('asc_registration.index')
+        ->middleware('check.permission:asc_registration,view');
+
+    Route::get('/create', [AscRegistrationController::class, 'create'])
+        ->name('asc_registration.create')
+        ->middleware('check.permission:asc_registration,add');
+
+    Route::post('/', [AscRegistrationController::class, 'store'])
+        ->name('asc_registration.store')
+        ->middleware('check.permission:asc_registration,add');
+
+    Route::get('/{asc_registration}', [AscRegistrationController::class, 'show'])
+        ->name('asc_registration.show')
+        ->middleware('check.permission:asc_registration,view');
+
+    Route::get('/{asc_registration}/edit', [AscRegistrationController::class, 'edit'])
+        ->name('asc_registration.edit')
+        ->middleware('check.permission:asc_registration,edit');
+
+    Route::put('/{asc_registration}', [AscRegistrationController::class, 'update'])
+        ->name('asc_registration.update')
+        ->middleware('check.permission:asc_registration,edit');
+
+    Route::delete('/{asc_registration}', [AscRegistrationController::class, 'destroy'])
+        ->name('asc_registration.destroy')
+        ->middleware('check.permission:asc_registration,delete');
+
+    Route::post('/upload', [AscRegistrationController::class, 'uploadCsv'])
+        ->name('asc_registration.upload_csv')
+        ->middleware('check.permission:asc_registration,upload_csv');
+});
+
+// Outside prefix routes with view permission
+Route::middleware('auth')->group(function () {
+    Route::get('/downloadAscCsv', [AscRegistrationController::class, 'reportCsv'])
+        ->name('downloadAscCsv')
+        ->middleware('check.permission:asc_registration,view');
+
+    Route::get('/searchASC', [AscRegistrationController::class, 'search'])
+        ->name('searchASC')
+        ->middleware('check.permission:asc_registration,view');
+});
+
 
     //Grievance controller
 
-    Route::resource('grievances', GrievanceController::class);
-    Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])->name('grievances.report.csv');
-    Route::post('grievances/upload_csv', [GrievanceController::class, 'uploadCsv'])->name('grievances.upload_csv');
-    Route::get('/searchGrievances', [GrievanceController::class, 'search'])->name('searchGrievances');
+    // Route::resource('grievances', GrievanceController::class);
+    // Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])->name('grievances.report.csv');
+    // Route::post('grievances/upload_csv', [GrievanceController::class, 'uploadCsv'])->name('grievances.upload_csv');
+    // Route::get('/searchGrievances', [GrievanceController::class, 'search'])->name('searchGrievances');
 
-    // Officer routes
-    Route::get('/grievances/{grievance}/officer/create', [OfficerController::class, 'create'])->name('officer.create');
-    Route::post('/grievances/{grievance}/officer', [OfficerController::class, 'store'])->name('officer.store');
-    Route::get('/grievances/{grievance}/officers', [OfficerController::class, 'showOfficers'])->name('grievance.officers');
+    // // Officer routes
+    // Route::get('/grievances/{grievance}/officer/create', [OfficerController::class, 'create'])->name('officer.create');
+    // Route::post('/grievances/{grievance}/officer', [OfficerController::class, 'store'])->name('officer.store');
+    // Route::get('/grievances/{grievance}/officers', [OfficerController::class, 'showOfficers'])->name('grievance.officers');
+
+    // Grievance
+
+    Route::prefix('grievances')->middleware('auth')->group(function () {
+
+    // Index (View all)
+    Route::get('/', [GrievanceController::class, 'index'])
+        ->name('grievances.index')
+        ->middleware('check.permission:grievances,view');
+
+    // Create form
+    Route::get('/create', [GrievanceController::class, 'create'])
+        ->name('grievances.create')
+        ->middleware('check.permission:grievances,add');
+
+    // Store new record
+    Route::post('/', [GrievanceController::class, 'store'])
+        ->name('grievances.store')
+        ->middleware('check.permission:grievances,add');
+
+    // Show one record
+    Route::get('/{grievance}', [GrievanceController::class, 'show'])
+        ->name('grievances.show')
+        ->middleware('check.permission:grievances,view');
+
+    // Edit form
+    Route::get('/{grievance}/edit', [GrievanceController::class, 'edit'])
+        ->name('grievances.edit')
+        ->middleware('check.permission:grievances,edit');
+
+    // Update
+    Route::put('/{grievance}', [GrievanceController::class, 'update'])
+        ->name('grievances.update')
+        ->middleware('check.permission:grievances,edit');
+
+    // Delete
+    Route::delete('/{grievance}', [GrievanceController::class, 'destroy'])
+        ->name('grievances.destroy')
+        ->middleware('check.permission:grievances,delete');
+
+    // CSV Upload
+    Route::post('/upload_csv', [GrievanceController::class, 'uploadCsv'])
+        ->name('grievances.upload_csv')
+        ->middleware('check.permission:grievances,upload_csv');
+});
+
+// Outside prefix - CSV Export & Search
+Route::middleware('auth')->group(function () {
+    Route::get('grievances/report/csv', [GrievanceController::class, 'reportCsv'])
+        ->name('grievances.report.csv')
+        ->middleware('check.permission:grievances,view');
+
+    Route::get('/searchGrievances', [GrievanceController::class, 'search'])
+        ->name('searchGrievances')
+        ->middleware('check.permission:grievances,view');
+});
+
+
+Route::prefix('grievances/{grievance}')->middleware('auth')->group(function () {
+
+    // Officer create form
+    Route::get('/officer/create', [OfficerController::class, 'create'])
+        ->name('officer.create')
+        ->middleware('check.permission:officer,add');
+
+    // Store officer
+    Route::post('/officer', [OfficerController::class, 'store'])
+        ->name('officer.store')
+        ->middleware('check.permission:officer,add');
+
+    // Show officers assigned to grievance
+    Route::get('/officers', [OfficerController::class, 'showOfficers'])
+        ->name('grievance.officers')
+        ->middleware('check.permission:officer,view');
+});
+
 
 
     // // Vegitable Routes
@@ -1573,11 +1934,11 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/create', [StaffProfileController::class, 'create'])
             ->name('staff_profile.create')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,add');
 
         Route::post('/store', [StaffProfileController::class, 'store'])
             ->name('staff_profile.store')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,add');
 
         Route::get('/{staffProfile}', [StaffProfileController::class, 'show'])
             ->name('staff_profile.show')
@@ -1625,16 +1986,66 @@ Route::get('/test-role', function () {
     return 'You passed the role check!';
 })->middleware(['auth', 'role:admin']);
 
-    Route::prefix('expressions')->group(function () {
-        Route::get('/', [EOIController::class, 'index'])->name('expressions.index');
-        Route::get('/create', [EOIController::class, 'create'])->name('expressions.create');
-        Route::post('/', [EOIController::class, 'store'])->name('expressions.store');
-        Route::get('/{id}', [EOIController::class, 'show'])->name('expressions.show');
-        Route::get('/{id}/edit', [EOIController::class, 'edit'])->name('expressions.edit');
-        Route::put('/{id}', [EOIController::class, 'update'])->name('expressions.update');
-        Route::delete('/{id}', [EOIController::class, 'destroy'])->name('expressions.destroy');
-    });
-    Route::patch('/expressions/{id}/update-status', [EOIController::class, 'updateStatus'])->name('expressions.updateStatus');
+    // Route::prefix('expressions')->group(function () {
+    //     Route::get('/', [EOIController::class, 'index'])->name('expressions.index');
+    //     Route::get('/create', [EOIController::class, 'create'])->name('expressions.create');
+    //     Route::post('/', [EOIController::class, 'store'])->name('expressions.store');
+    //     Route::get('/{id}', [EOIController::class, 'show'])->name('expressions.show');
+    //     Route::get('/{id}/edit', [EOIController::class, 'edit'])->name('expressions.edit');
+    //     Route::put('/{id}', [EOIController::class, 'update'])->name('expressions.update');
+    //     Route::delete('/{id}', [EOIController::class, 'destroy'])->name('expressions.destroy');
+    // });
+    // Route::patch('/expressions/{id}/update-status', [EOIController::class, 'updateStatus'])->name('expressions.updateStatus');
+
+
+    // Expressions of Interest (EOI) Routes
+
+    Route::prefix('expressions')->middleware('auth')->group(function () {
+    // View all EOI records
+    Route::get('/', [EOIController::class, 'index'])
+        ->name('expressions.index')
+        ->middleware('check.permission:expressions,view');
+
+        Route::get('/evaluation-completed', [EOIController::class, 'evaluationCompleted'])
+        ->name('expressions.evaluation-completed')
+        ->middleware('check.permission:expressions,view');
+
+    // Create form
+    Route::get('/create', [EOIController::class, 'create'])
+        ->name('expressions.create')
+        ->middleware('check.permission:expressions,add');
+
+    // Store new EOI
+    Route::post('/', [EOIController::class, 'store'])
+        ->name('expressions.store')
+        ->middleware('check.permission:expressions,add');
+
+    // Show single record
+    Route::get('/{id}', [EOIController::class, 'show'])
+        ->name('expressions.show')
+        ->middleware('check.permission:expressions,view');
+
+    // Edit form
+    Route::get('/{id}/edit', [EOIController::class, 'edit'])
+        ->name('expressions.edit')
+        ->middleware('check.permission:expressions,edit');
+
+    // Update action
+    Route::put('/{id}', [EOIController::class, 'update'])
+        ->name('expressions.update')
+        ->middleware('check.permission:expressions,edit');
+
+    // Delete action
+    Route::delete('/{id}', [EOIController::class, 'destroy'])
+        ->name('expressions.destroy')
+        ->middleware('check.permission:expressions,delete');
+});
+
+// Status update route (outside the prefix group)
+Route::patch('/expressions/{id}/update-status', [EOIController::class, 'updateStatus'])
+    ->name('expressions.updateStatus')
+    ->middleware(['auth', 'check.permission:expressions,edit']);
+
 
 
 });
@@ -1667,22 +2078,68 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 //Fingerling
 
-Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
-// Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
-Route::get('/fingerling/create/{tank_id}', [FingerlingController::class, 'create'])->name('fingerling.create');
-Route::post('/fingerling/store', [FingerlingController::class, 'store'])->name('fingerling.store');
-Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])->name('fingerling.show');
-Route::delete('/fingerling/{id}', [FingerlingController::class, 'destroy'])->name('fingerling.destroy');
-// Route to show the edit form
-Route::get('/fingerling/{id}/edit', [FingerlingController::class, 'edit'])->name('fingerling.edit');
+// Route::get('/fingerling', [FingerlingController::class, 'index'])->name('fingerling.index');
+// // Route::get('/fingerlings/search-fingerling', [FingerlingController::class, 'searchFingerling'])->name('fingerling.searchFingerling');
+// Route::get('/fingerling/create/{tank_id}', [FingerlingController::class, 'create'])->name('fingerling.create');
+// Route::post('/fingerling/store', [FingerlingController::class, 'store'])->name('fingerling.store');
+// Route::get('/fingerling/show/{tank_id}', [FingerlingController::class, 'show'])->name('fingerling.show');
+// Route::delete('/fingerling/{id}', [FingerlingController::class, 'destroy'])->name('fingerling.destroy');
+// // Route to show the edit form
+// Route::get('/fingerling/{id}/edit', [FingerlingController::class, 'edit'])->name('fingerling.edit');
 
-// Route to update the fingerling record
-Route::put('/fingerling/{id}', [FingerlingController::class, 'update'])->name('fingerling.update');
+// // Route to update the fingerling record
+// Route::put('/fingerling/{id}', [FingerlingController::class, 'update'])->name('fingerling.update');
+// //
+// Route::post('/fingerling/update-status/{tank}', [FingerlingController::class, 'updateStatus'])->name('fingerling.updateStatus');
+
+
 //
-Route::post('/fingerling/update-status/{tank}', [FingerlingController::class, 'updateStatus'])->name('fingerling.updateStatus');
 
+//Fingerling
 
-//
+Route::prefix('fingerling')->middleware('auth')->group(function () {
+
+    // View all fingerling records
+    Route::get('/', [FingerlingController::class, 'index'])
+        ->name('fingerling.index')
+        ->middleware('check.permission:fingerling,view');
+
+    // Create form
+    Route::get('/create/{tank_id}', [FingerlingController::class, 'create'])
+        ->name('fingerling.create')
+        ->middleware('check.permission:fingerling,add');
+
+    // Store new fingerling
+    Route::post('/store', [FingerlingController::class, 'store'])
+        ->name('fingerling.store')
+        ->middleware('check.permission:fingerling,add');
+
+    // Show tank-wise fingerling details
+    Route::get('/show/{tank_id}', [FingerlingController::class, 'show'])
+        ->name('fingerling.show')
+        ->middleware('check.permission:fingerling,view');
+
+    // Edit form
+    Route::get('/{id}/edit', [FingerlingController::class, 'edit'])
+        ->name('fingerling.edit')
+        ->middleware('check.permission:fingerling,edit');
+
+    // Update fingerling record
+    Route::put('/{id}', [FingerlingController::class, 'update'])
+        ->name('fingerling.update')
+        ->middleware('check.permission:fingerling,edit');
+
+    // Delete fingerling record
+    Route::delete('/{id}', [FingerlingController::class, 'destroy'])
+        ->name('fingerling.destroy')
+        ->middleware('check.permission:fingerling,delete');
+
+    // Update harvest status (session-only)
+    Route::post('/update-status/{tank}', [FingerlingController::class, 'updateStatus'])
+        ->name('fingerling.updateStatus')
+        ->middleware('check.permission:fingerling,edit');
+});
+
 
 
 
