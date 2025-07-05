@@ -209,6 +209,13 @@ table th:first-child, table td:first-child {
     background-color: #c82333;
 }
 
+.count {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: green;
+}
+
+
 
 </style>
 
@@ -283,7 +290,7 @@ table th:first-child, table td:first-child {
                 Total Tanks
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $tankRehabilitations->total() }}</h5>
+                <h5 class="card-title"><span class="count" data-target="{{ $tankRehabilitations->total() }}">0</span></h5>
                 <p class="card-text">Total tanks currently in the system.</p>
             </div>
         </div>
@@ -294,7 +301,7 @@ table th:first-child, table td:first-child {
                 Ongoing
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $ongoingCount }}</h5>
+                <h5 class="card-title"><span class="count" data-target="{{ $ongoingCount }}">0</span></h5>
                 <p class="card-text">Tanks currently undergoing rehabilitation.</p>
             </div>
         </div>
@@ -305,7 +312,7 @@ table th:first-child, table td:first-child {
                 Completed
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $completedCount }}</h5>
+                <h5 class="card-title"><span class="count" data-target="{{ $completedCount }}">0</span></h5>
                 <p class="card-text">Tanks that have completed rehabilitation.</p>
             </div>
         </div>
@@ -883,6 +890,30 @@ table th:first-child, table td:first-child {
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const counters = document.querySelectorAll('.count');
+
+        counters.forEach(counter => {
+            counter.innerText = '0';
+            const updateCounter = () => {
+                const target = +counter.getAttribute('data-target');
+                const current = +counter.innerText;
+                const increment = Math.ceil(target / 100); // Smaller = slower count
+
+                if (current < target) {
+                    counter.innerText = `${Math.min(current + increment, target)}`;
+                    setTimeout(updateCounter, 30); // Delay per frame
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
+        });
+    });
+</script>
+
 
 
 </body>
