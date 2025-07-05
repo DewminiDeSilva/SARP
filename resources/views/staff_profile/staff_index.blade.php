@@ -117,10 +117,11 @@
     font-weight: bold;
 }
 
-.summary-card-body h3 {
-    font-size: 1.5rem;
+.summary-card-body {
+    font-size: 2.5rem;
     color: green;
     margin: 0;
+    font-weight: bold;
 }
 .custom-swal-popup {
     border: 2px solid #126926; /* Green border */
@@ -364,33 +365,34 @@
     <div class="d-flex justify-content-center">
         <!-- Total Tanks Card -->
         <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
+            <div class="card-header summary-card-header">
             Total Staff Members
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $totalStaff }}</h5>
+                <h5 class="card-title summary-card-body"><span class="count" data-target="{{ $totalStaff }}">0</span></h5>
+
 
             </div>
         </div>
 
         <!-- Ongoing Tanks Card -->
         <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
+            <div class="card-header summary-card-header">
             Male Staff Members
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $maleStaff }}</h5>
+                <h5 class="card-title summary-card-body"><span class="count" data-target="{{ $maleStaff }}">0</span></h5>
 
             </div>
         </div>
 
         <!-- Completed Tanks Card -->
         <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
+            <div class="card-header summary-card-header">
             Female Staff Members
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $femaleStaff }}</h5>
+                <h5 class="card-title summary-card-body"><span class="count" data-target="{{ $femaleStaff }}">0</span></h5>
 
             </div>
         </div>
@@ -668,6 +670,31 @@
         });
     });
 </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const counters = document.querySelectorAll('.count');
+
+        counters.forEach(counter => {
+            counter.innerText = '0';
+            const updateCounter = () => {
+                const target = +counter.getAttribute('data-target');
+                const current = +counter.innerText;
+                const increment = target / 100;
+
+                if (current < target) {
+                    counter.innerText = `${Math.ceil(current + increment)}`;
+                    setTimeout(updateCounter, 30);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
+        });
+    });
+</script>
+
 
 
 </body>
