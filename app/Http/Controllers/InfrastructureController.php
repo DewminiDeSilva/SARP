@@ -41,18 +41,20 @@ class InfrastructureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'pre_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'during_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'post_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('images', 'public');
-        }
+        // Handle image uploads
+        $prePath = $request->hasFile('pre_image') ? $request->file('pre_image')->store('images', 'public') : null;
+        $duringPath = $request->hasFile('during_image') ? $request->file('during_image')->store('images', 'public') : null;
+        $postPath = $request->hasFile('post_image') ? $request->file('post_image')->store('images', 'public') : null;
 
         $infrastructure = new Infrastructure;
         $infrastructure->type_of_infrastructure = request('type_of_infrastructure');
         $infrastructure->infrastructure_progress = request('infrastructure_progress');
-        $infrastructure->infrastructure_description = request('infrastructure_description'); // New field
+        $infrastructure->infrastructure_description = request('infrastructure_description');
         $infrastructure->river_basin = request('river_basin');
         $infrastructure->cascade_name = request('cascade_name');
         $infrastructure->province_name = request('province_name');
@@ -70,11 +72,14 @@ class InfrastructureController extends Controller
         $infrastructure->contract_period = request('contract_period');
         $infrastructure->status = request('status');
         $infrastructure->remarks = request('remarks');
-        $infrastructure->image_path = $imagePath ?? null;
+        $infrastructure->pre_image_path = $prePath;
+        $infrastructure->during_image_path = $duringPath;
+        $infrastructure->post_image_path = $postPath;
         $infrastructure->save();
 
         return redirect('/infrastructure')->with('success', 'Infrastructure record created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -100,28 +105,49 @@ class InfrastructureController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Infrastructure $infrastructure)
+    public function update(Request $request, $id)
     {
-        $infrastructure->type_of_infrastructure = request('type_of_infrastructure');
-        $infrastructure->infrastructure_progress = request('infrastructure_progress');
-        $infrastructure->infrastructure_description = request('infrastructure_description'); // New field
-        $infrastructure->river_basin = request('river_basin');
-        $infrastructure->cascade_name = request('cascade_name');
-        $infrastructure->province_name = request('province_name');
-        $infrastructure->district = request('district');
-        $infrastructure->ds_division_name = request('ds_division_name');
-        $infrastructure->gn_division_name = request('gn_division_name');
-        $infrastructure->as_centre = request('as_centre');
-        $infrastructure->agency = request('agency');
-        $infrastructure->no_of_family = request('no_of_family');
-        $infrastructure->longitude = request('longitude');
-        $infrastructure->latitude = request('latitude');
-        $infrastructure->contractor = request('contractor');
-        $infrastructure->payment = request('payment');
-        $infrastructure->eot = request('eot');
-        $infrastructure->contract_period = request('contract_period');
-        $infrastructure->status = request('status');
-        $infrastructure->remarks = request('remarks');
+        $request->validate([
+            'pre_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'during_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'post_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $infrastructure = Infrastructure::findOrFail($id);
+
+        // Upload logic
+        if ($request->hasFile('pre_image')) {
+            $infrastructure->pre_image_path = $request->file('pre_image')->store('images', 'public');
+        }
+        if ($request->hasFile('during_image')) {
+            $infrastructure->during_image_path = $request->file('during_image')->store('images', 'public');
+        }
+        if ($request->hasFile('post_image')) {
+            $infrastructure->post_image_path = $request->file('post_image')->store('images', 'public');
+        }
+
+        // Update all other fields
+        $infrastructure->type_of_infrastructure = $request->type_of_infrastructure;
+        $infrastructure->infrastructure_progress = $request->infrastructure_progress;
+        $infrastructure->infrastructure_description = $request->infrastructure_description;
+        $infrastructure->river_basin = $request->river_basin;
+        $infrastructure->cascade_name = $request->cascade_name;
+        $infrastructure->province_name = $request->province_name;
+        $infrastructure->district = $request->district;
+        $infrastructure->ds_division_name = $request->ds_division_name;
+        $infrastructure->gn_division_name = $request->gn_division_name;
+        $infrastructure->as_centre = $request->as_centre;
+        $infrastructure->agency = $request->agency;
+        $infrastructure->no_of_family = $request->no_of_family;
+        $infrastructure->longitude = $request->longitude;
+        $infrastructure->latitude = $request->latitude;
+        $infrastructure->contractor = $request->contractor;
+        $infrastructure->payment = $request->payment;
+        $infrastructure->eot = $request->eot;
+        $infrastructure->contract_period = $request->contract_period;
+        $infrastructure->status = $request->status;
+        $infrastructure->remarks = $request->remarks;
+
         $infrastructure->save();
 
         return redirect('/infrastructure')->with('success', 'Infrastructure record updated successfully.');

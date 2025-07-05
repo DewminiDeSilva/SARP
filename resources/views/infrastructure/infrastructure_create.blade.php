@@ -369,9 +369,18 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Upload Image</label>
-                    <input type="file" class="form-control" name="image" id="image">
+                    <label for="pre_image" class="form-label">Pre-Infrastructure Image</label>
+                    <input type="file" class="form-control" name="pre_image" id="pre_image">
                 </div>
+                <div class="mb-3">
+                    <label for="during_image" class="form-label">During-Infrastructure Image</label>
+                    <input type="file" class="form-control" name="during_image" id="during_image">
+                </div>
+                <div class="mb-3">
+                    <label for="post_image" class="form-label">Post-Infrastructure Image</label>
+                    <input type="file" class="form-control" name="post_image" id="post_image">
+                </div>
+
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-success">Submit</button>

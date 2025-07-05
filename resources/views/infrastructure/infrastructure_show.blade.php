@@ -228,6 +228,37 @@
 }
 
 </style>
+
+<style>
+    .construction-images {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .image-container {
+        margin-bottom: 30px;
+        display: inline-block;
+    }
+
+    .animated-image {
+        width: 500px;
+        height: 400px;
+        object-fit: cover;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .animated-image:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    h3 {
+        color: #4CAF50;
+    }
+</style>
+
 </head>
 <body>
 @include('dashboard.header')
@@ -362,14 +393,48 @@
                             </div>
                         </div>
 
-                                <div class="d-flex justify-content-center mt-4">
+                                <div class="tank-section my-4 custom-frame">
+                                    <div class="tank-details">
+                                        <div class="construction-images">
 
-                                    @if($infrastructure->image_path)
-                                        <p><img src="{{ asset('storage/' . $infrastructure->image_path) }}" alt="Infrastructure Image" class="rounded-animated-image"></p>
-                                    @else
-                                        <p>No Image</p>
-                                    @endif
+                                            <div class="col-md-12 text-center">
+                                                <h2 class="header-title" style="color: green;">Infrastructure Images</h2>
+                                            </div>
+
+                                            @if($infrastructure->pre_image_path)
+                                            <div class="image-container">
+                                                <div class="image-row">
+                                                    <h3>Pre-Construction Image</h3>
+                                                    <img class="animated-image" src="{{ asset('storage/' . $infrastructure->pre_image_path) }}" alt="Pre Construction Image">
+                                                </div>
+                                            </div>
+                                            @endif
+                                            <br>
+
+                                            @if($infrastructure->during_image_path)
+                                            <div class="image-container">
+                                                <div class="image-row">
+                                                    <h3>During Construction Image</h3>
+                                                    <img class="animated-image" src="{{ asset('storage/' . $infrastructure->during_image_path) }}" alt="During Construction Image">
+                                                </div>
+                                            </div>
+                                            @endif
+                                            <br>
+
+                                            @if($infrastructure->post_image_path)
+                                            <div class="image-container">
+                                                <div class="image-row">
+                                                    <h3>Post Construction Image</h3>
+                                                    <img class="animated-image" src="{{ asset('storage/' . $infrastructure->post_image_path) }}" alt="Post Construction Image">
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                        </div>
+                                    </div>
                                 </div>
+
+
                             </div>
                                 <!-- Add two horizontal cards below Remarks -->
                                 <div class="row mt-4">

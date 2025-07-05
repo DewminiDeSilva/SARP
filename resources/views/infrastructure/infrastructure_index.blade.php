@@ -91,23 +91,25 @@
     }
 
     .edit-button {
-        background-color: white; /* White background */
-        color: orange;
-        border: 2px solid transparent; /* Initially no border */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px; /* Set a fixed width */
-        height: 40px; /* Set a fixed height */
-        box-sizing: border-box; /* Ensures padding is included in width and height */
-        transition: border 0.3s ease, background-color 0.3s ease; /* Smooth transition for border and background color */
-        background-color: #ffeeba; /* Slightly darker light yellow on hover */
-    }
+    background-color: #28a745 !important; /* Green background */
+    color: white !important;
+    border: none !important;
+    width: 120px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: none !important;
+}
 
-    .edit-button:hover {
-        border-color: orange; /* Border appears on hover */
-        background-color: #ffeeba; /* Slightly darker light yellow on hover */
-    }
+.edit-button:hover {
+    background-color: #218838 !important; /* Darker green on hover */
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 
     .view-button {
         background-color: white; /* White background */
@@ -338,6 +340,12 @@
         .custom-ministry-logo {
             max-width: 120px; /* Adjust the width as needed */
         }
+
+        .count {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: green;
+}
     </style>
 
 <style>
@@ -411,7 +419,7 @@
                 Total Infrastructures
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $totalInfrastructures }}</h5>
+                <h5 class="card-title"><span class="count" data-target="{{ $totalInfrastructures }}">0</span></h5>
                 <p class="card-text">Total infrastructures currently in the system.</p>
             </div>
         </div>
@@ -422,7 +430,7 @@
                 Ongoing
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $ongoingCount }}</h5>
+                <h5 class="card-title"><span class="count" data-target="{{ $ongoingCount }}">0</span></h5>
                 <p class="card-text">Infrastructures currently undergoing progress.</p>
             </div>
         </div>
@@ -433,7 +441,7 @@
                 Completed
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{ $completedCount }}</h5>
+                <h5 class="card-title"><span class="count" data-target="{{ $completedCount }}">0</span></h5>
                 <p class="card-text">Infrastructures that have completed progress.</p>
             </div>
         </div>
@@ -533,9 +541,12 @@
                                             @endif
 
                                             @if(auth()->user()->hasPermission('infrastructure', 'edit'))
-                                            <a href="/infrastructure/{{ $infrastructure->id }}/edit" class="btn btn-danger edit-button" title="Edit">
-                                                <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit Icon" style="width: 16px; height: 16px;">
-                                            </a>
+                                            <a href="/infrastructure/{{ $infrastructure->id }}/edit"
+   class="btn btn-success edit-button"
+   style="height: 40px; width: 120px; font-size: 16px; display: flex; align-items: center; justify-content: center;"
+   title="Edit">
+   Update
+</a>
                                             @endif
 
                                             @if(auth()->user()->hasPermission('infrastructure', 'delete'))
@@ -688,6 +699,30 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const counters = document.querySelectorAll('.count');
+
+        counters.forEach(counter => {
+            counter.innerText = '0';
+            const updateCounter = () => {
+                const target = +counter.getAttribute('data-target');
+                const current = +counter.innerText;
+                const increment = Math.ceil(target / 100); // smaller = slower
+
+                if (current < target) {
+                    counter.innerText = `${Math.min(current + increment, target)}`;
+                    setTimeout(updateCounter, 30); // delay between updates
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
+        });
+    });
+</script>
+
 
 
                         </div>

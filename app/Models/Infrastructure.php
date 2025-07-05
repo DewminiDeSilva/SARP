@@ -31,6 +31,9 @@ class Infrastructure extends Model
         'contract_period',
         'status',
         'remarks',
-        'image_path',
+        'pre_image_path',
+        'during_image_path',
+        'post_image_path',
+
     ];
 }

@@ -204,7 +204,8 @@
 </br>
 
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
-            <form action="/infrastructure/{{ $infrastructure->id }}" method="POST">
+            <form action="/infrastructure/{{ $infrastructure->id }}" method="POST" enctype="multipart/form-data">
+
                 @csrf
                 @method('PUT')
 
@@ -345,6 +346,37 @@
                         <label for="remarks" class="form-label">Remarks</label>
                         <input type="text" class="form-control" id="remarks" name="remarks" value="{{ $infrastructure->remarks }}" required>
                     </div>
+
+                    <hr>
+                    <h4 class="mt-4 mb-3 text-center text-success">Infrastructure Images</h4>
+
+                    <div class="mb-3">
+                        <label for="pre_image" class="form-label">Pre-Infrastructure Image</label>
+                        <input type="file" class="form-control" id="pre_image" name="pre_image">
+                        @if($infrastructure->pre_image_path)
+                            <p class="mt-2">Current Image:</p>
+                            <img src="{{ asset('storage/' . $infrastructure->pre_image_path) }}" alt="Pre Image" class="img-thumbnail" width="200">
+                        @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="during_image" class="form-label">During-Infrastructure Image</label>
+                        <input type="file" class="form-control" id="during_image" name="during_image">
+                        @if($infrastructure->during_image_path)
+                            <p class="mt-2">Current Image:</p>
+                            <img src="{{ asset('storage/' . $infrastructure->during_image_path) }}" alt="During Image" class="img-thumbnail" width="200">
+                        @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="post_image" class="form-label">Post-Infrastructure Image</label>
+                        <input type="file" class="form-control" id="post_image" name="post_image">
+                        @if($infrastructure->post_image_path)
+                            <p class="mt-2">Current Image:</p>
+                            <img src="{{ asset('storage/' . $infrastructure->post_image_path) }}" alt="Post Image" class="img-thumbnail" width="200">
+                        @endif
+                    </div>
+
 
                     <div class="text-center">
                         <button type="submit" class="btn btn-success">Submit</button>
