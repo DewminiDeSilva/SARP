@@ -13,6 +13,7 @@ class AgriFarmerContribution extends Model
     protected $fillable = [
         'agriculture_data_id',
         'farmer_contribution',
+        'date',
         'cost'
     ];
 

@@ -175,6 +175,27 @@
 
     }
 </style>
+<style>
+    .list-group-item {
+        font-size: 15px;
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
+
+    h5.text-success {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #1e7e34;
+    }
+
+    /* Override li:hover globally if needed */
+    .right-column li:hover {
+        background-color: transparent !important;
+        color: inherit !important;
+        text-decoration: none !important;
+        cursor: default !important;
+    }
+</style>
 
 </head>
 <body>
@@ -208,82 +229,181 @@
         <h5>Crop Name: <span class="text-success">{{ $cropName }}</span></h5>
     </div>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-
-
-                    <th>Crop Variety</th>
-                    <th>Farmer Contributions</th>
-                    <th>Planting Date</th>
-                    <th>Total Acres Cultivated</th>
-
-                    <th>Product Details</th> <!-- New column for product details -->
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($agricultureData as $data)
-                <tr>
-
-
-                    <td>{{ $data->crop_variety ?? 'N/A' }}</td>
-
-                    <!-- Farmer Contributions and Costs -->
-                    <td>
-                        @if($data->farmerContributions->isNotEmpty())
-                            @foreach($data->farmerContributions as $contribution)
-                                <div style="border-bottom: 1px solid #dee2e6; padding: 5px;">
-                                    Contribution: {{ $contribution->farmer_contribution }} - Cost: {{ $contribution->cost }}
-                                </div>
-                            @endforeach
-                        @else
-                            <div>No farmer contributions available</div>
-                        @endif
-                    </td>
-
-                    <td>{{ $data->planting_date ?? 'N/A' }}</td>
-                    <td>{{ $data->total_acres ?? 'N/A' }}</td>
-
-                    <!-- New section for product details (total production, income, and profit) -->
-                    <td>
-                        @if($data->agriculturProducts->isNotEmpty())
-                            @foreach($data->agriculturProducts as $product)
-                                <div style="border-bottom: 1px solid #dee2e6; padding: 5px;">
-                                    Product: {{ $product->product_name }} <br>
-                                    Total Production: {{ $product->total_production }} kg <br>
-                                    Total Income: {{ $product->total_income }} <br>
-                                    Profit: {{ $product->profit }}
-                                </div>
-                            @endforeach
-                        @else
-                            <div>No products available</div>
-                        @endif
-                    </td>
-
-                    <td>
-                        <!-- Edit button -->
-                         @if(auth()->user()->hasPermission('agriculture', 'edit'))
-                        <a href="{{ route('agriculture.edit', $data->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        @endif
-                        <!-- Delete form -->
-                        @if(auth()->user()->hasPermission('agriculture', 'delete'))
-                        <form action="{{ route('agriculture.destroy', $data->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
-                        </form>
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
         @if($agricultureData->isEmpty())
-            <p>No agriculture data found for this beneficiary.</p>
-        @endif
+        <p>No agriculture data found for this beneficiary.</p>
+    @endif
+
+    @foreach ($agricultureData as $data)
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-md-4"><strong>Planting Date:</strong> {{ $data->planting_date }}</div>
+                <div class="col-md-4"><strong>Total Acres:</strong> {{ $data->total_acres }}</div>
+                <div class="col-md-4"><strong>Total Livestock Area:</strong> {{ $data->total_livestock_area }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4"><strong>Total Cost:</strong> Rs. {{ $data->total_cost }}</div>
+                <div class="col-md-4"><strong>GN Division:</strong> {{ $data->gn_division_name }}</div>
+            </div>
+
+           <h5 class="text-success mt-4">Farmer Contributions</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <thead class="table-success">
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Value (Rs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data->farmerContributions as $item)
+            <tr>
+                <td>{{ $item->date }}</td>
+                <td>{{ $item->farmer_contribution }}</td>
+                <td>{{ number_format($item->cost, 2) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
+          <h5 class="text-success mt-4">Promoter Contributions</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <thead class="table-success">
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Value (Rs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data->promoterContributions as $item)
+            <tr>
+                <td>{{ $item->date }}</td>
+                <td>{{ $item->description }}</td>
+                <td>{{ number_format($item->cost, 2) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
+         <h5 class="text-success mt-4">Grant Details</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <thead class="table-success">
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Value (Rs.)</th>
+                <th>Issued By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data->grantDetails as $item)
+            <tr>
+                <td>{{ $item->date }}</td>
+                <td>{{ $item->description }}</td>
+                <td>{{ number_format($item->value, 2) }}</td>
+                <td>{{ $item->grant_issued_by }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+         <h5 class="text-success mt-4">Credit Details</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Bank</th>
+                <td>{{ $data->creditDetail->bank_name }}</td>
+            </tr>
+            <tr>
+                <th>Branch</th>
+                <td>{{ $data->creditDetail->branch }}</td>
+            </tr>
+            <tr>
+                <th>Account No</th>
+                <td>{{ $data->creditDetail->account_number }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>Rs. {{ number_format($data->creditDetail->credit_amount, 2) }}</td>
+            </tr>
+            <tr>
+                <th>Interest Rate</th>
+                <td>{{ $data->creditDetail->interest_rate }}%</td>
+            </tr>
+            <tr>
+                <th>Number of Installments</th>
+                <td>{{ $data->creditDetail->number_of_installments }}</td>
+            </tr>
+            <tr>
+                <th>Credit Issue Date</th>
+                <td>{{ $data->creditDetail->credit_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Loan Installment Date</th>
+                <td>{{ $data->creditDetail->loan_installment_date }}</td>
+            </tr>
+            <tr>
+                <th>Installment Due Date</th>
+                <td>{{ $data->creditDetail->installment_due_date }}</td>
+            </tr>
+            <tr>
+                <th>Balance Date</th>
+                <td>{{ $data->creditDetail->credit_balance_on_date }}</td>
+            </tr>
+            <tr>
+                <th>Credit Balance</th>
+                <td>Rs. {{ number_format($data->creditDetail->credit_balance, 2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+          <h5 class="text-success mt-4">Credit Payments</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Payment Date</th>
+                <th>Installment Payment (Rs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data->creditDetail->payments as $payment)
+            <tr>
+                <td>{{ $payment->payment_date }}</td>
+                <td>Rs. {{ number_format($payment->installment_payment, 2) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
+
+            <div class="d-flex justify-content-end mt-4">
+                <a href="{{ route('agriculture.edit', $data->id) }}" class="btn btn-warning me-2"><i class="fas fa-edit"></i> Edit</a>
+                <form action="{{ route('agriculture.destroy', $data->id) }}" method="POST" onsubmit="return confirmDelete(this)">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                </form>
+            </div>
+
+        </div>
     </div>
+    @endforeach
+</div>
     <!-- Include Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>

@@ -2006,7 +2006,7 @@ Route::get('/test-role', function () {
         ->name('expressions.index')
         ->middleware('check.permission:expressions,view');
 
-        Route::get('/evaluation-completed', [EOIController::class, 'evaluationCompleted'])
+    Route::get('/evaluation-completed', [EOIController::class, 'evaluationCompleted'])
         ->name('expressions.evaluation-completed')
         ->middleware('check.permission:expressions,view');
 
