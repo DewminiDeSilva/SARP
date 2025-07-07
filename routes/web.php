@@ -57,6 +57,9 @@ use App\Http\Controllers\CostTabController;
 use App\Http\Controllers\ProjectDesignReportController;
 use App\Http\Controllers\EOIController;
 use App\Http\Controllers\Admin\UserPermissionController;
+use App\Http\Controllers\YouthController;
+
+
 
 
 
@@ -2145,3 +2148,26 @@ Route::prefix('fingerling')->middleware('auth')->group(function () {
 
 Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
 Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
+
+
+
+
+//Youth Enterprise
+
+// Show list of all beneficiaries to link Youth Enterprise
+Route::get('/youth', [YouthController::class, 'index'])->name('youth.index');
+
+// Show form to create Youth Enterprise details for a beneficiary
+Route::get('/youth/create/{beneficiary_id}', [YouthController::class, 'create'])->name('youth.create');
+
+// Handle storing the submitted Youth Enterprise data
+Route::post('/youth/store', [YouthController::class, 'store'])->name('youth.store');
+
+Route::get('/youth/{id}/show', [YouthController::class, 'show'])->name('youth.show');
+
+Route::get('/youth/{id}/edit', [YouthController::class, 'edit'])->name('youth.edit');
+Route::put('/youth/{id}', [YouthController::class, 'update'])->name('youth.update');
+
+Route::delete('/youth/{id}', [YouthController::class, 'destroy'])->name('youth.destroy');
+
+
