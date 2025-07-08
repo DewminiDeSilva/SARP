@@ -164,135 +164,341 @@
     <div class="container mt-5">
 
         <div class="center-heading text-center">
-            <h1 style="font-size: 2.5rem; color: green;">Agriculture Form {{ $beneficiary->name_with_initials }}</h1>
+            <h1 style="font-size: 2.5rem; color: green;">Cultivation Data of {{ $beneficiary->name_with_initials }}</h1>
         </div>
     </br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
         <form action="{{ route('agriculture.store') }}" method="POST">
             @csrf
-            <!-- Crop Category and Crop Name -->
-            <!-- <div class="row mt-3">
-                <div class="col">
-                    <div class="dropdown">
-                        <label for="categoryDropdown" class="form-label dropdown-label">Crop Category</label>
-                        <select id="categoryDropdown" name="category" class="form-control" required>
-                            <option value="">Select Category</option>
-                            <option value="vegetables">Vegetables</option>
-                            <option value="fruits">Fruits</option>
-                            <option value="home_garden">Home Garden</option>
-                            <option value="others">Cereals/Legumes</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col">
-                    <label for="cropName" class="form-label bold-label">Crop Name</label>
-                    <select id="cropName" name="crop_name" class="form-control" required>
-                        <option value="">Select Crop Name</option>
-                    </select>
-                </div>
-            </div> -->
-            <!-- Crop Category (Read-Only) -->
+           
 <div class="row mt-3">
-    <div class="col">
-        <label for="cropCategory" class="form-label bold-label">Crop Category</label>
-        <input type="text" class="form-control" id="cropCategory" name="crop_category"
-               value="{{ $cropCategory }}" readonly>
+  <div class="col-md-4">
+    <label for="cropCategory" class="form-label bold-label">Crop Category</label>
+    <input type="text" class="form-control" id="cropCategory" name="crop_category" value="{{ $cropCategory }}" readonly>
+  </div>
+
+
+ <div class="col-md-4">
+    <label for="cropName" class="form-label bold-label">Crop Name</label>
+    <input type="text" class="form-control" id="cropName" name="crop_name" value="{{ $cropName }}" readonly>
+  </div>
+
+
+<!-- Planting Date -->
+
+  <div class="col-md-4">
+    <label for="plantingDate" class="form-label bold-label">Planting Date</label>
+    <input type="date" class="form-control" id="plantingDate" name="planting_date">
+  </div>
+</div>
+
+<!-- Total Acres & Total Livestock Area & Total Cost -->
+<div class="row mt-3">
+  <div class="col-md-4">
+    <label for="totalAcres" class="form-label bold-label">Total Acres</label>
+    <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" min="0">
+  </div>
+  <div class="col-md-4">
+    <label for="totalLivestockArea" class="form-label bold-label">Total Livestock Area</label>
+    <input type="number" class="form-control" name="total_livestock_area" step="0.01" min="0">
+  </div>
+  <div class="col-md-4">
+    <label for="totalCost" class="form-label bold-label">Total Cost</label>
+    <input type="number" class="form-control" name="total_cost" step="0.01" min="0">
+  </div>
+</div>
+<!-- Farmer Contribution Section -->
+<!-- <div class="mt-4">
+  <h5>Farmer Contributions</h5>
+  <div id="farmer-fields">
+    <div class="row farmer-group mb-2">
+      <div class="col-md-3">
+         <label>Contribution Date</label>
+        <input type="date" name="farmer_date[]" class="form-control" placeholder="Date">
+      </div>
+      <div class="col-md-5">
+        <label>Contribution Description</label>
+        <input type="text" name="farmer_contribution[]" class="form-control" placeholder="Contribution Description">
+      </div>
+      <div class="col-md-3">
+          <label>Cost (Rs.)</label>
+        <input type="number" step="0.01" name="cost[]" class="form-control" placeholder="Cost">
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-sm btn-success mt-2" id="add-farmer">Add More</button>
+</div> -->
+<div class="card mb-4 mt-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Farmer Contributions
+    </div>
+    <div class="card-body">
+        <div id="farmer-fields">
+            <div class="row farmer-group align-items-center">
+                <div class="col-md-3">
+                    <label>Contribution Date</label>
+                    <input type="date" name="farmer_date[]" class="form-control" required>
+                </div>
+                <div class="col-md-5">
+                    <label>Contribution Description</label>
+                    <input type="text" name="farmer_contribution[]" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label>Cost (Rs.)</label>
+                    <input type="number" step="0.01" name="cost[]" class="form-control" required>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                    <!-- Optional remove button space -->
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+            <button type="button" class="btn btn-success btn-sm" id="add-farmer">Add More Farmer Contributions</button>
+        </div>
     </div>
 </div>
 
-<!-- Crop Name (Read-Only) -->
-<div class="row mt-3">
-    <div class="col">
-        <label for="cropName" class="form-label bold-label">Crop Name</label>
-        <input type="text" class="form-control" id="cropName" name="crop_name"
-               value="{{ $cropName }}" readonly>
+
+<!-- Promoter Contribution Section
+<div class="mt-4">
+  <h5>Promoter Contributions</h5>
+  <div id="promoter-fields">
+    
+    <div class="row promoter-group mb-2">
+        
+      <div class="col-md-3">
+        <label>Contribution Date</label>
+        <input type="date" name="promoter_date[]" class="form-control" placeholder="Date">
+    </div>
+      <div class="col-md-5">
+         <label>Contribution Description</label>
+        <input type="text" name="promoter_description[]" class="form-control" placeholder="Description">
+    </div>
+      <div class="col-md-3">
+        <label>Cost (Rs.)</label>
+        <input type="number" step="0.01" name="promoter_cost[]" class="form-control" placeholder="Cost">
+    </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-sm btn-success mt-2" id="add-promoter">Add More</button>
+</div> -->
+<div class="card mb-4 mt-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Promoter Contributions
+    </div>
+    <div class="card-body">
+        <div id="promoter-fields">
+            <div class="row promoter-group align-items-center">
+                <div class="col-md-3">
+                    <label>Contribution Date</label>
+                    <input type="date" name="promoter_date[]" class="form-control" required>
+                </div>
+                <div class="col-md-5">
+                    <label>Contribution Description</label>
+                    <input type="text" name="promoter_description[]" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label>Cost (Rs.)</label>
+                    <input type="number" step="0.01" name="promoter_cost[]" class="form-control" required>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                    <!-- Remove button will be added dynamically via JS if needed -->
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+            <button type="button" class="btn btn-success btn-sm" id="add-promoter">Add More Promoter Contributions</button>
+        </div>
     </div>
 </div>
 
-            <!-- Crop Variety -->
-            <div class="row mt-3">
-                <div class="col">
-                    <label for="cropVariety" class="form-label bold-label">Crop Variety</label>
-                    <input type="text" class="form-control" id="cropVariety" name="crop_variety" >
+
+<!-- Grant Details Section -->
+<!-- <div class="mt-4">
+  <h5>Grant Details</h5>
+  <div id="grant-fields">
+    <div class="row grant-group mb-2">
+      <div class="col-md-2">
+        <label>Grant Date</label>
+        <input type="date" name="grant_date[]" class="form-control" placeholder="Date">
+    </div>
+      <div class="col-md-4">
+         <label>Grant Description</label>
+        <input type="text" name="grant_description[]" class="form-control" placeholder="Description">
+    </div>
+      <div class="col-md-2">
+         <label>Value</label>
+        <input type="number" step="0.01" name="grant_value[]" class="form-control" placeholder="Value">
+    </div>
+      <div class="col-md-4">
+         <label>Issued by</label>
+        <input type="text" name="grant_issued_by[]" class="form-control" placeholder="Issued By">
+    </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-sm btn-success mt-2" id="add-grant">Add More</button>
+</div> -->
+<div class="card mb-4 mt-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Grant Details
+    </div>
+    <div class="card-body">
+        <div id="grant-fields">
+            <div class="row grant-group align-items-center">
+                <div class="col-md-2">
+                    <label>Grant Date</label>
+                    <input type="date" name="grant_date[]" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label>Grant Description</label>
+                    <input type="text" name="grant_description[]" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Value</label>
+                    <input type="number" step="0.01" name="grant_value[]" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label>Issued by</label>
+                    <input type="text" name="grant_issued_by[]" class="form-control" required>
                 </div>
             </div>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+            <button type="button" class="btn btn-success btn-sm" id="add-grant">Add More Grant Details</button>
+        </div>
+    </div>
+</div>
 
-            <!-- Planting Date -->
-            <div class="row mt-3">
-                <div class="col">
-                    <label for="plantingDate" class="form-label bold-label">Planting Date</label>
-                    <input type="date" class="form-control" id="plantingDate" name="planting_date">
+
+<!-- Credit Detail (Single Entry) -->
+<div class="card mb-4 mt-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Credit Details
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label>Bank Name</label>
+                <input type="text" name="bank_name" class="form-control" placeholder="Bank Name">
+            </div>
+            <div class="col-md-4">
+                <label>Branch</label>
+                <input type="text" name="branch" class="form-control" placeholder="Branch">
+            </div>
+            <div class="col-md-4">
+                <label>Account Number</label>
+                <input type="text" name="account_number" class="form-control" placeholder="Account Number">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <label>Interest Rate (%)</label>
+                <input type="number" step="0.01" name="interest_rate" class="form-control" placeholder="Interest Rate %">
+            </div>
+            <div class="col-md-3">
+                <label>Credit Issue Date</label>
+                <input type="date" name="credit_issue_date" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label>Loan Installment Date</label>
+                <input type="date" name="loan_installment_date" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label>Credit Amount (Rs.)</label>
+                <input type="number" step="0.01" name="credit_amount" class="form-control" placeholder="Credit Amount">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <label>Number of Installments</label>
+                <input type="number" name="number_of_installments" class="form-control" placeholder="No. of Installments">
+            </div>
+            <div class="col-md-3">
+                <label>Installment Due Date</label>
+                <input type="date" name="installment_due_date" class="form-control">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Credit Payments Section -->
+<div class="card mb-4 mt-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Credit Payments
+    </div>
+    <div class="card-body">
+        <div id="credit-payment-fields">
+            <div class="row credit-payment-group mb-2">
+                <div class="col-md-6">
+                    <label>Payment Date</label>
+                    <input type="date" name="payment_date[]" class="form-control" placeholder="Payment Date">
+                </div>
+                <div class="col-md-6">
+                    <label>Installment Payment (Rs.)</label>
+                    <input type="number" step="0.01" name="installment_payment[]" class="form-control" placeholder="Installment Payment">
                 </div>
             </div>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+            <button type="button" class="btn btn-success btn-sm" id="add-credit-payment">Add More</button>
+        </div>
+    </div>
+</div>
 
-            <!-- Inputs -->
-            <div class="row mt-3">
-                <div class="col">
-                    <label for="inputs" class="form-label bold-label">Inputs</label>
-                    <input type="text" class="form-control" id="inputs" name="inputs" required>
+
+<div class="card mb-4 card-custom">
+    <div class="card-header bg-success text-white">
+        Credit Balance On
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label>Credit Balance On Date</label>
+                <input type="date" name="credit_balance_on_date" class="form-control" id="balance-date" readonly>
+            </div>
+            <div class="col-md-4">
+                <label>Credit Balance (Rs.)</label>
+                <input type="number" step="0.01" name="credit_balance" class="form-control" placeholder="Credit Balance">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Agriculture Products Section -->
+<div class="card mb-4 mt-5 card-custom">
+    <div class="card-header bg-success text-white">
+        Agriculture Products
+    </div>
+    <div class="card-body">
+        <div id="product-fields">
+            <div class="row product-group mb-2">
+                <div class="col-md-3">
+                    <label>Production Name</label>
+                    <input type="text" name="product_name[]" class="form-control" placeholder="Product Name">
+                </div>
+                <div class="col-md-3">
+                    <label>Total Production</label>
+                    <input type="number" step="0.01" name="total_production[]" class="form-control" placeholder="Total Production">
+                </div>
+                <div class="col-md-3">
+                    <label>Total Income (Rs.)</label>
+                    <input type="number" step="0.01" name="total_income[]" class="form-control" placeholder="Total Income">
+                </div>
+                <div class="col-md-3">
+                    <label>Profit (Rs.)</label>
+                    <input type="number" step="0.01" name="profit[]" class="form-control" placeholder="Profit">
                 </div>
             </div>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+            <button type="button" class="btn btn-success btn-sm" id="add-product">Add More</button>
+        </div>
+    </div>
+</div>
 
-            <!-- Farmer Contribution and Cost -->
-            <div class="row mt-3">
-                <div class="col">
-                    Farmer or Other Contribution
-                </div>
-                <div class="card-body">
-                    <div id="contribution-fields">
-                        <div class="row contribution-group">
-                            <div class="col-5 form-group">
-                                <label for="farmer_contribution[]">Farmer Contribution</label>
-                                <input type="text" name="farmer_contribution[]" class="form-control" required>
-                            </div>
-                            <div class="col-5 form-group">
-                                <label for="cost[]">Cost</label>
-                                <input type="number" step="0.01" name="cost[]" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" id="add-contribution" class="btn btn-primary mt-3">Add More</button>
-                </div>
-            </div>
 
-            <!-- Total Acres -->
-            <div class="row mt-3">
-                <div class="col">
-                    <label for="totalAcres" class="form-label bold-label">Total Number of Acres Cultivated</label>
-                    <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" min="0" required>
-
-                </div>
-            </div>
-
-            <!-- Total Production, Total Income, Profit for Products -->
-            <div class="row mt-3">
-                <div class="col">
-                    Product Details
-                </div>
-                <div class="card-body">
-                    <div id="product-fields">
-                        <div class="row product-group">
-                            <div class="col-4 form-group">
-                                <label for="product_name[]">Product Name</label>
-                                <input type="text" name="product_name[]" class="form-control" required>
-                            </div>
-                            <div class="col-3 form-group">
-                                <label for="total_production[]">Total Production (kg)</label>
-                                <input type="number" step="0.01" name="total_production[]" class="form-control" required>
-                            </div>
-                            <div class="col-3 form-group">
-                                <label for="total_income[]">Total Income</label>
-                                <input type="number" step="0.01" name="total_income[]" class="form-control" required>
-                            </div>
-                            <div class="col-2 form-group">
-                                <label for="profit[]">Profit</label>
-                                <input type="number" step="0.01" name="profit[]" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" id="add-product" class="btn btn-primary mt-3">Add More Product</button>
-                </div>
-            </div>
 
             <!-- GN Division Name -->
             <input type="hidden" id="gnDivisionName" name="gn_division_name">
@@ -485,6 +691,98 @@
                 content.style.padding = '20px'; // Reset padding
             }
         });
+    });
+</script>
+<!-- JavaScript to handle dynamic Add More buttons -->
+<script>
+    $(document).on('click', '#add-farmer', function () {
+  $('#farmer-fields').append(`
+    <div class="row farmer-group mb-2">
+      <div class="col-md-3"><input type="date" name="farmer_date[]" class="form-control" placeholder="Date"></div>
+      <div class="col-md-5"><input type="text" name="farmer_contribution[]" class="form-control" placeholder="Contribution Description"></div>
+      <div class="col-md-3"><input type="number" step="0.01" name="cost[]" class="form-control" placeholder="Cost"></div>
+      <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-farmer">X</button></div>
+    </div>`);
+});
+
+$(document).on('click', '.remove-farmer', function () {
+  $(this).closest('.farmer-group').remove();
+});
+
+  $(document).on('click', '#add-promoter', function () {
+    $('#promoter-fields').append(`
+      <div class="row promoter-group mb-2">
+        <div class="col-md-3"><input type="date" name="promoter_date[]" class="form-control"></div>
+        <div class="col-md-5"><input type="text" name="promoter_description[]" class="form-control"></div>
+        <div class="col-md-3"><input type="number" step="0.01" name="promoter_cost[]" class="form-control"></div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-promoter">X</button></div>
+      </div>`);
+  });
+  $(document).on('click', '.remove-promoter', function () {
+    $(this).closest('.promoter-group').remove();
+  });
+
+  $(document).on('click', '#add-grant', function () {
+    $('#grant-fields').append(`
+      <div class="row grant-group mb-2">
+        <div class="col-md-2"><input type="date" name="grant_date[]" class="form-control"></div>
+        <div class="col-md-4"><input type="text" name="grant_description[]" class="form-control"></div>
+        <div class="col-md-2"><input type="number" step="0.01" name="grant_value[]" class="form-control"></div>
+        <div class="col-md-3"><input type="text" name="grant_issued_by[]" class="form-control"></div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-grant">X</button></div>
+      </div>`);
+  });
+  $(document).on('click', '.remove-grant', function () {
+    $(this).closest('.grant-group').remove();
+  });
+
+  $(document).on('click', '#add-credit-payment', function () {
+    $('#credit-payment-fields').append(`
+      <div class="row credit-payment-group mb-2">
+        <div class="col-md-6"><input type="date" name="payment_date[]" class="form-control"></div>
+        <div class="col-md-5"><input type="number" step="0.01" name="installment_payment[]" class="form-control"></div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-credit-payment">X</button></div>
+      </div>`);
+  });
+  $(document).on('click', '.remove-credit-payment', function () {
+    $(this).closest('.credit-payment-group').remove();
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#add-product').click(function () {
+      $('#product-fields').append(`
+        <div class="row product-group mb-2">
+          <div class="col-md-3">
+            <input type="text" name="product_name[]" class="form-control" placeholder="Product Name">
+          </div>
+          <div class="col-md-3">
+            <input type="number" step="0.01" name="total_production[]" class="form-control" placeholder="Total Production">
+          </div>
+          <div class="col-md-3">
+            <input type="number" step="0.01" name="total_income[]" class="form-control" placeholder="Total Income">
+          </div>
+          <div class="col-md-2">
+            <input type="number" step="0.01" name="profit[]" class="form-control" placeholder="Profit">
+          </div>
+          <div class="col-md-1 d-flex align-items-end">
+            <button type="button" class="btn btn-danger btn-sm remove-product">X</button>
+          </div>
+        </div>
+      `);
+    });
+
+    $(document).on('click', '.remove-product', function () {
+      $(this).closest('.product-group').remove();
+    });
+  });
+</script>
+
+<script>
+    // Auto fill today's date in "Credit Balance On Date"
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('balance-date').value = today;
     });
 </script>
 </body>
