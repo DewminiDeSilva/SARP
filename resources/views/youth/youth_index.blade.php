@@ -190,6 +190,20 @@
                 </div>
             </div>
 
+            <!-- Search Bar -->
+            <form method="GET" action="{{ route('youth.index') }}" class="form-inline mb-3 mt-5 d-flex align-items-center gap-2">
+                <input type="text" name="search" class="form-control mr-2" placeholder="Search beneficiaries..." value="{{ request('search') }}">
+
+                <select name="status" class="form-control mr-2">
+                    <option value="">-- All Statuses --</option>
+                    <option value="with" {{ request('status') == 'with' ? 'selected' : '' }}>With Youth</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending Youth</option>
+                </select>
+
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
+
+
             <div class="row table-container mt-4">
                 <div class="col">
                     <table class="table table-bordered">

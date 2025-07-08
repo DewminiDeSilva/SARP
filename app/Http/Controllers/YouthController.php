@@ -13,12 +13,12 @@ class YouthController extends Controller
      * Display a paginated list of beneficiaries for Youth Enterprise linkage.
      * Only specific columns are selected, and sorted by latest first.
      */
-    public function index(Request $request)
+   public function index(Request $request)
 {
-    // 1) Get all beneficiary IDs who have youth records
+    // 1) Get all beneficiary IDs with youth records
     $youthBeneficiaryIds = Youth::pluck('beneficiary_id')->unique();
 
-    // 2) Build the base query for beneficiaries
+    // 2) Build base query
     $query = Beneficiary::select(
         'id',
         'nic',
@@ -29,25 +29,39 @@ class YouthController extends Controller
         'tank_name'
     );
 
-    // 3) Apply text search
+    // 3) Apply search
     if ($request->filled('search')) {
         $search = $request->search;
         $query->where(function ($q) use ($search) {
-            $q->where('nic', 'like', "%{$search}%")
-              ->orWhere('name_with_initials', 'like', "%{$search}%")
-              ->orWhere('address', 'like', "%{$search}%")
-              ->orWhere('tank_name', 'like', "%{$search}%")
-              ->orWhere('phone', 'like', "%{$search}%");
+            if (strtolower($search) === 'male' || strtolower($search) === 'female') {
+                $q->where('gender', strtolower($search));
+            } else {
+                $q->where('nic', 'like', "%{$search}%")
+                  ->orWhere('name_with_initials', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('tank_name', 'like', "%{$search}%");
+            }
         });
+
     }
 
-    // 4) Order by latest
-    $query->orderBy('created_at', 'desc');
+    // 4) Apply status filter
+    if ($request->filled('status')) {
+        if ($request->status == 'with') {
+            $query->whereIn('id', $youthBeneficiaryIds);
+        } elseif ($request->status == 'pending') {
+            $query->whereNotIn('id', $youthBeneficiaryIds);
+        }
+    }
 
-    // 5) Paginate
-    $beneficiaries = $query->paginate(10)->appends([
-        'search' => $request->search,
-    ]);
+    // 5) Paginate and append filters
+    $beneficiaries = $query->orderBy('created_at', 'desc')
+        ->paginate(10)
+        ->appends([
+            'search' => $request->search,
+            'status' => $request->status,
+        ]);
 
     // 6) Summary counts
     $totalBeneficiaries = Beneficiary::count();
@@ -63,6 +77,7 @@ class YouthController extends Controller
         'pendingYouthCount'
     ));
 }
+
 
 
     /**
