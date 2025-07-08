@@ -138,6 +138,13 @@
             font-weight: bold;
             border-left: 5px solid #28a745;
         }
+
+        .card-header {
+            background-color:#198754 !important; /* darker green */
+            color: white;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -175,7 +182,7 @@
 
         <!-- 1. Enterprise Information -->
         <div class="card mb-3">
-            <div class="card-header bg-success text-white font-weight-bold">Enterprise Information</div>
+            <div class="card-header bg-success text-white font-weight-bold">Enterprise & Business Information</div>
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-4">
@@ -218,43 +225,54 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label>Nature of Business</label>
-                        <input type="text" name="nature_of_business" class="form-control" value="{{ $youth->nature_of_business }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label>Products Available</label>
-                        <textarea name="products_available" class="form-control">{{ $youth->products_available }}</textarea>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label>Yield Collection Details</label>
-                        <textarea name="yield_collection_details" class="form-control">{{ $youth->yield_collection_details }}</textarea>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Marketing Information</label>
-                        <textarea name="marketing_information" class="form-control">{{ $youth->marketing_information }}</textarea>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label>List of Distributors</label>
-                        <textarea name="list_of_distributors" class="form-control">{{ $youth->list_of_distributors }}</textarea>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Business Plan (PDF)</label>
-                        <input type="file" name="business_plan" class="form-control">
-                        @if ($youth->business_plan)
-                            <a href="{{ asset('storage/' . $youth->business_plan) }}" target="_blank">View current</a>
-                        @endif
-                    </div>
-                </div>
+                
             </div>
         </div>
+
+        <!-- Business Information Section -->
+<div class="card mb-4">
+    <div class="card-header">
+        Business Information
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Nature of Business</label>
+                <input type="text" name="nature_of_business" class="form-control" value="{{ $youth->nature_of_business }}">
+            </div>
+            <div class="col-md-6">
+                <label>Products Available</label>
+                <textarea name="products_available" class="form-control">{{ $youth->products_available }}</textarea>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Yield Collection Details</label>
+                <textarea name="yield_collection_details" class="form-control">{{ $youth->yield_collection_details }}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label>Marketing Information</label>
+                <textarea name="marketing_information" class="form-control">{{ $youth->marketing_information }}</textarea>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>List of Distributors</label>
+                <textarea name="list_of_distributors" class="form-control">{{ $youth->list_of_distributors }}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label>Business Plan (PDF)</label>
+                <input type="file" name="business_plan" class="form-control">
+                @if ($youth->business_plan)
+                    <a href="{{ asset('storage/' . $youth->business_plan) }}" target="_blank">View current</a>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
 
         <!-- Dynamic Sections (reuse same as create for JS) -->
         <!-- Asset Details -->

@@ -176,37 +176,48 @@
 </div>
 
         <!-- Enterprise Information -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Enterprise Information</div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-4"><label>Enterprise Name</label><input type="text" name="enterprise_name" class="form-control"></div>
-                    <div class="col-md-4"><label>Registration Number</label><input type="text" name="registration_number" class="form-control"></div>
-                    <div class="col-md-4"><label>Institute of Registration</label><input type="text" name="institute_of_registration" class="form-control"></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6"><label>Address</label><input type="text" name="address" class="form-control"></div>
-                    <div class="col-md-3"><label>Email</label><input type="email" name="email" class="form-control"></div>
-                    <div class="col-md-3"><label>Phone Number</label><input type="text" name="phone_number" class="form-control"></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6"><label>Website</label><input type="text" name="website_name" class="form-control"></div>
-                    <div class="col-md-6"><label>Certificates Description</label><textarea name="description_of_certificates" class="form-control"></textarea></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6"><label>Nature of Business</label><input type="text" name="nature_of_business" class="form-control"></div>
-                    <div class="col-md-6"><label>Products Available</label><textarea name="products_available" class="form-control"></textarea></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6"><label>Yield Collection Details</label><textarea name="yield_collection_details" class="form-control"></textarea></div>
-                    <div class="col-md-6"><label>Marketing Information</label><textarea name="marketing_information" class="form-control"></textarea></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6"><label>List of Distributors</label><textarea name="list_of_distributors" class="form-control"></textarea></div>
-                    <div class="col-md-6"><label>Business Plan (PDF)</label><input type="file" name="business_plan" class="form-control"></div>
-                </div>
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">Enterprise Information</div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-4"><label>Enterprise Name</label><input type="text" name="enterprise_name" class="form-control"></div>
+            <div class="col-md-4"><label>Registration Number</label><input type="text" name="registration_number" class="form-control"></div>
+            <div class="col-md-4"><label>Institute of Registration</label><input type="text" name="institute_of_registration" class="form-control"></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6"><label>Address</label><input type="text" name="address" class="form-control"></div>
+            <div class="col-md-3"><label>Email</label><input type="email" name="email" class="form-control"></div>
+            <div class="col-md-3"><label>Phone Number</label><input type="text" name="phone_number" class="form-control"></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6"><label>Website</label><input type="text" name="website_name" class="form-control"></div>
+            <div class="col-md-6"><label>Certificates Description</label><textarea name="description_of_certificates" class="form-control"></textarea></div>
+        </div>
+    </div>
+</div>
+
+<!-- Business Information -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">Business Information</div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6"><label>Nature of Business</label><input type="text" name="nature_of_business" class="form-control"></div>
+            <div class="col-md-6"><label>Products Available</label><textarea name="products_available" class="form-control"></textarea></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6"><label>Yield Collection Details</label><textarea name="yield_collection_details" class="form-control"></textarea></div>
+            <div class="col-md-6"><label>Marketing Information</label><textarea name="marketing_information" class="form-control"></textarea></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6"><label>List of Distributors</label><textarea name="list_of_distributors" class="form-control"></textarea></div>
+            <div class="col-md-6">
+                <label>Business Plan (PDF)</label>
+                <input type="file" name="business_plan" class="form-control">
             </div>
         </div>
+    </div>
+</div>
+
 
         <!-- Asset Details -->
         <div class="card mb-4">
