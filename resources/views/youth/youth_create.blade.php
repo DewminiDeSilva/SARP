@@ -152,180 +152,139 @@
             @include('dashboard.dashboardC')
         </div>
 
-        <div class="right-column">
+        <div class="right-column" style="padding:70px;">
             <div class="container-fluid">
                 <div class="center-heading text-center">
                     <h1 style="font-size: 2.5rem; color: green;">Youth Enterprise Registration</h1>
                 </div>
             </div>
+     
+    <div class="container mt-5 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
             
+
     <form action="{{ route('youth.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="beneficiary_id" value="{{ $beneficiary->id }}">
-        <!-- 1. Enterprise Information -->
-        <div class="section-title">Enterprise Information</div>
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label>Enterprise Name</label>
-                <input type="text" name="enterprise_name" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label>Registration Number</label>
-                <input type="text" name="registration_number" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label>Institute of Registration</label>
-                <input type="text" name="institute_of_registration" class="form-control">
-            </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Address</label>
-                <input type="text" name="address" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <label>Phone Number</label>
-                <input type="text" name="phone_number" class="form-control">
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Website</label>
-                <input type="text" name="website_name" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label>Certificates Description</label>
-                <textarea name="description_of_certificates" class="form-control"></textarea>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Nature of Business</label>
-                <input type="text" name="nature_of_business" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label>Products Available</label>
-                <textarea name="products_available" class="form-control"></textarea>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Yield Collection Details</label>
-                <textarea name="yield_collection_details" class="form-control"></textarea>
-            </div>
-            <div class="col-md-6">
-                <label>Marketing Information</label>
-                <textarea name="marketing_information" class="form-control"></textarea>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>List of Distributors</label>
-                <textarea name="list_of_distributors" class="form-control"></textarea>
-            </div>
-            <div class="col-md-6">
-                <label>Business Plan (PDF)</label>
-                <input type="file" name="business_plan" class="form-control">
-            </div>
-        </div>
-
-        <!-- 2. Asset Details (JSON) -->
-        <div class="section-title">Asset Details</div>
-        <div id="assetDetails"></div>
-        <button type="button" class="btn btn-outline-success mb-3" onclick="addAssetRow()">Add Asset</button>
-
-        <!-- 3. Youth Contribution (JSON) -->
-        <div class="section-title">Youth Contributions</div>
-        <div id="youthContributions"></div>
-        <button type="button" class="btn btn-outline-success mb-3" onclick="addYouthRow()">Add Contribution</button>
-
-        <!-- 4. Promoter Contribution (JSON) -->
-        <div class="section-title">Promoter Contributions</div>
-        <div id="promoterContributions"></div>
-        <button type="button" class="btn btn-outline-success mb-3" onclick="addPromoterRow()">Add Contribution</button>
-
-        <!-- 5. Grant Details (JSON) -->
-        <div class="section-title">Grant Details</div>
-        <div id="grantDetails"></div>
-        <button type="button" class="btn btn-outline-success mb-3" onclick="addGrantRow()">Add Grant</button>
-
-        <!-- 6. Credit Details -->
-        <div class="section-title">Credit Details</div>
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label>Bank Name</label>
-                <input type="text" name="bank_name" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label>Branch</label>
-                <input type="text" name="branch" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label>Account Number</label>
-                <input type="text" name="account_number" class="form-control">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <label>Interest Rate (%)</label>
-                <input type="number" step="0.01" name="interest_rate" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <label>Credit Issue Date</label>
-                <input type="date" name="credit_issue_date" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <label>Loan Installment Date</label>
-                <input type="date" name="loan_installment_date" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <label>Credit Amount</label>
-                <input type="number" step="0.01" name="credit_amount" class="form-control">
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Number of Installments</label>
-                <input type="number" name="number_of_installments" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label>Installment Due Date</label>
-                <input type="date" name="installment_due_date" class="form-control">
-            </div>
-        </div>
-
-        <!-- Installment Payments (JSON) -->
-        <div class="section-title">Installment Payments</div>
-        <div id="installmentPayments"></div>
-        <button type="button" class="btn btn-outline-success mb-3" onclick="addInstallmentRow()">Add Installment</button>
-
-        <!-- Credit Balance Information -->
-        <div class="section-title">Credit Balance Information</div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Credit Balance Date</label>
-                <input type="date" name="credit_balance_date" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label>Credit Balance Value</label>
-                <input type="number" step="0.01" name="credit_balance_value" class="form-control">
-            </div>
-        </div>
         
-        <button type="submit" class="btn btn-success">Submit</button>
+        <!-- Enterprise Information -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Enterprise Information</div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4"><label>Enterprise Name</label><input type="text" name="enterprise_name" class="form-control"></div>
+                    <div class="col-md-4"><label>Registration Number</label><input type="text" name="registration_number" class="form-control"></div>
+                    <div class="col-md-4"><label>Institute of Registration</label><input type="text" name="institute_of_registration" class="form-control"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><label>Address</label><input type="text" name="address" class="form-control"></div>
+                    <div class="col-md-3"><label>Email</label><input type="email" name="email" class="form-control"></div>
+                    <div class="col-md-3"><label>Phone Number</label><input type="text" name="phone_number" class="form-control"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><label>Website</label><input type="text" name="website_name" class="form-control"></div>
+                    <div class="col-md-6"><label>Certificates Description</label><textarea name="description_of_certificates" class="form-control"></textarea></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><label>Nature of Business</label><input type="text" name="nature_of_business" class="form-control"></div>
+                    <div class="col-md-6"><label>Products Available</label><textarea name="products_available" class="form-control"></textarea></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><label>Yield Collection Details</label><textarea name="yield_collection_details" class="form-control"></textarea></div>
+                    <div class="col-md-6"><label>Marketing Information</label><textarea name="marketing_information" class="form-control"></textarea></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><label>List of Distributors</label><textarea name="list_of_distributors" class="form-control"></textarea></div>
+                    <div class="col-md-6"><label>Business Plan (PDF)</label><input type="file" name="business_plan" class="form-control"></div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Asset Details -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Asset Details</div>
+            <div class="card-body">
+                <div id="assetDetails"></div>
+                <button type="button" class="btn btn-outline-success mt-2" onclick="addAssetRow()">Add Asset</button>
+            </div>
+        </div>
 
+        <!-- Youth Contributions -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Youth Contributions</div>
+            <div class="card-body">
+                <div id="youthContributions"></div>
+                <button type="button" class="btn btn-outline-success mt-2" onclick="addYouthRow()">Add Contribution</button>
+            </div>
+        </div>
+
+        <!-- Promoter Contributions -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Promoter Contributions</div>
+            <div class="card-body">
+                <div id="promoterContributions"></div>
+                <button type="button" class="btn btn-outline-success mt-2" onclick="addPromoterRow()">Add Contribution</button>
+            </div>
+        </div>
+
+        <!-- Grant Details -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Grant Details</div>
+            <div class="card-body">
+                <div id="grantDetails"></div>
+                <button type="button" class="btn btn-outline-success mt-2" onclick="addGrantRow()">Add Grant</button>
+            </div>
+        </div>
+
+        <!-- Credit Details -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Credit Details</div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4"><label>Bank Name</label><input type="text" name="bank_name" class="form-control"></div>
+                    <div class="col-md-4"><label>Branch</label><input type="text" name="branch" class="form-control"></div>
+                    <div class="col-md-4"><label>Account Number</label><input type="text" name="account_number" class="form-control"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3"><label>Interest Rate (%)</label><input type="number" step="0.01" name="interest_rate" class="form-control"></div>
+                    <div class="col-md-3"><label>Credit Issue Date</label><input type="date" name="credit_issue_date" class="form-control"></div>
+                    <div class="col-md-3"><label>Loan Installment Date</label><input type="date" name="loan_installment_date" class="form-control"></div>
+                    <div class="col-md-3"><label>Credit Amount</label><input type="number" step="0.01" name="credit_amount" class="form-control"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><label>Number of Installments</label><input type="number" name="number_of_installments" class="form-control"></div>
+                    <div class="col-md-6"><label>Installment Due Date</label><input type="date" name="installment_due_date" class="form-control"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Installment Payments -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Installment Payments</div>
+            <div class="card-body">
+                <div id="installmentPayments"></div>
+                <button type="button" class="btn btn-outline-success mt-2" onclick="addInstallmentRow()">Add Installment</button>
+            </div>
+        </div>
+
+        <!-- Credit Balance -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">Credit Balance Information</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6"><label>Credit Balance Date</label><input type="date" name="credit_balance_date" class="form-control"></div>
+                    <div class="col-md-6"><label>Credit Balance Value</label><input type="number" step="0.01" name="credit_balance_value" class="form-control"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success px-5">Submit</button>
+        </div>
     </form>
+    
+    
+    </div> 
 </div>
 
 <script>
