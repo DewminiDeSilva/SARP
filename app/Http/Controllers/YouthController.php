@@ -13,10 +13,13 @@ class YouthController extends Controller
      * Display a paginated list of beneficiaries for Youth Enterprise linkage.
      * Only specific columns are selected, and sorted by latest first.
      */
-    public function index()
+    public function index(Request $request)
 {
-    // Fetch paginated list of beneficiaries (as you're already doing)
-    $beneficiaries = Beneficiary::select(
+    // 1) Get all beneficiary IDs who have youth records
+    $youthBeneficiaryIds = Youth::pluck('beneficiary_id')->unique();
+
+    // 2) Build the base query for beneficiaries
+    $query = Beneficiary::select(
         'id',
         'nic',
         'name_with_initials',
@@ -24,20 +27,40 @@ class YouthController extends Controller
         'address',
         'phone',
         'tank_name'
-    )
-    ->orderBy('created_at', 'desc')
-    ->paginate(10);
+    );
 
-    // Summary counts for cards
-    $totalBeneficiaries = Beneficiary::count(); // Total registered beneficiaries
-    $withYouth = Youth::distinct('beneficiary_id')->count('beneficiary_id'); // Beneficiaries with youth records
-    $pending = $totalBeneficiaries - $withYouth; // Remaining without youth data
+    // 3) Apply text search
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('nic', 'like', "%{$search}%")
+              ->orWhere('name_with_initials', 'like', "%{$search}%")
+              ->orWhere('address', 'like', "%{$search}%")
+              ->orWhere('tank_name', 'like', "%{$search}%")
+              ->orWhere('phone', 'like', "%{$search}%");
+        });
+    }
 
+    // 4) Order by latest
+    $query->orderBy('created_at', 'desc');
+
+    // 5) Paginate
+    $beneficiaries = $query->paginate(10)->appends([
+        'search' => $request->search,
+    ]);
+
+    // 6) Summary counts
+    $totalBeneficiaries = Beneficiary::count();
+    $withYouthCount     = Youth::distinct('beneficiary_id')->count('beneficiary_id');
+    $pendingYouthCount  = $totalBeneficiaries - $withYouthCount;
+
+    // 7) Return view
     return view('youth.youth_index', compact(
         'beneficiaries',
+        'youthBeneficiaryIds',
         'totalBeneficiaries',
-        'withYouth',
-        'pending'
+        'withYouthCount',
+        'pendingYouthCount'
     ));
 }
 

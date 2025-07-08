@@ -127,7 +127,10 @@
             background-color: #126926;
             border-color: #126926;
         }
-         
+        
+        .highlight-row {
+            background-color: #fff8dc !important;
+        }
         
     </style>
 </head>
@@ -148,46 +151,44 @@
             </div>
 
             <!-- Summary Cards -->
-<div class="row text-center mb-4 mt-5">
-    <div class="col-md-4">
-        <div class="card border-success shadow-sm">
-            <div class="card-header bg-success text-white font-weight-bold">
-                Total Beneficiaries
-            </div>
-            <div class="card-body">
-                <h2 class="card-title font-weight-bold">{{ $totalBeneficiaries }}</h2>
-                <p class="card-text">All registered beneficiaries</p>
-            </div>
-        </div>
-    </div>
+<!-- Summary Cards -->
+            <div class="row text-center mb-4 mt-5">
+                <div class="col-md-4">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header bg-success text-white font-weight-bold">
+                            Total Beneficiaries
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title font-weight-bold">{{ $totalBeneficiaries }}</h2>
+                            <p class="card-text">All registered beneficiaries</p>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="col-md-4">
-        <div class="card border-success shadow-sm">
-            <div class="card-header bg-success text-white font-weight-bold">
-                With Youth Details
-            </div>
-            <div class="card-body">
-                <h2 class="card-title font-weight-bold">{{ $withYouth }}</h2>
-                <p class="card-text">Beneficiaries with youth data</p>
-            </div>
-        </div>
-    </div>
+                <div class="col-md-4">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header bg-success text-white font-weight-bold">
+                            With Youth Details
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title font-weight-bold">{{ $withYouthCount }}</h2>
+                            <p class="card-text">Beneficiaries with youth data</p>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="col-md-4">
-        <div class="card border-success shadow-sm">
-            <div class="card-header bg-success text-white font-weight-bold">
-                Without Youth Details
+                <div class="col-md-4">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header bg-success text-white font-weight-bold">
+                            Without Youth Details
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title font-weight-bold">{{ $pendingYouthCount }}</h2>
+                            <p class="card-text">Awaiting youth entry</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <h2 class="card-title font-weight-bold">{{ $pending }}</h2>
-                <p class="card-text">Awaiting youth entry</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 
             <div class="row table-container mt-4">
                 <div class="col">
@@ -205,7 +206,8 @@
                         </thead>
                         <tbody>
                             @forelse($beneficiaries as $beneficiary)
-                                <tr>
+                                @php $hasYouth = $youthBeneficiaryIds->contains($beneficiary->id); @endphp
+                                <tr @if($hasYouth) class="highlight-row" @endif>
                                     <td>{{ $beneficiary->nic }}</td>
                                     <td>{{ $beneficiary->name_with_initials }}</td>
                                     <td>{{ ucfirst($beneficiary->gender) }}</td>
@@ -213,7 +215,9 @@
                                     <td>{{ $beneficiary->phone }}</td>
                                     <td>{{ $beneficiary->tank_name }}</td>
                                     <td class="text-center align-middle" style="white-space: nowrap; width: 1%;">
-                                        <a href="{{ route('youth.show', $beneficiary->id) }}" class="btn btn-info btn-sm me-1">View Youth Details</a>
+                                        @if($hasYouth)
+                                            <a href="{{ route('youth.show', $beneficiary->id) }}" class="btn btn-info btn-sm me-1">View Youth Details</a>
+                                        @endif
                                         <a href="{{ route('youth.create', $beneficiary->id) }}" class="btn btn-success btn-sm">Add Youth Details</a>
                                     </td>
                                 </tr>
