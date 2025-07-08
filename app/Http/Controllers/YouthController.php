@@ -14,21 +14,33 @@ class YouthController extends Controller
      * Only specific columns are selected, and sorted by latest first.
      */
     public function index()
-    {
-        $beneficiaries = Beneficiary::select(
-            'id',
-            'nic',
-            'name_with_initials',
-            'gender',
-            'address',
-            'phone',
-            'tank_name'
-        )
-        ->orderBy('created_at', 'desc') // Show newest beneficiaries first
-        ->paginate(10);
+{
+    // Fetch paginated list of beneficiaries (as you're already doing)
+    $beneficiaries = Beneficiary::select(
+        'id',
+        'nic',
+        'name_with_initials',
+        'gender',
+        'address',
+        'phone',
+        'tank_name'
+    )
+    ->orderBy('created_at', 'desc')
+    ->paginate(10);
 
-        return view('youth.youth_index', compact('beneficiaries'));
-    }
+    // Summary counts for cards
+    $totalBeneficiaries = Beneficiary::count(); // Total registered beneficiaries
+    $withYouth = Youth::distinct('beneficiary_id')->count('beneficiary_id'); // Beneficiaries with youth records
+    $pending = $totalBeneficiaries - $withYouth; // Remaining without youth data
+
+    return view('youth.youth_index', compact(
+        'beneficiaries',
+        'totalBeneficiaries',
+        'withYouth',
+        'pending'
+    ));
+}
+
 
     /**
      * Show the form to add Youth Enterprise details for a selected beneficiary.

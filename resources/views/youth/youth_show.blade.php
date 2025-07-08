@@ -156,7 +156,7 @@
             @include('dashboard.dashboardC')
         </div>
 
-        <div class="right-column">
+        <div class="right-column" style="padding-top: 70px;">
             <div class="container-fluid">
                 <div class="center-heading text-center">
                     <h2 style="font-size: 2.4rem; color: green;">Youth Enterprise Details</h2>
