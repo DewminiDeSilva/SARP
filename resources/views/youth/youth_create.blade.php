@@ -322,7 +322,8 @@
             </div>
         </div>
         
-        <button type="button" class="btn btn-primary" onclick="confirmCreate()">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+
 
     </form>
 </div>
@@ -384,24 +385,6 @@
     }
 </script>
 
-<script>
-    function confirmCreate() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "This will submit the youth enterprise registration.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, submit!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.querySelector('form').submit();
-            }
-        });
-    }
-</script>
 
 </body>
 </html>
