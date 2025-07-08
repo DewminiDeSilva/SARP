@@ -316,7 +316,7 @@
     </table>
 </div>
 
-         <h5 class="text-success mt-4">Credit Details</h5>
+         <!-- <h5 class="text-success mt-4">Credit Details</h5>
 <div class="table-responsive mb-3">
     <table class="table table-bordered table-striped">
         <tbody>
@@ -366,8 +366,70 @@
             </tr>
         </tbody>
     </table>
+</div> -->
+<h5 class="text-success mt-4">Credit Details</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Bank</th>
+                <td>{{ $data->creditDetail->bank_name }}</td>
+            </tr>
+            <tr>
+                <th>Branch</th>
+                <td>{{ $data->creditDetail->branch }}</td>
+            </tr>
+            <tr>
+                <th>Account No</th>
+                <td>{{ $data->creditDetail->account_number }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>Rs. {{ number_format($data->creditDetail->credit_amount, 2) }}</td>
+            </tr>
+            <tr>
+                <th>Interest Rate</th>
+                <td>{{ $data->creditDetail->interest_rate }}%</td>
+            </tr>
+            <tr>
+                <th>Number of Installments</th>
+                <td>{{ $data->creditDetail->number_of_installments }}</td>
+            </tr>
+            <tr>
+                <th>Credit Issue Date</th>
+                <td>{{ $data->creditDetail->credit_issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Loan Installment Date</th>
+                <td>{{ $data->creditDetail->loan_installment_date }}</td>
+            </tr>
+            <tr>
+                <th>Installment Due Date</th>
+                <td>{{ $data->creditDetail->installment_due_date }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+@php
+    $systemDate = \Carbon\Carbon::now()->format('Y-m-d');
+@endphp
 
+<h5 class="text-success mt-4">Credit Balance On</h5>
+<div class="table-responsive mb-3">
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Balance Date</th>
+                 <th>Credit Balance</th>
+               
+            </tr>
+            <tr>
+                <td>{{ $systemDate }}</td>
+                <td>Rs. {{ number_format($data->creditDetail->credit_balance, 2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
           <h5 class="text-success mt-4">Credit Payments</h5>
 <div class="table-responsive mb-3">
@@ -389,6 +451,31 @@
     </table>
 </div>
 
+@if ($data->agriculturProducts && $data->agriculturProducts->count())
+    <h5 class="text-success mt-4">Agriculture Products</h5>
+    <div class="table-responsive mb-3">
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Total Production</th>
+                    <th>Total Income (Rs.)</th>
+                    <th>Profit (Rs.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data->agriculturProducts as $product)
+                <tr>
+                    <td>{{ $product->product_name }}</td>
+                    <td>{{ $product->total_production }}</td>
+                    <td>Rs. {{ number_format($product->total_income, 2) }}</td>
+                    <td>Rs. {{ number_format($product->profit, 2) }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endif
 
 
             <div class="d-flex justify-content-end mt-4">

@@ -210,9 +210,7 @@
         <label>Cost (Rs.)</label>
         <input type="number" step="0.01" name="cost[]" class="form-control" value="{{ $item->cost }}" placeholder="Cost">
       </div>
-      <div class="col-md-1 d-flex align-items-end">
-        <button type="button" class="btn btn-danger btn-sm remove-farmer">Remove</button>
-      </div>
+     
     </div>
     @endforeach
   </div>
@@ -239,9 +237,7 @@
         <label>Cost (Rs.)</label>
         <input type="number" step="0.01" name="promoter_cost[]" class="form-control" value="{{ $item->cost }}" placeholder="Cost">
       </div>
-      <div class="col-md-1 d-flex align-items-end">
-        <button type="button" class="btn btn-danger btn-sm remove-promoter">Remove</button>
-      </div>
+     
     </div>
     @endforeach
   </div>
@@ -270,9 +266,7 @@
         <label>Issued by</label>
         <input type="text" name="grant_issued_by[]" class="form-control" value="{{ $item->issued_by }}" placeholder="Issued By">
       </div>
-      <div class="col-md-1 d-flex align-items-end">
-        <button type="button" class="btn btn-danger btn-sm remove-grant">Remove</button>
-      </div>
+      
     </div>
     @endforeach
   </div>
@@ -367,6 +361,36 @@
     @endforeach
 @endif
 <button type="button" class="btn btn-sm btn-success mt-2" id="add-credit-payment">Add More</button>
+
+<h5 class="mt-4">Agriculture Products</h5>
+<div id="product-container">
+    @if ($agriculture->agriculturProducts)
+        @foreach ($agriculture->agriculturProducts as $index => $product)
+            <div class="row mb-2 product-group align-items-end">
+                <div class="col-md-3">
+                    <label>Product Name</label>
+                    <input type="text" name="product_name[]" class="form-control" value="{{ $product->product_name }}">
+                </div>
+                <div class="col-md-3">
+                    <label>Total Production</label>
+                    <input type="number" step="0.01" name="total_production[]" class="form-control" value="{{ $product->total_production }}">
+                </div>
+                <div class="col-md-3">
+                    <label>Total Income</label>
+                    <input type="number" step="0.01" name="total_income[]" class="form-control" value="{{ $product->total_income }}">
+                </div>
+                <div class="col-md-2">
+                    <label>Profit</label>
+                    <input type="number" step="0.01" name="profit[]" class="form-control" value="{{ $product->profit }}">
+                </div>
+                {{-- No remove button for existing records --}}
+            </div>
+        @endforeach
+    @endif
+</div>
+
+<button type="button" class="btn btn-sm btn-success mt-2" id="add-product">Add More</button>
+
 
         <div class="mt-4 text-center">
             <a href="{{ route('agriculture.index') }}" class="btn btn-secondary">Back</a>
@@ -469,7 +493,7 @@
     });
 </script>
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     // ADD CREDIT PAYMENT
     document.getElementById('add-credit-payment')?.addEventListener('click', function () {
@@ -499,7 +523,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-</script>
+</script> -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -615,6 +639,41 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+</script>
+
+<script>
+    document.getElementById('add-product').addEventListener('click', function () {
+        const container = document.getElementById('product-container');
+        const newGroup = document.createElement('div');
+        newGroup.classList.add('row', 'mb-2', 'product-group', 'align-items-end');
+
+        newGroup.innerHTML = `
+            <div class="col-md-3">
+                <input type="text" name="product_name[]" class="form-control" placeholder="Product Name">
+            </div>
+            <div class="col-md-3">
+                <input type="number" step="0.01" name="total_production[]" class="form-control" placeholder="Total Production">
+            </div>
+            <div class="col-md-3">
+                <input type="number" step="0.01" name="total_income[]" class="form-control" placeholder="Total Income">
+            </div>
+            <div class="col-md-2">
+                <input type="number" step="0.01" name="profit[]" class="form-control" placeholder="Profit">
+            </div>
+            <div class="col-md-1 text-end">
+                <button type="button" class="btn btn-danger btn-sm remove-product">Remove</button>
+            </div>
+        `;
+
+        container.appendChild(newGroup);
+    });
+
+    // Remove functionality for newly added rows
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('remove-product')) {
+            e.target.closest('.product-group').remove();
+        }
+    });
 </script>
 
 </body>

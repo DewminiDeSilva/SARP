@@ -232,66 +232,218 @@ public function store(Request $request)
 
 
 
-    public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'category' => 'nullable|string|max:255',
-            'crop_name' => 'nullable|string|max:255',
-            'planting_date' => 'nullable|date',
-            'total_acres' => 'nullable|numeric|min:0',
-            'total_livestock_area' => 'nullable|numeric|min:0',
-            'total_cost' => 'nullable|numeric|min:0',
+    // public function update(Request $request, $id)
+    // {
+    //     $validatedData = $request->validate([
+    //         'category' => 'nullable|string|max:255',
+    //         'crop_name' => 'nullable|string|max:255',
+    //         'planting_date' => 'nullable|date',
+    //         'total_acres' => 'nullable|numeric|min:0',
+    //         'total_livestock_area' => 'nullable|numeric|min:0',
+    //         'total_cost' => 'nullable|numeric|min:0',
 
-            'farmer_contribution.*' => 'nullable|string|max:255',
-            'cost.*' => 'nullable|numeric|min:0',
+    //         'farmer_contribution.*' => 'nullable|string|max:255',
+    //         'cost.*' => 'nullable|numeric|min:0',
 
-            'product_name.*' => 'nullable|string|max:255',
-            'total_production.*' => 'nullable|numeric|min:0',
-            'total_income.*' => 'nullable|numeric|min:0',
-            'profit.*' => 'nullable|numeric',
-        ]);
+    //         'product_name.*' => 'nullable|string|max:255',
+    //         'total_production.*' => 'nullable|numeric|min:0',
+    //         'total_income.*' => 'nullable|numeric|min:0',
+    //         'profit.*' => 'nullable|numeric',
+    //     ]);
 
-        $agricultureData = AgricultureData::findOrFail($id);
+    //     $agricultureData = AgricultureData::findOrFail($id);
 
-        $agricultureData->update([
-            'category' => $validatedData['category'],
-            'crop_name' => $validatedData['crop_name'],
-            'planting_date' => $validatedData['planting_date'],
-            'total_acres' => $validatedData['total_acres'],
-            'total_livestock_area' => $validatedData['total_livestock_area'],
-            'total_cost' => $validatedData['total_cost'],
-        ]);
+    //     $agricultureData->update([
+    //         'category' => $validatedData['category'],
+    //         'crop_name' => $validatedData['crop_name'],
+    //         'planting_date' => $validatedData['planting_date'],
+    //         'total_acres' => $validatedData['total_acres'],
+    //         'total_livestock_area' => $validatedData['total_livestock_area'],
+    //         'total_cost' => $validatedData['total_cost'],
+    //     ]);
 
-        // Sync contributions and products
-        $agricultureData->farmerContributions()->delete();
-        if ($request->has('farmer_contribution')) {
-            foreach ($request->farmer_contribution as $index => $value) {
-                AgriFarmerContribution::create([
-                    'agriculture_data_id' => $agricultureData->id,
-                    'farmer_contribution' => $value,
-                    'cost' => $request->cost[$index] ?? null,
-                    'date' => $request->farmer_date[$index] ?? null,
-                ]);
-            }
+    //     // Sync contributions and products
+    //     $agricultureData->farmerContributions()->delete();
+    //     if ($request->has('farmer_contribution')) {
+    //         foreach ($request->farmer_contribution as $index => $value) {
+    //             AgriFarmerContribution::create([
+    //                 'agriculture_data_id' => $agricultureData->id,
+    //                 'farmer_contribution' => $value,
+    //                 'cost' => $request->cost[$index] ?? null,
+    //                 'date' => $request->farmer_date[$index] ?? null,
+    //             ]);
+    //         }
+    //     }
+
+    //     $agricultureData->agriculturProducts()->delete();
+    //     if ($request->has('product_name')) {
+    //         foreach ($request->product_name as $index => $value) {
+    //             AgriculturProduct::create([
+    //                 'agriculture_data_id' => $agricultureData->id,
+    //                 'product_name' => $value,
+    //                 'total_production' => $request->total_production[$index] ?? null,
+    //                 'total_income' => $request->total_income[$index] ?? null,
+    //                 'profit' => $request->profit[$index] ?? null,
+    //             ]);
+    //         }
+    //     }
+
+    //     // TODO: Add promoter, grant, credit update logic if needed
+
+    //     return redirect()->route('agriculture.index')->with('success', 'Agriculture data updated.');
+    // }
+
+public function update(Request $request, $id)
+{
+    $validatedData = $request->validate([
+        'category' => 'nullable|string|max:255',
+        'crop_name' => 'nullable|string|max:255',
+        'planting_date' => 'nullable|date',
+        'total_acres' => 'nullable|numeric|min:0',
+        'total_livestock_area' => 'nullable|numeric|min:0',
+        'total_cost' => 'nullable|numeric|min:0',
+
+        // Farmer Contribution
+        'farmer_contribution.*' => 'nullable|string|max:255',
+        'cost.*' => 'nullable|numeric|min:0',
+
+        // Promoter Contribution
+        'promoter_description.*' => 'nullable|string|max:255',
+        'promoter_cost.*' => 'nullable|numeric|min:0',
+        'promoter_date.*' => 'nullable|date',
+
+        // Grant Details
+        'grant_description.*' => 'nullable|string|max:255',
+        'grant_value.*' => 'nullable|numeric|min:0',
+        'grant_issued_by.*' => 'nullable|string|max:255',
+
+        // Agri Products
+        'product_name.*' => 'nullable|string|max:255',
+        'total_production.*' => 'nullable|numeric|min:0',
+        'total_income.*' => 'nullable|numeric|min:0',
+        'profit.*' => 'nullable|numeric',
+
+        // Credit Detail
+        'bank_name' => 'nullable|string|max:255',
+        'branch' => 'nullable|string|max:255',
+        'account_number' => 'nullable|string|max:255',
+        'interest_rate' => 'nullable|numeric',
+        'credit_issue_date' => 'nullable|date',
+        'loan_installment_date' => 'nullable|date',
+        'credit_amount' => 'nullable|numeric',
+        'number_of_installments' => 'nullable|numeric',
+        'installment_due_date' => 'nullable|date',
+        'credit_balance_on_date' => 'nullable|date',
+        'credit_balance' => 'nullable|numeric',
+
+        // Credit Payments
+        'payment_date.*' => 'nullable|date',
+        'installment_payment.*' => 'nullable|numeric|min:0',
+    ]);
+
+    $agricultureData = AgricultureData::findOrFail($id);
+
+    // Update main agriculture fields
+    $agricultureData->update([
+        'category' => $validatedData['category'],
+        'crop_name' => $validatedData['crop_name'],
+        'planting_date' => $validatedData['planting_date'],
+        'total_acres' => $validatedData['total_acres'],
+        'total_livestock_area' => $validatedData['total_livestock_area'],
+        'total_cost' => $validatedData['total_cost'],
+    ]);
+
+    // --- Farmer Contributions ---
+    $agricultureData->farmerContributions()->delete();
+    if ($request->has('farmer_contribution')) {
+        foreach ($request->farmer_contribution as $index => $value) {
+            \App\Models\AgriFarmerContribution::create([
+                'agriculture_data_id' => $agricultureData->id,
+                'farmer_contribution' => $value,
+                'cost' => $request->cost[$index] ?? null,
+                'date' => $request->farmer_date[$index] ?? null,
+            ]);
         }
-
-        $agricultureData->agriculturProducts()->delete();
-        if ($request->has('product_name')) {
-            foreach ($request->product_name as $index => $value) {
-                AgriculturProduct::create([
-                    'agriculture_data_id' => $agricultureData->id,
-                    'product_name' => $value,
-                    'total_production' => $request->total_production[$index] ?? null,
-                    'total_income' => $request->total_income[$index] ?? null,
-                    'profit' => $request->profit[$index] ?? null,
-                ]);
-            }
-        }
-
-        // TODO: Add promoter, grant, credit update logic if needed
-
-        return redirect()->route('agriculture.index')->with('success', 'Agriculture data updated.');
     }
+
+    // --- Promoter Contributions ---
+$agricultureData->promoterContributions()->delete();
+if ($request->has('promoter_description')) {
+    foreach ($request->promoter_description as $index => $value) {
+        \App\Models\PromoterContribution::create([
+            'agriculture_data_id' => $agricultureData->id,
+            'description' => $value,
+            'cost' => $request->promoter_cost[$index] ?? null,
+            'date' => $request->promoter_date[$index] ?? null,
+        ]);
+    }
+}
+
+    // --- Grant Details ---
+    $agricultureData->grantDetails()->delete();
+    if ($request->has('grant_description')) {
+        foreach ($request->grant_description as $index => $value) {
+            \App\Models\GrantDetail::create([
+                'agriculture_data_id' => $agricultureData->id,
+                'description' => $value,
+                'value' => $request->grant_value[$index] ?? null,
+                'grant_issued_by' => $request->grant_issued_by[$index] ?? null,
+                'date' => $request->grant_date[$index] ?? null,
+            ]);
+        }
+    }
+
+    // --- Agricultur Products ---
+    $agricultureData->agriculturProducts()->delete();
+    if ($request->has('product_name')) {
+        foreach ($request->product_name as $index => $value) {
+            \App\Models\AgriculturProduct::create([
+                'agriculture_data_id' => $agricultureData->id,
+                'product_name' => $value,
+                'total_production' => $request->total_production[$index] ?? null,
+                'total_income' => $request->total_income[$index] ?? null,
+                'profit' => $request->profit[$index] ?? null,
+            ]);
+        }
+    }
+
+    // --- Credit Detail ---
+    $creditData = [
+        'bank_name' => $request->bank_name,
+        'branch' => $request->branch,
+        'account_number' => $request->account_number,
+        'interest_rate' => $request->interest_rate,
+        'credit_issue_date' => $request->credit_issue_date,
+        'loan_installment_date' => $request->loan_installment_date,
+        'credit_amount' => $request->credit_amount,
+        'number_of_installments' => $request->number_of_installments,
+        'installment_due_date' => $request->installment_due_date,
+        'credit_balance_on_date' => $request->credit_balance_on_date,
+        'credit_balance' => $request->credit_balance,
+    ];
+
+    $agricultureData->creditDetail()->updateOrCreate(
+        ['agriculture_data_id' => $agricultureData->id],
+        $creditData
+    );
+
+    // --- Credit Payments ---
+    if ($agricultureData->creditDetail) {
+        $agricultureData->creditDetail->payments()->delete();
+
+        if ($request->has('payment_date')) {
+            foreach ($request->payment_date as $index => $date) {
+                \App\Models\CreditPayment::create([
+                    'credit_detail_id' => $agricultureData->creditDetail->id,
+                    'payment_date' => $date,
+                    'installment_payment' => $request->installment_payment[$index] ?? null,
+                ]);
+            }
+        }
+    }
+
+    return redirect()->route('agriculture.index')->with('success', 'Agriculture data updated.');
+}
 
 
 

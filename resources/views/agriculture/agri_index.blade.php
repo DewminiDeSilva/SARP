@@ -411,10 +411,10 @@
                                             @if(auth()->user()->hasPermission('agriculture', 'add'))
                                             <a href="{{ route('agriculture.create', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-info btn-sm">Add Agriculture Data</a>
                                             @endif
-
+<!-- 
                                             @if(auth()->user()->hasPermission('agriculture', 'view'))
                                             <a href="{{ route('crops.by.gn.division', ['gn_division_id' => $beneficiary->gn_division_name]) }}" class="btn btn-info btn-sm">View Crops</a>
-                                            @endif
+                                            @endif -->
                                         </div>
                                     </td>
                                 </tr>
