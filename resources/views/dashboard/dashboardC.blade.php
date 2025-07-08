@@ -173,6 +173,14 @@ li:hover {
                         </ul>
                     </li>
 
+                    <li class="submenu">
+                        <a href="#" style="color: #FFFFFF">Youth Enterprise</a>
+                        <ul class="nested">
+                            <li><a href="/youth" style="color: #FFFFFF">Youth Enterprise Details</a></li>
+                        </ul>
+                    </li>
+
+                    
                 </ul>
             </li>
             <li class="submenu">
