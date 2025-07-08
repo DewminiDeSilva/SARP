@@ -131,7 +131,12 @@
             border-color: #126926;
         }
          
-        
+        .card-header {
+            background-color:#198754 !important; /* Darker green */
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
     </style>
 
     <style>
@@ -166,8 +171,7 @@
     
 
 
-    <div class="container mt-4">
-    <div class="border border-success p-3 rounded">
+    <div class="container mt-5 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
 
     
 
@@ -201,7 +205,8 @@
     
         <!-- Card 1: Enterprise Information -->
         <div class="card mb-4 mt-3">
-    <div class="card-header bg-success text-white fw-bold">
+    <div class="card-header">
+
         Enterprise Information
     </div>
     <div class="card-body">
@@ -442,7 +447,7 @@
 
 
 </div>
-</div>
+
 
 
 </body>

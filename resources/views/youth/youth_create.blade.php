@@ -166,7 +166,15 @@
         @csrf
         <input type="hidden" name="beneficiary_id" value="{{ $beneficiary->id }}">
 
-        
+        <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded border bg-light shadow-sm">
+    <!-- Left side: Beneficiary Name -->
+    <div style="font-size: 1.3rem; font-weight: 700; color:rgb(14, 99, 48);">
+        <i class="fas fa-user me-2"></i> Beneficiary: {{ $beneficiary->name_with_initials ?? 'N/A' }}
+    </div>
+
+    
+</div>
+
         <!-- Enterprise Information -->
         <div class="card mb-4">
             <div class="card-header bg-success text-white">Enterprise Information</div>
@@ -279,7 +287,7 @@
         </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-success px-5">Submit</button>
+            <button type="submit" class="btn btn-success mt-4 px-4">Submit</button>
         </div>
     </form>
     
@@ -328,13 +336,28 @@
     }
 
     function addGrantRow() {
-        addRow('grantDetails', 'grant_details', [
-            { name: 'date', placeholder: 'Date', type: 'date' },
-            { name: 'description', placeholder: 'Description', type: 'text' },
-            { name: 'value', placeholder: 'Value', type: 'number' },
-            { name: 'grant_issued_by', placeholder: 'Issued By', type: 'text' },
-        ]);
-    }
+    const container = document.getElementById('grantDetails');
+    const row = document.createElement('div');
+    row.className = "row mb-2 align-items-end";
+    row.innerHTML = `
+        <div class="col-md-2">
+            <input type="date" name="grant_details[date][]" class="form-control" placeholder="Date">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="grant_details[description][]" class="form-control" placeholder="Description">
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="grant_details[value][]" class="form-control" placeholder="Value">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="grant_details[grant_issued_by][]" class="form-control" placeholder="Issued By">
+        </div>
+        <div class="col-md-1 d-flex align-items-center">
+            <button type="button" class="btn btn-danger" onclick="this.closest('.row').remove()">X</button>
+        </div>
+    `;
+    container.appendChild(row);
+}
 
     function addInstallmentRow() {
         addRow('installmentPayments', 'installment_payments', [
