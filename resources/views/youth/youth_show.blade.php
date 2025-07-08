@@ -168,15 +168,12 @@
             <i class="fas fa-edit"></i> Edit
         </a>
         
-        <!-- Delete Button -->
-        <button class="btn btn-danger" onclick="confirmDelete('{{ route('youth.destroy', $youth->id) }}')">
-            <i class="fas fa-trash-alt"></i> Delete
-        </button>
-
-        <!-- Hidden Delete Form -->
-        <form id="delete-form" method="POST" style="display: none;">
-            @csrf
-            @method('DELETE')
+        <form action="{{ route('youth.destroy', $youth->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');" style="display: inline-block;">
+        @csrf
+        @method('DELETE')
+            <button class="btn btn-danger" onclick="confirmDelete({{ $youth->id }})">
+                <i class="fas fa-trash-alt"></i> Delete
+            </button>
         </form>
     </div>
 
@@ -329,6 +326,12 @@
         });
     }
 </script>
+
+
+<form id="delete-form" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
 
 </body>
 </html>
