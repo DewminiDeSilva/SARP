@@ -246,15 +246,15 @@
             <div class="row farmer-group align-items-center">
                 <div class="col-md-3">
                     <label>Contribution Date</label>
-                    <input type="date" name="farmer_date[]" class="form-control" required>
+                    <input type="date" name="farmer_date[]" class="form-control" >
                 </div>
                 <div class="col-md-5">
                     <label>Contribution Description</label>
-                    <input type="text" name="farmer_contribution[]" class="form-control" required>
+                    <input type="text" name="farmer_contribution[]" class="form-control" >
                 </div>
                 <div class="col-md-3">
                     <label>Cost (Rs.)</label>
-                    <input type="number" step="0.01" name="cost[]" class="form-control" required>
+                    <input type="number" step="0.01" name="cost[]" class="form-control" >
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
                     <!-- Optional remove button space -->
@@ -300,15 +300,15 @@
             <div class="row promoter-group align-items-center">
                 <div class="col-md-3">
                     <label>Contribution Date</label>
-                    <input type="date" name="promoter_date[]" class="form-control" required>
+                    <input type="date" name="promoter_date[]" class="form-control">
                 </div>
                 <div class="col-md-5">
                     <label>Contribution Description</label>
-                    <input type="text" name="promoter_description[]" class="form-control" required>
+                    <input type="text" name="promoter_description[]" class="form-control" >
                 </div>
                 <div class="col-md-3">
                     <label>Cost (Rs.)</label>
-                    <input type="number" step="0.01" name="promoter_cost[]" class="form-control" required>
+                    <input type="number" step="0.01" name="promoter_cost[]" class="form-control" >
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
                     <!-- Remove button will be added dynamically via JS if needed -->
@@ -356,19 +356,19 @@
             <div class="row grant-group align-items-center">
                 <div class="col-md-2">
                     <label>Grant Date</label>
-                    <input type="date" name="grant_date[]" class="form-control" required>
+                    <input type="date" name="grant_date[]" class="form-control" >
                 </div>
                 <div class="col-md-4">
                     <label>Grant Description</label>
-                    <input type="text" name="grant_description[]" class="form-control" required>
+                    <input type="text" name="grant_description[]" class="form-control" >
                 </div>
                 <div class="col-md-2">
                     <label>Value</label>
-                    <input type="number" step="0.01" name="grant_value[]" class="form-control" required>
+                    <input type="number" step="0.01" name="grant_value[]" class="form-control" >
                 </div>
                 <div class="col-md-4">
                     <label>Issued by</label>
-                    <input type="text" name="grant_issued_by[]" class="form-control" required>
+                    <input type="text" name="grant_issued_by[]" class="form-control" >
                 </div>
             </div>
         </div>

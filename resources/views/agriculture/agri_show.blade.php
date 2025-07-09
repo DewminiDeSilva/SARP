@@ -223,7 +223,7 @@
 
     <div class="container mt-5">
         <h2>Agriculture Details for Beneficiary: {{ $beneficiary->name_with_initials }}</h2>
-
+    
         <div class="mb-3">
         <h5>Crop Category: <span class="text-success">{{ $cropCategory }}</span></h5>
         <h5>Crop Name: <span class="text-success">{{ $cropName }}</span></h5>
@@ -234,6 +234,17 @@
     @endif
 
     @foreach ($agricultureData as $data)
+
+                <div class="d-flex justify-content-end mt-4">
+                <a href="{{ route('agriculture.edit', $data->id) }}" class="btn btn-warning me-2"><i class="fas fa-edit"></i> Edit</a>
+                <form action="{{ route('agriculture.destroy', $data->id) }}" method="POST"class="delete-form d-inline" onsubmit="return confirmDelete(this)">
+
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                </form>
+            </div>
+</br>
     <div class="card mb-4">
         <div class="card-body">
             <div class="row mb-2">
@@ -316,57 +327,6 @@
     </table>
 </div>
 
-         <!-- <h5 class="text-success mt-4">Credit Details</h5>
-<div class="table-responsive mb-3">
-    <table class="table table-bordered table-striped">
-        <tbody>
-            <tr>
-                <th>Bank</th>
-                <td>{{ $data->creditDetail->bank_name }}</td>
-            </tr>
-            <tr>
-                <th>Branch</th>
-                <td>{{ $data->creditDetail->branch }}</td>
-            </tr>
-            <tr>
-                <th>Account No</th>
-                <td>{{ $data->creditDetail->account_number }}</td>
-            </tr>
-            <tr>
-                <th>Amount</th>
-                <td>Rs. {{ number_format($data->creditDetail->credit_amount, 2) }}</td>
-            </tr>
-            <tr>
-                <th>Interest Rate</th>
-                <td>{{ $data->creditDetail->interest_rate }}%</td>
-            </tr>
-            <tr>
-                <th>Number of Installments</th>
-                <td>{{ $data->creditDetail->number_of_installments }}</td>
-            </tr>
-            <tr>
-                <th>Credit Issue Date</th>
-                <td>{{ $data->creditDetail->credit_issue_date }}</td>
-            </tr>
-            <tr>
-                <th>Loan Installment Date</th>
-                <td>{{ $data->creditDetail->loan_installment_date }}</td>
-            </tr>
-            <tr>
-                <th>Installment Due Date</th>
-                <td>{{ $data->creditDetail->installment_due_date }}</td>
-            </tr>
-            <tr>
-                <th>Balance Date</th>
-                <td>{{ $data->creditDetail->credit_balance_on_date }}</td>
-            </tr>
-            <tr>
-                <th>Credit Balance</th>
-                <td>Rs. {{ number_format($data->creditDetail->credit_balance, 2) }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div> -->
 <h5 class="text-success mt-4">Credit Details</h5>
 <div class="table-responsive mb-3">
     <table class="table table-bordered table-striped">
@@ -478,14 +438,14 @@
 @endif
 
 
-            <div class="d-flex justify-content-end mt-4">
+            <!-- <div class="d-flex justify-content-end mt-4">
                 <a href="{{ route('agriculture.edit', $data->id) }}" class="btn btn-warning me-2"><i class="fas fa-edit"></i> Edit</a>
                 <form action="{{ route('agriculture.destroy', $data->id) }}" method="POST" onsubmit="return confirmDelete(this)">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
                 </form>
-            </div>
+            </div> -->
 
         </div>
     </div>
@@ -514,6 +474,30 @@
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(form) {
+        event.preventDefault(); // Stop normal form submission
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action will permanently delete the record.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Submit the form if confirmed
+            }
+        });
+
+        return false; // Prevent default submission until confirmed
+    }
+</script>
+
 
 </body>
 </html>

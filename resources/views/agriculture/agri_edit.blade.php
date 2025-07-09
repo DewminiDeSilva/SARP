@@ -173,30 +173,30 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Crop Category</label>
-                <input type="text" name="category" class="form-control" value="{{ $agriculture->category }}" required>
+                <input type="text" name="category" class="form-control" value="{{ $agriculture->category }}" >
             </div>
             <div class="col-md-4">
                 <label>Crop Name</label>
-                <input type="text" name="crop_name" class="form-control" value="{{ $agriculture->crop_name }}" required>
+                <input type="text" name="crop_name" class="form-control" value="{{ $agriculture->crop_name }}" >
             </div>
             <div class="col-md-4">
                 <label>Planting Date</label>
-                <input type="date" name="planting_date" class="form-control" value="{{ $agriculture->planting_date }}" required>
+                <input type="date" name="planting_date" class="form-control" value="{{ $agriculture->planting_date }}" >
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-md-4">
                 <label>Total Acres</label>
-                <input type="number" step="0.01" name="total_acres" class="form-control" value="{{ $agriculture->total_acres }}" required>
+                <input type="number" step="0.01" name="total_acres" class="form-control" value="{{ $agriculture->total_acres }}" >
             </div>
             <div class="col-md-4">
                 <label>Total Livestock Area</label>
-                <input type="number" step="0.01" name="total_livestock_area" class="form-control" value="{{ $agriculture->total_livestock_area }}" required>
+                <input type="number" step="0.01" name="total_livestock_area" class="form-control" value="{{ $agriculture->total_livestock_area }}">
             </div>
             <div class="col-md-4">
                 <label>Total Cost</label>
-                <input type="number" step="0.01" name="total_cost" class="form-control" value="{{ $agriculture->total_cost }}" required>
+                <input type="number" step="0.01" name="total_cost" class="form-control" value="{{ $agriculture->total_cost }}" >
             </div>
         </div>
 
