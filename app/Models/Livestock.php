@@ -9,37 +9,58 @@ class Livestock extends Model
 {
     use HasFactory;
 
-    // Define the table if it's not the default 'livestocks'
     protected $table = 'livestocks';
 
-    // Define the fillable attributes for mass assignment
     protected $fillable = [
         'beneficiary_id',
         'livestock_type',
         'production_focus',
-        'total_livestock_area',
-        'total_cost',
-        'inputs',
+        'livestock_commencement_date',
+        'number_of_livestocks',
+        'area_of_cade',
+        'value',
+        'bank_name',
+        'branch',
+        'account_number',
+        'interest_rate',
+        'credit_issue_date',
+        'loan_installment_date',
+        'credit_amount',
+        'number_of_installments',
+        'installment_due_date',
+        'credit_balance_no',
+        'credit_balance_date',
+        'credit_balance_value',
         'gn_division_name',
-        'total_number_of_acres',
-        'livestock_commencement_date'  // Livestock start date field
     ];
 
-    // Define the relationship with the Beneficiary model
     public function beneficiary()
     {
         return $this->belongsTo(Beneficiary::class);
     }
 
-    // Define the relationship with the LiveProduct model
     public function liveProducts()
     {
-        return $this->hasMany(LiveProduct::class, 'livestock_id');
+        return $this->hasMany(LiveProduct::class);
     }
 
-    // Define the relationship with the LiveContribution model
-    public function liveContributions()
+    public function farmerContributions()
     {
-        return $this->hasMany(LiveContribution::class, 'livestock_id');
+        return $this->hasMany(LiveFarmerContribution::class);
+    }
+
+    public function promoterContributions()
+    {
+        return $this->hasMany(LivePromoterContribution::class);
+    }
+
+    public function grantDetails()
+    {
+        return $this->hasMany(LiveGrantDetail::class);
+    }
+
+    public function installmentPayments()
+    {
+        return $this->hasMany(LiveInstallmentPayment::class);
     }
 }

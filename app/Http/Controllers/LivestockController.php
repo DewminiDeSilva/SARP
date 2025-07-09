@@ -3,25 +3,32 @@ namespace App\Http\Controllers;
 
 use App\Models\Livestock;
 use App\Models\LiveProduct;
-use App\Models\LiveContribution;
+use App\Models\LiveFarmerContribution;
+use App\Models\LivePromoterContribution;
+use App\Models\LiveGrantDetail;
+use App\Models\LiveInstallmentPayment;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
 
+
 class LivestockController extends Controller
 {
-    // Method to list all livestock for a specific beneficiary
     public function listLivestock(Request $request)
     {
         $beneficiary_id = $request->route('beneficiary_id');
         $beneficiary = Beneficiary::findOrFail($beneficiary_id);
 
-        // Fetch livestock records with related products and contributions
-        $livestocks = Livestock::with(['liveProducts', 'liveContributions'])
-            ->where('beneficiary_id', $beneficiary_id)
-            ->get();
+        $livestocks = Livestock::with([
+            'liveProducts',
+            'farmerContributions',
+            'promoterContributions',
+            'grantDetails',
+            'installmentPayments'
+        ])->where('beneficiary_id', $beneficiary_id)->get();
 
         return view('livestock.livestock_index', compact('livestocks', 'beneficiary'));
     }
+
 
     // Method to show the form to create a new livestock record
     public function create(Request $request, $beneficiary_id)
@@ -49,54 +56,111 @@ class LivestockController extends Controller
     {
         $validatedData = $request->validate([
             'beneficiary_id' => 'required|exists:beneficiaries,id',
-            'livestock_type' => 'required|string|max:255',
-            'production_focus' => 'required|string|max:255',
-            'total_livestock_area' => 'required|numeric',
-            'total_cost' => 'required|numeric',
-            'inputs' => 'required|string|max:255',
-            'total_number_of_acres' => 'required|numeric|min:0',
-            'livestock_commencement_date' => 'required|date', // Added this validation
+            'livestock_type' => 'required',
+            'production_focus' => 'required',
+            'livestock_commencement_date' => 'required|date',
+            'number_of_livestocks' => 'required|integer',
+            'area_of_cade' => 'required|numeric',
+           'livestock_value' => 'required|numeric|min:0',
 
-            // Validate related products (if applicable)
-            'product_name.*' => 'nullable|string|max:255',
-            'total_production.*' => 'nullable|numeric|min:0',
-            'total_income.*' => 'nullable|numeric|min:0',
-            'profit.*' => 'nullable|numeric|min:0',
+            'bank_name' => 'nullable|string',
+            'branch' => 'nullable|string',
+            'account_number' => 'nullable|string',
+            'interest_rate' => 'nullable|numeric',
+            'credit_issue_date' => 'nullable|date',
+            'loan_installment_date' => 'nullable|date',
+            'credit_amount' => 'nullable|numeric',
+            'number_of_installments' => 'nullable|integer',
+            'installment_due_date' => 'nullable|date',
+            'credit_balance_no' => 'nullable|string',
+            'credit_balance_date' => 'nullable|date',
+            'credit_balance_value' => 'nullable|numeric',
 
-            // Validate related contributions (if applicable)
-            'contribution_type.*' => 'nullable|string|max:255',
-            'cost.*' => 'nullable|numeric|min:0',
+           // Products
+'product_name.*' => 'nullable|string|max:255',
+'total_production.*' => 'nullable|numeric|min:0',
+'total_income.*' => 'nullable|numeric|min:0',
+'profit.*' => 'nullable|numeric|min:0',
+
+// Farmer Contributions
+'farmer_date.*' => 'nullable|date',
+'farmer_description.*' => 'nullable|string|max:255',
+'farmer_value.*' => 'nullable|numeric|min:0',
+
+// Promoter Contributions
+'promoter_date.*' => 'nullable|date',
+'promoter_description.*' => 'nullable|string|max:255',
+'promoter_value.*' => 'nullable|numeric|min:0',
+
+// Grant Details
+'grant_date.*' => 'nullable|date',
+'grant_description.*' => 'nullable|string|max:255',
+'grant_value.*' => 'nullable|numeric|min:0',
+'grant_issued_by.*' => 'nullable|string|max:255',
+
+// Installment Payments
+'installment_payment_date.*' => 'nullable|date',
+'installment_payment_value.*' => 'nullable|numeric|min:0',
+
         ]);
 
         // Retrieve the beneficiary to get the GN division name
         $beneficiary = Beneficiary::findOrFail($validatedData['beneficiary_id']);
         $validatedData['gn_division_name'] = $beneficiary->gn_division_name;
-
+        // Fix the column mapping
+            $validatedData['value'] = $validatedData['livestock_value'];
+            unset($validatedData['livestock_value']);
         // Create the livestock record
         $livestock = Livestock::create($validatedData);
-
-        // Store related products (if applicable)
-        if ($request->has('product_name')) {
-            foreach ($request->product_name as $index => $productName) {
-                LiveProduct::create([
-                    'livestock_id' => $livestock->id,
-                    'product_name' => $productName,
-                    'total_production' => $request->total_production[$index] ?? null,
-                    'total_income' => $request->total_income[$index] ?? null,
-                    'profit' => $request->profit[$index] ?? null,
-                ]);
-            }
+// Store Live Products
+        foreach ($request->product_name ?? [] as $i => $name) {
+            LiveProduct::create([
+                'livestock_id' => $livestock->id,
+                'product_name' => $name,
+                'total_production' => $request->total_production[$i] ?? 0,
+                'total_income' => $request->total_income[$i] ?? 0,
+                'profit' => $request->profit[$i] ?? 0,
+            ]);
         }
 
-        // Store related contributions (if applicable)
-        if ($request->has('contribution_type')) {
-            foreach ($request->contribution_type as $index => $contributionType) {
-                LiveContribution::create([
-                    'livestock_id' => $livestock->id,
-                    'contribution_type' => $contributionType,
-                    'cost' => $request->cost[$index] ?? null,
-                ]);
-            }
+        // Farmer Contributions
+        foreach ($request->farmer_date ?? [] as $i => $date) {
+            LiveFarmerContribution::create([
+                'livestock_id' => $livestock->id,
+                'date' => $date,
+                'description' => $request->farmer_description[$i] ?? null,
+                'value' => $request->farmer_value[$i] ?? null,
+            ]);
+        }
+
+        // Promoter Contributions
+        foreach ($request->promoter_date ?? [] as $i => $date) {
+            LivePromoterContribution::create([
+                'livestock_id' => $livestock->id,
+                'date' => $date,
+                'description' => $request->promoter_description[$i] ?? null,
+                'value' => $request->promoter_value[$i] ?? null,
+            ]);
+        }
+
+        // Grant Details
+        foreach ($request->grant_date ?? [] as $i => $date) {
+            LiveGrantDetail::create([
+                'livestock_id' => $livestock->id,
+                'date' => $date,
+                'description' => $request->grant_description[$i] ?? null,
+                'value' => $request->grant_value[$i] ?? null,
+                'grant_issued_by' => $request->grant_issued_by[$i] ?? null,
+            ]);
+        }
+
+        // Installment Payments
+        foreach ($request->installment_payment_date ?? [] as $i => $date) {
+            LiveInstallmentPayment::create([
+                'livestock_id' => $livestock->id,
+                'installment_payment_date' => $date,
+                'installment_payment_value' => $request->installment_payment_value[$i] ?? null,
+            ]);
         }
 
         return redirect()->route('livestocks.list', ['beneficiary_id' => $request->beneficiary_id])
@@ -120,19 +184,20 @@ class LivestockController extends Controller
     }
 
     // Method to show the form to edit an existing livestock record
-    public function edit($beneficiary_id, $livestock_id)
-{
-    $livestock = Livestock::where('id', $livestock_id)
-                          ->where('beneficiary_id', $beneficiary_id)
-                          ->firstOrFail();
+   public function edit($beneficiary_id, $livestock_id)
+    {
+        $livestock = Livestock::with([
+            'liveProducts',
+            'farmerContributions',
+            'promoterContributions',
+            'grantDetails',
+            'installmentPayments'
+        ])->where('id', $livestock_id)
+          ->where('beneficiary_id', $beneficiary_id)
+          ->firstOrFail();
 
-    return view('livestock.livestock_edit', [
-        'livestock' => $livestock,
-        'beneficiary_id' => $beneficiary_id, // ✅ pass this explicitly
-    ]);
-}
-
-
+        return view('livestock.livestock_edit', compact('livestock', 'beneficiary_id'));
+    }
 
     // Method to update an existing livestock record
     public function update(Request $request, $beneficiary_id, $livestock_id)
@@ -142,57 +207,117 @@ class LivestockController extends Controller
                           ->firstOrFail();
 
         $validatedData = $request->validate([
-            'livestock_type' => 'required|string|max:255',
-            'production_focus' => 'required|string|max:255',
-            'total_livestock_area' => 'required|numeric',
-            'total_cost' => 'required|numeric',
-            'inputs' => 'required|string|max:255',
-            'total_number_of_acres' => 'required|numeric|min:0',
-            'livestock_commencement_date' => 'required|date', // Added validation for start date
+             
+            'livestock_type' => 'required',
+            'production_focus' => 'required',
+            'livestock_commencement_date' => 'required|date',
+            'number_of_livestocks' => 'required|integer',
+            'area_of_cade' => 'required|numeric',
+            'livestock_value' => 'required|numeric|min:0',
 
-            // Validate related products (if applicable)
-            'product_name.*' => 'nullable|string|max:255',
-            'total_production.*' => 'nullable|numeric|min:0',
-            'total_income.*' => 'nullable|numeric|min:0',
-            'profit.*' => 'nullable|numeric|min:0',
+            'bank_name' => 'nullable|string',
+            'branch' => 'nullable|string',
+            'account_number' => 'nullable|string',
+            'interest_rate' => 'nullable|numeric',
+            'credit_issue_date' => 'nullable|date',
+            'loan_installment_date' => 'nullable|date',
+            'credit_amount' => 'nullable|numeric',
+            'number_of_installments' => 'nullable|integer',
+            'installment_due_date' => 'nullable|date',
+            'credit_balance_no' => 'nullable|string',
+            'credit_balance_date' => 'nullable|date',
+            'credit_balance_value' => 'nullable|numeric',
 
-            // Validate related contributions (if applicable)
-            'contribution_type.*' => 'nullable|string|max:255',
-            'cost.*' => 'nullable|numeric|min:0',
-        ]);
+            // Products
+        'product_name.*' => 'nullable|string|max:255',
+        'total_production.*' => 'nullable|numeric|min:0',
+        'total_income.*' => 'nullable|numeric|min:0',
+        'profit.*' => 'nullable|numeric|min:0',
+
+        // Farmer Contributions
+        'farmer_date.*' => 'nullable|date',
+        'farmer_description.*' => 'nullable|string|max:255',
+        'farmer_value.*' => 'nullable|numeric|min:0',
+
+        // Promoter Contributions
+        'promoter_date.*' => 'nullable|date',
+        'promoter_description.*' => 'nullable|string|max:255',
+        'promoter_value.*' => 'nullable|numeric|min:0',
+
+        // Grant Details
+        'grant_date.*' => 'nullable|date',
+        'grant_description.*' => 'nullable|string|max:255',
+        'grant_value.*' => 'nullable|numeric|min:0',
+        'grant_issued_by.*' => 'nullable|string|max:255',
+
+        // Installment Payments
+        'installment_payment_date.*' => 'nullable|date',
+        'installment_payment_value.*' => 'nullable|numeric|min:0',
+
+            ]);
 
         $livestock->update($validatedData);
 
         // Update related products (if applicable)
         $livestock->liveProducts()->delete(); // Delete all existing products
-        if ($request->has('product_name')) {
-            foreach ($request->product_name as $index => $productName) {
-                LiveProduct::create([
-                    'livestock_id' => $livestock->id,
-                    'product_name' => $productName,
-                    'total_production' => $request->total_production[$index],
-                    'total_income' => $request->total_income[$index],
-                    'profit' => $request->profit[$index],
-                ]);
-            }
-        }
-
-        // Update related contributions (if applicable)
-        $livestock->liveContributions()->delete(); // Delete all existing contributions
-        if ($request->has('contribution_type')) {
-            foreach ($request->contribution_type as $index => $contributionType) {
-                LiveContribution::create([
-                    'livestock_id' => $livestock->id,
-                    'contribution_type' => $contributionType,
-                    'cost' => $request->cost[$index],
-                ]);
-            }
-        }
-
-        return redirect()->route('livestocks.list', ['beneficiary_id' => $livestock->beneficiary_id])
-            ->with('success', 'Livestock record updated successfully.');
+         $livestock->farmerContributions()->delete();
+        $livestock->promoterContributions()->delete();
+        $livestock->grantDetails()->delete();
+        $livestock->installmentPayments()->delete();
+        // Re-create live products
+    foreach ($request->product_name ?? [] as $i => $name) {
+        \App\Models\LiveProduct::create([
+            'livestock_id' => $livestock->id,
+            'product_name' => $name,
+            'total_production' => $request->total_production[$i] ?? 0,
+            'total_income' => $request->total_income[$i] ?? 0,
+            'profit' => $request->profit[$i] ?? 0,
+        ]);
     }
 
+    // Farmer Contributions
+    foreach ($request->farmer_date ?? [] as $i => $date) {
+        \App\Models\LiveFarmerContribution::create([
+            'livestock_id' => $livestock->id,
+            'date' => $date,
+            'description' => $request->farmer_description[$i] ?? null,
+            'value' => $request->farmer_value[$i] ?? null,
+        ]);
+    }
+
+    // Promoter Contributions
+    foreach ($request->promoter_date ?? [] as $i => $date) {
+        \App\Models\LivePromoterContribution::create([
+            'livestock_id' => $livestock->id,
+            'date' => $date,
+            'description' => $request->promoter_description[$i] ?? null,
+            'value' => $request->promoter_value[$i] ?? null,
+        ]);
+    }
+
+    // Grant Details
+    foreach ($request->grant_date ?? [] as $i => $date) {
+        \App\Models\LiveGrantDetail::create([
+            'livestock_id' => $livestock->id,
+            'date' => $date,
+            'description' => $request->grant_description[$i] ?? null,
+            'value' => $request->grant_value[$i] ?? null,
+            'grant_issued_by' => $request->grant_issued_by[$i] ?? null,
+        ]);
+    }
+
+    // Installment Payments
+    foreach ($request->installment_payment_date ?? [] as $i => $date) {
+        \App\Models\LiveInstallmentPayment::create([
+            'livestock_id' => $livestock->id,
+            'installment_payment_date' => $date,
+            'installment_payment_value' => $request->installment_payment_value[$i] ?? null,
+        ]);
+    }
+
+    return redirect()->route('livestocks.list', ['beneficiary_id' => $beneficiary_id])
+        ->with('success', 'Livestock record updated successfully!');
+}
     // Method to delete a livestock record
     public function destroy($livestock_id)
     {
@@ -201,7 +326,10 @@ class LivestockController extends Controller
 
         // Delete related records (products and contributions)
         $livestock->liveProducts()->delete();
-        $livestock->liveContributions()->delete();
+        $livestock->farmerContributions()->delete();
+        $livestock->promoterContributions()->delete();
+        $livestock->grantDetails()->delete();
+        $livestock->installmentPayments()->delete();
         $livestock->delete();
 
         return redirect()->route('livestocks.list', ['beneficiary_id' => $beneficiary_id])

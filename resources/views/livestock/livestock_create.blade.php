@@ -38,30 +38,270 @@
         }
 
         /* Styling for the page */
-        body {
-            background-color: #f0f2f5;
-            font-family: 'Roboto', sans-serif;
-        }
-        .container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: 50px;
-        }
-        h2, h4 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .form-section {
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .btn {
-            font-weight: 600;
-        }
+        /* Layout Styling */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+    padding: 40px 30px;
+    margin-top: 50px;
+}
+
+/* Page Headers */
+h1, h2, h4 {
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Section Box Styling */
+.form-section {
+    background-color: #f9f9f9;
+    border-left: 6px solid #198754; /* Bootstrap green */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+/* Frame Layout */
+.frame {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left-column {
+    flex: 0 0 20%;
+    border-right: 1px solid #dee2e6;
+    padding: 15px;
+    background-color: #ffffff;
+}
+
+.right-column {
+    flex: 0 0 80%;
+    padding: 25px 40px;
+    background-color: #ffffff;
+}
+
+/* Labels and Inputs */
+label.form-label {
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 6px;
+}
+
+input.form-control, select.form-control {
+    border-radius: 4px;
+    padding: 8px 10px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    transition: border-color 0.3s;
+}
+
+input.form-control:focus, select.form-control:focus {
+    border-color: #198754;
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.25);
+}
+
+/* Button Styles */
+button.btn {
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 5px;
+}
+
+button.btn-primary {
+    background-color: #198754;
+    border: none;
+}
+
+button.btn-primary:hover {
+    background-color: #157347;
+}
+
+button.btn-secondary {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+}
+
+button.btn-secondary:hover {
+    background-color: #0b5ed7;
+}
+
+button.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+button.btn-danger:hover {
+    background-color: #bb2d3b;
+}
+
+/* Error Messages */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Utility */
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mb-3 { margin-bottom: 1rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.text-center { text-align: center !important; }
+
+/* Layout Styling */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+    padding: 40px 30px;
+    margin-top: 50px;
+}
+
+/* Page Headers */
+h1, h2, h4 {
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Section Box Styling */
+.form-section {
+    background-color: #f9f9f9;
+    border-left: 6px solid #fffcfc; /* Bootstrap green */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+.sub-form-box {
+    border: 1px dashed #ccc;
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+
+/* Frame Layout */
+.frame {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left-column {
+    flex: 0 0 20%;
+    border-right: 1px solid #dee2e6;
+    padding: 15px;
+    background-color: #ffffff;
+}
+
+.right-column {
+    flex: 0 0 80%;
+    padding: 25px 40px;
+    background-color: #ffffff;
+}
+
+/* Labels and Inputs */
+label.form-label {
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 6px;
+}
+
+input.form-control, select.form-control {
+    border-radius: 4px;
+    padding: 8px 10px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    transition: border-color 0.3s;
+}
+
+input.form-control:focus, select.form-control:focus {
+    border-color: #080a09;
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.25);
+}
+
+/* Button Styles */
+button.btn {
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 5px;
+}
+
+button.btn-primary {
+    background-color: #198754;
+    border: none;
+}
+
+button.btn-primary:hover {
+    background-color: #157347;
+}
+
+button.btn-secondary {
+    background-color: #2d8b32;
+    color: white;
+    border: none;
+}
+
+button.btn-secondary:hover {
+    background-color: #0e8c51;
+}
+
+button.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+button.btn-danger:hover {
+    background-color: #bb2d3b;
+}
+
+/* Error Messages */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Utility */
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mb-3 { margin-bottom: 1rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.text-center { text-align: center !important; }
+
+
     </style>
 </head>
 <body>
@@ -74,7 +314,8 @@
     <div class="right-column">
 
     <div class="col-md-12 text-center">
-    <h2 class="header-title" style="color: green;">Livestock Registration for <td style="color: black;">{{ $beneficiary->name_with_initials }}</td></h2>
+        <h1 class="custom-border">Livestock Registration Form</h1>
+    <h2 class="header-title" style="color: green;">Cultivation data of  <td style="color: black;">{{ $beneficiary->name_with_initials }}</td></h2>
     </div>
 
     <div class="container">
@@ -97,7 +338,7 @@
             <!-- Livestock Information -->
             <div class="form-section">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <!-- Livestock Type -->
                         <div class="mb-3">
                             <label for="livestock_type" class="form-label">Livestock Type</label>
@@ -112,7 +353,7 @@
                             <input type="hidden" name="livestock_type" value="{{ $livestockType }}">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <!-- Production Focus -->
                         <div class="mb-3">
                             <label for="production_focus" class="form-label">Production Focus</label>
@@ -121,96 +362,239 @@
                         </div>
                     </div>
 
-                </div>
+                
 
                 <!-- Newly added Livestock Commencement Date -->
-                <div class="row">
-                    <div class="col-md-6">
+                
+                    <div class="col-md-4">
                         <div class="mb-3">
                             <label for="livestock_commencement_date" class="form-label">Livestock Commencement Date</label>
                             <input type="date" class="form-control" id="livestock_commencement_date" name="livestock_commencement_date" required>
                         </div>
                     </div>
-                </div>
+                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="total_livestock_area" class="form-label">Total Livestock Area</label>
-                            <input type="number" class="form-control" id="total_livestock_area" name="total_livestock_area"  step="0.01" min="0"required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="total_number_of_acres" class="form-label">Total Number of Acres</label>
-                            <input type="number" class="form-control" id="total_number_of_acres" name="total_number_of_acres" step="0.01" min="0" required>
-                        </div>
-                    </div>
-                </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label for="number_of_livestocks" class="form-label">Number of Livestocks</label>
+            <input type="number" class="form-control" id="number_of_livestocks" name="number_of_livestocks" step="0.01" min="0" required>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label for="area_of_cade" class="form-label">Area of the Cade</label>
+            <input type="number" class="form-control" id="area_of_cade" name="area_of_cade" step="0.01" min="0" required>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label for="value" class="form-label">Value</label>
+           <input type="number" class="form-control" id="livestock_value" name="livestock_value" step="0.01" min="0" required>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="total_cost" class="form-label">Total Cost</label>
-                            <input type="number" class="form-control" id="total_cost" name="total_cost"  step="0.01" min="0"required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="inputs" class="form-label">Inputs</label>
-                            <input type="text" class="form-control" id="inputs" name="inputs" required>
-                        </div>
-                    </div>
+        </div>
+    </div>
+</div>
+
+
+
+           <!-- Farmer Contributions Section -->
+<div class="sub-form-box">
+    <h4>Farmer Contributions</h4>
+    <div id="contributionsSection">
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="farmer_date[]">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Description of Farmer Contribution</label>
+                <input type="text" class="form-control" name="farmer_description[]">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Value</label>
+                <input type="number" class="form-control" name="farmer_value[]">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-contribution">Remove</button>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="addContribution" class="btn btn-secondary mt-3">Add Contribution</button>
+</div>
+
+
+     <!-- Promoter Contributions Section -->
+<div class="sub-form-box">
+    <h4>Promoter Contributions</h4>
+    <div id="promoterContributionsSection">
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="promoter_date[]">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Description of Promoter Contribution</label>
+                <input type="text" class="form-control" name="promoter_description[]">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Value</label>
+                <input type="number" class="form-control" name="promoter_value[]" step="0.01" min="0">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-promoter-contribution">Remove</button>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="addPromoterContribution" class="btn btn-secondary mt-3">Add Contribution</button>
+</div>
+      <!-- Grant Details Section -->
+<div class="sub-form-box">
+    <h4>Grant Details</h4>
+    <div id="grantDetailsSection">
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="grant_date[]">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Description of Grant</label>
+                <input type="text" class="form-control" name="grant_description[]">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Value</label>
+                <input type="number" class="form-control" name="grant_value[]" step="0.01" min="0">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Grant Issued By</label>
+                <input type="text" class="form-control" name="grant_issued_by[]">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-grant">Remove</button>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="addGrantDetail" class="btn btn-secondary mt-3">Add Grant</button>
+</div>
+<!-- Credit Details Section -->
+<div class="sub-form-box">
+    <h4>Credit Details</h4>
+    <div class="row">
+        <div class="col-md-3">
+            <label class="form-label">Bank Name</label>
+            <input type="text" class="form-control" name="bank_name" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Branch</label>
+            <input type="text" class="form-control" name="branch" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Account Number</label>
+            <input type="text" class="form-control" name="account_number" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Interest Rate (%)</label>
+            <input type="number" step="0.01" min="0" class="form-control" name="interest_rate" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Credit Issue Date</label>
+            <input type="date" class="form-control" name="credit_issue_date" required>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <label class="form-label">Loan Installment Date</label>
+            <input type="date" class="form-control" name="loan_installment_date" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Credit Amount</label>
+            <input type="number" step="0.01" min="0" class="form-control" name="credit_amount" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Number of Installments</label>
+            <input type="number" min="1" class="form-control" name="number_of_installments" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Installment Due Date</label>
+            <input type="date" class="form-control" name="installment_due_date" required>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h4>Installment Payment</h4>
+        <div id="installmentPaymentsSection">
+            <div class="row mt-2">
+                <div class="col-md-5">
+                    <label class="form-label">Installment Payment Date</label>
+                    <input type="date" class="form-control" name="installment_payment_date[]">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Installment Payment Value</label>
+                    <input type="number" step="0.01" min="0" class="form-control" name="installment_payment_value[]">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger remove-installment">Remove</button>
                 </div>
             </div>
+        </div>
+        <button type="button" id="addInstallmentPayment" class="btn btn-secondary mt-3">Add Installment Payment</button>
+    </div>
+</div>
 
-            <!-- Contributions Section -->
-            <div class="form-section">
-                <h4>Farmer Contributions</h4>
-                <div id="contributionsSection">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label for="contribution_type" class="form-label">Contribution Type</label>
-                            <input type="text" class="form-control" name="contribution_type[]">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="cost" class="form-label">Cost</label>
-                            <input type="number" class="form-control" name="cost[]">
-                        </div>
-                        <div class="col-md-4 mt-4">
-                            <button type="button" class="btn btn-danger remove-contribution">Remove</button>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" id="addContribution" class="btn btn-secondary mt-3">Add Contribution</button>
-            </div>
+<!-- Credit Balance Info Section -->
+<div class="sub-form-box">
+    <h4>Credit Balance Info</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <label class="form-label">Credit Balance No</label>
+            <input type="text" class="form-control" name="credit_balance_no" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Date (Auto)</label>
+            <input type="date" class="form-control" name="credit_balance_date" value="{{ \Carbon\Carbon::now()->toDateString() }}" readonly>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Value</label>
+            <input type="number" step="0.01" min="0" class="form-control" name="credit_balance_value" required>
+        </div>
+    </div>
+</div>
+
+
 
             <!-- Products Section -->
-            <div class="form-section">
+            <div class="sub-form-box">
                 <h4>Livestock Products</h4>
                 <div id="productsSection">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="product_name" class="form-label">Product Name</label>
-                            <input type="text" class="form-control" name="product_name[]" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="total_production" class="form-label">Total Production</label>
-                            <input type="number" class="form-control" name="total_production[]"  step="0.01" min="0"required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="total_income" class="form-label">Total Income</label>
-                            <input type="number" class="form-control" name="total_income[]" step="0.01" min="0"required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="profit" class="form-label">Profit</label>
-                            <input type="number" class="form-control" name="profit[]" step="0.01" min="0"required>
-                        </div>
-                    </div>
-                </div>
+                    <div class="row mt-2">
+        <div class="col-md-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <input type="text" class="form-control" name="product_name[]" required>
+        </div>
+        <div class="col-md-3">
+            <label for="total_production" class="form-label">Total Production</label>
+            <input type="number" class="form-control" name="total_production[]" step="0.01" min="0" required>
+        </div>
+        <div class="col-md-3">
+            <label for="total_income" class="form-label">Total Income</label>
+            <input type="number" class="form-control" name="total_income[]" step="0.01" min="0" required>
+        </div>
+        <div class="col-md-2">
+            <label for="profit" class="form-label">Profit</label>
+            <input type="number" class="form-control" name="profit[]" step="0.01" min="0" required>
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <button type="button" class="btn btn-danger remove-product">Remove</button>
+        </div>
+         </div>
                 <button type="button" id="addProduct" class="btn btn-secondary mt-3">Add Product</button>
             </div>
 
+    </div>
+</div>
+                    </div>
+               
             <!-- Submit Button -->
             <div class="row">
                 <div class="col-12 text-center">
@@ -276,24 +660,35 @@ $('#livestock_type').change(function() {
 });
 
 
-            // Add Contribution
-            $('#addContribution').click(function () {
-                var newContribution = `
-                    <div class="row mt-2">
-                        <div class="col-md-4">
-                            <label for="contribution_type" class="form-label">Contribution Type</label>
-                            <input type="text" class="form-control" name="contribution_type[]">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="cost" class="form-label">Cost</label>
-                            <input type="number" class="form-control" name="cost[]">
-                        </div>
-                        <div class="col-md-4 mt-4">
-                            <button type="button" class="btn btn-danger remove-contribution">Remove</button>
-                        </div>
-                    </div>`;
-                $('#contributionsSection').append(newContribution);
-            });
+            // Add Farmer Contribution
+$('#addContribution').click(function () {
+   var newContribution = `
+    <div class="row mt-2">
+        <div class="col-md-3">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="farmer_date[]">
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Description of Farmer Contribution</label>
+            <input type="text" class="form-control" name="farmer_description[]">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Value</label>
+            <input type="number" class="form-control" name="farmer_value[]" step="0.01" min="0">
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <button type="button" class="btn btn-danger remove-contribution">Remove</button>
+        </div>
+    </div>`;
+
+    $('#contributionsSection').append(newContribution);
+});
+
+// Remove Farmer Contribution
+$(document).on('click', '.remove-contribution', function () {
+    $(this).closest('.row').remove();
+});
+
 
             // Add Product
             $('#addProduct').click(function () {
@@ -322,15 +717,94 @@ $('#livestock_type').change(function() {
                 $('#productsSection').append(newProduct);
             });
 
-            // Remove Contribution
-            $(document).on('click', '.remove-contribution', function () {
-                $(this).closest('.row').remove();
-            });
+            
 
             // Remove Product
             $(document).on('click', '.remove-product', function () {
                 $(this).closest('.row').remove();
             });
+            
+// Add Promoter Contribution
+$('#addPromoterContribution').click(function () {
+    var newPromoterContribution = `
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="promoter_date[]">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Description of Promoter Contribution</label>
+                <input type="text" class="form-control" name="promoter_description[]">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Value</label>
+                <input type="number" class="form-control" name="promoter_value[]" step="0.01" min="0">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-promoter-contribution">Remove</button>
+            </div>
+        </div>`;
+    $('#promoterContributionsSection').append(newPromoterContribution);
+});
+
+// Remove Promoter Contribution
+$(document).on('click', '.remove-promoter-contribution', function () {
+    $(this).closest('.row').remove();
+});
+// Add Grant Detail
+$('#addGrantDetail').click(function () {
+    var newGrant = `
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="grant_date[]">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Description of Grant</label>
+                <input type="text" class="form-control" name="grant_description[]">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Value</label>
+                <input type="number" class="form-control" name="grant_value[]" step="0.01" min="0">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Grant Issued By</label>
+                <input type="text" class="form-control" name="grant_issued_by[]">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-grant">Remove</button>
+            </div>
+        </div>`;
+    $('#grantDetailsSection').append(newGrant);
+});
+
+// Remove Grant
+$(document).on('click', '.remove-grant', function () {
+    $(this).closest('.row').remove();
+});
+// Add Installment Payment
+$('#addInstallmentPayment').click(function () {
+    var newInstallment = `
+        <div class="row mt-2">
+            <div class="col-md-5">
+                <label class="form-label">Installment Payment Date</label>
+                <input type="date" class="form-control" name="installment_payment_date[]">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Installment Payment Value</label>
+                <input type="number" class="form-control" name="installment_payment_value[]" step="0.01" min="0">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-installment">Remove</button>
+            </div>
+        </div>`;
+    $('#installmentPaymentsSection').append(newInstallment);
+});
+
+// Remove Installment Payment
+$(document).on('click', '.remove-installment', function () {
+    $(this).closest('.row').remove();
+});
 
 
         });

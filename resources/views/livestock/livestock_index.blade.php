@@ -31,20 +31,47 @@
 
         /* Custom CSS */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #34495e;
-            /* --accent-color: #3498db; */
-            --light-gray: #f8f9fa;
-            --border-color: #dee2e6;
-            --header-bg: #f3f4f6;  /* Light gray header background */
+            --primary-color: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e40af;
+            --success-color: #10b981;
+            --success-light: #34d399;
+            --success-dark: #059669;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --border-light: #f3f4f6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: var(--light-gray);
-            color: var(--primary-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-
         .container {
             background-color: white;
             border-radius: 15px;
@@ -195,6 +222,115 @@
                 margin-bottom: 0.5rem;
             }
         }
+        .section-card {
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #f9fff9;
+    box-shadow: 0 0 10px rgba(0, 128, 0, 0.1);
+}
+
+.section-header {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin: -20px -20px 20px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header i {
+    margin-right: 8px;
+}
+
+.remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 12px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.remove-btn:hover {
+    background-color: #c82333;
+}
+
+.add-more-btn {
+    background-color: #198754;
+    color: white;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.add-more-btn:hover {
+    background-color: #157347;
+}
+.section-card {
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #f9fff9;
+    box-shadow: 0 0 10px rgba(0, 128, 0, 0.1);
+}
+
+.section-header {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin: -20px -20px 20px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header i {
+    margin-right: 8px;
+}
+
+.remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 12px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.remove-btn:hover {
+    background-color: #c82333;
+}
+
+.add-more-btn {
+    background-color: #198754;
+    color: white;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.add-more-btn:hover {
+    background-color: #157347;
+}
+
     </style>
 
     <style>
@@ -286,6 +422,7 @@
 }
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
@@ -311,81 +448,173 @@
     </div>
 
     <!-- Rest of the HTML remains the same as in the previous version -->
-    <div class="container">
-        <h2>Livestock Details for Beneficiary: <span>{{ $beneficiary->name_with_initials }}</span></h2>
+   <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="mb-0">Cultivation data of <span>{{ $beneficiary->name_with_initials }}</span></h2>
+    </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Livestock Type</th>
-                    <th>Production Focus</th>
-                    <th>Commencement Date</th>
-                    <th>Total Livestock Area</th>
-                    <th>Total Number of Acres</th>
-                    <th>Total Cost</th>
-                    <th>Inputs</th>
-                    <th>Farmer Contributions</th>
-                    <th>Product Details</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($livestocks as $livestock)
-                <tr>
-                    <td data-label="Livestock Type">{{ $livestock->livestock_type ?? 'N/A' }}</td>
-                    <td data-label="Production Focus">{{ $livestock->production_focus ?? 'N/A' }}</td>
-                    <td data-label="Commencement Date">{{ $livestock->livestock_commencement_date ?? 'N/A' }}</td>
-                    <td data-label="Total Area">{{ $livestock->total_livestock_area ?? 'N/A' }}</td>
-                    <td data-label="Total Acres">{{ $livestock->total_number_of_acres ?? 'N/A' }}</td>
-                    <td data-label="Total Cost">{{ $livestock->total_cost ?? 'N/A' }}</td>
-                    <td data-label="Inputs">{{ $livestock->inputs ?? 'N/A' }}</td>
+    @foreach($livestocks as $livestock)
+    <!-- WHITE ACTION BAR -->
+    <div class="d-flex justify-content-end align-items-center bg-white p-2 rounded shadow-sm mb-1">
 
-                    <td data-label="Farmer Contributions">
-                        @if($livestock->liveContributions->isNotEmpty())
-                            @foreach($livestock->liveContributions as $contribution)
-                                <div class="detail-box">
-                                    <strong>Contribution:</strong> {{ $contribution->contribution_type }}<br>
-                                    <strong>Cost:</strong> {{ $contribution->cost }}
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="empty-state">No farmer contributions available</div>
-                        @endif
-                    </td>
+        {{-- EDIT BUTTON --}}
+        @if(auth()->user()->hasPermission('livestocks', 'edit'))
+            <button type="button" class="btn btn-warning me-2"
+                    onclick="confirmEdit({{ $livestock->id }})">
+                EDIT
+            </button>
+            <form id="edit-form-{{ $livestock->id }}"
+                  action="{{ route('livestocks.edit', ['beneficiary_id' => $beneficiary->id, 'livestock' => $livestock->id]) }}"
+                  method="GET" style="display:none;">
+            </form>
+        @endif
+           @if(auth()->user()->hasPermission('livestocks', 'delete'))
+    <form id="delete-form-{{ $livestock->id }}"
+          action="{{ route('livestocks.destroy', ['beneficiary_id' => $beneficiary->id, 'livestock_id' => $livestock->id]) }}"
+          method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="button" class="btn btn-danger"
+                onclick="confirmDelete({{ $livestock->id }})">
+            DELETE
+        </button>
+    </form>
+@endif
 
-                    <td data-label="Product Details">
-                        @if($livestock->liveProducts->isNotEmpty())
-                            @foreach($livestock->liveProducts as $product)
-                                <div class="detail-box">
-                                    <strong>Product:</strong> {{ $product->product_name }}<br>
-                                    <strong>Total Production:</strong> {{ $product->total_production }} kg<br>
-                                    <strong>Total Income:</strong> {{ $product->total_income }}<br>
-                                    <strong>Profit:</strong> {{ $product->profit }}
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="empty-state">No products available</div>
-                        @endif
-                    </td>
+        </div>
+       <div class="section-card">
+    <div class="section-header"><i class="fas fa-seedling"></i> Basic info</div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-md-4"><strong>Livestock Type:</strong> {{ $livestock->livestock_type ?? 'N/A' }}</div>
+                <div class="col-md-4"><strong>Production Focus:</strong> {{ $livestock->production_focus ?? 'N/A' }}</div>
+                <div class="col-md-4"><strong>Commencement Date:</strong> {{ $livestock->livestock_commencement_date ?? 'N/A' }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4"><strong>Number of Livestock:</strong> {{ $livestock->number_of_livestocks ?? 'N/A' }}</div>
+                <div class="col-md-4"><strong>Area of the Cade:</strong> {{ $livestock->area_of_cade ?? 'N/A' }}</div>
+                <div class="col-md-4"><strong>Value:</strong> Rs. {{ number_format($livestock->value ?? 0, 2) }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4"><strong>GN Division:</strong> {{ $livestock->gn_division_name ?? 'N/A' }}</div>
+            </div>
+        </div>
+    </div>
 
-                    <td data-label="Actions">
-                        @if(auth()->user()->hasPermission('livestocks', 'edit'))
-                        <a href="{{ route('livestocks.edit', ['beneficiary_id' => $beneficiary->id, 'livestock' => $livestock->id]) }}"
-                            class="btn btn-warning">Edit</a>
-                        @endif
-                        @if(auth()->user()->hasPermission('livestocks', 'delete'))
-                        <form action="{{ route('livestocks.destroy', ['beneficiary_id' => $beneficiary->id, 'livestock_id' => $livestock->id]) }}"
-                              method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
-                        </form>
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+
+       <!-- Farmer Contributions -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-seedling"></i> Farmer Contributions</div>
+    @if($livestock->farmerContributions->isNotEmpty())
+        @foreach($livestock->farmerContributions as $item)
+            <div class="detail-box">
+                <strong>Date:</strong> {{ $item->date }}<br>
+                <strong>Description:</strong> {{ $item->description }}<br>
+                <strong>Value:</strong> Rs. {{ $item->value }}
+            </div>
+        @endforeach
+    @else
+        <div class="empty-state">No farmer contributions available.</div>
+    @endif
+</div>
+
+<!-- Promoter Contributions -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-user-friends"></i> Promoter Contributions</div>
+    @if($livestock->promoterContributions->isNotEmpty())
+        @foreach($livestock->promoterContributions as $item)
+            <div class="detail-box">
+                <strong>Date:</strong> {{ $item->date }}<br>
+                <strong>Description:</strong> {{ $item->description }}<br>
+                <strong>Value:</strong> Rs. {{ $item->value }}
+            </div>
+        @endforeach
+    @else
+        <div class="empty-state">No promoter contributions available.</div>
+    @endif
+</div>
+
+<!-- Grant Details -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-gift"></i> Grant Details</div>
+    @if($livestock->grantDetails->isNotEmpty())
+        @foreach($livestock->grantDetails as $item)
+            <div class="detail-box">
+                <strong>Date:</strong> {{ $item->date }}<br>
+                <strong>Description:</strong> {{ $item->description }}<br>
+                <strong>Value:</strong> Rs. {{ $item->value }}<br>
+                <strong>Issued By:</strong> {{ $item->grant_issued_by }}
+            </div>
+        @endforeach
+    @else
+        <div class="empty-state">No grant details available.</div>
+    @endif
+</div>
+
+<!-- Credit Details -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-university"></i> Credit Details</div>
+    <div class="row">
+        <div class="col-md-4"><strong>Bank:</strong> {{ $livestock->bank_name ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Branch:</strong> {{ $livestock->branch ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Account:</strong> {{ $livestock->account_number ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Amount:</strong> Rs. {{ $livestock->credit_amount ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Interest Rate:</strong> {{ $livestock->interest_rate ?? 'N/A' }}%</div>
+        <div class="col-md-4"><strong>Credit Issue Date:</strong> {{ $livestock->credit_issue_date ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Loan Installment Date:</strong> {{ $livestock->loan_installment_date ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>No. of Installments:</strong> {{ $livestock->number_of_installments ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Installment Due Date:</strong> {{ $livestock->installment_due_date ?? 'N/A' }}</div>
+    </div>
+</div>
+
+<!-- Installment Payments -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-calendar-check"></i> Installment Payments</div>
+    @if($livestock->installmentPayments->isNotEmpty())
+        @foreach($livestock->installmentPayments as $payment)
+            <div class="detail-box">
+                <strong>Payment Date:</strong> {{ $payment->installment_payment_date }}<br>
+                <strong>Value:</strong> Rs. {{ $payment->installment_payment_value }}
+            </div>
+        @endforeach
+    @else
+        <div class="empty-state">No installment payments available.</div>
+    @endif
+</div>
+
+<!-- Credit Balance -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-balance-scale"></i> Credit Balance</div>
+    <div class="row">
+        <div class="col-md-4"><strong>No:</strong> {{ $livestock->credit_balance_no ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Date:</strong> {{ $livestock->credit_balance_date ?? 'N/A' }}</div>
+        <div class="col-md-4"><strong>Value:</strong> Rs. {{ $livestock->credit_balance_value ?? 'N/A' }}</div>
+    </div>
+</div>
+
+<!-- Livestock Products -->
+<div class="section-card">
+    <div class="section-header"><i class="fas fa-cubes"></i> Livestock Products</div>
+    @if($livestock->liveProducts->isNotEmpty())
+        @foreach($livestock->liveProducts as $product)
+            <div class="detail-box">
+                <strong>Product:</strong> {{ $product->product_name }}<br>
+                <strong>Total Production:</strong> {{ $product->total_production }} kg<br>
+                <strong>Total Income:</strong> Rs. {{ $product->total_income }}<br>
+                <strong>Profit:</strong> Rs. {{ $product->profit }}
+            </div>
+        @endforeach
+    @else
+        <div class="empty-state">No products available.</div>
+    @endif
+</div>
+
+        
+        </form>
+    </tr>
+    @endforeach
+</tbody>
+
         </table>
 
         @if($livestocks->isEmpty())
@@ -422,5 +651,63 @@
         });
     });
 </script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action will permanently delete the livestock record.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action will permanently delete the livestock record.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+
+    function confirmEdit(id) {
+        Swal.fire({
+            title: 'Proceed to edit?',
+            text: "You're about to edit this record.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#ffc107',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, edit it!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('edit-form-' + id).submit();
+            }
+        });
+    }
+</script>
+
+
+
 </body>
 </html>
