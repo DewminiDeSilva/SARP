@@ -131,7 +131,12 @@
             border-color: #126926;
         }
          
-        
+        .card-header {
+            background-color:#198754 !important; /* Darker green */
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
     </style>
 
     <style>
@@ -156,179 +161,294 @@
             @include('dashboard.dashboardC')
         </div>
 
-        <div class="right-column">
+        <div class="right-column" style="padding: 70px;">
             <div class="container-fluid">
                 <div class="center-heading text-center">
-                    <h1 style="font-size: 2.5rem; color: green;">Youth Enterprise Details</h1>
+                    <h2 style="font-size: 2.4rem; color: green;">Youth Enterprise Details</h2>
                 </div>
             </div>
     
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ route('youth.edit', $youth->id) }}" class="btn btn-warning mr-2">
-            <i class="fas fa-edit"></i> Edit
-        </a>
-        
-        <!-- Delete Button -->
-        <button class="btn btn-danger" onclick="confirmDelete('{{ route('youth.destroy', $youth->id) }}')">
-            <i class="fas fa-trash-alt"></i> Delete
-        </button>
+    
 
-        <!-- Hidden Delete Form -->
-        <form id="delete-form" method="POST" style="display: none;">
-            @csrf
-            @method('DELETE')
-        </form>
+
+    <div class="container mt-5 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
+
+    
+
+
+    <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded border bg-light shadow-sm">
+    <!-- Left side: Beneficiary Name -->
+    <div style="font-size: 1.3rem; font-weight: 700; color:rgb(14, 99, 48);">
+        <i class="fas fa-user me-2"></i> Beneficiary: {{ $beneficiary->name_with_initials ?? 'N/A' }}
     </div>
 
-    <!-- Enterprise Info -->
-    <div class="section-title">Enterprise Information</div>
-    <table class="table table-bordered">
-        <tbody>
-            <tr><th>Enterprise Name</th><td>{{ $youth->enterprise_name }}</td></tr>
-            <tr><th>Registration Number</th><td>{{ $youth->registration_number }}</td></tr>
-            <tr><th>Institute of Registration</th><td>{{ $youth->institute_of_registration }}</td></tr>
-            <tr><th>Address</th><td>{{ $youth->address }}</td></tr>
-            <tr><th>Email</th><td>{{ $youth->email }}</td></tr>
-            <tr><th>Phone Number</th><td>{{ $youth->phone_number }}</td></tr>
-            <tr><th>Website</th><td>{{ $youth->website_name }}</td></tr>
-            <tr><th>Certificates Description</th><td>{{ $youth->description_of_certificates }}</td></tr>
-        </tbody>
-    </table>
+    <!-- Right side: Edit & Delete Buttons -->
+    <div>
+        <a href="{{ route('youth.edit', $youth->id) }}" class="btn btn-warning me-2">
+            <i class="fas fa-edit"></i> Edit
+        </a>
 
-    <!-- Business Info -->
-    <div class="section-title">Business Details</div>
-    <table class="table table-bordered">
-        <tbody>
-            <tr><th>Nature of Business</th><td>{{ $youth->nature_of_business }}</td></tr>
-            <tr><th>Products Available</th><td>{{ $youth->products_available }}</td></tr>
-            <tr><th>Yield Collection Details</th><td>{{ $youth->yield_collection_details }}</td></tr>
-            <tr><th>Marketing Information</th><td>{{ $youth->marketing_information }}</td></tr>
-            <tr><th>List of Distributors</th><td>{{ $youth->list_of_distributors }}</td></tr>
-            <tr><th>Business Plan (PDF)</th>
-                <td>
-                    @if ($youth->business_plan)
-                        <a href="{{ asset('storage/' . $youth->business_plan) }}" target="_blank">Download Plan</a>
-                    @else
-                        Not Uploaded
-                    @endif
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <form action="{{ route('youth.destroy', $youth->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i> Delete
+    </button>
+</form>
 
-    <!-- Asset Details -->
-    <div class="section-title">Asset Details</div>
-    <table class="table table-bordered">
-        <thead><tr><th>Asset Name</th><th>Asset Value</th></tr></thead>
-        <tbody>
-            @foreach($youth->asset_details ?? [] as $asset)
-                <tr>
-                    <td>{{ $asset['asset_name'] ?? '' }}</td>
-                    <td>{{ $asset['asset_value'] ?? '' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 
-    <!-- Youth Contributions -->
-    <div class="section-title">Youth Contributions</div>
-    <table class="table table-bordered">
-        <thead><tr><th>Date</th><th>Description</th><th>Value</th></tr></thead>
-        <tbody>
-            @foreach($youth->youth_contributions ?? [] as $item)
-                <tr>
-                    <td>{{ $item['date'] ?? '' }}</td>
-                    <td>{{ $item['description'] ?? '' }}</td>
-                    <td>{{ $item['value'] ?? '' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 
-    <!-- Promoter Contributions -->
-    <div class="section-title">Promoter Contributions</div>
-    <table class="table table-bordered">
-        <thead><tr><th>Date</th><th>Description</th><th>Value</th></tr></thead>
-        <tbody>
-            @foreach($youth->promoter_contributions ?? [] as $item)
-                <tr>
-                    <td>{{ $item['date'] ?? '' }}</td>
-                    <td>{{ $item['description'] ?? '' }}</td>
-                    <td>{{ $item['value'] ?? '' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <!-- Grant Details -->
-    <div class="section-title">Grant Details</div>
-    <table class="table table-bordered">
-        <thead><tr><th>Date</th><th>Description</th><th>Value</th><th>Issued By</th></tr></thead>
-        <tbody>
-            @foreach($youth->grant_details ?? [] as $item)
-                <tr>
-                    <td>{{ $item['date'] ?? '' }}</td>
-                    <td>{{ $item['description'] ?? '' }}</td>
-                    <td>{{ $item['value'] ?? '' }}</td>
-                    <td>{{ $item['grant_issued_by'] ?? '' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <!-- Credit Details -->
-    <div class="section-title">Credit Details</div>
-    <table class="table table-bordered">
-        <tbody>
-            <tr><th>Bank Name</th><td>{{ $youth->bank_name }}</td></tr>
-            <tr><th>Branch</th><td>{{ $youth->branch }}</td></tr>
-            <tr><th>Account Number</th><td>{{ $youth->account_number }}</td></tr>
-            <tr><th>Interest Rate</th><td>{{ $youth->interest_rate }}</td></tr>
-            <tr><th>Credit Issue Date</th><td>{{ $youth->credit_issue_date }}</td></tr>
-            <tr><th>Loan Installment Date</th><td>{{ $youth->loan_installment_date }}</td></tr>
-            <tr><th>Credit Amount</th><td>{{ $youth->credit_amount }}</td></tr>
-            <tr><th>Number of Installments</th><td>{{ $youth->number_of_installments }}</td></tr>
-            <tr><th>Installment Due Date</th><td>{{ $youth->installment_due_date }}</td></tr>
-            <tr><th>Credit Balance Date</th><td>{{ $youth->credit_balance_date }}</td></tr>
-            <tr><th>Credit Balance Value</th><td>{{ $youth->credit_balance_value }}</td></tr>
-        </tbody>
-    </table>
-
-    <!-- Installment Payments -->
-    <div class="section-title">Installment Payments</div>
-    <table class="table table-bordered">
-        <thead><tr><th>Payment Date</th><th>Payment Value</th></tr></thead>
-        <tbody>
-            @foreach($youth->installment_payments ?? [] as $item)
-                <tr>
-                    <td>{{ $item['installment_payment_date'] ?? '' }}</td>
-                    <td>{{ $item['installment_payment_value'] ?? '' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    </div>
 </div>
 
-<script>
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "This will permanently delete the youth enterprise record!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.getElementById('delete-form');
-                form.setAttribute('action', `/youth/${id}`);
-                form.submit();
-            }
-        });
-    }
-</script>
+
+    
+        <!-- Card 1: Enterprise Information -->
+        <div class="card mb-4 mt-3">
+    <div class="card-header">
+
+        Enterprise Information
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Enterprise Name</th>
+                    <td>{{ $youth->enterprise_name ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Registration Number</th>
+                    <td>{{ $youth->registration_number ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Institute of Registration</th>
+                    <td>{{ $youth->institute_of_registration ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ $youth->address ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ $youth->email ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ $youth->phone_number ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Website</th>
+                    <td>{{ $youth->website_name ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Certificates Description</th>
+                    <td>{{ $youth->description_of_certificates ?? '-' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+        <!-- Card 2: Business Details -->
+<div class="card mb-4 mt-5">
+    <div class="card-header bg-success text-white fw-bold">
+        Business Details
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Nature of Business</th>
+                    <td>{{ $youth->nature_of_business ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Products Available</th>
+                    <td>{{ $youth->products_available ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Yield Collection Details</th>
+                    <td>{{ $youth->yield_collection_details ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Marketing Information</th>
+                    <td>{{ $youth->marketing_information ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>List of Distributors</th>
+                    <td>{{ $youth->list_of_distributors ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Business Plan (PDF)</th>
+                    <td>
+                        @if ($youth->business_plan)
+                            <a href="{{ asset('storage/' . $youth->business_plan) }}" target="_blank">Download Plan</a>
+                        @else
+                            Not Uploaded
+                        @endif
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+        <!-- Card 3: Additional Details -->
+        <div class="card mb-4 mt-5">
+    <div class="card-header bg-success text-white fw-bold">
+        Additional Details
+    </div>
+    <div class="card-body">
+
+        {{-- Asset Details --}}
+        <h5 class="fw-semibold mb-2">Asset Details</h5>
+        <table class="table table-bordered mb-4">
+            <thead>
+                <tr>
+                    <th>Asset Name</th>
+                    <th>Asset Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($youth->asset_details ?? [] as $asset)
+                    <tr>
+                        <td>{{ $asset['asset_name'] ?? '-' }}</td>
+                        <td>{{ $asset['asset_value'] ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="2">No asset details provided.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{-- Youth Contributions --}}
+        <h5 class="fw-semibold mb-2">Youth Contributions</h5>
+        <table class="table table-bordered mb-4">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($youth->youth_contributions ?? [] as $item)
+                    <tr>
+                        <td>{{ $item['date'] ?? '-' }}</td>
+                        <td>{{ $item['description'] ?? '-' }}</td>
+                        <td>{{ $item['value'] ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="3">No youth contributions recorded.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{-- Promoter Contributions --}}
+        <h5 class="fw-semibold mb-2">Promoter Contributions</h5>
+        <table class="table table-bordered mb-4">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($youth->promoter_contributions ?? [] as $item)
+                    <tr>
+                        <td>{{ $item['date'] ?? '-' }}</td>
+                        <td>{{ $item['description'] ?? '-' }}</td>
+                        <td>{{ $item['value'] ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="3">No promoter contributions recorded.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{-- Grant Details --}}
+        <h5 class="fw-semibold mb-2">Grant Details</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                    <th>Issued By</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($youth->grant_details ?? [] as $item)
+                    <tr>
+                        <td>{{ $item['date'] ?? '-' }}</td>
+                        <td>{{ $item['description'] ?? '-' }}</td>
+                        <td>{{ $item['value'] ?? '-' }}</td>
+                        <td>{{ $item['grant_issued_by'] ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="4">No grant details provided.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+    <div class="card mb-4 mt-5">
+    <div class="card-header bg-success text-white fw-bold">
+        Financial Details
+    </div>
+    <div class="card-body">
+
+        <!-- Credit Details -->
+        <h5 class="mb-3">Credit Details</h5>
+        <table class="table table-bordered">
+            <tbody>
+                <tr><th>Bank Name</th><td>{{ $youth->bank_name ?? '-' }}</td></tr>
+                <tr><th>Branch</th><td>{{ $youth->branch ?? '-' }}</td></tr>
+                <tr><th>Account Number</th><td>{{ $youth->account_number ?? '-' }}</td></tr>
+                <tr><th>Interest Rate</th><td>{{ $youth->interest_rate ?? '-' }}</td></tr>
+                <tr><th>Credit Issue Date</th><td>{{ $youth->credit_issue_date ?? '-' }}</td></tr>
+                <tr><th>Loan Installment Date</th><td>{{ $youth->loan_installment_date ?? '-' }}</td></tr>
+                <tr><th>Credit Amount</th><td>{{ $youth->credit_amount ?? '-' }}</td></tr>
+                <tr><th>Number of Installments</th><td>{{ $youth->number_of_installments ?? '-' }}</td></tr>
+                <tr><th>Installment Due Date</th><td>{{ $youth->installment_due_date ?? '-' }}</td></tr>
+                <tr><th>Credit Balance Date</th><td>{{ $youth->credit_balance_date ?? '-' }}</td></tr>
+                <tr><th>Credit Balance Value</th><td>{{ $youth->credit_balance_value ?? '-' }}</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Installment Payments -->
+        <h5 class="mt-4 mb-3">Installment Payments</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr><th>Payment Date</th><th>Payment Value</th></tr>
+            </thead>
+            <tbody>
+                @forelse($youth->installment_payments ?? [] as $item)
+                    <tr>
+                        <td>{{ $item['installment_payment_date'] ?? '-' }}</td>
+                        <td>{{ $item['installment_payment_value'] ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="2">No installment payments recorded.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
 
 </body>
 </html>

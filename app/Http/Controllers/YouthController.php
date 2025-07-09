@@ -13,22 +13,72 @@ class YouthController extends Controller
      * Display a paginated list of beneficiaries for Youth Enterprise linkage.
      * Only specific columns are selected, and sorted by latest first.
      */
-    public function index()
-    {
-        $beneficiaries = Beneficiary::select(
-            'id',
-            'nic',
-            'name_with_initials',
-            'gender',
-            'address',
-            'phone',
-            'tank_name'
-        )
-        ->orderBy('created_at', 'desc') // Show newest beneficiaries first
-        ->paginate(10);
+   public function index(Request $request)
+{
+    // 1) Get all beneficiary IDs with youth records
+    $youthBeneficiaryIds = Youth::pluck('beneficiary_id')->unique();
 
-        return view('youth.youth_index', compact('beneficiaries'));
+    // 2) Build base query
+    $query = Beneficiary::select(
+        'id',
+        'nic',
+        'name_with_initials',
+        'gender',
+        'address',
+        'phone',
+        'tank_name'
+    );
+
+    // 3) Apply search
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            if (strtolower($search) === 'male' || strtolower($search) === 'female') {
+                $q->where('gender', strtolower($search));
+            } else {
+                $q->where('nic', 'like', "%{$search}%")
+                  ->orWhere('name_with_initials', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('tank_name', 'like', "%{$search}%");
+            }
+        });
+
     }
+
+    // 4) Apply status filter
+    if ($request->filled('status')) {
+        if ($request->status == 'with') {
+            $query->whereIn('id', $youthBeneficiaryIds);
+        } elseif ($request->status == 'pending') {
+            $query->whereNotIn('id', $youthBeneficiaryIds);
+        }
+    }
+
+    // 5) Paginate and append filters
+    $beneficiaries = $query->orderBy('created_at', 'desc')
+        ->paginate(10)
+        ->appends([
+            'search' => $request->search,
+            'status' => $request->status,
+        ]);
+
+    // 6) Summary counts
+    $totalBeneficiaries = Beneficiary::count();
+    $withYouthCount     = Youth::distinct('beneficiary_id')->count('beneficiary_id');
+    $pendingYouthCount  = $totalBeneficiaries - $withYouthCount;
+
+    // 7) Return view
+    return view('youth.youth_index', compact(
+        'beneficiaries',
+        'youthBeneficiaryIds',
+        'totalBeneficiaries',
+        'withYouthCount',
+        'pendingYouthCount'
+    ));
+}
+
+
 
     /**
      * Show the form to add Youth Enterprise details for a selected beneficiary.
