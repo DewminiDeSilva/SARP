@@ -40,7 +40,7 @@
     <div class="right-column">
 
     <div class="container mt-5">
-        <h2>livestock Details for Beneficiary: {{ $beneficiary->first_name }}</h2>
+        <h2>livestock  {{ $beneficiary->first_name }}</h2>
 
         <table class="table table-bordered">
             <thead>
