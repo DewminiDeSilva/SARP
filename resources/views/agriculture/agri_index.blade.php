@@ -350,14 +350,7 @@
 
 
 
-            <!-- Success Message Popup -->
-            @if(session('success'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        alert('{{ session('success') }}');
-                    });
-                </script>
-            @endif
+           
 
             <!-- Entries Selector and Summary Cards -->
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -530,6 +523,21 @@
         });
     });
 </script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: '{{ session('success') }}',
+        timer: 2500,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
 
 </body>
 </html>
