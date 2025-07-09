@@ -47,6 +47,15 @@
             flex: 0 0 20%;
             border-right: 1px solid #dee2e6;
         }
+          .btn-primary {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .btn-primary:hover {
+            background-color: #145c32;
+            border-color: #145c32;
+        }
     </style>
 
 <style>

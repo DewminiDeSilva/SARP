@@ -118,7 +118,15 @@
 .right-column {
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
+  .btn-primary {
+            background-color: #198754;
+            border-color: #198754;
+        }
 
+        .btn-primary:hover {
+            background-color: #145c32;
+            border-color: #145c32;
+        }
 </style>
 
 </head>
@@ -393,7 +401,7 @@
 
 
         <div class="mt-4 text-center">
-            <a href="{{ route('agriculture.index') }}" class="btn btn-secondary">Back</a>
+          
             <button type="submit" class="btn btn-primary">Update</button>
         </div>
     </form>
