@@ -793,6 +793,29 @@
     @endif
 </script>
 
+@if(session('create_success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{{ session('create_success') }}',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
+
+@if(session('create_fail'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '{{ session('create_fail') }}',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+@endif
 
 
                         </div>

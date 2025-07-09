@@ -77,7 +77,12 @@ class InfrastructureController extends Controller
         $infrastructure->post_image_path = $postPath;
         $infrastructure->save();
 
-        return redirect('/infrastructure')->with('success', 'Infrastructure record created successfully.');
+        if ($infrastructure->wasRecentlyCreated) {
+            return redirect('/infrastructure')->with('create_success', 'Record saved successfully.');
+        } else {
+            return redirect('/infrastructure')->with('create_fail', 'Record save failed.');
+        }
+
     }
 
 
