@@ -171,17 +171,16 @@ li:hover {
 
                             <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a></li>
                         </ul>
-                    </li>
-
-                    <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Youth Enterprise</a>
-                        <ul class="nested">
-                            <li><a href="/youth" style="color: #FFFFFF">Youth Enterprise Details</a></li>
-                        </ul>
-                    </li>
-
-                    
-                </ul>
+                    </li>       
+                </ul>              
+            </li>
+            
+            <li class="submenu">
+                <a href="#" style="color: #FFFFFF">Youth Enterprises</a>
+                    <ul class="nested">
+                            <li><a href="#" style="color: #FFFFFF">Youth Proposals</a></li>
+                            <li><a href="/youth" style="color: #FFFFFF">Youth Projects</a></li>
+                    </ul>
             </li>
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">4p Agri Business Development Projects</a>
