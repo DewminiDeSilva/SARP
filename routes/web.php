@@ -58,6 +58,7 @@ use App\Http\Controllers\ProjectDesignReportController;
 use App\Http\Controllers\EOIController;
 use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\YouthController;
+use App\Http\Controllers\YouthProposalController;
 
 
 
@@ -2171,3 +2172,12 @@ Route::put('/youth/{id}', [YouthController::class, 'update'])->name('youth.updat
 Route::delete('/youth/{id}', [YouthController::class, 'destroy'])->name('youth.destroy');
 
 
+
+
+
+
+
+//Youth Proposal 
+
+Route::resource('youth-proposals', YouthProposalController::class);
+Route::patch('/youth-proposals/update-status/{id}', [YouthProposalController::class, 'updateStatus'])->name('youth-proposals.updateStatus');
