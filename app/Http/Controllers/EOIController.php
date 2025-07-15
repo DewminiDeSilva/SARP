@@ -214,7 +214,7 @@ class EOIController extends Controller
 }
 public function evaluationCompleted()
 {
-    $completedExpressions = EOI::where('status', 'Evaluation Completed')->paginate(10);
+    $completedExpressions = EOI::where('status', 'Agreement Signed')->paginate(10);
     return view('eoi.evaluation_completed_index', compact('completedExpressions'));
 }
 

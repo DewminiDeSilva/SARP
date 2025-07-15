@@ -186,7 +186,7 @@
 
 
             <div class="center-heading text-center">
-                <h1 style="font-size: 2.5rem; color: green;">Evaluation Completed EOIs</h1>
+                <h1 style="font-size: 2.5rem; color: green;">Agreement Sign EOIs</h1>
             </div>
 
             <div class="table-responsive">

@@ -247,7 +247,7 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb-3">
                 <h2 style="color: green;">Expressions of Interest</h2>
-                <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Completed Evaluations</a>
+                <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Agreement Sign EOI</a>
             </div>
            
             <div class="mb-3">
