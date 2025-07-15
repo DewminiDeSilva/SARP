@@ -254,7 +254,7 @@ class YouthController extends Controller
         'marketing_information' => 'nullable|string',
         'list_of_distributors' => 'nullable|string',
 
-        'business_plan' => 'nullable|mimes:pdf|max:2048',
+        'business_plan' => 'nullable|mimes:pdf|max:10240',
 
         // Credit detail fields
         'bank_name' => 'nullable|string',
