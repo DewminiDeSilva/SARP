@@ -101,6 +101,8 @@ public function store(Request $request)
             'total_production.*' => 'nullable|numeric|min:0',
             'total_income.*' => 'nullable|numeric|min:0',
             'profit.*' => 'nullable|numeric',
+            'buyer_details.*' => 'nullable|string|max:255',
+
         ]);
 
         DB::beginTransaction();
@@ -140,6 +142,7 @@ public function store(Request $request)
                         'total_production' => $request->total_production[$index] ?? null,
                         'total_income' => $request->total_income[$index] ?? null,
                         'profit' => $request->profit[$index] ?? null,
+                        'buyer_details' => $request->buyer_details[$index] ?? null,
                     ]);
                 }
             }
@@ -322,6 +325,8 @@ public function update(Request $request, $id)
         'total_production.*' => 'nullable|numeric|min:0',
         'total_income.*' => 'nullable|numeric|min:0',
         'profit.*' => 'nullable|numeric',
+        'buyer_details.*' => 'nullable|string|max:255',
+
 
         // Credit Detail
         'bank_name' => 'nullable|string|max:255',
@@ -403,6 +408,7 @@ if ($request->has('promoter_description')) {
                 'total_production' => $request->total_production[$index] ?? null,
                 'total_income' => $request->total_income[$index] ?? null,
                 'profit' => $request->profit[$index] ?? null,
+                'buyer_details' => $request->buyer_details[$index] ?? null,
             ]);
         }
     }

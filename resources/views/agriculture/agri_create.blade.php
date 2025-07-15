@@ -499,6 +499,10 @@
                     <label>Profit (Rs.)</label>
                     <input type="number" step="0.01" name="profit[]" class="form-control" placeholder="Profit">
                 </div>
+                    <div class="col-md-3">
+            <label>Buyer Details</label>
+            <input type="text" name="buyer_details[]" class="form-control" placeholder="Buyer Name / Company">
+        </div>
             </div>
         </div>
         <div class="d-flex justify-content-start mt-3">
@@ -661,6 +665,10 @@
                  <label for="profit[]">Profit</label>
                  <input type="number" step="0.01" name="profit[]" class="form-control" required>
              </div>
+              <div class="col-md-3 form-group">
+            <label for="buyer_details[]">Buyer Details</label>
+            <input type="text" name="buyer_details[]" class="form-control" placeholder="Buyer Name / Company">
+        </div>
              <div class="col-2">
                  <button type="button" class="btn btn-danger remove-product-btn">Remove</button>
              </div>
@@ -710,7 +718,7 @@
       <div class="col-md-3"><input type="date" name="farmer_date[]" class="form-control" placeholder="Date"></div>
       <div class="col-md-5"><input type="text" name="farmer_contribution[]" class="form-control" placeholder="Contribution Description"></div>
       <div class="col-md-3"><input type="number" step="0.01" name="cost[]" class="form-control" placeholder="Cost"></div>
-      <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-farmer">X</button></div>
+      <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-farmer">Remove</button></div>
     </div>`);
 });
 
@@ -724,7 +732,7 @@ $(document).on('click', '.remove-farmer', function () {
         <div class="col-md-3"><input type="date" name="promoter_date[]" class="form-control"></div>
         <div class="col-md-5"><input type="text" name="promoter_description[]" class="form-control"></div>
         <div class="col-md-3"><input type="number" step="0.01" name="promoter_cost[]" class="form-control"></div>
-        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-promoter">X</button></div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-promoter">Remove</button></div>
       </div>`);
   });
   $(document).on('click', '.remove-promoter', function () {
@@ -738,7 +746,7 @@ $(document).on('click', '.remove-farmer', function () {
         <div class="col-md-4"><input type="text" name="grant_description[]" class="form-control"></div>
         <div class="col-md-2"><input type="number" step="0.01" name="grant_value[]" class="form-control"></div>
         <div class="col-md-3"><input type="text" name="grant_issued_by[]" class="form-control"></div>
-        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-grant">X</button></div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-grant">Remove</button></div>
       </div>`);
   });
   $(document).on('click', '.remove-grant', function () {
@@ -750,7 +758,7 @@ $(document).on('click', '.remove-farmer', function () {
       <div class="row credit-payment-group mb-2">
         <div class="col-md-6"><input type="date" name="payment_date[]" class="form-control"></div>
         <div class="col-md-5"><input type="number" step="0.01" name="installment_payment[]" class="form-control"></div>
-        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-credit-payment">X</button></div>
+        <div class="col-md-1"><button type="button" class="btn btn-danger btn-sm remove-credit-payment">Remove</button></div>
       </div>`);
   });
   $(document).on('click', '.remove-credit-payment', function () {
@@ -774,8 +782,11 @@ $(document).on('click', '.remove-farmer', function () {
           <div class="col-md-2">
             <input type="number" step="0.01" name="profit[]" class="form-control" placeholder="Profit">
           </div>
+          <div class="col-md-3">
+        <input type="text" name="buyer_details[]" class="form-control" placeholder="Buyer Details">
+      </div>
           <div class="col-md-1 d-flex align-items-end">
-            <button type="button" class="btn btn-danger btn-sm remove-product">X</button>
+            <button type="button" class="btn btn-danger btn-sm remove-product">Remove</button>
           </div>
         </div>
       `);

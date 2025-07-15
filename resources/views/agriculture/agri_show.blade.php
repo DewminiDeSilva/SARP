@@ -421,6 +421,7 @@
                     <th>Total Production</th>
                     <th>Total Income (Rs.)</th>
                     <th>Profit (Rs.)</th>
+                     <th>Buyer Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -430,6 +431,7 @@
                     <td>{{ $product->total_production }}</td>
                     <td>Rs. {{ number_format($product->total_income, 2) }}</td>
                     <td>Rs. {{ number_format($product->profit, 2) }}</td>
+                     <td>{{ $product->buyer_details ?? '-' }}</td>
                 </tr>
                 @endforeach
             </tbody>

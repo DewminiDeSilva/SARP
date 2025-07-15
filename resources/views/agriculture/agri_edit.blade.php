@@ -391,6 +391,10 @@
                     <label>Profit</label>
                     <input type="number" step="0.01" name="profit[]" class="form-control" value="{{ $product->profit }}">
                 </div>
+                 <div class="col-md-3">
+        <label>Buyer Details</label>
+        <input type="text" name="buyer_details[]" class="form-control" value="{{ $product->buyer_details }}" placeholder="Buyer Name / Company">
+    </div>
                 {{-- No remove button for existing records --}}
             </div>
         @endforeach
@@ -461,6 +465,9 @@
                     <label for="profit_${index}" class="form-label">Profit</label>
                     <input type="number" class="form-control" name="profit[]" id="profit_${index}" required>
                 </div>
+                 <div class="col-md-3">
+            <input type="text" name="buyer_details[]" class="form-control" placeholder="Buyer Details">
+        </div>
                 <div class="col-md-2 mt-4">
                     <button type="button" class="btn btn-danger remove-product">Remove</button>
                 </div>
@@ -668,6 +675,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="col-md-2">
                 <input type="number" step="0.01" name="profit[]" class="form-control" placeholder="Profit">
             </div>
+             <div class="col-md-3">
+            <input type="text" name="buyer_details[]" class="form-control" placeholder="Buyer Details">
+        </div>
             <div class="col-md-1 text-end">
                 <button type="button" class="btn btn-danger btn-sm remove-product">Remove</button>
             </div>

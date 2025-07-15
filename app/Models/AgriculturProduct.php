@@ -16,6 +16,7 @@ class AgriculturProduct extends Model
         'total_production',
         'total_income',
         'profit',
+        'buyer_details',
     ];
 
     // Define the relationship with the AgricultureData model
