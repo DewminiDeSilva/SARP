@@ -288,6 +288,15 @@
 .right-column {
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
+#projectTypeWrapper {
+    margin: 30px auto;
+    text-align: center;
+    width: 60%;
+}
+#project_type {
+    width: 100%;
+    max-width: 400px;
+}
 
 </style>
 </head>
@@ -443,65 +452,107 @@
 
     </div>
 <!-- agri and livestock dropdown -->
+<!-- Project Type -->
+<!-- Project Type Dropdown -->
+<div class="form-group d-flex justify-content-center align-items-center flex-column" id="projectTypeWrapper">
+    <label for="project_type" class="form-label dropdown-label text-center">Type of Project</label>
+    <select class="form-control btn btn-success" id="project_type" name="project_type" required>
+        <option value="">Select Project Type</option>
+        <option value="resilience">Resilience Project</option>
+        <option value="youth">Youth Enterprise</option>
+        <option value="4p">4P Projects</option>
+        <option value="nutrition">Nutrition Programs</option>
+    </select>
+</div>
 
-<!-- Input 1 Dropdown for Agriculture/Livestock -->
-<div class="col">
-    <div class="dropdown">
-        <label for="agriculture_livestock" class="form-label dropdown-label">Agriculture/Livestock</label>
-        <select class="form-control btn btn-success" id="agriculture_livestock" name="input1" data-bs-toggle="dropdown" aria-expanded="false" required>
-            <option value="">Select Option</option>
-            <option value="agriculture">Agriculture</option>
-            <option value="livestock">Livestock</option>
-        </select>
-    </div>
-
-<!-- Section for Agriculture -->
-<div id="agricultureSection" class="row mt-3 d-none">
+<!-- ✅ RESILIENCE SECTION -->
+<div id="resilienceSection" class="d-none mt-3">
+    <!-- Input 1 Dropdown for Agriculture/Livestock -->
     <div class="col">
-        <div class="form-group">
-            <label for="categoryDropdown" class="form-label dropdown-label">Crop Category</label>
-            <select class="form-control btn btn-success" id="categoryDropdown" name="input2">
-                <option value="">Select Category</option>
-                <option value="vegetables">Vegetables</option>
-                <option value="fruits">Fruits</option>
-                <option value="home_garden">Home Garden</option>
-                <option value="others">Cereals/Legumes</option>
+        <div class="dropdown">
+            <label for="agriculture_livestock" class="form-label dropdown-label">Agriculture/Livestock</label>
+            <select class="form-control btn btn-success" id="agriculture_livestock" name="input1">
+                <option value="">Select Option</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="livestock">Livestock</option>
             </select>
         </div>
     </div>
-    <div class="col">
-        <div class="form-group">
-            <label for="cropName" class="form-label dropdown-label">Crop Name</label>
-            <select class="form-control btn btn-success" id="cropName" name="input3">
-                <option value="">Select Crop Name</option>
-            </select>
+
+    <!-- Agriculture Section -->
+    <div id="agricultureSection" class="row mt-3 d-none">
+        <div class="col">
+            <div class="form-group">
+                <label for="categoryDropdown" class="form-label dropdown-label">Crop Category</label>
+                <select class="form-control btn btn-success" id="categoryDropdown" name="input2">
+                    <option value="">Select Category</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="home_garden">Home Garden</option>
+                    <option value="others">Cereals/Legumes</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="cropName" class="form-label dropdown-label">Crop Name</label>
+                <select class="form-control btn btn-success" id="cropName" name="input3">
+                    <option value="">Select Crop Name</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Livestock Section -->
+    <div id="livestockSection" class="row mt-3 d-none">
+        <div class="col">
+            <div class="form-group">
+                <label for="livestock_type" class="form-label dropdown-label">Livestock Type</label>
+                <select class="form-control btn btn-success" id="livestock_type" name="input2">
+                    <option value="">Select Livestock Type</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Poultry">Poultry</option>
+                    <option value="Goat Rearing">Goat Rearing</option>
+                    <option value="Aqua Culture">Aqua Culture</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="production_focus" class="form-label dropdown-label">Production Focus</label>
+                <select class="form-control btn btn-success" id="production_focus" name="input3">
+                    <option value="">Select Production Focus</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Section for Livestock -->
-<div id="livestockSection" class="row mt-3 d-none">
-    <div class="col">
-        <div class="form-group">
-            <label for="livestock_type" class="form-label dropdown-label">Livestock Type</label>
-            <select class="form-control btn btn-success" id="livestock_type" name="input2">
-                <option value="">Select Livestock Type</option>
-                <option value="Dairy">Dairy</option>
-                <option value="Poultry">Poultry</option>
-                <option value="Goat Rearing">Goat Rearing</option>
-                <option value="Aqua Culture">Aqua Culture</option>
-            </select>
-        </div>
-    </div>
-    <div class="col">
-        <div class="form-group">
-            <label for="production_focus" class="form-label dropdown-label">Production Focus</label>
-            <select class="form-control btn btn-success" id="production_focus" name="input3">
-                <option value="">Select Production Focus</option>
-            </select>
-        </div>
+<!-- ✅ YOUTH ENTERPRISE SECTION -->
+<div id="youthSection" class="d-none mt-3">
+    <div class="form-group">
+        <label for="youth_enterprise_name">Youth Enterprise Project Name</label>
+        <input type="text" class="form-control" name="youth_enterprise_name" placeholder="Enter Youth Project Name">
     </div>
 </div>
+
+<!-- ✅ 4P PROJECT SECTION -->
+<div id="eoiSection" class="d-none mt-3">
+    <div class="form-group">
+        <label for="eoi_project_name">4P Project (EOI) Name</label>
+        <input type="text" class="form-control" name="eoi_project_name" placeholder="Enter EOI Project Name">
+    </div>
+</div>
+
+<!-- ✅ NUTRITION PROGRAM SECTION -->
+<div id="nutritionSection" class="d-none mt-3">
+    <div class="form-group">
+        <label for="nutrition_project_name">Nutrition Program Name</label>
+        <input type="text" class="form-control" name="nutrition_project_name" placeholder="Enter Nutrition Program Name">
+    </div>
+</div>
+
+
 
 
     <!-- GND and ASC -->
@@ -912,6 +963,26 @@ $(document).ready(function () {
     }
 });
 
+$(document).ready(function () {
+    $('#project_type').change(function () {
+        var selected = $(this).val();
+
+        // Hide all first
+        $('#resilienceSection, #youthSection, #eoiSection, #nutritionSection').addClass('d-none');
+
+        // Show based on selection
+        if (selected === 'resilience') {
+            $('#resilienceSection').removeClass('d-none');
+        } else if (selected === 'youth') {
+            $('#youthSection').removeClass('d-none');
+        } else if (selected === '4p') {
+            $('#eoiSection').removeClass('d-none');
+        } else if (selected === 'nutrition') {
+            $('#nutritionSection').removeClass('d-none');
+        }
+    });
+});
+
 
     // Handle Agriculture Category Change (Input2 and Input3 for Agriculture)
     $('#categoryDropdown').change(function () {
@@ -999,6 +1070,37 @@ $(document).ready(function () {
 
 
 </script>
+<script>
+    $(document).ready(function () {
+        $('#project_type').change(function () {
+            const selected = $(this).val();
+            $('#resilienceSection, #youthSection, #eoiSection, #nutritionSection').addClass('d-none');
+
+            if (selected === 'resilience') {
+                $('#resilienceSection').removeClass('d-none');
+            } else if (selected === 'youth') {
+                $('#youthSection').removeClass('d-none');
+            } else if (selected === '4p') {
+                $('#eoiSection').removeClass('d-none');
+            } else if (selected === 'nutrition') {
+                $('#nutritionSection').removeClass('d-none');
+            }
+        });
+
+        // Show crop/livestock logic inside resilience
+        $('#agriculture_livestock').change(function () {
+            const selected = $(this).val();
+            $('#agricultureSection, #livestockSection').addClass('d-none');
+
+            if (selected === 'agriculture') {
+                $('#agricultureSection').removeClass('d-none');
+            } else if (selected === 'livestock') {
+                $('#livestockSection').removeClass('d-none');
+            }
+        });
+    });
+</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -1021,6 +1123,8 @@ $(document).ready(function () {
         });
     });
 </script>
+
+
 
 
     </div>

@@ -50,6 +50,7 @@ class Beneficiary extends Model
         'input1',
         'input2',
         'input3',
+        'project_type',
     ];
 
     /**

@@ -57,6 +57,7 @@ class BeneficiaryController extends Controller
             ->orWhere('input1', 'like', '%' . $search . '%') // New input
             ->orWhere('input2', 'like', '%' . $search . '%') // New input
             ->orWhere('input3', 'like', '%' . $search . '%') // New input
+            ->orWhere('project_type', 'like', '%' . $search . '%')
             ->paginate(10);
                             
             $allBeneficiaries = Beneficiary::all();
@@ -86,8 +87,13 @@ class BeneficiaryController extends Controller
         'allBeneficiaries',
         'convertedMap'
     ));
-} 
-    // Check if you want to return the beneficiary_index or beneficiary_list view
+}
+        
+    
+        // Check if you want to return the beneficiary_index or beneficiary_list view
+        
+    
+    
     /**
      * Import data.
      */
@@ -153,6 +159,7 @@ class BeneficiaryController extends Controller
                          'input1' => $beneficiaryData['Input1'] ?? null, // New input
                         'input2' => $beneficiaryData['Input2'] ?? null, // New input
                         'input3' => $beneficiaryData['Input3'] ?? null, // New input
+                        'project_type' => $beneficiaryData['project_type'] ?? null, // New input
                      ]);
                  }
              }
@@ -180,7 +187,7 @@ public function generateCsv()
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'AI Division', 'Latitude', 'Longitude',
         'Number of Family Members', 'Head of Householder Name', 'Householder Number', 'Income Source', 'Average Income',
         'Monthly Household Expenses', 'Household Level Assets Description', 'Community-Based Organization', 'Type of Water Resource',
-        'Training Details Description','Input1', 'Input2', 'Input3'
+        'Training Details Description','Input1', 'Input2', 'Input3','project_type'
     ];
 
     // Insert the header into the CSV file
@@ -225,7 +232,10 @@ public function generateCsv()
             $beneficiary->input1, // New input
             $beneficiary->input2, // New input
             $beneficiary->input3, // New input
+            $beneficiary->project_type,
         ];
+
+        
 
         // Insert data row into CSV
         fputcsv($file, $data);
@@ -369,8 +379,11 @@ public function index(Request $request)
         'input1' => 'nullable|string|max:255',
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
+        'project_type' => 'nullable|string|max:255',
     ]);
  
+
+
 
 
     // Create a new beneficiary instance after validation
@@ -496,6 +509,7 @@ public function index(Request $request)
         'input1' => 'nullable|string|max:255',
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
+        'project_type' => 'nullable|string|max:255',
     ]);
 
     // Find the beneficiary by ID
@@ -546,7 +560,7 @@ public function index(Request $request)
         'Monthly Household Expenses', 'Number of Family Members', 'Education', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area', 
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'Tank Name', 'AI Division', 'Account Number', 'Bank Name', 
         'Bank Branch', 'Latitude', 'Longitude', 'Head of Householder Name', 'Householder Number', 'Household Level Assets Description', 
-        'Community-Based Organization', 'Type of Water Resource', 'Training Details Description','Input1', 'Input2', 'Input3'
+        'Community-Based Organization', 'Type of Water Resource', 'Training Details Description','Input1', 'Input2', 'Input3','project_type'
     ]);
 
     foreach ($beneficiaries as $row) {
@@ -558,7 +572,10 @@ public function index(Request $request)
             $row->latitude, $row->longitude, $row->head_of_householder_name, $row->householder_number, $row->household_level_assets_description, 
             $row->community_based_organization, $row->type_of_water_resource, $row->training_details_description,$row->input1, // Added field
             $row->input2, // Added field
-            $row->input3  // Added field
+            $row->input3,
+            $row->project_type,
+            
+              // Added field
         ]);
     }
     fclose($fp);

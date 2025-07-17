@@ -486,6 +486,20 @@
     <hr>
 
     <!-- Display Input1: Agriculture/Livestock -->
+    <!-- Display Input1: Project Type -->
+<!-- Project Type -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <strong>Type of Project:</strong>
+    </div>
+    <div class="col-md-6">
+        {{ $beneficiary->project_type ?? 'N/A' }}
+    </div>
+</div>
+
+<!-- Conditional Display Based on Project Type -->
+@if ($beneficiary->project_type === 'resilience')
+    <!-- Resilience: Agriculture or Livestock -->
     <div class="row mb-3">
         <div class="col-md-6">
             <strong>Agriculture/Livestock:</strong>
@@ -495,9 +509,7 @@
         </div>
     </div>
 
-    <!-- Display Input2 and Input3 based on Input1 -->
     @if ($beneficiary->input1 === 'agriculture')
-        <!-- Agriculture Section -->
         <div class="row mb-3">
             <div class="col-md-6">
                 <strong>Crop Category:</strong>
@@ -515,7 +527,6 @@
             </div>
         </div>
     @elseif ($beneficiary->input1 === 'livestock')
-        <!-- Livestock Section -->
         <div class="row mb-3">
             <div class="col-md-6">
                 <strong>Livestock Type:</strong>
@@ -532,18 +543,42 @@
                 {{ $beneficiary->input3 ?? 'N/A' }}
             </div>
         </div>
-    @else
-        <!-- Default Section for No Data -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <strong>Details:</strong>
-            </div>
-            <div class="col-md-6">
-                No details available.
-            </div>
-        </div>
     @endif
-</div>
+
+@elseif ($beneficiary->project_type === 'youth')
+    <!-- Youth Enterprise -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Youth Proposal Name:</strong>
+        </div>
+        <div class="col-md-6">
+            {{ $beneficiary->input1 ?? 'N/A' }}
+        </div>
+    </div>
+
+@elseif ($beneficiary->project_type === '4p')
+    <!-- 4P Project -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Company Name (4P Project):</strong>
+        </div>
+        <div class="col-md-6">
+            {{ $beneficiary->input1 ?? 'N/A' }}
+        </div>
+    </div>
+
+@elseif ($beneficiary->project_type === 'nutrition')
+    <!-- Nutrition Program -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Nutrition Program Name:</strong>
+        </div>
+        <div class="col-md-6">
+            {{ $beneficiary->input1 ?? 'N/A' }}
+        </div>
+    </div>
+@endif
+
 
                                 </div>
                             </div>
