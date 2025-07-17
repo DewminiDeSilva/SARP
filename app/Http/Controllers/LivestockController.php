@@ -58,10 +58,10 @@ class LivestockController extends Controller
             'beneficiary_id' => 'required|exists:beneficiaries,id',
             'livestock_type' => 'required',
             'production_focus' => 'required',
-            'livestock_commencement_date' => 'required|date',
-            'number_of_livestocks' => 'required|integer',
-            'area_of_cade' => 'required|numeric',
-           'livestock_value' => 'required|numeric|min:0',
+            'livestock_commencement_date' => 'nullable|date',
+            'number_of_livestocks' => 'nullable|integer',
+            'area_of_cade' => 'nullable|numeric',
+           'livestock_value' => 'nullable|numeric|min:0',
 
             'bank_name' => 'nullable|string',
             'branch' => 'nullable|string',
@@ -72,7 +72,6 @@ class LivestockController extends Controller
             'credit_amount' => 'nullable|numeric',
             'number_of_installments' => 'nullable|integer',
             'installment_due_date' => 'nullable|date',
-            'credit_balance_no' => 'nullable|string',
             'credit_balance_date' => 'nullable|date',
             'credit_balance_value' => 'nullable|numeric',
 
@@ -81,6 +80,7 @@ class LivestockController extends Controller
 'total_production.*' => 'nullable|numeric|min:0',
 'total_income.*' => 'nullable|numeric|min:0',
 'profit.*' => 'nullable|numeric|min:0',
+'buyer_details.*' => 'nullable|string|max:1000', 
 
 // Farmer Contributions
 'farmer_date.*' => 'nullable|date',
@@ -107,9 +107,7 @@ class LivestockController extends Controller
         // Retrieve the beneficiary to get the GN division name
         $beneficiary = Beneficiary::findOrFail($validatedData['beneficiary_id']);
         $validatedData['gn_division_name'] = $beneficiary->gn_division_name;
-        // Fix the column mapping
-            $validatedData['value'] = $validatedData['livestock_value'];
-            unset($validatedData['livestock_value']);
+        
         // Create the livestock record
         $livestock = Livestock::create($validatedData);
 // Store Live Products
@@ -120,6 +118,7 @@ class LivestockController extends Controller
                 'total_production' => $request->total_production[$i] ?? 0,
                 'total_income' => $request->total_income[$i] ?? 0,
                 'profit' => $request->profit[$i] ?? 0,
+                'buyer_details' => $request->buyer_details[$i] ?? null,
             ]);
         }
 
@@ -224,7 +223,6 @@ class LivestockController extends Controller
             'credit_amount' => 'nullable|numeric',
             'number_of_installments' => 'nullable|integer',
             'installment_due_date' => 'nullable|date',
-            'credit_balance_no' => 'nullable|string',
             'credit_balance_date' => 'nullable|date',
             'credit_balance_value' => 'nullable|numeric',
 
@@ -233,6 +231,7 @@ class LivestockController extends Controller
         'total_production.*' => 'nullable|numeric|min:0',
         'total_income.*' => 'nullable|numeric|min:0',
         'profit.*' => 'nullable|numeric|min:0',
+        'buyer_details.*' => 'nullable|string|max:1000', 
 
         // Farmer Contributions
         'farmer_date.*' => 'nullable|date',
@@ -272,6 +271,7 @@ class LivestockController extends Controller
             'total_production' => $request->total_production[$i] ?? 0,
             'total_income' => $request->total_income[$i] ?? 0,
             'profit' => $request->profit[$i] ?? 0,
+            'buyer_details' => $request->buyer_details[$i] ?? null,
         ]);
     }
 

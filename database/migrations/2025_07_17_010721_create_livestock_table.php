@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('livestock_commencement_date')->nullable();
             $table->integer('number_of_livestocks')->nullable();
             $table->decimal('area_of_cade', 10, 2)->nullable();
-            $table->decimal('value', 10, 2)->nullable();
+            $table->decimal('livestock_value', 10, 2)->nullable();
             $table->string('gn_division_name');
             
             // Credit details
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->date('installment_due_date')->nullable();
 
             // Credit balance
-            $table->string('credit_balance_no')->nullable();
+           
             $table->date('credit_balance_date')->nullable();
             $table->decimal('credit_balance_value', 12, 2)->nullable();
 
@@ -50,6 +50,7 @@ return new class extends Migration
             $table->decimal('total_production', 10, 2)->nullable(); // Marked as nullable
             $table->decimal('total_income', 10, 2)->nullable(); // Marked as nullable
             $table->decimal('profit', 10, 2)->nullable(); // Marked as nullable
+             $table->text('buyer_details')->nullable();
             $table->timestamps();
         });
 

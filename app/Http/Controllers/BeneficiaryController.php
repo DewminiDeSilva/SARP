@@ -86,13 +86,8 @@ class BeneficiaryController extends Controller
         'allBeneficiaries',
         'convertedMap'
     ));
-}
-        
-    
-        // Check if you want to return the beneficiary_index or beneficiary_list view
-        
-    
-    
+} 
+    // Check if you want to return the beneficiary_index or beneficiary_list view
     /**
      * Import data.
      */
