@@ -493,7 +493,7 @@
             <div class="row mb-2">
                 <div class="col-md-4"><strong>Number of Livestock:</strong> {{ $livestock->number_of_livestocks ?? 'N/A' }}</div>
                 <div class="col-md-4"><strong>Area of the Cade:</strong> {{ $livestock->area_of_cade ?? 'N/A' }}</div>
-                <div class="col-md-4"><strong>Value:</strong> Rs. {{ number_format($livestock->value ?? 0, 2) }}</div>
+                <div class="col-md-4"><strong>Value:</strong> Rs. {{ number_format($livestock->livestock_value ?? 0, 2) }}</div>
             </div>
             <div class="row mb-2">
                 <div class="col-md-4"><strong>GN Division:</strong> {{ $livestock->gn_division_name ?? 'N/A' }}</div>
@@ -584,9 +584,8 @@
 
 <!-- Credit Balance -->
 <div class="section-card">
-    <div class="section-header"><i class="fas fa-balance-scale"></i> Credit Balance</div>
+    <div class="section-header"><i class="fas fa-balance-scale"></i> Credit Balance NO</div>
     <div class="row">
-        <div class="col-md-4"><strong>No:</strong> {{ $livestock->credit_balance_no ?? 'N/A' }}</div>
         <div class="col-md-4"><strong>Date:</strong> {{ $livestock->credit_balance_date ?? 'N/A' }}</div>
         <div class="col-md-4"><strong>Value:</strong> Rs. {{ $livestock->credit_balance_value ?? 'N/A' }}</div>
     </div>
@@ -601,7 +600,8 @@
                 <strong>Product:</strong> {{ $product->product_name }}<br>
                 <strong>Total Production:</strong> {{ $product->total_production }} kg<br>
                 <strong>Total Income:</strong> Rs. {{ $product->total_income }}<br>
-                <strong>Profit:</strong> Rs. {{ $product->profit }}
+                <strong>Profit:</strong> Rs. {{ $product->profit }}<br>
+                <strong>Buyer Details:</strong> {{ $product->buyer_details ?? 'N/A' }}
             </div>
         @endforeach
     @else

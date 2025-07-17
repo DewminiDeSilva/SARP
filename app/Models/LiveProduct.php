@@ -18,7 +18,8 @@ class LiveProduct extends Model
         'product_name',
         'total_production',
         'total_income',
-        'profit'
+        'profit',
+        'buyer_details',
     ];
 
     // Define the relationship with the Livestock model

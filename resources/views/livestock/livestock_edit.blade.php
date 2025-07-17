@@ -137,6 +137,13 @@
 .right-column {
     flex-grow: 1;
 }
+.form-title {
+        text-align: center;
+        color: green;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
 
 </style>
 
@@ -164,8 +171,11 @@
     </a>
     </div>
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-    <h1 class="custom-border">Edit Livestock Registration </h1>
+    <div class="col-md-12 text-center">
+  <h1 class="form-title">Edit Livestock Registration</h1>
+
+
+
         <form action="{{ route('livestocks.update', ['beneficiary_id' => $beneficiary_id, 'livestock' => $livestock->id]) }}" method="POST">
         </div>
             @csrf
@@ -385,10 +395,6 @@
     <h4>Credit Balance Info</h4>
     <div class="row">
         <div class="col-md-4">
-            <label class="form-label">Credit Balance No</label>
-            <input type="text" class="form-control" name="credit_balance_no" value="{{ old('credit_balance_no', $livestock->credit_balance_no) }}">
-        </div>
-        <div class="col-md-4">
             <label class="form-label">Date</label>
             <input type="date" class="form-control" name="credit_balance_date" value="{{ old('credit_balance_date', $livestock->credit_balance_date) }}">
         </div>
@@ -421,6 +427,10 @@
                             <div class="col-md-2">
                                 <label for="profit_{{ $index }}" class="form-label">Profit</label>
                                 <input type="number" class="form-control" name="profit[]" id="profit_{{ $index }}" value="{{ old('profit.' . $index, $product->profit) }}" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="buyer_details_{{ $index }}" class="form-label">Buyer Details</label>
+                                <input type="text" class="form-control" name="buyer_details[]" id="buyer_details_{{ $index }}" value="{{ old('buyer_details.' . $index, $product->buyer_details) }}">
                             </div>
                             <div class="col-md-2 mt-4">
                                 <button type="button" class="btn btn-danger remove-product">Remove</button>
@@ -599,6 +609,10 @@
                 <label for="profit_${index}" class="form-label">Profit</label>
                 <input type="number" class="form-control" name="profit[]" id="profit_${index}" step="0.01" min="0" required>
             </div>
+            <div class="col-md-2 mt-2">
+        <label for="buyer_details_${index}" class="form-label">Buyer Details</label>
+        <input type="text" class="form-control" name="buyer_details[]" id="buyer_details_${index}" placeholder="Name/contact/remarks">
+    </div>
             <div class="col-md-2 mt-4">
                 <button type="button" class="btn btn-danger remove-product">Remove</button>
             </div>

@@ -348,9 +348,15 @@ public function uploadCsv(Request $request)
 
         // Process each row and insert into the database
         foreach ($rows as $row) {
+
+             if (empty(array_filter($row))) {
+                continue;
+            }
             if (count($row) === count($header)) {
                 $tankData = array_combine($header, $row);
-
+               if (empty(trim($tankData['Tank Name'] ?? ''))) {
+                    return redirect()->back()->with('error', "Row $rowCount: 'Tank Name' is required.");
+                }
                   // Convert date format for 'awarded_date'
                   $awardedDate = null;
                   if (isset($tankData['Awarded Date']) && !empty($tankData['Awarded Date'])) {

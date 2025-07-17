@@ -369,7 +369,7 @@ button.btn-danger:hover {
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="livestock_commencement_date" class="form-label">Livestock Commencement Date</label>
-                            <input type="date" class="form-control" id="livestock_commencement_date" name="livestock_commencement_date" required>
+                            <input type="date" class="form-control" id="livestock_commencement_date" name="livestock_commencement_date" >
                         </div>
                     </div>
                  </div>
@@ -378,19 +378,19 @@ button.btn-danger:hover {
     <div class="col-md-4">
         <div class="mb-3">
             <label for="number_of_livestocks" class="form-label">Number of Livestocks</label>
-            <input type="number" class="form-control" id="number_of_livestocks" name="number_of_livestocks" step="0.01" min="0" required>
+            <input type="number" class="form-control" id="number_of_livestocks" name="number_of_livestocks" step="0.01" min="0" >
         </div>
     </div>
     <div class="col-md-4">
         <div class="mb-3">
             <label for="area_of_cade" class="form-label">Area of the Cade</label>
-            <input type="number" class="form-control" id="area_of_cade" name="area_of_cade" step="0.01" min="0" required>
+            <input type="number" class="form-control" id="area_of_cade" name="area_of_cade" step="0.01" min="0" >
         </div>
     </div>
     <div class="col-md-4">
         <div class="mb-3">
-            <label for="value" class="form-label">Value</label>
-           <input type="number" class="form-control" id="livestock_value" name="livestock_value" step="0.01" min="0" required>
+            <label for="livestock_value" class="form-label">Livestock Value</label>
+           <input type="number" class="form-control" id="livestock_value" name="livestock_value" step="0.01" min="0" >
 
         </div>
     </div>
@@ -482,42 +482,42 @@ button.btn-danger:hover {
     <div class="row">
         <div class="col-md-3">
             <label class="form-label">Bank Name</label>
-            <input type="text" class="form-control" name="bank_name" required>
+            <input type="text" class="form-control" name="bank_name">
         </div>
         <div class="col-md-3">
             <label class="form-label">Branch</label>
-            <input type="text" class="form-control" name="branch" required>
+            <input type="text" class="form-control" name="branch" >
         </div>
         <div class="col-md-2">
             <label class="form-label">Account Number</label>
-            <input type="text" class="form-control" name="account_number" required>
+            <input type="text" class="form-control" name="account_number" >
         </div>
         <div class="col-md-2">
             <label class="form-label">Interest Rate (%)</label>
-            <input type="number" step="0.01" min="0" class="form-control" name="interest_rate" required>
+            <input type="number" step="0.01" min="0" class="form-control" name="interest_rate" >
         </div>
         <div class="col-md-2">
             <label class="form-label">Credit Issue Date</label>
-            <input type="date" class="form-control" name="credit_issue_date" required>
+            <input type="date" class="form-control" name="credit_issue_date">
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-md-3">
             <label class="form-label">Loan Installment Date</label>
-            <input type="date" class="form-control" name="loan_installment_date" required>
+            <input type="date" class="form-control" name="loan_installment_date">
         </div>
         <div class="col-md-3">
             <label class="form-label">Credit Amount</label>
-            <input type="number" step="0.01" min="0" class="form-control" name="credit_amount" required>
+            <input type="number" step="0.01" min="0" class="form-control" name="credit_amount">
         </div>
         <div class="col-md-3">
             <label class="form-label">Number of Installments</label>
-            <input type="number" min="1" class="form-control" name="number_of_installments" required>
+            <input type="number" min="1" class="form-control" name="number_of_installments">
         </div>
         <div class="col-md-3">
             <label class="form-label">Installment Due Date</label>
-            <input type="date" class="form-control" name="installment_due_date" required>
+            <input type="date" class="form-control" name="installment_due_date">
         </div>
     </div>
 
@@ -546,17 +546,17 @@ button.btn-danger:hover {
 <div class="sub-form-box">
     <h4>Credit Balance Info</h4>
     <div class="row">
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
             <label class="form-label">Credit Balance No</label>
-            <input type="text" class="form-control" name="credit_balance_no" required>
-        </div>
+            <input type="text" class="form-control" name="credit_balance_no" >
+        </div> --}}
         <div class="col-md-4">
             <label class="form-label">Date (Auto)</label>
             <input type="date" class="form-control" name="credit_balance_date" value="{{ \Carbon\Carbon::now()->toDateString() }}" readonly>
         </div>
         <div class="col-md-4">
             <label class="form-label">Value</label>
-            <input type="number" step="0.01" min="0" class="form-control" name="credit_balance_value" required>
+            <input type="number" step="0.01" min="0" class="form-control" name="credit_balance_value" >
         </div>
     </div>
 </div>
@@ -570,20 +570,24 @@ button.btn-danger:hover {
                     <div class="row mt-2">
         <div class="col-md-3">
             <label for="product_name" class="form-label">Product Name</label>
-            <input type="text" class="form-control" name="product_name[]" required>
+            <input type="text" class="form-control" name="product_name[]">
         </div>
         <div class="col-md-3">
             <label for="total_production" class="form-label">Total Production</label>
-            <input type="number" class="form-control" name="total_production[]" step="0.01" min="0" required>
+            <input type="number" class="form-control" name="total_production[]" step="0.01" min="0">
         </div>
         <div class="col-md-3">
             <label for="total_income" class="form-label">Total Income</label>
-            <input type="number" class="form-control" name="total_income[]" step="0.01" min="0" required>
+            <input type="number" class="form-control" name="total_income[]" step="0.01" min="0">
         </div>
         <div class="col-md-2">
             <label for="profit" class="form-label">Profit</label>
-            <input type="number" class="form-control" name="profit[]" step="0.01" min="0" required>
+            <input type="number" class="form-control" name="profit[]" step="0.01" min="0">
         </div>
+         <div class="col-md-6 mt-3">
+        <label for="buyer_details" class="form-label">Buyer Details</label>
+        <input type="text" class="form-control" name="buyer_details[]" placeholder="Enter buyer name/contact/remarks">
+    </div>
         <div class="col-md-1 d-flex align-items-end">
             <button type="button" class="btn btn-danger remove-product">Remove</button>
         </div>
@@ -593,7 +597,7 @@ button.btn-danger:hover {
 
     </div>
 </div>
-                    </div>
+                   
                
             <!-- Submit Button -->
             <div class="row">
@@ -603,7 +607,7 @@ button.btn-danger:hover {
             </div>
         </form>
     </div>
-
+ </div>
     <script>
         $(document).ready(function () {
             // CSRF Setup for AJAX
@@ -710,6 +714,10 @@ $(document).on('click', '.remove-contribution', function () {
                             <label for="profit" class="form-label">Profit</label>
                             <input type="number" class="form-control" name="profit[]" required>
                         </div>
+                        <div class="col-md-6 mt-3">
+                <label for="buyer_details" class="form-label">Buyer Details</label>
+                <input type="text" class="form-control" name="buyer_details[]" placeholder="Enter buyer name/contact/remarks">
+            </div>
                         <div class="col-md-12 mt-2">
                             <button type="button" class="btn btn-danger remove-product">Remove</button>
                         </div>
