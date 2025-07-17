@@ -1,0 +1,222 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\YouthProposal;
+
+class YouthProposalController extends Controller
+{
+    /**
+     * Display a listing of Youth Proposals.
+     */
+    public function index()
+    {
+        $entries = request()->get('entries', 10);
+        $proposals = YouthProposal::latest()->paginate($entries)->appends(['entries' => $entries]);
+
+        return view('youth_proposal.youth_proposal_index', compact('proposals', 'entries'));
+
+    }
+
+    /**
+     * Show the form for creating a new Youth Proposal.
+     */
+    public function create()
+    {
+        return view('youth_proposal.youth_proposal_create');
+    }
+
+    /**
+     * Store a newly created Youth Proposal in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'organization_name' => 'nullable|string|max:255',
+            'registration_details' => 'nullable|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'office_phone' => 'nullable|string|max:20',
+            'mobile_phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'market_problem' => 'nullable|string',
+            'business_title' => 'nullable|string|max:255',
+            'business_objectives' => 'nullable|string',
+            'background_info' => 'nullable|string',
+            'project_justification' => 'nullable|string',
+            'project_benefits' => 'nullable|string',
+            'category' => 'nullable|string',
+            'status' => 'nullable|string',
+            'risks' => 'nullable|array',
+            'mitigations' => 'nullable|array',
+            'investment_breakdown' => 'nullable|array',
+            'project_coverage' => 'nullable|array',
+            'expected_outputs' => 'nullable|array',
+            'expected_outcomes' => 'nullable|array',
+            'funding_source' => 'nullable|array',
+            'assistance_required' => 'nullable|array',
+            'implementation_plan' => 'nullable|file|mimes:pdf|max:10240',
+        ]);
+
+        $proposal = new YouthProposal();
+        $proposal->organization_name = $request->organization_name;
+        $proposal->registration_details = $request->registration_details;
+        $proposal->contact_person = $request->contact_person;
+        $proposal->address = $request->address;
+        $proposal->office_phone = $request->office_phone;
+        $proposal->mobile_phone = $request->mobile_phone;
+        $proposal->email = $request->email;
+        $proposal->market_problem = $request->market_problem;
+        $proposal->business_title = $request->business_title;
+        $proposal->business_objectives = $request->business_objectives;
+        $proposal->background_info = $request->background_info;
+        $proposal->project_justification = $request->project_justification;
+        $proposal->project_benefits = $request->project_benefits;
+        $proposal->category = $request->category;
+
+        $proposal->risk_factors = json_encode([
+            'risks' => $request->risks,
+            'mitigations' => $request->mitigations
+        ]);
+        $proposal->investment_breakdown = json_encode($request->investment_breakdown);
+        $proposal->project_coverage = json_encode($request->project_coverage);
+        $proposal->expected_outputs = json_encode($request->expected_outputs);
+        $proposal->expected_outcomes = json_encode($request->expected_outcomes);
+        $proposal->funding_source = json_encode($request->funding_source);
+        $proposal->assistance_required = json_encode($request->assistance_required);
+
+        if ($request->hasFile('implementation_plan')) {
+            $path = $request->file('implementation_plan')->store('youth_proposals', 'public');
+            $proposal->implementation_plan = $path;
+        }
+
+
+
+
+        $proposal->save();
+
+        return redirect()->route('youth-proposals.index')->with('success', 'Youth Proposal submitted successfully!');
+    }
+
+    /**
+     * Display the specified Youth Proposal.
+     */
+    public function show($id)
+    {
+        $proposal = YouthProposal::findOrFail($id);
+        return view('youth_proposal.youth_proposal_show')->with('youth_proposal', $proposal);
+    }
+
+
+    /**
+     * Show the form for editing the specified Youth Proposal.
+     */
+    public function edit($id)
+    {
+        $proposal = YouthProposal::findOrFail($id);
+        return view('youth_proposals.edit', compact('proposal'));
+    }
+
+    /**
+     * Update the specified Youth Proposal in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'organization_name' => 'nullable|string|max:255',
+            'registration_details' => 'nullable|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'office_phone' => 'nullable|string|max:20',
+            'mobile_phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'market_problem' => 'nullable|string',
+            'business_title' => 'nullable|string|max:255',
+            'business_objectives' => 'nullable|string',
+            'background_info' => 'nullable|string',
+            'project_justification' => 'nullable|string',
+            'project_benefits' => 'nullable|string',
+            'category' => 'nullable|string',
+            'status' => 'nullable|string',
+            'risks' => 'nullable|array',
+            'mitigations' => 'nullable|array',
+            'investment_breakdown' => 'nullable|array',
+            'project_coverage' => 'nullable|array',
+            'expected_outputs' => 'nullable|array',
+            'expected_outcomes' => 'nullable|array',
+            'funding_source' => 'nullable|array',
+            'assistance_required' => 'nullable|array',
+            'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+        ]);
+
+        $proposal = YouthProposal::findOrFail($id);
+        $proposal->organization_name = $request->organization_name;
+        $proposal->registration_details = $request->registration_details;
+        $proposal->contact_person = $request->contact_person;
+        $proposal->address = $request->address;
+        $proposal->office_phone = $request->office_phone;
+        $proposal->mobile_phone = $request->mobile_phone;
+        $proposal->email = $request->email;
+        $proposal->market_problem = $request->market_problem;
+        $proposal->business_title = $request->business_title;
+        $proposal->business_objectives = $request->business_objectives;
+        $proposal->background_info = $request->background_info;
+        $proposal->project_justification = $request->project_justification;
+        $proposal->project_benefits = $request->project_benefits;
+        $proposal->category = $request->category;
+
+        $proposal->risk_factors = json_encode([
+            'risks' => $request->risks,
+            'mitigations' => $request->mitigations,
+        ]);
+        $proposal->investment_breakdown = json_encode($request->investment_breakdown);
+        $proposal->project_coverage = json_encode($request->project_coverage);
+        $proposal->expected_outputs = json_encode($request->expected_outputs);
+        $proposal->expected_outcomes = json_encode($request->expected_outcomes);
+        $proposal->funding_source = json_encode($request->funding_source);
+        $proposal->assistance_required = json_encode($request->assistance_required);
+
+        if ($request->hasFile('implementation_plan')) {
+            $file = $request->file('implementation_plan');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/youth_proposals', $filename);
+            $proposal->implementation_plan = 'storage/youth_proposals/' . $filename;
+
+        }
+
+        $proposal->save();
+
+        return redirect()->route('youth-proposals.index')->with('success', 'Youth Proposal updated successfully!');
+    }
+
+    /**
+     * Remove the specified Youth Proposal from storage.
+     */
+    public function destroy($id)
+    {
+        $proposal = YouthProposal::findOrFail($id);
+        $proposal->delete();
+
+        return redirect()->route('youth-proposals.index')->with('success', 'Youth Proposal deleted successfully!');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|string',
+        ]);
+
+        $proposal = YouthProposal::findOrFail($id);
+        $proposal->status = $request->status;
+        $proposal->save();
+
+        return redirect()->back()->with('success', 'Status updated successfully.');
+    }
+
+    public function evaluationCompleted()
+    {
+        $completedProposals = YouthProposal::where('status', 'Evaluation Completed')->paginate(10);
+        return view('youth_proposals.evaluation_completed_index', compact('completedProposals'));
+    }
+}

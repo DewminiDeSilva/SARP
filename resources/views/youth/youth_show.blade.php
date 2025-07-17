@@ -151,6 +151,14 @@
         .table td, .table th {
             vertical-align: middle;
         }
+
+        .equal-width-table th {
+            width: 45%
+        }
+        .equal-width-table td {
+            width: 55%;
+        }
+
     </style>
 </head>
 <body>
@@ -210,7 +218,7 @@
         Enterprise Information
     </div>
     <div class="card-body">
-        <table class="table table-bordered">
+        <table class="table table-bordered equal-width-table">
             <tbody>
                 <tr>
                     <th>Enterprise Name</th>
@@ -256,7 +264,7 @@
         Business Details
     </div>
     <div class="card-body">
-        <table class="table table-bordered">
+        <table class="table table-bordered equal-width-table">
             <tbody>
                 <tr>
                     <th>Nature of Business</th>
@@ -306,7 +314,7 @@
         <table class="table table-bordered mb-4">
             <thead>
                 <tr>
-                    <th>Asset Name</th>
+                    <th style="width:45%">Asset Name</th>
                     <th>Asset Value</th>
                 </tr>
             </thead>
@@ -327,8 +335,8 @@
         <table class="table table-bordered mb-4">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Description</th>
+                    <th style="width:25%">Date</th>
+                    <th style="width:50%">Description</th>
                     <th>Value</th>
                 </tr>
             </thead>
@@ -350,8 +358,8 @@
         <table class="table table-bordered mb-4">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Description</th>
+                    <th style="width:25%">Date</th>
+                    <th style="width:50%">Description</th>
                     <th>Value</th>
                 </tr>
             </thead>
@@ -373,10 +381,10 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Value</th>
-                    <th>Issued By</th>
+                    <th style="width:25%">Date</th>
+                    <th style="width:35%">Description</th>
+                    <th style="width:15%">Issued By</th>
+                    <th style="width:25%">Value</th>                  
                 </tr>
             </thead>
             <tbody>
@@ -384,8 +392,9 @@
                     <tr>
                         <td>{{ $item['date'] ?? '-' }}</td>
                         <td>{{ $item['description'] ?? '-' }}</td>
-                        <td>{{ $item['value'] ?? '-' }}</td>
                         <td>{{ $item['grant_issued_by'] ?? '-' }}</td>
+                        <td>{{ $item['value'] ?? '-' }}</td>
+                        
                     </tr>
                 @empty
                     <tr><td colspan="4">No grant details provided.</td></tr>
@@ -405,7 +414,7 @@
 
         <!-- Credit Details -->
         <h5 class="mb-3">Credit Details</h5>
-        <table class="table table-bordered">
+        <table class="table table-bordered equal-width-table">
             <tbody>
                 <tr><th>Bank Name</th><td>{{ $youth->bank_name ?? '-' }}</td></tr>
                 <tr><th>Branch</th><td>{{ $youth->branch ?? '-' }}</td></tr>
@@ -425,7 +434,7 @@
         <h5 class="mt-4 mb-3">Installment Payments</h5>
         <table class="table table-bordered">
             <thead>
-                <tr><th>Payment Date</th><th>Payment Value</th></tr>
+                <tr><th style="width:45%">Payment Date</th><th>Payment Value</th></tr>
             </thead>
             <tbody>
                 @forelse($youth->installment_payments ?? [] as $item)
