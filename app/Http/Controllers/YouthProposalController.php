@@ -74,7 +74,7 @@ class YouthProposalController extends Controller
         $proposal->project_justification = $request->project_justification;
         $proposal->project_benefits = $request->project_benefits;
         $proposal->category = $request->category;
-
+        $proposal->status = $request->status; // ✅ Add this below $proposal->category
         $proposal->risk_factors = json_encode([
             'risks' => $request->risks,
             'mitigations' => $request->mitigations
@@ -165,7 +165,7 @@ class YouthProposalController extends Controller
         $proposal->project_justification = $request->project_justification;
         $proposal->project_benefits = $request->project_benefits;
         $proposal->category = $request->category;
-
+        $proposal->status = $request->status; // ✅ Add this below $proposal->category
         $proposal->risk_factors = json_encode([
             'risks' => $request->risks,
             'mitigations' => $request->mitigations,
@@ -214,9 +214,9 @@ class YouthProposalController extends Controller
         return redirect()->back()->with('success', 'Status updated successfully.');
     }
 
-    public function evaluationCompleted()
+    public function agreementSigned()
     {
-        $completedProposals = YouthProposal::where('status', 'Evaluation Completed')->paginate(10);
-        return view('youth_proposals.evaluation_completed_index', compact('completedProposals'));
+        $signedProposals = YouthProposal::where('status', 'Agreement Signed')->paginate(10);
+        return view('youth_proposal.agreement_signed_index', compact('signedProposals'));
     }
 }

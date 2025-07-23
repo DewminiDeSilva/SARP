@@ -250,9 +250,13 @@
                 
             </div>
            
-            <div class="mb-3">
-           
-            <a href="{{ route('youth-proposals.create') }}" class="btn submitbtton">+ Submit New</a>
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+                <a href="{{ route('youth-proposals.create') }}" class="btn submitbtton">Submit New</a>
+
+                <a href="{{ route('youth-proposal.agreementSigned') }}" class="btn btn-success ml-auto">
+                    <i class="fas fa-file-signature"></i> View Agreement Signed Proposals
+                </a>
+
             </div>
 
 

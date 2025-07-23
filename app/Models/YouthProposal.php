@@ -23,6 +23,7 @@ class YouthProposal extends Model
         'business_title',
         'business_objectives',
         'category',
+        'status', // ✅ add this line
         'risks',
         'mitigations',
         'investment_breakdown',
