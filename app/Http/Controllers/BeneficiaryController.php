@@ -414,10 +414,11 @@ public function index(Request $request)
      */
     public function edit(Beneficiary $beneficiary)
     {
-        //return view('beneficiary.beneficiary_edit', compact('beneficiary'));
-
-       // $beneficiary = Beneficiary::findOrFail($id);
-        return view('beneficiary.beneficiary_edit', compact('beneficiary'));
+        // Fetch all Youth Proposals with 'Agreement Signed' status
+        $agreementSignedYouth = \App\Models\YouthProposal::where('status', 'Agreement Signed')
+            ->get(['id', 'organization_name']);
+    
+        return view('beneficiary.beneficiary_edit', compact('beneficiary', 'agreementSignedYouth'));
     }
 
     /**
@@ -515,6 +516,8 @@ public function index(Request $request)
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
         'project_type' => 'nullable|string|max:255',
+        'youth_proposal_id' => 'nullable|exists:youth_proposals,id',
+
     ]);
 
     // Find the beneficiary by ID

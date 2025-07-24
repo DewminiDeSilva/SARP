@@ -333,6 +333,20 @@
                     </div>
                 </div>
 
+                <!-- ✅ YOUTH ENTERPRISE SECTION (EDIT MODE) -->
+                <div class="form-group mt-3" id="youthEnterpriseProjectName" style="{{ old('project_type', $beneficiary->project_type) === 'youth' ? '' : 'display: none;' }}">
+                    <label for="youth_proposal_id">Youth Enterprises Project Name</label>
+                    <select name="youth_proposal_id" id="youth_proposal_id" class="form-control">
+                        <option value="">-- Select Youth Enterprise --</option>
+                        @foreach($agreementSignedYouth as $proposal)
+                            <option value="{{ $proposal->id }}" 
+                                {{ (old('youth_proposal_id', $beneficiary->youth_proposal_id) == $proposal->id) ? 'selected' : '' }}>
+                                {{ $proposal->organization_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- NIC, Name with Initials, Gender, DOB, Address, and Age -->
                 <div class="form-row">
                     <div class="form-group">
