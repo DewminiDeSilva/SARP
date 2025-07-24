@@ -538,11 +538,27 @@
 
 <!-- ✅ 4P PROJECT SECTION -->
 <div id="eoiSection" class="d-none mt-3">
+
     <div class="form-group">
-        <label for="eoi_project_name">4P Project (EOI) Name</label>
-        <input type="text" class="form-control" name="eoi_project_name" placeholder="Enter EOI Project Name">
+        <label for="eoi_project_name">4P Project - Business Concept Title</label>
+        <select name="eoi_business_title" id="eoi_project_name" class="form-control greenbackground" >
+
+            <option value="">-- Select Business Title --</option>
+            @foreach($businessTitles as $title)
+                <option value="{{ $title }}">{{ $title }}</option>
+            @endforeach
+        </select>
     </div>
+
+    <div class="form-group">
+        <label for="eoi_category">4P Project Category</label>
+        <select name="eoi_category" id="eoi_category" class="form-control greenbackground">
+            <option value="">-- Select Category --</option>
+        </select>
+    </div>
+
 </div>
+
 
 <!-- ✅ NUTRITION PROGRAM SECTION -->
 <div id="nutritionSection" class="d-none mt-3">
@@ -1099,6 +1115,46 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).ready(function () {
+    $('#eoi_project_name').on('change', function () {
+        var selectedTitle = $(this).val();
+        var $categoryDropdown = $('#eoi_category');
+        $categoryDropdown.empty().append('<option value="">Loading...</option>');
+
+        if (selectedTitle) {
+            $.ajax({
+                url: '/eoi/get-categories/' + encodeURIComponent(selectedTitle),
+                type: 'GET',
+                success: function (categories) {
+                    $categoryDropdown.empty().append('<option value="">-- Select Category --</option>');
+                    categories.forEach(function (category) {
+                        $categoryDropdown.append('<option value="' + category + '">' + category + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Failed to fetch categories.');
+                    $categoryDropdown.empty().append('<option value="">-- Select Category --</option>');
+                }
+            });
+        } else {
+            $categoryDropdown.empty().append('<option value="">-- Select Category --</option>');
+        }
+    });
+});
+document.getElementById("agriculture_livestock").addEventListener("change", function () {
+    const val = this.value;
+
+    document.getElementById("agricultureSection").classList.add("d-none");
+    document.getElementById("livestockSection").classList.add("d-none");
+
+    if (val === "agriculture") {
+        document.getElementById("agricultureSection").classList.remove("d-none");
+    } else if (val === "livestock") {
+        document.getElementById("livestockSection").classList.remove("d-none");
+    }
+});
+
 </script>
 
 

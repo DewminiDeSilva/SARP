@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
 use App\Models\Livestock;
+use App\Models\EOI;
 use League\Csv\Reader;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -333,9 +334,14 @@ public function index(Request $request)
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('beneficiary.beneficiary_create');
-    }
+{
+    $businessTitles = EOI::where('status', 'Agreement Signed')
+        ->whereNotNull('business_title')
+        ->distinct()
+        ->pluck('business_title');
+
+    return view('beneficiary.beneficiary_create', compact('businessTitles'));
+}
 
     public function store(Request $request)
     {
@@ -380,6 +386,8 @@ public function index(Request $request)
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
         'project_type' => 'nullable|string|max:255',
+        'eoi_business_title' => 'nullable|string|max:255',
+        'eoi_category' => 'nullable|string|max:255',
     ]);
  
 
@@ -388,6 +396,9 @@ public function index(Request $request)
 
     // Create a new beneficiary instance after validation
     $beneficiary = new Beneficiary($request->all());
+    $beneficiary->eoi_business_title = $request->eoi_business_title;
+    $beneficiary->eoi_category = $request->eoi_category;
+
     $beneficiary->save();
 
     return redirect('/beneficiary')->with('success', 'Beneficiary registered successfully.');
@@ -600,6 +611,18 @@ public function index(Request $request)
 
     return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
 }
+
+public function getCategoriesByBusinessTitle($title)
+{
+    $categories = EOI::whereRaw('LOWER(TRIM(business_title)) = ?', [strtolower(trim($title))])
+        ->where('status', 'Agreement Signed')
+        ->whereNotNull('category')
+        ->distinct()
+        ->pluck('category');
+
+    return response()->json($categories);
+}
+
 
 
     

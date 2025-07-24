@@ -215,6 +215,9 @@
                                 <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                 </a>
+                                <a href="{{ route('eoi.beneficiaries', $expression->id) }}" class="btn btn-sm btn-success ml-1" title="View Beneficiaries">
+                                View Beneficiaries
+                                </a>
                             </td>
                         </tr>
                         @empty

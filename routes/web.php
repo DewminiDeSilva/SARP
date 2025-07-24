@@ -59,6 +59,7 @@ use App\Http\Controllers\EOIController;
 use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\YouthController;
 use App\Http\Controllers\YouthProposalController;
+use App\Http\Controllers\EOIBeneficiaryController;
 
 
 
@@ -2142,10 +2143,41 @@ Route::prefix('fingerling')->middleware('auth')->group(function () {
     Route::post('/update-status/{tank}', [FingerlingController::class, 'updateStatus'])
         ->name('fingerling.updateStatus')
         ->middleware('check.permission:fingerling,edit');
+
 });
 
+Route::get('/eoi/get-categories/{title}', [BeneficiaryController::class, 'getCategoriesByBusinessTitle'])
+    ->name('beneficiary.eoi.categories')
+    ->middleware('check.permission:beneficiary,view');
+
+Route::get('/eoi/{id}/beneficiaries', [EOIController::class, 'viewEOIBeneficiaries'])
+    ->name('eoi.beneficiaries') // This must match the name used in Blade
+    ->middleware('check.permission:beneficiary,view');
+
+Route::get('/eoi/completed', [EOIController::class, 'evaluationCompleted'])
+    ->name('expressions.evaluation_completed')
+    ->middleware('check.permission:beneficiary,view');
+
+    Route::get('/eoi/add/{id}', [EOIController::class, 'createForBeneficiary'])
+    ->name('beneficiary.eoi.add')
+    ->middleware('check.permission:beneficiary,add');
 
 
+
+Route::get('/eoi-form/create/{beneficiary_id}', [EOIBeneficiaryController::class, 'create'])
+    ->name('eoi_form.create');
+
+    Route::post('/eoi-form/store', [EOIBeneficiaryController::class, 'store'])->name('eoi_form.store');
+
+   Route::get('/eoi-form/show/{beneficiary_id}', [EOIBeneficiaryController::class, 'show'])->name('eoi_form.show');
+
+// Add this to web.php
+Route::get('/eoi-form/edit/{id}', [EOIBeneficiaryController::class, 'edit'])->name('eoi_form.edit');
+
+// Route::put('/eoi-form/update/{id}', [EOIBeneficiaryController::class, 'update'])->name('eoi_form.update');
+Route::put('/eoi-form/{id}', [EOIBeneficiaryController::class, 'update'])->name('eoi_form.update');
+
+Route::delete('/eoi-form/destroy/{id}', [EOIBeneficiaryController::class, 'destroy'])->name('eoi_form.destroy');
 
 Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
 Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);

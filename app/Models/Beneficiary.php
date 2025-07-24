@@ -51,6 +51,8 @@ class Beneficiary extends Model
         'input2',
         'input3',
         'project_type',
+        'eoi_business_title',
+        'eoi_category',
     ];
 
     /**
@@ -71,4 +73,10 @@ class Beneficiary extends Model
     {
         return $this->hasMany(Livestock::class, 'beneficiary_id', 'id');
     }
+
+    public function eoiForm()
+{
+    return $this->hasOne(EOIBeneficiaryForm::class);
+}
+
 }
