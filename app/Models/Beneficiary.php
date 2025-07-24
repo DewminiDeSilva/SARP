@@ -51,6 +51,7 @@ class Beneficiary extends Model
         'input2',
         'input3',
         'project_type',
+        'youth_proposal_id',        
     ];
 
     /**
@@ -71,4 +72,10 @@ class Beneficiary extends Model
     {
         return $this->hasMany(Livestock::class, 'beneficiary_id', 'id');
     }
+
+    public function youthProposal()
+    {
+        return $this->belongsTo(YouthProposal::class, 'youth_proposal_id');
+    }
+
 }

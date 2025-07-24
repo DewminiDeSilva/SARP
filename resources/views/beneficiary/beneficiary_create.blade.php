@@ -529,11 +529,14 @@
 </div>
 
 <!-- ✅ YOUTH ENTERPRISE SECTION -->
-<div id="youthSection" class="d-none mt-3">
-    <div class="form-group">
-        <label for="youth_enterprise_name">Youth Enterprise Project Name</label>
-        <input type="text" class="form-control" name="youth_enterprise_name" placeholder="Enter Youth Project Name">
-    </div>
+<div class="form-group mt-3" id="youthEnterpriseProjectName" style="display: none;">
+    <label for="youth_proposal_id">Youth Enterprises Project Name</label>
+    <select name="youth_proposal_id" id="youth_proposal_id" class="form-control">
+        <option value="">-- Select Youth Enterprise --</option>
+        @foreach($agreementSignedYouth as $proposal)
+            <option value="{{ $proposal->id }}">{{ $proposal->organization_name }}</option>
+        @endforeach
+    </select>
 </div>
 
 <!-- ✅ 4P PROJECT SECTION -->
@@ -1075,17 +1078,20 @@ $(document).ready(function () {
         $('#project_type').change(function () {
             const selected = $(this).val();
             $('#resilienceSection, #youthSection, #eoiSection, #nutritionSection').addClass('d-none');
+            $('#youthEnterpriseProjectName').hide();
 
             if (selected === 'resilience') {
                 $('#resilienceSection').removeClass('d-none');
             } else if (selected === 'youth') {
                 $('#youthSection').removeClass('d-none');
+                $('#youthEnterpriseProjectName').show(); // Show the dropdown when 'Youth Enterprises' is selected
             } else if (selected === '4p') {
                 $('#eoiSection').removeClass('d-none');
             } else if (selected === 'nutrition') {
                 $('#nutritionSection').removeClass('d-none');
             }
         });
+
 
         // Show crop/livestock logic inside resilience
         $('#agriculture_livestock').change(function () {
@@ -1124,6 +1130,23 @@ $(document).ready(function () {
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const projectType = document.getElementById('project_type');
+        const youthField = document.getElementById('youthEnterpriseProjectName');
+
+        function toggleFields() {
+            if (projectType.value === 'Youth Enterprises') {
+                youthField.style.display = 'block';
+            } else {
+                youthField.style.display = 'none';
+            }
+        }
+
+        projectType.addEventListener('change', toggleFields);
+        toggleFields(); // Run on page load
+    });
+</script>
 
 
 

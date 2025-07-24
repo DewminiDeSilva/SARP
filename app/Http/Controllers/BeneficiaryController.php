@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
 use App\Models\Livestock;
+use App\Models\YouthProposal;
 use League\Csv\Reader;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -334,7 +335,9 @@ public function index(Request $request)
      */
     public function create()
     {
-        return view('beneficiary.beneficiary_create');
+        $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')->get(['id', 'organization_name']);
+
+        return view('beneficiary.beneficiary_create', compact('agreementSignedYouth'));
     }
 
     public function store(Request $request)
@@ -380,6 +383,8 @@ public function index(Request $request)
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
         'project_type' => 'nullable|string|max:255',
+        'youth_proposal_id' => 'nullable|exists:youth_proposals,id',
+
     ]);
  
 

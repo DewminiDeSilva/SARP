@@ -552,7 +552,7 @@
             <strong>Youth Proposal Name:</strong>
         </div>
         <div class="col-md-6">
-            {{ $beneficiary->input1 ?? 'N/A' }}
+            {{ $beneficiary->youthProposal->organization_name ?? 'N/A' }}
         </div>
     </div>
 
