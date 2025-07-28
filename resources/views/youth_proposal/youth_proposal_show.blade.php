@@ -158,7 +158,7 @@
         @include('dashboard.dashboardC')
     </div>
 
-    <div class="right-column" id="mainContent">
+    <div class="right-column" style="padding:70px;" id="mainContent">
         <div class="d-flex align-items-center mb-3">
             <button id="sidebarToggle" class="btn btn-secondary">
                 <i class="fas fa-bars"></i>

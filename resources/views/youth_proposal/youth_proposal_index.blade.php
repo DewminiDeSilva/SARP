@@ -186,72 +186,131 @@
             border-color: #126926;
         }
     </style>
+    
     <style>
-/* Badge style for EOI status */
-.status-badge {
-    display: inline-block;
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-.status-badge:hover {
-    transform: scale(1.05);
-}
+        /* Badge style for EOI status */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
 
-.badge-evaluation-completed {
-    background-color: #28a745;
-}
-.badge-other {
-    background-color: #6c757d;
-}
+        .badge-evaluation-completed {
+            background-color: #28a745;
+        }
+        .badge-other {
+            background-color: #6c757d;
+        }
 
-.status-select {
-    appearance: none;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    width: 150px;
-}
-.status-select:hover {
-    background-color: #f1f1f1;
-    border-color: #28a745;
-}
-</style>
+        .status-select {
+            appearance: none;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            width: 150px;
+        }
+        .status-select:hover {
+            background-color: #f1f1f1;
+            border-color: #28a745;
+        }
+
+        /* Compact table row height */
+        .table td, .table th {
+            padding-top: 6px !important;
+            padding-left: 20px !important;
+            padding-bottom: 6px !important;
+            font-size: 1rem;
+        }
+        /* Center all table cell content */
+        .table td, .table th {
+            
+            vertical-align: middle !important;
+        }
+        
+    </style>
 
 </head>
+
 <body>
 
 @include('dashboard.header')
 
 <div class="frame" style="padding-top: 70px;">
+
     <div class="left-column">
         @include('dashboard.dashboardC')
         @csrf
     </div>
-    <div class="right-column">
+
+    <div class="right-column" style="padding:58px;">
+
         <div class="d-flex align-items-center mb-3">
             <button id="sidebarToggle" class="btn btn-secondary mr-2">
                 <i class="fas fa-bars"></i>
             </button>
-
         </div>
 
-
         <div class="container-fluid">
-            <div class="d-flex justify-content-between mb-3">
-                <h2 style="color: green;">Youth Proposals</h2>
-                
+
+            <div class="center-heading text-center">
+                <h2 style="font-size: 2.4rem; color: green;">Youth Proposals</h2>
             </div>
+            
+            <!-- Summary Cards -->
+            <div class="row text-center mb-5 mt-5">
+                <div class="col-md-4">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header bg-success text-white font-weight-bold">
+                            Total Organizations
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title font-weight-bold">{{ $totalOrganizations }}</h2>
+                            <p class="card-text">All submitted youth proposals</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-4">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header bg-success text-white font-weight-bold">
+                            Agreement Signed
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title font-weight-bold">{{ $agreementSignedCount }}</h2>
+                            <p class="card-text">Proposals with signed agreements</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-4">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header bg-success text-white font-weight-bold">
+                            Not Agreement Signed
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title font-weight-bold">{{ $notAgreementSignedCount }}</h2>
+                            <p class="card-text">Pending signature or approval</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
            
             <div class="mb-3 d-flex justify-content-between align-items-center">
-                <a href="{{ route('youth-proposals.create') }}" class="btn submitbtton">Submit New</a>
+
+            
+                <a href="{{ route('youth-proposals.create') }}" class="btn btn-success">Submit New</a>
 
                 <a href="{{ route('youth-proposal.agreementSigned') }}" class="btn btn-success ml-auto">
                     <i class="fas fa-file-signature"></i> View Agreement Signed Proposals
@@ -259,139 +318,138 @@
 
             </div>
 
-
-
+            
             <div class="table-responsive">
                 <table class="table table-bordered">
-                <thead class="thead-light">
-        <tr>
-        <th>ID</th>
-        <th>Organization Name</th>
-        <th>Contact Person</th>
-        <th>Mobile Phone</th>
-        <th>Market Problem</th>
-        <th>Business Title</th>
-        <th>Status</th> <!-- status column first -->
-        <th>Actions</th> <!-- then actions -->
-    </tr>
-</thead>
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Organization Name</th>
+                            <th>Contact Person</th>
+                            <th>Mobile Phone</th>
+                            <th>Market Problem</th>
+                            <th>Business Title</th>
+                            <th>Status</th> <!-- status column first -->
+                            <th>Actions</th> <!-- then actions -->
+                        </tr>
+                    </thead>
+                    
                     <tbody>
-@foreach($proposals as $youth_proposal)
+                    @foreach($proposals as $youth_proposal)
 
-<tr>
-    <td>{{ $youth_proposal->id }}</td>
-    <td>{{ $youth_proposal->organization_name }}</td>
-    <td>{{ $youth_proposal->contact_person }}</td>
-    <td>{{ $youth_proposal->mobile_phone }}</td>
-    <td>{{ Str::limit($youth_proposal->market_problem, 50) }}</td>
-    <td>{{ $youth_proposal->business_title }}</td>
+                    <tr>
+                        <td>{{ $youth_proposal->id }}</td>
+                        <td>{{ $youth_proposal->organization_name }}</td>
+                        <td>{{ $youth_proposal->contact_person }}</td>
+                        <td>{{ $youth_proposal->mobile_phone }}</td>
+                        <td>{{ Str::limit($youth_proposal->market_problem, 50) }}</td>
+                        <td>{{ $youth_proposal->business_title }}</td>
 
-    <!-- ✅ Status Column -->
-    <td class="text-center">
-        @php
-            $status = $youth_proposal->status;
-            $badgeClass = match($status) {
-                'Evaluation Completed' => 'badge-success',
-                'Internal Review Committee Approved' => 'badge-warning',
-                'Business Proposal Submitted' => 'badge-info',
-                'BPEC Evaluation' => 'badge-secondary',
-                'BPEC Approved' => 'badge-primary',
-                'NSC Approved' => 'badge-dark',
-                'IFAD Approved' => 'badge-light text-dark',
-                'Agreement Signed' => 'badge-success',
-                default => 'badge-secondary'
-            };
-        @endphp
-
-        <div id="status-{{ $youth_proposal->id }}">
-            <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $youth_proposal->id }})">
-                {{ $status ?? 'Select Status' }}
-            </span>
-        </div>
-
-        <!-- Hidden Form for Submission -->
-        <form id="status-form-{{ $youth_proposal->id }}" action="{{ route('youth-proposals.updateStatus', $youth_proposal->id) }}" method="POST" style="display:none;">
-            @csrf
-            @method('PATCH')
-            <input type="hidden" name="status" id="status-input-{{ $youth_proposal->id }}">
-        </form>
-    </td>
-
-    
-    <td>
-    <div class="action-buttons">
-        <a href="{{ route('youth-proposals.show', $youth_proposal->id) }}" class="btn btn-sm view-button" title="View">
-            <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
-        </a>
-    </div>
-    </td>
-
-</tr>
-@endforeach
-</tbody>
+                        <!-- ✅ Status Column -->
+                        <td class="text-center">
+                            @php
+                                $status = $youth_proposal->status;
+                                $badgeClass = match($status) {
+                                    'Evaluation Completed' => 'badge-success',
+                                    'Internal Review Committee Approved' => 'badge-warning',
+                                    'Business Proposal Submitted' => 'badge-info',
+                                    'BPEC Evaluation' => 'badge-secondary',
+                                    'BPEC Approved' => 'badge-primary',
+                                    'NSC Approved' => 'badge-dark',
+                                    'IFAD Approved' => 'badge-light text-dark',
+                                    'Agreement Signed' => 'badge-success',
+                                    default => 'badge-secondary'
+                                };
+                            @endphp
+                            
+                            <div id="status-{{ $youth_proposal->id }}">
+                                <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $youth_proposal->id }})">
+                                    {{ $status ?? 'Select Status' }}
+                                </span>
+                            </div>
+                            
+                            <!-- Hidden Form for Submission -->
+                            <form id="status-form-{{ $youth_proposal->id }}" action="{{ route('youth-proposals.updateStatus', $youth_proposal->id) }}" method="POST" style="display:none;">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" id="status-input-{{ $youth_proposal->id }}">
+                            </form>
+                        </td>
+                            
+                            
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center">
+                                <a href="{{ route('youth-proposals.show', $youth_proposal->id) }}" class="btn btn-sm view-button" title="View">
+                                    <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
+                                </a>
+                            </div>
+                        </td>
+                            
+                    </tr>
+                    @endforeach
+                    </tbody>
 
                 </table>
 
-                <nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item {{ $proposals->onFirstPage() ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $proposals->previousPageUrl() }}" tabindex="-1">Previous</a>
-        </li>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item {{ $proposals->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $proposals->previousPageUrl() }}" tabindex="-1">Previous</a>
+                    </li>
 
-        @php
-            $currentPage = $proposals->currentPage();
-            $lastPage = $proposals->lastPage();
-            $startPage = max($currentPage - 2, 1);
-            $endPage = min($currentPage + 2, $lastPage);
-        @endphp
+                    @php
+                        $currentPage = $proposals->currentPage();
+                        $lastPage = $proposals->lastPage();
+                        $startPage = max($currentPage - 2, 1);
+                        $endPage = min($currentPage + 2, $lastPage);
+                    @endphp
 
-        @if ($startPage > 1)
-            <li class="page-item"><a class="page-link" href="{{ $proposals->url(1) }}">1</a></li>
-            @if ($startPage > 2)
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-            @endif
-        @endif
+                    @if ($startPage > 1)
+                        <li class="page-item"><a class="page-link" href="{{ $proposals->url(1) }}">1</a></li>
+                        @if ($startPage > 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                    @endif
 
-        @for ($i = $startPage; $i <= $endPage; $i++)
-            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-                <a class="page-link" href="{{ $proposals->url($i) }}">{{ $i }}</a>
-            </li>
-        @endfor
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                        <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $proposals->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
 
-        @if ($endPage < $lastPage)
-            @if ($endPage < $lastPage - 1)
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-            @endif
-            <li class="page-item"><a class="page-link" href="{{ $proposals->url($lastPage) }}">{{ $lastPage }}</a></li>
-        @endif
+                    @if ($endPage < $lastPage)
+                        @if ($endPage < $lastPage - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                        <li class="page-item"><a class="page-link" href="{{ $proposals->url($lastPage) }}">{{ $lastPage }}</a></li>
+                    @endif
 
-        <li class="page-item {{ $proposals->hasMorePages() ? '' : 'disabled' }}">
-            <a class="page-link" href="{{ $proposals->nextPageUrl() }}">Next</a>
-        </li>
-    </ul>
-</nav>
+                    <li class="page-item {{ $proposals->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $proposals->nextPageUrl() }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
 
-@php
-    $currentPage = $proposals->currentPage();
-    $perPage = $proposals->perPage();
-    $total = $proposals->total();
-    $startingNumber = ($currentPage - 1) * $perPage + 1;
-    $endingNumber = min($total, $currentPage * $perPage);
-@endphp
+            @php
+                $currentPage = $proposals->currentPage();
+                $perPage = $proposals->perPage();
+                $total = $proposals->total();
+                $startingNumber = ($currentPage - 1) * $perPage + 1;
+                $endingNumber = min($total, $currentPage * $perPage);
+            @endphp
 
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div id="tableInfo" class="text-right">
-        <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
-    </div>
-</div>
-
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div id="tableInfo" class="text-right">
+                    <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
+                </div>
+            </div>
 
             </div>
         </div>
-
     </div>
 </div>
+
 
 <!-- JS for sidebar toggle -->
 <script>
@@ -484,7 +542,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-
 
 </body>
 </html>

@@ -172,7 +172,7 @@
         @csrf
     </div>
 
-    <div class="right-column">
+    <div class="right-column" style="padding:70px;">
         <div class="d-flex align-items-center mb-3">
 
             <button id="sidebarToggle" class="btn btn-secondary mr-2">
@@ -186,7 +186,7 @@
 
 
             <div class="center-heading text-center mt-4">
-                <h1 style="font-size: 2.5rem; color: green;">Agreement Signed Youth Proposals</h1>
+                <h1 style="font-size: 2.4rem; color: green;">Agreement Signed Youth Proposals</h1>
             </div>
 
             <div class="table-responsive mt-5">
@@ -199,7 +199,7 @@
                             <th style="width: 200px;">Mobile Phone</th>
                             <th style="width: 260px;">Business Title</th>
                             <th style="width: 220px;">Status</th>
-                            <th style="width: 170px;">Actions</th>
+                            <th style="width: 220px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -235,6 +235,7 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
+                        <br>
                         Showing {{ $signedProposals->firstItem() ?? 0 }} to {{ $signedProposals->lastItem() ?? 0 }} of {{ $signedProposals->total() }} entries
                     </div>
                     <div>
