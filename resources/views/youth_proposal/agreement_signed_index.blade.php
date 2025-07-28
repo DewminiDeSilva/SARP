@@ -185,21 +185,21 @@
         </div>
 
 
-            <div class="center-heading text-center">
+            <div class="center-heading text-center mt-4">
                 <h1 style="font-size: 2.5rem; color: green;">Agreement Signed Youth Proposals</h1>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive mt-5">
                 <table class="table table-bordered">
                     <thead class="thead-light">
                         <tr>
-                            <th>ID</th>
-                            <th>Organization Name</th>
-                            <th>Contact Person</th>
-                            <th>Mobile Phone</th>
-                            <th>Business Title</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th style="width: 30px;">ID</th>
+                            <th style="width: 320px;">Organization Name</th>
+                            <th style="width: 220px;">Contact Person</th>
+                            <th style="width: 200px;">Mobile Phone</th>
+                            <th style="width: 260px;">Business Title</th>
+                            <th style="width: 220px;">Status</th>
+                            <th style="width: 170px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -212,12 +212,14 @@
                             <td>{{ $proposal->business_title }}</td>
                             <td>{{ $proposal->status }}</td>
                             <td>
-                                <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button mr-1" title="View Proposal">
-                                    <img src="{{ asset('assets/images/view.png') }}" alt="View Proposal" style="width: 16px; height: 16px;">
-                                </a>
-                                <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn btn-sm view-button" title="View Beneficiaries">
-                                    <img src="{{ asset('assets/images/beneficiary.png') }}" alt="View Beneficiaries" style="width: 16px; height: 16px;">
-                                </a>
+                                <div style="display: flex; gap: 6px;">
+                                    <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button" title="View Proposal">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn btn-sm view-button" title="View Beneficiaries">
+                                        <i class="fas fa-users"></i> View Beneficiaries
+                                    </a>
+                                </div>
                             </td>
 
 
