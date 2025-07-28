@@ -2182,3 +2182,6 @@ Route::delete('/youth/{id}', [YouthController::class, 'destroy'])->name('youth.d
 Route::resource('youth-proposals', YouthProposalController::class);
 Route::patch('/youth-proposals/update-status/{id}', [YouthProposalController::class, 'updateStatus'])->name('youth-proposals.updateStatus');
 Route::get('/youth-proposal/agreement-signed', [YouthProposalController::class, 'agreementSigned'])->name('youth-proposal.agreementSigned');
+
+Route::get('/youth-proposals/{id}/beneficiaries', [YouthProposalController::class, 'showBeneficiaries'])->name('youth-proposals.beneficiaries');
+

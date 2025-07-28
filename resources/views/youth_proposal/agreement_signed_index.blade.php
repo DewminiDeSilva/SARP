@@ -199,7 +199,7 @@
                             <th>Mobile Phone</th>
                             <th>Business Title</th>
                             <th>Status</th>
-                            <th>View</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -212,10 +212,15 @@
                             <td>{{ $proposal->business_title }}</td>
                             <td>{{ $proposal->status }}</td>
                             <td>
-                                <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button" title="View">
-                                    <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
+                                <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button mr-1" title="View Proposal">
+                                    <img src="{{ asset('assets/images/view.png') }}" alt="View Proposal" style="width: 16px; height: 16px;">
+                                </a>
+                                <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn btn-sm view-button" title="View Beneficiaries">
+                                    <img src="{{ asset('assets/images/beneficiary.png') }}" alt="View Beneficiaries" style="width: 16px; height: 16px;">
                                 </a>
                             </td>
+
+
                         </tr>
                         @empty
                         <tr>

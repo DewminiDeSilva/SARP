@@ -219,4 +219,13 @@ class YouthProposalController extends Controller
         $signedProposals = YouthProposal::where('status', 'Agreement Signed')->paginate(10);
         return view('youth_proposal.agreement_signed_index', compact('signedProposals'));
     }
+
+
+    public function showBeneficiaries($id)
+    {
+        $proposal = YouthProposal::with('beneficiaries')->findOrFail($id);
+
+        return view('youth_proposal.beneficiaries_by_proposal', compact('proposal'));
+    }
+    
 }
