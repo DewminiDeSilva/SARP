@@ -45,25 +45,51 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #198754;
-            font-weight: 500;
+            color: #fff;
+            border: none;
+            padding: 10px 50px;
+            border-radius: 4px;
             text-decoration: none;
-            margin-bottom: 15px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-back img {
-            margin-right: 8px;
-            width: 30px;
+            width: 45px;
+            height: auto;
+            margin-right: 5px;
+            transition: transform 0.3s ease;
+            background: none;
+            position: relative;
+            z-index: 1;
         }
 
-        .btn-primary {
-            background-color: #198754;
-            border-color: #198754;
+        .btn-back .btn-text {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            right: 25px;
+            background-color: #1e8e1e;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 0;
         }
 
-        .btn-primary:hover {
-            background-color: #145c32;
-            border-color: #145c32;
+        .btn-back:hover .btn-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .btn-back:hover img {
+            transform: translateX(-50px);
         }
 
         .custom-border {
@@ -108,8 +134,8 @@
         <div class="d-flex align-items-center mb-3">
             <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
             <a href="{{ route('youth-proposals.index') }}" class="btn-back">
-                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span>Back</span>
-            </a>
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            </a>    
         </div>
 
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);">

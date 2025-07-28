@@ -216,9 +216,8 @@
         const toggleButton = document.getElementById('sidebarToggle');
 
         toggleButton.addEventListener('click', function () {
-            sidebar.classList.toggle('hidden');
-            content.style.flex = sidebar.classList.contains('hidden') ? '0 0 100%' : '0 0 80%';
-            content.style.padding = '20px';
+            sidebar.classList.toggle('d-none');
+            content.style.flex = sidebar.classList.contains('d-none') ? '0 0 100%' : '0 0 80%';
         });
     });
 </script>

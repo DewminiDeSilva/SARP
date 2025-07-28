@@ -39,11 +39,6 @@
 
         #sidebarToggle {
             background-color: #126926;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         #sidebarToggle:hover {
@@ -459,14 +454,8 @@
         const toggleButton = document.getElementById('sidebarToggle');
 
         toggleButton.addEventListener('click', function () {
-            sidebar.classList.toggle('hidden');
-            if (sidebar.classList.contains('hidden')) {
-                content.style.flex = '0 0 100%';
-                content.style.padding = '20px';
-            } else {
-                content.style.flex = '0 0 80%';
-                content.style.padding = '20px';
-            }
+            sidebar.classList.toggle('d-none');
+            content.style.flex = sidebar.classList.contains('d-none') ? '0 0 100%' : '0 0 80%';
         });
     });
 </script>
