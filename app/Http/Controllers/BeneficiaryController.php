@@ -334,10 +334,19 @@ public function index(Request $request)
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        return view('beneficiary.beneficiary_create');
-    }
+   public function create()
+{
+     $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')->get(['id', 'organization_name']);
+
+     $businessTitles = EOI::where('status', 'Agreement Signed')
+        ->whereNotNull('business_title')
+        ->distinct()
+        ->pluck('business_title');
+
+
+    return view('beneficiary.beneficiary_create', compact('agreementSignedYouth', 'businessTitles'));
+}
+
 
     public function store(Request $request)
     {

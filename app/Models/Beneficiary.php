@@ -71,4 +71,15 @@ class Beneficiary extends Model
     {
         return $this->hasMany(Livestock::class, 'beneficiary_id', 'id');
     }
+
+ public function eoiForm()
+{
+    return $this->hasOne(EOIBeneficiaryForm::class);
+}
+
+   public function youthProposal()
+    {
+        return $this->belongsTo(YouthProposal::class, 'youth_proposal_id');
+    }
+
 }
