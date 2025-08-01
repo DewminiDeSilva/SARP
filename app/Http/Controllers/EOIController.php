@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\EOI;
-
+use App\Models\Beneficiary;
 
 class EOIController extends Controller
 {
@@ -216,6 +216,24 @@ public function evaluationCompleted()
 {
     $completedExpressions = EOI::where('status', 'Agreement Signed')->paginate(10);
     return view('eoi.evaluation_completed_index', compact('completedExpressions'));
+}
+
+
+public function viewEOIBeneficiaries($id)
+{
+    $eoi = EOI::findOrFail($id);
+
+    $beneficiaries = Beneficiary::where('eoi_business_title', $eoi->business_title)
+        ->whereNotNull('eoi_business_title')
+        ->get();
+
+    return view('eoi.eoi_beneficiaries', compact('eoi', 'beneficiaries'));
+}
+
+public function createForBeneficiary($beneficiaryId)
+{
+    $beneficiary = Beneficiary::findOrFail($beneficiaryId);
+    return view('eoi.create', compact('beneficiary'));
 }
 
 }

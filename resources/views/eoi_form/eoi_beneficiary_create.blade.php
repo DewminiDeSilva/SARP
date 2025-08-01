@@ -146,7 +146,30 @@
 .right-column {
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
+    .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #198754;
+            font-weight: 500;
+            text-decoration: none;
+            margin-bottom: 15px;
+        }
 
+        .btn-back img {
+            margin-right: 8px;
+            width: 30px;
+        }
+
+        .btn-primary {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .btn-primary:hover {
+            background-color: #145c32;
+            border-color: #145c32;
+        }
 </style>
 
 </head>
@@ -160,49 +183,66 @@
     <div class="right-column">
 
     <div class="d-flex align-items-center mb-3">
+        <button id="sidebarToggle" class="btn btn-secondary mr-2">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <a href="{{ route('expressions.evaluation_completed') }}" class="btn-back">
+        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+    </a>
+
 
     <!-- Sidebar Toggle Button -->
     <button id="sidebarToggle" class="btn btn-secondary mr-2">
         <i class="fas fa-bars"></i>
     </button>
 
-    <a href="{{ route('agriculture.index') }}" class="btn-back">
-        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-    </a>
+
 </div>
     <div class="container mt-5">
 
         <div class="center-heading text-center">
-            <h1 style="font-size: 2.5rem; color: green;">Cultivation Data of {{ $beneficiary->name_with_initials }}</h1>
+            <h1 style="font-size: 2.5rem; color: green;">EOI Data of {{ $beneficiary->name_with_initials }}</h1>
         </div>
     </br>
         <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
-        <form action="{{ route('agriculture.store') }}" method="POST">
+        <form action="{{ route('eoi_form.store') }}" method="POST">
             @csrf
+
            
 <div class="row mt-3">
   <div class="col-md-4">
-    <label for="cropCategory" class="form-label bold-label">Crop Category</label>
-    <input type="text" class="form-control" id="cropCategory" name="crop_category" value="{{ $cropCategory }}" readonly>
+    <label for="eoiCategory" class="form-label bold-label">EOI Category</label>
+    <input type="text" class="form-control" id="eoiCategory" name="eoi_category" value="{{ $eoiCategory }}" readonly>
   </div>
 
-
- <div class="col-md-4">
-    <label for="cropName" class="form-label bold-label">Crop Name</label>
-    <input type="text" class="form-control" id="cropName" name="crop_name" value="{{ $cropName }}" readonly>
+  <div class="col-md-4">
+    <label for="eoiBusinessTitle" class="form-label bold-label">EOI Business Title</label>
+    <input type="text" class="form-control" id="eoiBusinessTitle" name="eoi_business_title" value="{{ $eoiBusinessTitle }}" readonly>
   </div>
+</div>
+
 
 
 <!-- Planting Date -->
 
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <label for="plantingDate" class="form-label bold-label">Planting Date</label>
     <input type="date" class="form-control" id="plantingDate" name="planting_date">
   </div>
+</div> -->
+
+<!-- EOI Planting Date -->
+<div class="row mt-3">
+  <div class="col-md-4">
+    <label for="eoiPlantingDate" class="form-label bold-label">EOI Starting Date</label>
+    <input type="date" class="form-control" id="eoiPlantingDate" name="planting_date" value="{{ old('planting_date', $planting_date ?? '') }}">
+  </div>
 </div>
 
+
 <!-- Total Acres & Total Livestock Area & Total Cost -->
-<div class="row mt-3">
+<!-- <div class="row mt-3">
   <div class="col-md-4">
     <label for="totalAcres" class="form-label bold-label">Total Acres</label>
     <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" min="0">
@@ -215,8 +255,25 @@
     <label for="totalCost" class="form-label bold-label">Total Cost</label>
     <input type="number" class="form-control" name="total_cost" step="0.01" min="0">
   </div>
+</div> -->
+
+<!-- EOI Total Acres & Total Livestock Area & Total Cost -->
+<div class="row mt-3">
+  <div class="col-md-4">
+    <label for="totalAcres" class="form-label bold-label">EOI Total Acres</label>
+    <input type="number" class="form-control" id="totalAcres" name="total_acres" step="0.01" min="0" value="{{ old('total_acres', $total_acres ?? '') }}">
+  </div>
+  <div class="col-md-4">
+    <label for="totalLivestockArea" class="form-label bold-label">EOI Total Livestock Area</label>
+    <input type="number" class="form-control" id="totalLivestockArea" name="total_livestock_area" step="0.01" min="0" value="{{ old('total_livestock_area', $total_livestock_area ?? '') }}">
+  </div>
+  <div class="col-md-4">
+    <label for="totalCost" class="form-label bold-label">EOI Total Cost</label>
+    <input type="number" class="form-control" id="totalCost" name="total_cost" step="0.01" min="0" value="{{ old('total_cost', $total_cost ?? '') }}">
+  </div>
 </div>
 
+<!-- Farmer Contributions -->
 <div class="card mb-4 mt-5 card-custom">
     <div class="card-header bg-success text-white">
         Farmer Contributions
@@ -226,18 +283,18 @@
             <div class="row farmer-group align-items-center">
                 <div class="col-md-3">
                     <label>Contribution Date</label>
-                    <input type="date" name="farmer_date[]" class="form-control" >
+                    <input type="date" name="farmer_date[]" class="form-control">
                 </div>
                 <div class="col-md-5">
                     <label>Contribution Description</label>
-                    <input type="text" name="farmer_contribution[]" class="form-control" >
+                    <input type="text" name="farmer_contribution[]" class="form-control">
                 </div>
                 <div class="col-md-3">
                     <label>Cost (Rs.)</label>
-                    <input type="number" step="0.01" name="cost[]" class="form-control" >
+                    <input type="number" step="0.01" name="cost[]" class="form-control">
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
-                    <!-- Optional remove button space -->
+                    <!-- Optional remove button or spacing -->
                 </div>
             </div>
         </div>
@@ -249,6 +306,7 @@
 
 
 
+<!-- Promoter Contributions -->
 <div class="card mb-4 mt-5 card-custom">
     <div class="card-header bg-success text-white">
         Promoter Contributions
@@ -262,14 +320,14 @@
                 </div>
                 <div class="col-md-5">
                     <label>Contribution Description</label>
-                    <input type="text" name="promoter_description[]" class="form-control" >
+                    <input type="text" name="promoter_description[]" class="form-control">
                 </div>
                 <div class="col-md-3">
                     <label>Cost (Rs.)</label>
-                    <input type="number" step="0.01" name="promoter_cost[]" class="form-control" >
+                    <input type="number" step="0.01" name="promoter_cost[]" class="form-control">
                 </div>
                 <div class="col-md-1 d-flex align-items-center">
-                    <!-- Remove button will be added dynamically via JS if needed -->
+                    <!-- Optional remove button space -->
                 </div>
             </div>
         </div>
@@ -278,6 +336,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -453,7 +512,7 @@
             <!-- Submit Button -->
             <div class="row mt-4">
                 <div class="col text-center">
-                    <input type="hidden" name="beneficiary_id" value="{{ $beneficiaryId ?? '' }}">
+                    <input type="hidden" name="beneficiary_id" value="{{ $beneficiary->id }}">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -739,5 +798,18 @@ $(document).on('click', '.remove-farmer', function () {
         document.getElementById('balance-date').value = today;
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const gnInput = document.getElementById("gn_division_name");
+
+        if (gnInput) {
+            // Only try to add the event if the element exists
+            gnInput.addEventListener("change", function () {
+                console.log("GN division changed!");
+            });
+        }
+    });
+</script>
+
 </body>
 </html>

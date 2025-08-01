@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Beneficiary;
 use App\Models\Livestock;
 use App\Models\YouthProposal;
+use App\Models\EOI;
 use League\Csv\Reader;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -335,9 +336,7 @@ public function index(Request $request)
      */
     public function create()
     {
-        $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')->get(['id', 'organization_name']);
-
-        return view('beneficiary.beneficiary_create', compact('agreementSignedYouth'));
+        return view('beneficiary.beneficiary_create');
     }
 
     public function store(Request $request)
@@ -383,8 +382,6 @@ public function index(Request $request)
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
         'project_type' => 'nullable|string|max:255',
-        'youth_proposal_id' => 'nullable|exists:youth_proposals,id',
-
     ]);
  
 
@@ -393,6 +390,9 @@ public function index(Request $request)
 
     // Create a new beneficiary instance after validation
     $beneficiary = new Beneficiary($request->all());
+    $beneficiary->eoi_business_title = $request->eoi_business_title;
+    $beneficiary->eoi_category = $request->eoi_category;
+
     $beneficiary->save();
 
     return redirect('/beneficiary')->with('success', 'Beneficiary registered successfully.');
@@ -608,6 +608,18 @@ public function index(Request $request)
 
     return view('beneficiary.beneficiary_list', compact('beneficiaries', 'totalBeneficiaries', 'totalGnDivisions', 'totalLivestocks'));
 }
+
+public function getCategoriesByBusinessTitle($title)
+{
+    $categories = EOI::whereRaw('LOWER(TRIM(business_title)) = ?', [strtolower(trim($title))])
+        ->where('status', 'Agreement Signed')
+        ->whereNotNull('category')
+        ->distinct()
+        ->pluck('category');
+
+    return response()->json($categories);
+}
+
 
 
     
