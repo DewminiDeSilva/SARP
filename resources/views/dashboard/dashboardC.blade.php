@@ -165,16 +165,19 @@ li:hover {
                         </ul>
                     </li>
 
+                    <li><a href="/nutrient-home" style="color: #FFFFFF">Nutrient Rich Home Garden</a></li> <!-- ✅ Your new module -->
+
+
                     <li class="submenu">
                         <a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a>
                         <ul class="nested">
 
                             <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a></li>
                         </ul>
-                    </li>       
-                </ul>              
+                    </li>
+                </ul>
             </li>
-            
+
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Youth Enterprises</a>
                     <ul class="nested">
@@ -191,7 +194,7 @@ li:hover {
                         <a href="#" style="color: #FFFFFF">Establish 4p Projects</a>
                         <ul class="nested">
                             <li href=""><a href="/expressions/evaluation-completed" style="color: #FFFFFF">Registration of 4P Project</a></li>
-                        
+
                         </ul>
                     </li>
 

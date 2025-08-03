@@ -60,7 +60,7 @@ use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\YouthController;
 use App\Http\Controllers\YouthProposalController;
 use App\Http\Controllers\EOIBeneficiaryController;
-
+use App\Http\Controllers\NutrientRichHomeGardenController;
 
 
 
@@ -2179,6 +2179,39 @@ Route::put('/eoi-form/{id}', [EOIBeneficiaryController::class, 'update'])->name(
 
 Route::delete('/eoi-form/destroy/{id}', [EOIBeneficiaryController::class, 'destroy'])->name('eoi_form.destroy');
 
+
+//Nutrient Rich Home Garden Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/nutrient-home', [NutrientRichHomeGardenController::class, 'index'])
+        ->name('nutrient-home.index')
+        ->middleware('check.permission:nutrient_rich_home_garden,view');
+
+    Route::get('/nutrient-home/create/{beneficiaryId}', [NutrientRichHomeGardenController::class, 'create'])
+        ->name('nutrient-home.create')
+        ->middleware('check.permission:nutrient_rich_home_garden,add');
+
+    Route::post('/nutrient-home/store', [NutrientRichHomeGardenController::class, 'store'])
+        ->name('nutrient-home.store')
+        ->middleware('check.permission:nutrient_rich_home_garden,add');
+
+    Route::get('/nutrient-home/{id}/edit', [NutrientRichHomeGardenController::class, 'edit'])
+        ->name('nutrient-home.edit')
+        ->middleware('check.permission:nutrient_rich_home_garden,edit');
+
+    Route::put('/nutrient-home/{id}', [NutrientRichHomeGardenController::class, 'update'])
+        ->name('nutrient-home.update')
+        ->middleware('check.permission:nutrient_rich_home_garden,edit');
+
+    Route::delete('/nutrient-home/{id}', [NutrientRichHomeGardenController::class, 'destroy'])
+        ->name('nutrient-home.destroy')
+        ->middleware('check.permission:nutrient_rich_home_garden,delete');
+
+    Route::get('/nutrient-home/{id}', [NutrientRichHomeGardenController::class, 'show'])
+        ->name('nutrient-home.show')
+        ->middleware('check.permission:nutrient_rich_home_garden,view');
+});
+
+
 Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
 Route::post('/staff_profile/status/{id}', [StaffProfileController::class, 'updateStatus']);
 
@@ -2209,7 +2242,7 @@ Route::delete('/youth/{id}', [YouthController::class, 'destroy'])->name('youth.d
 
 
 
-//Youth Proposal 
+//Youth Proposal
 
 Route::resource('youth-proposals', YouthProposalController::class);
 Route::patch('/youth-proposals/update-status/{id}', [YouthProposalController::class, 'updateStatus'])->name('youth-proposals.updateStatus');
