@@ -10,6 +10,61 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+
+    <style>
+            .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border: none;
+            padding: 10px 50px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-back img {
+            width: 45px;
+            height: auto;
+            margin-right: 5px;
+            transition: transform 0.3s ease;
+            background: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-back .btn-text {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            right: 25px;
+            background-color: #1e8e1e;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 0;
+        }
+
+        .btn-back:hover .btn-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .btn-back:hover img {
+            transform: translateX(-50px);
+        }
+
+
+        </style>
     <style>
         .frame {
             display: flex;
@@ -25,53 +80,15 @@
             flex: 0 0 80%;
             padding: 20px;
         }
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            padding: 10px 50px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            background-color: #1e8e1e;
-        }
-        .btn-back img {
-            width: 45px;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-        }
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-        }
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-        .btn-back:hover img {
-            transform: translateX(-50px);
-        }
+       
         .view-button { color: white; background-color: #60C267; }
         .view-button:hover { border-color: green; }
         .sidebar.hidden { transform: translateX(-100%); }
         .left-column.hidden { display: none; }
         .right-column { transition: flex 0.3s ease, padding 0.3s ease; }
     </style>
+
+    
 </head>
 <body>
 

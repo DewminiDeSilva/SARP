@@ -146,30 +146,7 @@
 .right-column {
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
-    .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #198754;
-            font-weight: 500;
-            text-decoration: none;
-            margin-bottom: 15px;
-        }
-
-        .btn-back img {
-            margin-right: 8px;
-            width: 30px;
-        }
-
-        .btn-primary {
-            background-color: #198754;
-            border-color: #198754;
-        }
-
-        .btn-primary:hover {
-            background-color: #145c32;
-            border-color: #145c32;
-        }
+  
 </style>
 
 </head>
@@ -192,10 +169,7 @@
     </a>
 
 
-    <!-- Sidebar Toggle Button -->
-    <button id="sidebarToggle" class="btn btn-secondary mr-2">
-        <i class="fas fa-bars"></i>
-    </button>
+  
 
 
 </div>
