@@ -49,4 +49,11 @@ class YouthProposal extends Model
         'funding_source' => 'array',
         'assistance_required' => 'array',
     ];
+
+
+    public function beneficiaries()
+    {
+        return $this->hasMany(\App\Models\Beneficiary::class, 'youth_proposal_id');
+    }
+
 }

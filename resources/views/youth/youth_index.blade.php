@@ -131,6 +131,11 @@
         .highlight-row {
             background-color: #fff8dc !important;
         }
+
+        #sidebarToggle {
+            background-color: #126926;
+           
+        }
         
     </style>
 </head>
@@ -144,6 +149,11 @@
         </div>
 
         <div class="right-column" style="padding:70px;" >
+
+            <div class="d-flex align-items-center mb-3">
+                <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
+            </div>
+
             <div class="container-fluid">
                 <div class="center-heading text-center">
                     <h1 style="font-size: 2.4rem; color: green;">Youth Enterprise Details</h1>
@@ -304,5 +314,21 @@
             </div>
         </div>
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.left-column');
+        const content = document.querySelector('.right-column');
+        const toggleButton = document.getElementById('sidebarToggle');
+
+        toggleButton.addEventListener('click', function () {
+            sidebar.classList.toggle('d-none');
+            content.style.flex = sidebar.classList.contains('d-none') ? '0 0 100%' : '0 0 80%';
+        });
+    });
+</script>
+
 </body>
 </html>
+
+

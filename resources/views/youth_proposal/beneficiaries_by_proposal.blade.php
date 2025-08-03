@@ -2,29 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Beneficiaries by Youth Proposal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EOIs - Evaluation Completed</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap & Font Awesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- <style>
-        /* Reuse your styles here (same as original EOI index) */
-        .frame { display: flex; flex-direction: row; justify-content: space-between; width: 100%; }
-        .left-column { flex: 0 0 20%; border-right: 1px solid #dee2e6; }
-        .right-column { flex: 0 0 80%; padding: 20px; transition: flex 0.3s ease, padding 0.3s ease; }
-        .left-column.hidden { display: none; }
-        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
-        #sidebarToggle:hover { background-color: #0a4818; }
-        .view-button { color: white; background-color: #60C267; }
-        .view-button:hover { border-color: green; }
-        td { vertical-align: middle; white-space: nowrap; }
-        .pagination .page-link { padding: 5px 10px; }
-        .page-link { color: #28a745; }
-        .page-item.active .page-link { color: #fff; background-color: #126926; border-color: #126926; }
-    </style> -->
 
     <style>
     .entries-container {
@@ -161,6 +144,9 @@
     .view-button { color: white; background-color: #60C267; }
         .view-button:hover { border-color: green; }
 </style>
+
+
+    </style>
 </head>
 <body>
 
@@ -174,81 +160,55 @@
 
     <div class="right-column" style="padding:70px;">
         <div class="d-flex align-items-center mb-3">
-
-            <button id="sidebarToggle" class="btn btn-secondary mr-2">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <a href="{{ route('youth-proposals.index') }}" class="btn-back">
-           <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
+            <a href="{{ route('youth-proposal.agreementSigned') }}" class="btn-back">
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
         </div>
 
+        <div class="text-center mb-5">
+            <h2 style="font-size: 2.3rem; color: green;">Beneficiaries Linked to: <strong>{{ $proposal->organization_name }}</strong></h2>
+        </div>
 
-            <div class="center-heading text-center mt-4">
-                <h1 style="font-size: 2.4rem; color: green;">Agreement Signed Youth Proposals</h1>
-            </div>
-
-            <div class="table-responsive mt-5">
+        @if($proposal->beneficiaries->isEmpty())
+            <p class="text-center">No beneficiaries are linked to this proposal.</p>
+        @else
+            <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead class="thead-light">
                         <tr>
-                            <th style="width: 30px;">ID</th>
-                            <th style="width: 320px;">Organization Name</th>
-                            <th style="width: 220px;">Contact Person</th>
-                            <th style="width: 200px;">Mobile Phone</th>
-                            <th style="width: 260px;">Business Title</th>
-                            <th style="width: 220px;">Status</th>
-                            <th style="width: 230px;">Actions</th>
+                            <th>NIC</th>
+                            <th>Name with Initials</th>
+                            <th>Gender</th>
+                            <th>Age</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th class="text-center" style="width: 220px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($signedProposals as $proposal)
-                        <tr>
-                            <td>{{ $proposal->id }}</td>
-                            <td>{{ $proposal->organization_name }}</td>
-                            <td>{{ $proposal->contact_person }}</td>
-                            <td>{{ $proposal->mobile_phone }}</td>
-                            <td>{{ $proposal->business_title }}</td>
-                            <td>{{ $proposal->status }}</td>
-                            <td style="text-align: center; vertical-align: middle;">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
-        <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button" title="View Proposal">
-            <i class="fas fa-eye"></i>
-        </a>
-        <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn btn-sm view-button" title="View Beneficiaries">
-            <i class="fas fa-users"></i> View Beneficiaries
-        </a>
-    </div>
-</td>
-
-
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="7" class="text-center">No proposals found with status 'Agreement Signed'.</td>
-                        </tr>
-                        @endforelse
-
+                        @foreach($proposal->beneficiaries as $beneficiary)
+                            <tr>
+                                <td>{{ $beneficiary->nic }}</td>
+                                <td>{{ $beneficiary->name_with_initials }}</td>
+                                <td>{{ ucfirst($beneficiary->gender) }}</td>
+                                <td>{{ $beneficiary->age }}</td>
+                                <td>{{ $beneficiary->phone }}</td>
+                                <td>{{ $beneficiary->address }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-sm btn-success view-button">
+                                        <i class="fas fa-eye"></i> View Beneficiary Details
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
-
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <br>
-                        Showing {{ $signedProposals->firstItem() ?? 0 }} to {{ $signedProposals->lastItem() ?? 0 }} of {{ $signedProposals->total() }} entries
-                    </div>
-                    <div>
-                        {{ $signedProposals->links() }}
-                    </div>
-
-                </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 
-<!-- Sidebar toggle script -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar = document.querySelector('.left-column');

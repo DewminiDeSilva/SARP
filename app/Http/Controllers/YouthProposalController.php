@@ -13,10 +13,25 @@ class YouthProposalController extends Controller
     public function index()
     {
         $entries = request()->get('entries', 10);
+    
+        // Get paginated proposals
         $proposals = YouthProposal::latest()->paginate($entries)->appends(['entries' => $entries]);
-
-        return view('youth_proposal.youth_proposal_index', compact('proposals', 'entries'));
-
+    
+        // Summary counts
+        $totalOrganizations = YouthProposal::count();
+        $agreementSignedCount = YouthProposal::where('status', 'Agreement Signed')->count();
+        $notAgreementSignedCount = YouthProposal::whereNull('status')
+            ->orWhere('status', '!=', 'Agreement Signed')
+            ->count();
+    
+        // Pass everything to the view
+        return view('youth_proposal.youth_proposal_index', compact(
+            'proposals',
+            'entries',
+            'totalOrganizations',
+            'agreementSignedCount',
+            'notAgreementSignedCount'
+        ));
     }
 
     /**
@@ -219,4 +234,13 @@ class YouthProposalController extends Controller
         $signedProposals = YouthProposal::where('status', 'Agreement Signed')->paginate(10);
         return view('youth_proposal.agreement_signed_index', compact('signedProposals'));
     }
+
+
+    public function showBeneficiaries($id)
+    {
+        $proposal = YouthProposal::with('beneficiaries')->findOrFail($id);
+
+        return view('youth_proposal.beneficiaries_by_proposal', compact('proposal'));
+    }
+    
 }
