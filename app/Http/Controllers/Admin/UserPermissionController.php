@@ -26,7 +26,7 @@ class UserPermissionController extends Controller
             'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'fingerling', 'infrastructure',
             'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'awpb',
             'costtab', 'projectdesignreport', 'vegitable', 'fruit', 'goat', 'dairy', 'poultary',
-            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions'
+            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions', 'nutrient_rich_home_garden'
         ];
 
         $moduleLabels = [
@@ -69,7 +69,8 @@ class UserPermissionController extends Controller
     'other_crops' => 'Other Crops',
     'agriculture' => 'Agriculture List',
     'livestocks' => 'Livestock List',
-    'expressions' => 'Expression of Interest (EOI)'
+    'expressions' => 'Expression of Interest (EOI)',
+    'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden'
 ];
 
 
