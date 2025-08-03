@@ -232,6 +232,31 @@
             
             vertical-align: middle !important;
         }
+        .locked-status {
+            background-color: #198754 !important; /* Bootstrap success */
+            opacity: 0.85;
+            cursor: not-allowed !important;
+        }
+        .locked-status i {
+            font-size: 0.85rem;
+            margin-left: 6px;
+        }
+        .status-select {
+            appearance: none;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .highlight-row {
+            background-color: #fff8dc !important; /* Light yellow (same as the Youth highlight) */
+        }
+
         
     </style>
 
@@ -324,15 +349,16 @@
                             <th>Mobile Phone</th>
                             <th>Market Problem</th>
                             <th>Business Title</th>
-                            <th>Status</th> <!-- status column first -->
-                            <th>Actions</th> <!-- then actions -->
+                            <th>Status</th> 
+                            <th>Actions</th>                           
                         </tr>
                     </thead>
                     
                     <tbody>
                     @foreach($proposals as $youth_proposal)
 
-                    <tr>
+                    <tr @if($youth_proposal->status === 'Agreement Signed') class="highlight-row" @endif>
+
                         <td>{{ $youth_proposal->id }}</td>
                         <td>{{ $youth_proposal->organization_name }}</td>
                         <td>{{ $youth_proposal->contact_person }}</td>
@@ -357,11 +383,15 @@
                                 };
                             @endphp
                             
-                            <div id="status-{{ $youth_proposal->id }}">
-                                <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $youth_proposal->id }})">
-                                    {{ $status ?? 'Select Status' }}
-                                </span>
-                            </div>
+                            <div id="status-{{ $youth_proposal->id }}" data-current-status="{{ $status }}">
+    <span class="badge {{ $badgeClass }} status-badge {{ $status === 'Agreement Signed' ? 'locked-status' : '' }}"
+        style="cursor:pointer;" onclick="toggleDropdown({{ $youth_proposal->id }})">
+        {{ $status ?? 'Select Status' }}
+        @if($status === 'Agreement Signed')
+            <i class="fas fa-lock ml-2"></i>
+        @endif
+    </span>
+</div>
                             
                             <!-- Hidden Form for Submission -->
                             <form id="status-form-{{ $youth_proposal->id }}" action="{{ route('youth-proposals.updateStatus', $youth_proposal->id) }}" method="POST" style="display:none;">
@@ -372,13 +402,14 @@
                         </td>
                             
                             
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center">
+                        <td class="text-center align-middle">
+                            <div class="d-flex justify-content-center align-items-center" style="gap: 6px;">
                                 <a href="{{ route('youth-proposals.show', $youth_proposal->id) }}" class="btn btn-sm view-button" title="View">
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                 </a>
                             </div>
                         </td>
+
                             
                     </tr>
                     @endforeach
@@ -462,11 +493,26 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    
 function toggleDropdown(eoiId) {
+    const statusSpan = document.querySelector(`#status-${eoiId} .status-badge`);
+    const currentStatus = statusSpan.innerText.trim();
+
+    if (currentStatus === 'Agreement Signed') {
+        Swal.fire({
+            icon: 'info',
+            title: 'Status Locked',
+            text: 'This proposal has already been marked as "Agreement Signed" and cannot be modified.',
+            confirmButtonColor: '#126926'
+        });
+        return;
+    }
+
     const statusDiv = document.getElementById('status-' + eoiId);
 
     statusDiv.innerHTML = `
-        <select class="form-control form-control-sm" onchange="submitStatus(this, ${eoiId})">
+    <div class="d-flex justify-content-center">
+        <select class="form-control form-control-sm status-select text-center" onchange="submitStatus(this, ${eoiId})" style="width: 180px;">
             <option value="">-- Select Status --</option>
             <option value="Evaluation Completed">Evaluation Completed</option>
             <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
@@ -478,27 +524,79 @@ function toggleDropdown(eoiId) {
             <option value="Agreement Signed">Agreement Signed</option>
             <option value="Clear">Clear Status</option>
         </select>
-    `;
+    </div>
+`;
+
 }
 
 function submitStatus(select, eoiId) {
-    const value = select.value;
+    const selectedValue = select.value;
     const form = document.getElementById('status-form-' + eoiId);
     const input = document.getElementById('status-input-' + eoiId);
 
-    if (value === 'Clear') {
-        input.value = '';
+    if (selectedValue === "") return;
+
+    // If "Agreement Signed" is selected, confirm with SweetAlert
+    if (selectedValue === 'Agreement Signed') {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Once marked as "Agreement Signed", the status cannot be changed later.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, mark as signed',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#126926',
+            cancelButtonColor: '#d33'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                input.value = selectedValue;
+                form.submit();
+            } else {
+                // Restore badge without change
+                revertToOriginalBadge(eoiId);
+            }
+        });
     } else {
-        input.value = value;
+        // No confirmation, submit directly
+        input.value = selectedValue;
+        form.submit();
+    }
+}
+
+// This restores the original badge view when cancel is clicked
+function revertToOriginalBadge(eoiId) {
+    const originalStatusSpan = document.querySelector(`#status-${eoiId}`);
+    const currentStatus = originalStatusSpan.getAttribute('data-current-status');
+
+    // Define badge class again (can be extracted to reuse logic from Blade if needed)
+    let badgeClass = 'badge-secondary';
+    switch (currentStatus) {
+        case 'Evaluation Completed':
+            badgeClass = 'badge-success'; break;
+        case 'Internal Review Committee Approved':
+            badgeClass = 'badge-warning'; break;
+        case 'Business Proposal Submitted':
+            badgeClass = 'badge-info'; break;
+        case 'BPEC Evaluation':
+            badgeClass = 'badge-secondary'; break;
+        case 'BPEC Approved':
+            badgeClass = 'badge-primary'; break;
+        case 'NSC Approved':
+            badgeClass = 'badge-dark'; break;
+        case 'IFAD Approved':
+            badgeClass = 'badge-light text-dark'; break;
+        case 'Agreement Signed':
+            badgeClass = 'badge-success'; break;
     }
 
-    const badgeContainer = document.getElementById('status-' + eoiId);
-    badgeContainer.style.transition = "opacity 0.5s ease";
-    badgeContainer.style.opacity = 0;
-
-    setTimeout(() => {
-        form.submit();
-    }, 800);
+    // Rebuild the original badge
+    let lockIcon = currentStatus === 'Agreement Signed' ? `<i class="fas fa-lock ml-2"></i>` : '';
+    originalStatusSpan.innerHTML = `
+        <span class="badge ${badgeClass} status-badge ${currentStatus === 'Agreement Signed' ? 'locked-status' : ''}"
+            style="cursor:pointer;" onclick="toggleDropdown(${eoiId})">
+            ${currentStatus ?? 'Select Status'} ${lockIcon}
+        </span>
+    `;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

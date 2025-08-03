@@ -199,7 +199,7 @@
                             <th style="width: 200px;">Mobile Phone</th>
                             <th style="width: 260px;">Business Title</th>
                             <th style="width: 220px;">Status</th>
-                            <th style="width: 220px;">Actions</th>
+                            <th style="width: 230px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -211,16 +211,16 @@
                             <td>{{ $proposal->mobile_phone }}</td>
                             <td>{{ $proposal->business_title }}</td>
                             <td>{{ $proposal->status }}</td>
-                            <td>
-                                <div style="display: flex; gap: 6px;">
-                                    <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button" title="View Proposal">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn btn-sm view-button" title="View Beneficiaries">
-                                        <i class="fas fa-users"></i> View Beneficiaries
-                                    </a>
-                                </div>
-                            </td>
+                            <td style="text-align: center; vertical-align: middle;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+        <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button" title="View Proposal">
+            <i class="fas fa-eye"></i>
+        </a>
+        <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn btn-sm view-button" title="View Beneficiaries">
+            <i class="fas fa-users"></i> View Beneficiaries
+        </a>
+    </div>
+</td>
 
 
                         </tr>
