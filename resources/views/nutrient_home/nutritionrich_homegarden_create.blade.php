@@ -159,10 +159,10 @@
 
         <!-- Crop Information -->
         <div class="section-header">Crop Information</div>
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="crop_category">Crop Category</label>
             <input type="text" class="form-control" name="crop_category" value="{{ $cropCategory }}" readonly>
-        </div>
+        </div> -->
         <div class="form-group">
             <label>Crop Name *</label>
             <input type="text" name="crop_name" class="form-control" value="{{ old('crop_name', $cropName) }}" required>

@@ -11,7 +11,7 @@ class NutrientRichHomeGardenController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Beneficiary::where('input1', 'agriculture');
+        $query = Beneficiary::where('project_type', 'nutrition');
 
         if ($request->has('search')) {
             $search = $request->search;

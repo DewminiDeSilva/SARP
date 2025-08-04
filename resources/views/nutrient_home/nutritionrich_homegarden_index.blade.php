@@ -162,7 +162,7 @@
 
 <style>
     .custom-blue-button {
-    background-color: #00d2ff;
+    background-color: #28a745;
     color: black;
     border: none;
     padding: 8px 16px;
@@ -173,7 +173,7 @@
 }
 
 .custom-blue-button:hover {
-    background-color: #00bde0;
+    background-color: #28a745;
     color: black;
     text-decoration: none !important; /* No underline on hover */
 }
