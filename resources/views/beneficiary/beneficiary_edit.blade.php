@@ -368,6 +368,74 @@ select[disabled] {
     <input type="hidden" name="cascade_name" value="{{ $beneficiary->cascade_name }}">
 </div>
 
+<!-- Project Type (Display Only) -->
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label><strong>Type of Project:</strong></label>
+        <input type="text" class="form-control" value="{{ $beneficiary->project_type ?? 'N/A' }}" readonly>
+    </div>
+</div>
+
+<!-- Conditional Display Based on Project Type -->
+@if ($beneficiary->project_type === 'resilience')
+    <!-- Resilience: Agriculture or Livestock -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Agriculture/Livestock:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->input1 ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+
+    @if ($beneficiary->input1 === 'agriculture')
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label><strong>Crop Category:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input2 ?? 'N/A' }}" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label><strong>Crop Name:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input3 ?? 'N/A' }}" readonly>
+            </div>
+        </div>
+    @elseif ($beneficiary->input1 === 'livestock')
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label><strong>Livestock Type:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input2 ?? 'N/A' }}" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label><strong>Production Focus:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input3 ?? 'N/A' }}" readonly>
+            </div>
+        </div>
+    @endif
+
+@elseif ($beneficiary->project_type === 'youth')
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Youth Proposal Name:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->youthProposal->organization_name ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+
+@elseif ($beneficiary->project_type === '4p')
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Company Name (4P Project):</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->eoi_business_title ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+
+@elseif ($beneficiary->project_type === 'nutrition')
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Nutrition Program Name:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->input1 ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+@endif
+
+
 
                 <!-- ✅ YOUTH ENTERPRISE SECTION (EDIT MODE) -->
                 <div class="form-group mt-3" id="youthEnterpriseProjectName" style="{{ old('project_type', $beneficiary->project_type) === 'youth' ? '' : 'display: none;' }}">

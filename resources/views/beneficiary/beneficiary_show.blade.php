@@ -563,7 +563,13 @@
             <strong>Company Name (4P Project):</strong>
         </div>
         <div class="col-md-6">
-            {{ $beneficiary->input1 ?? 'N/A' }}
+            {{ $beneficiary->eoi_business_title ?? 'N/A' }}
+        </div>
+        <div class="col-md-6">
+            <strong>4P Project Category:</strong>
+        </div>
+        <div class="col-md-6">
+            {{ $beneficiary->eoi_category ?? 'N/A' }}
         </div>
     </div>
 
