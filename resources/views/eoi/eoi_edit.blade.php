@@ -154,6 +154,7 @@
         <div class="card">
             <div class="card-body">
                 <form action="{{ route('expressions.update', $expression->id) }}" method="POST" enctype="multipart/form-data">
+                <!-- <form action="{{ route('expressions.update', $expression->id) }}" method="POST" enctype="multipart/form-data"> -->
 
                     @csrf
                     @method('PUT')
@@ -372,7 +373,7 @@
     </table>
 </div>
 <!-- Implementation Plan -->
-<div class="mb-3">
+ <div class="mb-3">
     <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
     <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
 
@@ -382,8 +383,16 @@
     </a>
 @endif
 </div>
+<!-- <div class="mb-3">
+    <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
+    <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
 
-
+   @if ($expression->implementation_plan)
+    <a href="{{ asset('uploads/implementation_plans/' . $expression->implementation_plan) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+        View Existing Plan
+    </a>
+@endif
+</div> -->
 
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary px-5">Update</button>
