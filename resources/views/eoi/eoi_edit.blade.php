@@ -371,6 +371,7 @@
         </tbody>
     </table>
 </div>
+<!-- Implementation Plan -->
 <div class="mb-3">
     <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
     <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
@@ -464,6 +465,7 @@ $(document).ready(function () {
     });
 
     // Expected Outcomes
+    
     $(document).on('click', '.add-outcome', function () {
         $('#outcomes-wrapper').append(`
             <div class="input-group mb-2">
