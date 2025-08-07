@@ -54,7 +54,7 @@ class EOIController extends Controller
     'funding_source' => 'nullable|array',
     'assistance_required' => 'nullable|array',
 
-    'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+    'implementation_plan' => 'nullable|file|mimes:pdf|max:1048576',
     'category' => 'nullable|string',
     'status' => 'nullable|string',
 ]);
@@ -143,7 +143,7 @@ class EOIController extends Controller
     'funding_source' => 'nullable|array',
     'assistance_required' => 'nullable|array',
 
-    'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+    'implementation_plan' => 'nullable|file|mimes:pdf|max:1048576',
     'category' => 'nullable|string',
     'status' => 'nullable|string',
 ]);
@@ -175,12 +175,13 @@ class EOIController extends Controller
     $expression->assistance_required = json_encode($request->assistance_required);
 
     // Update implementation plan if new file is uploaded
-    if ($request->hasFile('implementation_plan')) {
-        $file = $request->file('implementation_plan');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->storeAs('public/implementation_plans', $filename);
-        $expression->implementation_plan = $filename;
-    }
+   if ($request->hasFile('implementation_plan')) {
+    $file = $request->file('implementation_plan');
+    $filename = time() . '_' . $file->getClientOriginalName();
+    $file->move(public_path('uploads/implementation_plans'), $filename);
+    $expression->implementation_plan = $filename;
+}
+
     $expression->category = $request->category;
 
     $expression->save();
