@@ -391,6 +391,7 @@ public function index(Request $request)
         'input2' => 'nullable|string|max:255',
         'input3' => 'nullable|string|max:255',
         'project_type' => 'nullable|string|max:255',
+        'youth_proposal_id' => 'nullable|exists:youth_proposals,id',
     ]);
  
 
@@ -399,8 +400,8 @@ public function index(Request $request)
 
     // Create a new beneficiary instance after validation
     $beneficiary = new Beneficiary($request->all());
-    $beneficiary->eoi_business_title = $request->eoi_business_title;
-    $beneficiary->eoi_category = $request->eoi_category;
+    // $beneficiary->eoi_business_title = $request->eoi_business_title;
+    // $beneficiary->eoi_category = $request->eoi_category;
 
     $beneficiary->save();
 
