@@ -15,8 +15,11 @@ class EOIController extends Controller
 {
     $entries = request()->get('entries', 10);
     $expressions = \App\Models\EOI::latest()->paginate($entries)->appends(['entries' => $entries]);
-
-    return view('eoi.eoi_index', compact('expressions', 'entries'));
+    
+    $totalEOIs = EOI::count();
+    $rejectedEOIs = EOI::where('status', 'Rejected')->count();
+    $bpecApprovedEOIs = EOI::where('status', 'BPEC Approved')->count();
+    return view('eoi.eoi_index', compact('expressions', 'entries','totalEOIs', 'rejectedEOIs', 'bpecApprovedEOIs'));
 }
     /**
      * Show the form for creating a new EOI.
