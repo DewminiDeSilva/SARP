@@ -302,7 +302,7 @@
     @php
         $status = $expression->status;
         $badgeClass = match($status) {
-            'Evaluation Completed' => 'badge-success',
+            'Rejected' => 'badge-danger',
             'Internal Review Committee Approved' => 'badge-warning',
             'Business Proposal Submitted' => 'badge-info',
             'BPEC Evaluation' => 'badge-secondary',
@@ -310,6 +310,8 @@
             'NSC Approved' => 'badge-dark',
             'IFAD Approved' => 'badge-light text-dark',
             'Agreement Signed' => 'badge-success',
+            'Not working Status' => 'badge-light text-dark',
+
             default => 'badge-secondary'
         };
     @endphp
@@ -446,7 +448,7 @@ function toggleDropdown(eoiId) {
     statusDiv.innerHTML = `
         <select class="form-control form-control-sm" onchange="submitStatus(this, ${eoiId})">
             <option value="">-- Select Status --</option>
-            <option value="Evaluation Completed">Evaluation Completed</option>
+            <option value="Rejected">Rejected</option>
             <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
             <option value="Business Proposal Submitted">Business Proposal Submitted</option>
             <option value="BPEC Evaluation">BPEC Evaluation</option>
@@ -454,7 +456,7 @@ function toggleDropdown(eoiId) {
             <option value="NSC Approved">NSC Approved</option>
             <option value="IFAD Approved">IFAD Approved</option>
             <option value="Agreement Signed">Agreement Signed</option>
-            <option value="Clear">Clear Status</option>
+            <option value="Not working Status">Not working Status</option>
         </select>
     `;
 }
