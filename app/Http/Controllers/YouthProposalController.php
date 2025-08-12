@@ -130,8 +130,20 @@ class YouthProposalController extends Controller
     public function edit($id)
     {
         $proposal = YouthProposal::findOrFail($id);
-        return view('youth_proposals.edit', compact('proposal'));
+
+        // decode arrays for the form
+        $proposal->risk_factors_decoded     = json_decode($proposal->risk_factors, true) ?? ['risks' => [], 'mitigations' => []];
+        $proposal->investment_breakdown_decoded = json_decode($proposal->investment_breakdown, true) ?? [];
+        $proposal->project_coverage_decoded = json_decode($proposal->project_coverage, true) ?? [];
+        $proposal->expected_outputs_decoded = json_decode($proposal->expected_outputs, true) ?? [];
+        $proposal->expected_outcomes_decoded = json_decode($proposal->expected_outcomes, true) ?? [];
+        $proposal->funding_source_decoded   = json_decode($proposal->funding_source, true) ?? [];
+        $proposal->assistance_required_decoded = json_decode($proposal->assistance_required, true) ?? [];
+
+        // NOTE: your view path says 'youth_proposals.edit'
+        return view('youth_proposal.youth_proposal_edit', compact('proposal'));
     }
+
 
     /**
      * Update the specified Youth Proposal in storage.
@@ -153,7 +165,6 @@ class YouthProposalController extends Controller
             'project_justification' => 'nullable|string',
             'project_benefits' => 'nullable|string',
             'category' => 'nullable|string',
-            'status' => 'nullable|string',
             'risks' => 'nullable|array',
             'mitigations' => 'nullable|array',
             'investment_breakdown' => 'nullable|array',
@@ -162,7 +173,7 @@ class YouthProposalController extends Controller
             'expected_outcomes' => 'nullable|array',
             'funding_source' => 'nullable|array',
             'assistance_required' => 'nullable|array',
-            'implementation_plan' => 'nullable|file|mimes:pdf|max:2048',
+            'implementation_plan' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $proposal = YouthProposal::findOrFail($id);
@@ -180,7 +191,9 @@ class YouthProposalController extends Controller
         $proposal->project_justification = $request->project_justification;
         $proposal->project_benefits = $request->project_benefits;
         $proposal->category = $request->category;
-        $proposal->status = $request->status; // ✅ Add this below $proposal->category
+        if ($request->has('status') && $request->filled('status')) {
+            $proposal->status = $request->status;
+        }
         $proposal->risk_factors = json_encode([
             'risks' => $request->risks,
             'mitigations' => $request->mitigations,
@@ -193,11 +206,8 @@ class YouthProposalController extends Controller
         $proposal->assistance_required = json_encode($request->assistance_required);
 
         if ($request->hasFile('implementation_plan')) {
-            $file = $request->file('implementation_plan');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/youth_proposals', $filename);
-            $proposal->implementation_plan = 'storage/youth_proposals/' . $filename;
-
+            $path = $request->file('implementation_plan')->store('youth_proposals', 'public'); // same as store()
+            $proposal->implementation_plan = $path; // DO NOT prefix with "storage/"
         }
 
         $proposal->save();

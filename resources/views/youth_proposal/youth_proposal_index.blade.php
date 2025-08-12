@@ -256,8 +256,36 @@
         .highlight-row {
             background-color: #fff8dc !important; /* Light yellow (same as the Youth highlight) */
         }
-
         
+        
+    </style>
+
+    <style>
+      .delete-button{
+          color:#fff;
+          background-color:#ff4b5b; /* danger */
+          border:2px solid transparent;
+          width:60px;height:40px;
+          display:flex;align-items:center;justify-content:center;
+          transition:border .3s ease, background-color .3s ease;
+      }
+      .delete-button:hover{ border-color:#b3000c; }
+
+              /* Force icon colors */
+        .edit-button i {
+            color: orange; /* green */
+        }
+        .delete-button i {
+            color: rgba(255, 255, 255, 1); /* red */
+        }
+        
+        .edit-button:hover i {
+            color: orange; /* stay green on hover */
+        }
+        .delete-button:hover i {
+            color: rgba(255, 255, 255, 1); /* stay red on hover */
+        }
+
     </style>
 
 </head>
@@ -384,14 +412,14 @@
                             @endphp
                             
                             <div id="status-{{ $youth_proposal->id }}" data-current-status="{{ $status }}">
-    <span class="badge {{ $badgeClass }} status-badge {{ $status === 'Agreement Signed' ? 'locked-status' : '' }}"
-        style="cursor:pointer;" onclick="toggleDropdown({{ $youth_proposal->id }})">
-        {{ $status ?? 'Select Status' }}
-        @if($status === 'Agreement Signed')
-            <i class="fas fa-lock ml-2"></i>
-        @endif
-    </span>
-</div>
+                                <span class="badge {{ $badgeClass }} status-badge {{ $status === 'Agreement Signed' ? 'locked-status' : '' }}"
+                                    style="cursor:pointer;" onclick="toggleDropdown({{ $youth_proposal->id }})">
+                                    {{ $status ?? 'Select Status' }}
+                                    @if($status === 'Agreement Signed')
+                                        <i class="fas fa-lock ml-2"></i>
+                                    @endif
+                                </span>
+                            </div>
                             
                             <!-- Hidden Form for Submission -->
                             <form id="status-form-{{ $youth_proposal->id }}" action="{{ route('youth-proposals.updateStatus', $youth_proposal->id) }}" method="POST" style="display:none;">
@@ -407,6 +435,26 @@
                                 <a href="{{ route('youth-proposals.show', $youth_proposal->id) }}" class="btn btn-sm view-button" title="View">
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                 </a>
+
+                                {{-- Edit --}}
+                                <a href="{{ route('youth-proposals.edit', $youth_proposal->id) }}" class="btn btn-sm edit-button" title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+
+                                {{-- Delete --}}
+                                <form id="delete-form" method="POST" style="display:none;">
+                                  @csrf
+                                  @method('DELETE')
+                                </form>
+
+                                <button type="button"
+                                        class="btn btn-sm delete-button"
+                                        title="Delete"
+                                        data-id="{{ $youth_proposal->id }}"
+                                        data-status="{{ $youth_proposal->status }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
                             </div>
                         </td>
 
@@ -477,158 +525,225 @@
 </div>
 
 
-<!-- JS for sidebar toggle -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const sidebar = document.querySelector('.left-column');
-        const content = document.querySelector('.right-column');
-        const toggleButton = document.getElementById('sidebarToggle');
-
-        toggleButton.addEventListener('click', function () {
-            sidebar.classList.toggle('d-none');
-            content.style.flex = sidebar.classList.contains('d-none') ? '0 0 100%' : '0 0 80%';
-        });
-    });
-</script>
+<!-- Keep this INCLUDE exactly once, before any code that uses Swal -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    
-function toggleDropdown(eoiId) {
-    const statusSpan = document.querySelector(`#status-${eoiId} .status-badge`);
-    const currentStatus = statusSpan.innerText.trim();
+  // Sidebar toggle
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.querySelector('.left-column');
+    const content = document.querySelector('.right-column');
+    const toggleButton = document.getElementById('sidebarToggle');
 
+    if (toggleButton) {
+      toggleButton.addEventListener('click', function () {
+        sidebar.classList.toggle('d-none');
+        content.style.flex = sidebar.classList.contains('d-none') ? '0 0 100%' : '0 0 80%';
+      });
+    }
+  });
+
+  // --- Status handlers (GLOBAL so inline onclick works) ---
+  window.toggleDropdown = function (eoiId) {
+    const statusSpan = document.querySelector('#status-' + eoiId + ' .status-badge');
+    if (!statusSpan) return;
+
+    const currentStatus = (statusSpan.innerText || '').trim();
     if (currentStatus === 'Agreement Signed') {
-        Swal.fire({
-            icon: 'info',
-            title: 'Status Locked',
-            text: 'This proposal has already been marked as "Agreement Signed" and cannot be modified.',
-            confirmButtonColor: '#126926'
-        });
-        return;
+      Swal.fire({
+        icon: 'info',
+        title: 'Status Locked',
+        text: 'This proposal has already been marked as "Agreement Signed" and cannot be modified.',
+        confirmButtonColor: '#126926'
+      });
+      return;
     }
 
     const statusDiv = document.getElementById('status-' + eoiId);
+    if (!statusDiv) return;
 
     statusDiv.innerHTML = `
-    <div class="d-flex justify-content-center">
-        <select class="form-control form-control-sm status-select text-center" onchange="submitStatus(this, ${eoiId})" style="width: 180px;">
-            <option value="">-- Select Status --</option>
-            <option value="Evaluation Completed">Evaluation Completed</option>
-            <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
-            <option value="Business Proposal Submitted">Business Proposal Submitted</option>
-            <option value="BPEC Evaluation">BPEC Evaluation</option>
-            <option value="BPEC Approved">BPEC Approved</option>
-            <option value="NSC Approved">NSC Approved</option>
-            <option value="IFAD Approved">IFAD Approved</option>
-            <option value="Agreement Signed">Agreement Signed</option>
-            <option value="Clear">Clear Status</option>
+      <div class="d-flex justify-content-center">
+        <select class="form-control form-control-sm status-select text-center"
+                onchange="submitStatus(this, ${eoiId})" style="width: 180px;">
+          <option value="">-- Select Status --</option>
+          <option value="Evaluation Completed">Evaluation Completed</option>
+          <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
+          <option value="Business Proposal Submitted">Business Proposal Submitted</option>
+          <option value="BPEC Evaluation">BPEC Evaluation</option>
+          <option value="BPEC Approved">BPEC Approved</option>
+          <option value="NSC Approved">NSC Approved</option>
+          <option value="IFAD Approved">IFAD Approved</option>
+          <option value="Agreement Signed">Agreement Signed</option>
+          <option value="Clear">Clear Status</option>
         </select>
-    </div>
-`;
+      </div>`;
+  };
 
-}
-
-function submitStatus(select, eoiId) {
+  window.submitStatus = function (select, eoiId) {
     const selectedValue = select.value;
-    const form = document.getElementById('status-form-' + eoiId);
+    if (!selectedValue) return;
+
+    const form  = document.getElementById('status-form-' + eoiId);
     const input = document.getElementById('status-input-' + eoiId);
+    if (!form || !input) return;
 
-    if (selectedValue === "") return;
-
-    // If "Agreement Signed" is selected, confirm with SweetAlert
     if (selectedValue === 'Agreement Signed') {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Once marked as "Agreement Signed", the status cannot be changed later.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, mark as signed',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#126926',
-            cancelButtonColor: '#d33'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                input.value = selectedValue;
-                form.submit();
-            } else {
-                // Restore badge without change
-                revertToOriginalBadge(eoiId);
-            }
-        });
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Once marked as "Agreement Signed", the status cannot be changed later.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, mark as signed',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#126926',
+        cancelButtonColor: '#d33'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          input.value = selectedValue;
+          form.submit();
+        } else {
+          window.revertToOriginalBadge(eoiId);
+        }
+      });
     } else {
-        // No confirmation, submit directly
-        input.value = selectedValue;
-        form.submit();
+      input.value = selectedValue === 'Clear' ? '' : selectedValue;
+      form.submit();
     }
-}
+  };
 
-// This restores the original badge view when cancel is clicked
-function revertToOriginalBadge(eoiId) {
-    const originalStatusSpan = document.querySelector(`#status-${eoiId}`);
-    const currentStatus = originalStatusSpan.getAttribute('data-current-status');
+  window.revertToOriginalBadge = function (eoiId) {
+    const container = document.getElementById('status-' + eoiId);
+    if (!container) return;
 
-    // Define badge class again (can be extracted to reuse logic from Blade if needed)
+    const currentStatus = container.getAttribute('data-current-status') || '';
     let badgeClass = 'badge-secondary';
     switch (currentStatus) {
-        case 'Evaluation Completed':
-            badgeClass = 'badge-success'; break;
-        case 'Internal Review Committee Approved':
-            badgeClass = 'badge-warning'; break;
-        case 'Business Proposal Submitted':
-            badgeClass = 'badge-info'; break;
-        case 'BPEC Evaluation':
-            badgeClass = 'badge-secondary'; break;
-        case 'BPEC Approved':
-            badgeClass = 'badge-primary'; break;
-        case 'NSC Approved':
-            badgeClass = 'badge-dark'; break;
-        case 'IFAD Approved':
-            badgeClass = 'badge-light text-dark'; break;
-        case 'Agreement Signed':
-            badgeClass = 'badge-success'; break;
+      case 'Evaluation Completed': badgeClass = 'badge-success'; break;
+      case 'Internal Review Committee Approved': badgeClass = 'badge-warning'; break;
+      case 'Business Proposal Submitted': badgeClass = 'badge-info'; break;
+      case 'BPEC Evaluation': badgeClass = 'badge-secondary'; break;
+      case 'BPEC Approved': badgeClass = 'badge-primary'; break;
+      case 'NSC Approved': badgeClass = 'badge-dark'; break;
+      case 'IFAD Approved': badgeClass = 'badge-light text-dark'; break;
+      case 'Agreement Signed': badgeClass = 'badge-success'; break;
     }
-
-    // Rebuild the original badge
-    let lockIcon = currentStatus === 'Agreement Signed' ? `<i class="fas fa-lock ml-2"></i>` : '';
-    originalStatusSpan.innerHTML = `
-        <span class="badge ${badgeClass} status-badge ${currentStatus === 'Agreement Signed' ? 'locked-status' : ''}"
-            style="cursor:pointer;" onclick="toggleDropdown(${eoiId})">
-            ${currentStatus ?? 'Select Status'} ${lockIcon}
-        </span>
-    `;
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            timer: 2000,
-            showConfirmButton: false
-        });
-    @endif
-
-    @if(session('cleared'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Cleared!',
-            text: '{{ session('cleared') }}',
-            timer: 2000,
-            showConfirmButton: false
-        });
-    @endif
-
-    document.querySelectorAll('[id^=status-]').forEach(function(div) {
-        div.style.opacity = 0;
-        div.style.transition = "opacity 0.5s ease";
-        setTimeout(() => {
-            div.style.opacity = 1;
-        }, 100);
-    });
-});
+    var lockIcon = currentStatus === 'Agreement Signed' ? '<i class="fas fa-lock ml-2"></i>' : '';
+    container.innerHTML =
+      '<span class="badge ' + badgeClass + ' status-badge ' + (currentStatus === 'Agreement Signed' ? 'locked-status' : '') +
+      '" style="cursor:pointer;" onclick="toggleDropdown(' + eoiId + ')">' +
+      (currentStatus || 'Select Status') + ' ' + lockIcon + '</span>';
+  };
 </script>
+
+{{-- Flash (success/cleared) with back/forward guard + session forget --}}
+@if(session('success'))
+<script>
+  window.addEventListener('pageshow', function (e) {
+    try {
+      if (e && e.persisted) return;
+      var navEntries = (window.performance && performance.getEntriesByType) ? performance.getEntriesByType('navigation') : null;
+      var nav = (navEntries && navEntries.length) ? navEntries[0] : null;
+      if (nav && nav.type === 'back_forward') return;
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: @json(session('success')),
+        timer: 2000,
+        showConfirmButton: false,
+        confirmButtonColor: '#126926'
+      }).then(function () {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.href);
+        }
+      });
+    } catch (err) {
+      console.warn('Flash block error:', err);
+    }
+  });
+</script>
+@php(session()->forget('success'))
+@endif
+
+@if(session('cleared'))
+<script>
+  window.addEventListener('pageshow', function (e) {
+    try {
+      if (e && e.persisted) return;
+      var navEntries = (window.performance && performance.getEntriesByType) ? performance.getEntriesByType('navigation') : null;
+      var nav = (navEntries && navEntries.length) ? navEntries[0] : null;
+      if (nav && nav.type === 'back_forward') return;
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Cleared!',
+        text: @json(session('cleared')),
+        timer: 2000,
+        showConfirmButton: false,
+        confirmButtonColor: '#126926'
+      }).then(function () {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.href);
+        }
+      });
+    } catch (err) {
+      console.warn('Flash block error:', err);
+    }
+  });
+</script>
+@php(session()->forget('cleared'))
+@endif
+
+<script>
+  // Fade-in rows (optional)
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[id^=status-]').forEach(function (div) {
+      div.style.opacity = 0;
+      div.style.transition = 'opacity 0.5s ease';
+      setTimeout(function () { div.style.opacity = 1; }, 100);
+    });
+  });
+
+  // Delete confirmation
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.delete-button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const status = (this.dataset.status || '').trim();
+
+        if (status === 'Agreement Signed') {
+          Swal.fire({
+            icon: 'info',
+            title: 'Deletion disabled',
+            text: 'This proposal is marked as "Agreement Signed" and cannot be deleted.',
+            confirmButtonColor: '#126926'
+          });
+          return;
+        }
+
+        Swal.fire({
+          title: 'Delete this proposal?',
+          text: 'This action cannot be undone.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#6c757d'
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            const form = document.getElementById('delete-form');
+            if (!form) return;
+            form.action = "{{ url('youth-proposals') }}/" + id; // RESTful destroy route
+            form.submit();
+          }
+        });
+      });
+    });
+  });
+</script>
+
 
 </body>
 </html>
