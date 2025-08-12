@@ -170,7 +170,7 @@
                         </div>
                         <div class="card-body">
                             <h2 class="card-title font-weight-bold">{{ $totalBeneficiaries }}</h2>
-                            <p class="card-text">All registered beneficiaries</p>
+                            <p class="card-text">All registered beneficiaries with youth projects</p>
                         </div>
                     </div>
                 </div>

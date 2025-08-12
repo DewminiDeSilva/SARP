@@ -15,25 +15,22 @@ class YouthController extends Controller
      */
    public function index(Request $request)
 {
-    // 1) Get all beneficiary IDs with youth records
+    // Beneficiaries that already have Youth Enterprise records
     $youthBeneficiaryIds = Youth::pluck('beneficiary_id')->unique();
 
-    // 2) Build base query
-    $query = Beneficiary::select(
-        'id',
-        'nic',
-        'name_with_initials',
-        'gender',
-        'address',
-        'phone',
-        'tank_name'
-    );
+    // Base: ONLY beneficiaries that are linked to a Youth Organization (via youth_proposal_id relation)
+    // Make sure Beneficiary has: public function youthProposal() { return $this->belongsTo(\App\Models\YouthProposal::class); }
+    $query = Beneficiary::select('id','nic','name_with_initials','gender','address','phone','tank_name')
+        ->whereHas('youthProposal'); // <-- key change
 
-    // 3) Apply search
+    // (Optional) If you want ONLY Agreement Signed organizations, replace the above with:
+    // ->whereHas('youthProposal', fn($q) => $q->where('status', 'Agreement Signed'));
+
+    // Search
     if ($request->filled('search')) {
         $search = $request->search;
         $query->where(function ($q) use ($search) {
-            if (strtolower($search) === 'male' || strtolower($search) === 'female') {
+            if (in_array(strtolower($search), ['male','female'])) {
                 $q->where('gender', strtolower($search));
             } else {
                 $q->where('nic', 'like', "%{$search}%")
@@ -43,19 +40,18 @@ class YouthController extends Controller
                   ->orWhere('tank_name', 'like', "%{$search}%");
             }
         });
-
     }
 
-    // 4) Apply status filter
+    // Status filter (within the org-linked base set)
     if ($request->filled('status')) {
-        if ($request->status == 'with') {
+        if ($request->status === 'with') {
             $query->whereIn('id', $youthBeneficiaryIds);
-        } elseif ($request->status == 'pending') {
+        } elseif ($request->status === 'pending') {
             $query->whereNotIn('id', $youthBeneficiaryIds);
         }
     }
 
-    // 5) Paginate and append filters
+    // Paginate
     $beneficiaries = $query->orderBy('created_at', 'desc')
         ->paginate(10)
         ->appends([
@@ -63,12 +59,15 @@ class YouthController extends Controller
             'status' => $request->status,
         ]);
 
-    // 6) Summary counts
-    $totalBeneficiaries = Beneficiary::count();
-    $withYouthCount     = Youth::distinct('beneficiary_id')->count('beneficiary_id');
-    $pendingYouthCount  = $totalBeneficiaries - $withYouthCount;
+    // Summaries: only among beneficiaries linked to Youth Organizations
+    $totalBeneficiaries = Beneficiary::whereHas('youthProposal')->count();
 
-    // 7) Return view
+    $withYouthCount = Beneficiary::whereHas('youthProposal')
+        ->whereIn('id', $youthBeneficiaryIds)
+        ->count();
+
+    $pendingYouthCount = $totalBeneficiaries - $withYouthCount;
+
     return view('youth.youth_index', compact(
         'beneficiaries',
         'youthBeneficiaryIds',
@@ -77,6 +76,7 @@ class YouthController extends Controller
         'pendingYouthCount'
     ));
 }
+
 
 
 
