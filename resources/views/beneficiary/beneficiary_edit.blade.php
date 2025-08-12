@@ -261,6 +261,12 @@
 .right-column {
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
+select[disabled] {
+    color: #000 !important; /* Force black text */
+    background-color: #e9ecef; /* Optional: light gray background */
+    opacity: 1; /* Override default opacity */
+}
+
 
 </style>
 
@@ -299,39 +305,137 @@
                 @csrf
                 @method('PUT')
 
+                <!-- Tank Name and Province -->
+<div class="form-row">
+    <div class="form-group">
+        <label for="tankDropdown" class="form-label dropdown-label color-label col-form-label">Select Tank Name</label>
+        <select id="tankDropdown" class="form-control greenbackground" name="tank_name" disabled>
+            <option selected>{{ $beneficiary->tank_name ?? 'N/A' }}</option>
+        </select>
+        <input type="hidden" name="tank_name" value="{{ $beneficiary->tank_name }}">
+    </div>
+    <div class="form-group">
+        <label for="provinceDropdown" class="form-label dropdown-label color-label col-form-label">Province</label>
+        <select id="provinceDropdown" class="form-control greenbackground" name="province_name" disabled>
+            <option selected>{{ $beneficiary->province_name ?? 'N/A' }}</option>
+        </select>
+        <input type="hidden" name="province_name" value="{{ $beneficiary->province_name }}">
+    </div>
+</div>
+
+<!-- District and DS Division -->
+<div class="form-row">
+    <div class="form-group">
+        <label for="districtDropdown" class="form-label bold-label color-label">District</label>
+        <select class="form-control greenbackground" id="districtDropdown" name="district_name" disabled>
+            <option selected>{{ $beneficiary->district_name ?? 'N/A' }}</option>
+        </select>
+        <input type="hidden" name="district_name" value="{{ $beneficiary->district_name }}">
+    </div>
+    <div class="form-group">
+        <label for="dsDivisionDropdown" class="form-label bold-label color-label">DS Division</label>
+        <select class="form-control greenbackground" id="dsDivisionDropdown" name="ds_division_name" disabled>
+            <option selected>{{ $beneficiary->ds_division_name ?? 'N/A' }}</option>
+        </select>
+        <input type="hidden" name="ds_division_name" value="{{ $beneficiary->ds_division_name }}">
+    </div>
+</div>
+
+<!-- GN Division and ASC -->
+<div class="form-row">
+    <div class="form-group">
+        <label for="gnDropdown" class="form-label bold-label color-label">GN Division</label>
+        <select class="form-control greenbackground" id="gnDropdown" name="gn_division_name" disabled>
+            <option selected>{{ $beneficiary->gn_division_name ?? 'N/A' }}</option>
+        </select>
+        <input type="hidden" name="gn_division_name" value="{{ $beneficiary->gn_division_name }}">
+    </div>
+    <div class="form-group">
+        <label for="ascDropdown" class="form-label bold-label color-label">ASC</label>
+        <select class="form-control greenbackground" id="ascDropdown" name="as_center" disabled>
+            <option selected>{{ $beneficiary->as_center ?? 'N/A' }}</option>
+        </select>
+        <input type="hidden" name="as_center" value="{{ $beneficiary->as_center }}">
+    </div>
+</div>
+
+<!-- Cascade Name -->
+<div class="form-group">
+    <label for="cascadeDropdown" class="form-label bold-label color-label">Cascade Name</label>
+    <select class="form-control greenbackground" id="cascadeDropdown" name="cascade_name" disabled>
+        <option selected>{{ $beneficiary->cascade_name ?? 'N/A' }}</option>
+    </select>
+    <input type="hidden" name="cascade_name" value="{{ $beneficiary->cascade_name }}">
+</div>
+
+<!-- Project Type (Display Only) -->
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label><strong>Type of Project:</strong></label>
+        <input type="text" class="form-control" value="{{ $beneficiary->project_type ?? 'N/A' }}" readonly>
+    </div>
+</div>
+
+<!-- Conditional Display Based on Project Type -->
+@if ($beneficiary->project_type === 'resilience')
+    <!-- Resilience: Agriculture or Livestock -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Agriculture/Livestock:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->input1 ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+
+    @if ($beneficiary->input1 === 'agriculture')
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label><strong>Crop Category:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input2 ?? 'N/A' }}" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label><strong>Crop Name:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input3 ?? 'N/A' }}" readonly>
+            </div>
+        </div>
+    @elseif ($beneficiary->input1 === 'livestock')
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label><strong>Livestock Type:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input2 ?? 'N/A' }}" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label><strong>Production Focus:</strong></label>
+                <input type="text" class="form-control" value="{{ $beneficiary->input3 ?? 'N/A' }}" readonly>
+            </div>
+        </div>
+    @endif
+
+@elseif ($beneficiary->project_type === 'youth')
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Youth Proposal Name:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->youthProposal->organization_name ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+
+@elseif ($beneficiary->project_type === '4p')
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Company Name (4P Project):</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->eoi_business_title ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+
+@elseif ($beneficiary->project_type === 'nutrition')
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label><strong>Nutrition Program Name:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->input1 ?? 'N/A' }}" readonly>
+        </div>
+    </div>
+@endif
 
 
-                <!-- Tank and Province -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tankDropdown" class="form-label dropdown-label color-label col-form-label">Select Tank Name</label>
-                        <select id="tankDropdown" class="form-control greenbackground" name="tank_name" required>
-                            <option value="{{ $beneficiary->tank_name }}" selected>{{ $beneficiary->tank_name }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="provinceDropdown" class="form-label dropdown-label color-label col-form-label">Province</label>
-                        <select class="form-control greenbackground" id="provinceDropdown" name="province_name" required>
-                            <option value="{{ $beneficiary->province_name }}" selected>{{ $beneficiary->province_name }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- District and DS Division -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="districtDropdown" class="form-label bold-label color-label">District</label>
-                        <select class="form-control greenbackground" id="districtDropdown" name="district_name" required>
-                            <option value="{{ $beneficiary->district_name }}" selected>{{ $beneficiary->district_name }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="dsDivisionDropdown" class="form-label bold-label color-label">DS Division</label>
-                        <select class="form-control greenbackground" id="dsDivisionDropdown" name="ds_division_name" required>
-                            <option value="{{ $beneficiary->ds_division_name }}" selected>{{ $beneficiary->ds_division_name }}</option>
-                        </select>
-                    </div>
-                </div>
 
                 <!-- ✅ YOUTH ENTERPRISE SECTION (EDIT MODE) -->
                 <div class="form-group mt-3" id="youthEnterpriseProjectName" style="{{ old('project_type', $beneficiary->project_type) === 'youth' ? '' : 'display: none;' }}">

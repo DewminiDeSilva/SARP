@@ -36,7 +36,7 @@ li {
     padding: 10px; /* Add padding for the frame */
     border-radius: 5px; /* Rounded corners */
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
-    background-color: #0b6d1f; /* Background color */
+    background-color: #a1b1bdff; /* Background color */
 }
 
 li a {
@@ -47,7 +47,7 @@ li a {
 
 li:hover {
     border-color: #1C6008; /* Change frame border color on hover */
-    background-color: #1C6008; /* Change background color on hover */
+    background-color: #68878dff; /* Change background color on hover */
     cursor: pointer; /* Change cursor to pointer on hover */
 }
 

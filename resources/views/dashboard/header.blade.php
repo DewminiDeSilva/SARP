@@ -76,7 +76,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        background: linear-gradient(to bottom, rgb(76, 167, 88), #a8d5ba);
+        background: linear-gradient(to bottom, #527076ff, #a1b1bdff);
         color: black;
         z-index: 1000;
         padding: 10px 20px;

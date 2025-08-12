@@ -224,6 +224,45 @@
     border-color: #28a745;
 }
 </style>
+<style>
+    .stats-wrap {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    @media (max-width: 991.98px) { .stats-wrap { grid-template-columns: repeat(6, 1fr); } }
+    @media (max-width: 575.98px) { .stats-wrap { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-card {
+        grid-column: span 4; /* 3 cards per row on desktop */
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background: #fff;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+    }
+    .stat-head {
+        background: #d6f1f5; /* light blue like your sample */
+        padding: 10px 14px;
+        font-weight: 600;
+        color: #234b5a;
+        border-bottom: 1px solid #cfe7ec;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .stat-body {
+        padding: 16px;
+        text-align: center;
+        font-size: 1.25rem;
+        color: #2c3e50;
+    }
+</style>
 
 </head>
 <body>
@@ -255,8 +294,50 @@
             <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
             </div>
 
+          <!-- <div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total EOIs Received</h5>
+                <h3>{{ $totalEOIs }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Rejected EOIs</h5>
+                <h3>{{ $rejectedEOIs }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">BPEC Approved</h5>
+                <h3>{{ $bpecApprovedEOIs }}</h3>
+            </div>
+        </div>
+    </div>
+</div> -->
 
 
+<div class="stats-wrap">
+    <div class="stat-card">
+        <div class="stat-head">Total EOIs Received</div>
+        <div class="stat-body">{{ number_format($totalEOIs) }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-head">Rejected EOIs</div>
+        <div class="stat-body">{{ number_format($rejectedEOIs) }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-head">BPEC Approved</div>
+        <div class="stat-body">{{ number_format($bpecApprovedEOIs) }}</div>
+    </div>
+</div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                 <thead class="thead-light">
@@ -302,7 +383,7 @@
     @php
         $status = $expression->status;
         $badgeClass = match($status) {
-            'Evaluation Completed' => 'badge-success',
+            'Rejected' => 'badge-danger',
             'Internal Review Committee Approved' => 'badge-warning',
             'Business Proposal Submitted' => 'badge-info',
             'BPEC Evaluation' => 'badge-secondary',
@@ -310,6 +391,8 @@
             'NSC Approved' => 'badge-dark',
             'IFAD Approved' => 'badge-light text-dark',
             'Agreement Signed' => 'badge-success',
+            'Not working Status' => 'badge-light text-dark',
+
             default => 'badge-secondary'
         };
     @endphp
@@ -446,7 +529,7 @@ function toggleDropdown(eoiId) {
     statusDiv.innerHTML = `
         <select class="form-control form-control-sm" onchange="submitStatus(this, ${eoiId})">
             <option value="">-- Select Status --</option>
-            <option value="Evaluation Completed">Evaluation Completed</option>
+            <option value="Rejected">Rejected</option>
             <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
             <option value="Business Proposal Submitted">Business Proposal Submitted</option>
             <option value="BPEC Evaluation">BPEC Evaluation</option>
@@ -454,7 +537,7 @@ function toggleDropdown(eoiId) {
             <option value="NSC Approved">NSC Approved</option>
             <option value="IFAD Approved">IFAD Approved</option>
             <option value="Agreement Signed">Agreement Signed</option>
-            <option value="Clear">Clear Status</option>
+            <option value="Not working Status">Not working Status</option>
         </select>
     `;
 }

@@ -153,7 +153,9 @@
 
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('expressions.update', $expression->id) }}" method="POST">
+                <form action="{{ route('expressions.update', $expression->id) }}" method="POST" enctype="multipart/form-data">
+                <!-- <form action="{{ route('expressions.update', $expression->id) }}" method="POST" enctype="multipart/form-data"> -->
+
                     @csrf
                     @method('PUT')
 
@@ -161,7 +163,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Name of the Organization</label>
-                            <input type="text" class="form-control" name="organization_name" value="{{ $expression->organization_name }}" required>
+                            <input type="text" class="form-control" name="organization_name" value="{{ $expression->organization_name }}" >
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Registration Details (if any)</label>
@@ -172,17 +174,17 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Contact Person</label>
-                            <input type="text" class="form-control" name="contact_person" value="{{ $expression->contact_person }}" required>
+                            <input type="text" class="form-control" name="contact_person" value="{{ $expression->contact_person }}" >
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Mobile Phone</label>
-                            <input type="text" class="form-control" name="mobile_phone" value="{{ $expression->mobile_phone }}" required>
+                            <input type="text" class="form-control" name="mobile_phone" value="{{ $expression->mobile_phone }}" >
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Address</label>
-                        <textarea class="form-control" name="address" rows="2" required>{{ $expression->address }}</textarea>
+                        <textarea class="form-control" name="address" rows="2" >{{ $expression->address }}</textarea>
                     </div>
 
                     <div class="row mb-3">
@@ -198,23 +200,23 @@
 
                     <div class="mb-3">
                         <label class="form-label">Problem in the Marketplace</label>
-                        <textarea class="form-control" name="market_problem" required>{{ $expression->market_problem }}</textarea>
+                        <textarea class="form-control" name="market_problem" >{{ $expression->market_problem }}</textarea>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Business Concept Title</label>
-                        <input type="text" class="form-control" name="business_title" value="{{ $expression->business_title }}" required>
+                        <input type="text" class="form-control" name="business_title" value="{{ $expression->business_title }}">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Business Objectives</label>
-                        <textarea class="form-control" name="business_objectives" required>{{ $expression->business_objectives }}</textarea>
+                        <textarea class="form-control" name="business_objectives" >{{ $expression->business_objectives }}</textarea>
                     </div>
                     
                     <div class="mb-3">
     <label class="form-label">Category</label>
     <input type="text" name="category" class="form-control" 
-        value="{{$expression->category}}" required>
+        value="{{$expression->category}}" >
 </div>
 
 
@@ -370,6 +372,27 @@
         </tbody>
     </table>
 </div>
+<!-- Implementation Plan -->
+ <div class="mb-3">
+    <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
+    <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
+
+   @if ($expression->implementation_plan)
+    <a href="{{ asset('uploads/implementation_plans/' . $expression->implementation_plan) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+        View Existing Plan
+    </a>
+@endif
+</div>
+<!-- <div class="mb-3">
+    <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
+    <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
+
+   @if ($expression->implementation_plan)
+    <a href="{{ asset('uploads/implementation_plans/' . $expression->implementation_plan) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+        View Existing Plan
+    </a>
+@endif
+</div> -->
 
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary px-5">Update</button>
@@ -451,6 +474,7 @@ $(document).ready(function () {
     });
 
     // Expected Outcomes
+    
     $(document).on('click', '.add-outcome', function () {
         $('#outcomes-wrapper').append(`
             <div class="input-group mb-2">

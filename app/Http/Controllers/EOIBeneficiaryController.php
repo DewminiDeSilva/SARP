@@ -38,8 +38,10 @@ class EOIBeneficiaryController extends Controller
     {
         $request->validate([
             'beneficiary_id' => 'required|exists:beneficiaries,id',
-            'eoi_business_title' => $request->eoi_business_title, 
-            'eoi_category' => $request->eoi_category,          
+            // 'eoi_business_title' => $request->eoi_business_title, 
+            // 'eoi_category' => $request->eoi_category,          
+            'eoi_business_title' => 'required|string|max:255',
+            'eoi_category' => 'required|string|max:255',
             'planting_date' => 'nullable|date',
             'total_acres' => 'nullable|numeric',
             'total_livestock_area' => 'nullable|numeric',
