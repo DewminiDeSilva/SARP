@@ -16,6 +16,8 @@ class EOIController extends Controller
         // controls from the toolbar
         $entries = (int) $request->get('entries', 10);
         $search  = trim($request->get('search', ''));
+         $sortBy  = $request->get('sortBy', 'eoi_code'); // Default sort column
+         $sortDir = $request->get('sortDir', 'desc');    // Default sort direction
 
         // base query
         $query = EOI::query();
@@ -51,6 +53,10 @@ class EOIController extends Controller
         $agreementSigned  = EOI::where('status', 'Agreement Signed')->count();
         $ifadApproved     = EOI::where('status', 'IFAD Approved')->count();
         $nscApproved      = EOI::where('status', 'NSC Approved')->count();
+
+        $query->orderBy($sortBy, $sortDir);
+         $expressions = $query->paginate($entries)->appends($request->only('entries', 'search', 'sortBy', 'sortDir'));
+
 
         return view('eoi.eoi_index', compact(
             'expressions',
