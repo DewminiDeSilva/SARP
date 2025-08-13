@@ -262,6 +262,38 @@
         font-size: 1.25rem;
         color: #2c3e50;
     }
+   .search-form .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.search-form .form-control {
+    font-size: 0.9rem;
+    padding: 6px 8px;
+}
+
+.search-form .btn {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+}
+.form-select-sm, 
+.form-control-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+.btn-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+}
+
+td {
+    vertical-align: middle;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 300px; /* adjust per your layout */
+}
+
+
 </style>
 
 </head>
@@ -288,39 +320,7 @@
                 <h2 style="color: green;">Expressions of Interest</h2>
                 <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Agreement Sign EOI</a>
             </div>
-           
-            <div class="mb-3">
-           
-            <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
-            </div>
-
-          <!-- <div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card text-white bg-success">
-            <div class="card-body">
-                <h5 class="card-title">Total EOIs Received</h5>
-                <h3>{{ $totalEOIs }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-danger">
-            <div class="card-body">
-                <h5 class="card-title">Rejected EOIs</h5>
-                <h3>{{ $rejectedEOIs }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h5 class="card-title">BPEC Approved</h5>
-                <h3>{{ $bpecApprovedEOIs }}</h3>
-            </div>
-        </div>
-    </div>
-</div> -->
-
+            
 
 <div class="stats-wrap">
     <div class="stat-card">
@@ -337,17 +337,63 @@
         <div class="stat-head">BPEC Approved</div>
         <div class="stat-body">{{ number_format($bpecApprovedEOIs) }}</div>
     </div>
+
+           <div class="stat-card">
+        <div class="stat-head">Agreement Signed</div>
+        <div class="stat-body">{{ number_format($agreementSigned) }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-head">IFAD Approved</div>
+        <div class="stat-body">{{ number_format($ifadApproved) }}</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-head">NSC Approved</div>
+        <div class="stat-body">{{ number_format($nscApproved) }}</div>
+    </div>
+           
 </div>
+
+
+            <div class="mb-3">
+           
+            <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
+            </div>
+            
+         <form method="GET" action="{{ route('expressions.index') }}" class="mb-3">
+  <div class="d-flex justify-content-between align-items-center flex-wrap">
+    <!-- Left side: Show entries -->
+    <div class="d-flex align-items-center mb-2">
+        <label class="me-2 mb-0">Show</label>
+        <select name="entries" onchange="this.form.submit()" class="form-select form-select-sm w-auto">
+            @foreach([10,25,50,100] as $n)
+                <option value="{{ $n }}" {{ (int)($entries ?? 10) === $n ? 'selected' : '' }}>{{ $n }}</option>
+            @endforeach
+        </select>
+        <label class="ms-2 mb-0">entries</label>
+    </div>
+
+    <!-- Right side: Search -->
+    <div class="d-flex align-items-center mb-2">
+        <input type="text" name="search" value="{{ $search ?? '' }}" 
+               class="form-control form-control-sm me-2" 
+               placeholder="Search...">
+        <button type="submit" class="btn btn-success btn-sm">Search</button>
+    </div>
+</div>
+</form>
             <div class="table-responsive">
                 <table class="table table-bordered">
                 <thead class="thead-light">
         <tr>
-        <th>ID</th>
+        <th>EOI ID</th>
         <th>Organization Name</th>
         <th>Contact Person</th>
-        <th>Mobile Phone</th>
-        <th>Market Problem</th>
+        <!-- <th>Mobile Phone</th>
+        <th>Market Problem</th> -->
         <th>Business Title</th>
+        <th>Category</th>
         <th>Status</th> <!-- status column first -->
         <th>Actions</th> <!-- then actions -->
     </tr>
@@ -355,12 +401,14 @@
                     <tbody>
                         @foreach($expressions as $expression)
                         <tr>
-    <td>{{ $expression->id }}</td>
+    <!-- <td>{{ $expression->id }}</td> -->
+    <td>{{ $expression->eoi_code}}</td>
     <td>{{ $expression->organization_name }}</td>
     <td>{{ $expression->contact_person }}</td>
-    <td>{{ $expression->mobile_phone }}</td>
-    <td>{{ Str::limit($expression->market_problem, 50) }}</td>
+    <!-- <td>{{ $expression->mobile_phone }}</td>
+    <td>{{ Str::limit($expression->market_problem, 50) }}</td> -->
     <td>{{ $expression->business_title }}</td>
+     <td>{{ $expression->category }}</td>
 
     <!-- ✅ Status Column -->
     <!-- <td>

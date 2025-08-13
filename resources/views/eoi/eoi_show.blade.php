@@ -173,6 +173,7 @@
         <h2 class="header-title">Expression of Interest Details</h2>
 
         <div class="custom-frame">
+            <div class="info"><label>EOI ID:</label> <p>{{ $expression->eoi_code ?? 'N/A' }}</p></div>
             <div class="info"><label>Name of the Organization:</label> <p>{{ $expression->organization_name }}</p></div>
             <div class="info"><label>Registration Details:</label> <p>{{ $expression->registration_details ?? 'N/A' }}</p></div>
             <div class="info"><label>Contact Person:</label> <p>{{ $expression->contact_person }}</p></div>
@@ -203,16 +204,18 @@
     <table class="table table-bordered">
         <thead class="table-success">
             <tr>
-                <th>Area</th>
                 <th>No. of Farmers</th>
+                <th>Area</th>
+             
                 <th>Acreage</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($coverage as $row)
                 <tr>
-                    <td>{{ $row['area'] ?? 'N/A' }}</td>
                     <td>{{ $row['farmers'] ?? '0' }}</td>
+                    <td>{{ $row['area'] ?? 'N/A' }}</td>
+                   
                     <td>{{ $row['acreage'] ?? '0' }}</td>
                 </tr>
             @empty

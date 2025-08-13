@@ -101,11 +101,11 @@ class YouthController extends Controller
      */
     public function store(Request $request)
 {
-    // ✅ Validate all inputs including file and dynamic fields
+    //  Validate all inputs including file and dynamic fields
     $validated = $request->validate([
         'beneficiary_id' => 'required|exists:beneficiaries,id',
 
-        // 🌱 Enterprise Information
+        //  Enterprise Information
         'enterprise_name' => 'nullable|string|max:255',
         'registration_number' => 'nullable|string|max:255',
         'institute_of_registration' => 'nullable|string|max:255',
@@ -121,7 +121,7 @@ class YouthController extends Controller
         'list_of_distributors' => 'nullable|string',
         'business_plan' => 'nullable|file|mimes:pdf|max:10240',
 
-        // 📦 Credit Static Fields
+        //  Credit Static Fields
         'bank_name' => 'nullable|string|max:255',
         'branch' => 'nullable|string|max:255',
         'account_number' => 'nullable|string|max:50',
@@ -132,11 +132,11 @@ class YouthController extends Controller
         'number_of_installments' => 'nullable|string|max:50',
         'installment_due_date' => 'nullable|date',
 
-        // 💳 Credit Balance Fields
+        //  Credit Balance Fields
         'credit_balance_date' => 'nullable|date',
         'credit_balance_value' => 'nullable|string|max:255',
 
-        // 📋 Dynamic JSON Fields
+        //  Dynamic JSON Fields
         'asset_details' => 'nullable|array',
         'youth_contributions' => 'nullable|array',
         'promoter_contributions' => 'nullable|array',
@@ -150,7 +150,7 @@ class YouthController extends Controller
         $validated['business_plan'] = $path;
     }
 
-    // 🧠 Process JSON fields (add/remove capable)
+    // Process JSON fields (add/remove capable)
     $validated['asset_details'] = isset($request->asset_details['asset_name'], $request->asset_details['asset_value']) 
         ? json_encode(array_map(function ($name, $value) {
             return ['asset_name' => $name, 'asset_value' => $value];

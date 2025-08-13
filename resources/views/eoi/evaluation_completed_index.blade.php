@@ -193,7 +193,7 @@
                 <table class="table table-bordered">
                     <thead class="thead-light">
                         <tr>
-                            <th>ID</th>
+                            <th>EOI ID</th>
                             <th>Organization Name</th>
                             <th>Contact Person</th>
                             <th>Mobile Phone</th>
@@ -205,7 +205,7 @@
                     <tbody>
                         @forelse ($completedExpressions as $expression)
                         <tr>
-                            <td>{{ $expression->id }}</td>
+                            <td>{{ $expression->eoi_code }}</td>
                             <td>{{ $expression->organization_name }}</td>
                             <td>{{ $expression->contact_person }}</td>
                             <td>{{ $expression->mobile_phone }}</td>
