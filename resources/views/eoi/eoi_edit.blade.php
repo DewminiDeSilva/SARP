@@ -162,6 +162,11 @@
                     {{-- Input Fields --}}
                     <div class="row mb-3">
                         <div class="col-md-6">
+                            <label class="form-label">EOI ID</label>
+                            <input type="text" class="form-control" name="eoi_code" placeholder="Enter EOI Id" value="{{ $expression->eoi_code }}">
+                        </div>
+
+                        <div class="col-md-6">
                             <label class="form-label">Name of the Organization</label>
                             <input type="text" class="form-control" name="organization_name" value="{{ $expression->organization_name }}" >
                         </div>

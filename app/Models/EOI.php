@@ -12,6 +12,7 @@ class EOI extends Model
     protected $table = 'expressions_of_interest'; // Ensure correct table name
 
     protected $fillable = [
+        'eoi_code',
         'organization_name',
         'registration_details',
         'contact_person',

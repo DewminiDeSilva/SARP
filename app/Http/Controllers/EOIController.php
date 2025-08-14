@@ -11,16 +11,65 @@ class EOIController extends Controller
     /**
      * Display a listing of EOIs.
      */
-    public function index()
-{
-    $entries = request()->get('entries', 10);
-    $expressions = \App\Models\EOI::latest()->paginate($entries)->appends(['entries' => $entries]);
-    
-    $totalEOIs = EOI::count();
-    $rejectedEOIs = EOI::where('status', 'Rejected')->count();
-    $bpecApprovedEOIs = EOI::where('status', 'BPEC Approved')->count();
-    return view('eoi.eoi_index', compact('expressions', 'entries','totalEOIs', 'rejectedEOIs', 'bpecApprovedEOIs'));
-}
+   public function index(Request $request)
+    {
+        // controls from the toolbar
+        $entries = (int) $request->get('entries', 10);
+        $search  = trim($request->get('search', ''));
+         $sortBy  = $request->get('sortBy', 'eoi_code'); // Default sort column
+         $sortDir = $request->get('sortDir', 'desc');    // Default sort direction
+
+        // base query
+        $query = EOI::query();
+
+        // search across visible columns in your table
+        if ($search !== '') {
+            $like = "%{$search}%";
+            $query->where(function ($q) use ($like, $search) {
+                $q->where('organization_name', 'like', $like)
+                    ->orWhere('eoi_code', 'like', $like)
+                  ->orWhere('contact_person',   'like', $like)
+                  ->orWhere('business_title',   'like', $like)
+                  ->orWhere('category',         'like', $like)   // <- use your actual column name
+                  ->orWhere('status',           'like', $like)
+                  ->orWhere('mobile_phone',     'like', $like);
+
+                // also allow searching by exact numeric ID
+                if (is_numeric($search)) {
+                    $q->orWhere('id', (int) $search);
+                }
+            });
+        }
+
+        // paginate (keep params when switching pages)
+        $expressions = $query->latest()
+            ->paginate($entries)
+            ->appends($request->only('entries', 'search'));
+
+        // summary counts (overall, not filtered)
+        $totalEOIs        = EOI::count();
+        $rejectedEOIs     = EOI::where('status', 'Rejected')->count();
+        $bpecApprovedEOIs = EOI::where('status', 'BPEC Approved')->count();
+        $agreementSigned  = EOI::where('status', 'Agreement Signed')->count();
+        $ifadApproved     = EOI::where('status', 'IFAD Approved')->count();
+        $nscApproved      = EOI::where('status', 'NSC Approved')->count();
+
+        $query->orderBy($sortBy, $sortDir);
+         $expressions = $query->paginate($entries)->appends($request->only('entries', 'search', 'sortBy', 'sortDir'));
+
+
+        return view('eoi.eoi_index', compact(
+            'expressions',
+            'entries',
+            'search',
+            'totalEOIs',
+            'rejectedEOIs',
+            'bpecApprovedEOIs',
+            'agreementSigned',
+            'ifadApproved',
+            'nscApproved'
+        ));
+    }
     /**
      * Show the form for creating a new EOI.
      */
@@ -34,6 +83,7 @@ class EOIController extends Controller
     public function store(Request $request)
 {
    $request->validate([
+    'eoi_code' => 'nullable|string|max:255',
     'organization_name' => 'nullable|string|max:255',
     'registration_details' => 'nullable|string|max:255',
     'contact_person' => 'nullable|string|max:255',
@@ -62,6 +112,7 @@ class EOIController extends Controller
     'status' => 'nullable|string',
 ]);
     $expression = new EOI();
+    $expression->eoi_code = $request->eoi_code;
     $expression->organization_name = $request->organization_name;
     $expression->registration_details = $request->registration_details;
     $expression->contact_person = $request->contact_person;
@@ -123,6 +174,7 @@ class EOIController extends Controller
     public function update(Request $request, $id)
 {
     $request->validate([
+    'eoi_code' => 'nullable|string|max:255',
     'organization_name' => 'nullable|string|max:255',
     'registration_details' => 'nullable|string|max:255',
     'contact_person' => 'nullable|string|max:255',
@@ -151,6 +203,7 @@ class EOIController extends Controller
     'status' => 'nullable|string',
 ]);
     $expression = EOI::findOrFail($id);
+    $expression->eoi_code = $request->eoi_code;
     $expression->organization_name = $request->organization_name;
     $expression->registration_details = $request->registration_details;
     $expression->contact_person = $request->contact_person;

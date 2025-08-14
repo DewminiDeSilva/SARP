@@ -124,6 +124,10 @@
 
                 {{-- Your existing fields go here (unchanged) --}}
                 <!-- ... All form fields from previous version ... -->
+                 <div class="mb-3">
+                        <label class="form-label">EOI ID</label>
+                        <input type="text" class="form-control" name="eoi_code" placeholder="Enter EOI Id" value="{{ old('eoi_code') }}">
+                    </div>
 
                   <div class="mb-3">
                         <label class="form-label">Name of the Organization</label>
@@ -239,16 +243,17 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Area</th>
                     <th>No. of Farmers</th>
+                    <th>Area</th>
                     <th>Acreage</th>
                     <th><button type="button" class="btn btn-success add-coverage">+</button></th>
                 </tr>
             </thead>
             <tbody id="coverage-table">
                 <tr>
-                    <td><input type="text" name="project_coverage[0][area]" class="form-control"></td>
                     <td><input type="number" name="project_coverage[0][farmers]" class="form-control"></td>
+                    <td><input type="text" name="project_coverage[0][area]" class="form-control"></td>
+                    
                     <td><input type="number" name="project_coverage[0][acreage]" class="form-control"></td>
                     <td><button type="button" class="btn btn-danger remove-coverage">-</button></td>
                 </tr>
@@ -322,7 +327,7 @@
 
  <!-- ✅ Implementation Plan (PDF Upload) -->
  <div class="mb-3">
-        <label class="form-label">Upload Implementation Plan (Gantt Chart PDF)</label>
+        <label class="form-label">Project proposal with implementation plan (pdf)</label>
         <input type="file" class="form-control" name="implementation_plan" accept="application/pdf">
     </div>
 
