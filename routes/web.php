@@ -1157,23 +1157,7 @@ Route::middleware(['auth', 'check.permission:infrastructure,view'])->group(funct
 
 
 
-    Route::get('/dashboard', function () {
-        $maleCount = Beneficiary::where('gender', 'male')->count();
-        $femaleCount = Beneficiary::where('gender', 'female')->count();
-        $youthCount = Beneficiary::where('age','<', 30)->count();
-        $middleAgeCount = Beneficiary::where('age','>=', 30)->count();
-
-        return view('dashboard.dashboard', compact('maleCount', 'femaleCount', 'youthCount', 'middleAgeCount'));
-    });
-
-
-
-    Route::get('/dashboard', function () {
-        return view('dashboard.dashboard');
-    });
-    Route::get('/in', function () {
-        return view('dashboard.dashboardC');
-    });
+    
     Route::get('/Training', function () {
         return view('training.training_program');
     });
@@ -2057,7 +2041,7 @@ Route::patch('/expressions/{id}/update-status', [EOIController::class, 'updateSt
 
 // Route::get('/dashboard', [BeneficiaryController::class, 'dashboard'])->name('dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 ///
 
