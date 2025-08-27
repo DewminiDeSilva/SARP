@@ -49,6 +49,30 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
+    /* Home Button Styles */
+    .home-button-container {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .home-btn {
+      background: #059669;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+    }
+
+    .home-btn:hover {
+      background: #059669;
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -66,7 +90,7 @@
     /* Main Content Area */
     .main-content-area {
       margin-top: 100px;
-      margin-left: 20vw;
+      margin-left: 0;
       padding: var(--spacing-xl);
       background: var(--bg-color);
       min-height: calc(100vh - 100px);
@@ -79,18 +103,19 @@
     /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--spacing-lg);
-      margin-bottom: var(--spacing-xl);
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
     }
 
     .card {
       background: var(--panel-color);
-      border-radius: var(--radius-lg);
-      padding: var(--spacing-xl);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
       border: 1px solid var(--border-color);
       box-shadow: var(--shadow-sm);
       transition: all 0.2s ease;
+      min-height: 120px;
     }
 
     .card:hover {
@@ -106,22 +131,22 @@
     }
 
     .card-title {
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       font-weight: 500;
       color: var(--text-secondary);
-      line-height: 1.4;
-      margin: 0;
+      line-height: 1.3;
+      margin: 0 0 var(--spacing-xs) 0;
     }
 
     .card-badge {
       background: var(--success-color);
       color: white;
-      padding: var(--spacing-xs) var(--spacing-sm);
+      padding: var(--spacing-xs);
       border-radius: 50%;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      min-width: 24px;
-      height: 24px;
+      min-width: 20px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -129,7 +154,7 @@
     }
 
     .card-value {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--text-primary);
       margin: 0;
@@ -138,6 +163,12 @@
     /* Wide Card */
     .card-wide {
       grid-column: span 2;
+    }
+
+    /* Chart Card */
+    .card-chart {
+      grid-column: span 4;
+      text-align: center;
     }
 
     .form-group {
@@ -230,31 +261,35 @@
     /* Chart Section */
     .chart-section {
       background: var(--panel-color);
-      border-radius: var(--radius-lg);
-      padding: var(--spacing-xl);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
       border: 1px solid var(--border-color);
       box-shadow: var(--shadow-sm);
-      margin-top: var(--spacing-xl);
-      max-width: 600px;
+      margin-top: var(--spacing-lg);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .chart-title {
-      font-size: 1.125rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+      text-align: center;
     }
 
     .chart-container {
       display: flex;
       align-items: center;
-      gap: var(--spacing-xl);
+      justify-content: center;
+      gap: var(--spacing-lg);
       flex-wrap: wrap;
     }
 
     .chart-wrap {
-      width: 250px;
-      height: 250px;
+      width: 200px;
+      height: 200px;
       position: relative;
       flex-shrink: 0;
     }
@@ -274,14 +309,14 @@
     }
 
     #donut-center .big {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--text-primary);
       line-height: 1;
     }
 
     #donut-center .small {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
       margin-top: var(--spacing-xs);
     }
@@ -304,10 +339,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: var(--spacing-sm) var(--spacing-md);
+      padding: var(--spacing-xs) var(--spacing-sm);
       background: var(--border-light);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
+      margin-bottom: var(--spacing-xs);
     }
 
     .legend-left {
@@ -411,11 +447,17 @@
 
   @include('dashboard.header')
 
+ 
+
   <div class="main-content-area">
-    @include('dashboard.dashboardC')
+     
     @csrf
 
     <div class="right-column">
+      <!-- Home Button Container -->
+  <div class="home-button-container">
+    <a href="{{ route('beneficiary.index') }}" class="home-btn">Home</a>
+  </div>
       <!-- Data Cards -->
       <div class="cards-grid">
         <div class="card">
@@ -461,24 +503,13 @@
             </select>
           </div>
 
-          <div class="d-flex gap-3 mt-3">
-            <button class="btn btn-outline btn-sm">View</button>
-            <button class="btn btn-success btn-sm">Generate CSV</button>
-          </div>
+          
         </div>
 
         <!-- Quick Actions Card -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Quick Actions</h3>
-            <div class="card-badge">Actions</div>
-          </div>
+        
           
-          <div class="d-flex flex-column gap-2">
-            <a href="#" class="btn btn-primary btn-sm">Add New</a>
-            <a href="#" class="btn btn-outline btn-sm">Show Duplicates</a>
-          </div>
-        </div>
+          
 
         <!-- Module Selection Card -->
         <div class="card card-wide">
