@@ -12,39 +12,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
-    /* Modern Flat Design Variables */
+    /* Professional Dashboard Design Variables */
     :root {
-      --primary-color: #2563eb;
-      --secondary-color: #10b981;
-      --accent-color: #f59e0b;
-      --danger-color: #ef4444;
-      --success-color: #10b981;
-      --warning-color: #f59e0b;
-      --info-color: #3b82f6;
+      --primary-color: #5C3E9E;
+      --secondary-color: #4CAF50;
+      --accent-color: #FF9800;
+      --danger-color: #ea4335;
+      --success-color: #4CAF50;
+      --warning-color: #fbbc05;
+      --info-color: #2196F3;
+      --purple-color: #9C27B0;
+      --teal-color: #00BCD4;
       
-      --bg-color: #f8fafc;
+      --bg-color: #F0F2F8;
       --panel-color: #ffffff;
-      --text-primary: #1e293b;
-      --text-secondary: #64748b;
-      --text-muted: #94a3b8;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --text-muted: #adb5bd;
       
-      --border-color: #e2e8f0;
-      --border-light: #f1f5f9;
+      --border-color: #e9ecef;
+      --border-light: #f8f9fa;
       
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
       
-      --radius-sm: 6px;
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --radius-xl: 16px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
       
-      --spacing-xs: 4px;
-      --spacing-sm: 8px;
-      --spacing-md: 16px;
-      --spacing-lg: 24px;
-      --spacing-xl: 32px;
+      --spacing-xs: 6px;
+      --spacing-sm: 12px;
+      --spacing-md: 20px;
+      --spacing-lg: 28px;
+      --spacing-xl: 36px;
+      --spacing-2xl: 48px;
       
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
@@ -91,7 +95,7 @@
     .main-content-area {
       margin-top: 100px;
       margin-left: 0;
-      padding: var(--spacing-xl);
+      padding: var(--spacing-2xl);
       background: var(--bg-color);
       min-height: calc(100vh - 100px);
     }
@@ -103,61 +107,146 @@
     /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-lg);
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    /* KPI Cards Grid - 6 cards in 2x3 layout for better spacing */
+    #tank-kpi-section .cards-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, auto);
+      gap: var(--spacing-xl);
     }
 
     .card {
       background: var(--panel-color);
-      border-radius: var(--radius-md);
-      padding: var(--spacing-lg);
-      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-xl);
+      border: none;
       box-shadow: var(--shadow-sm);
-      transition: all 0.2s ease;
-      min-height: 120px;
+      transition: all 0.3s ease;
+      min-height: 180px;
+      position: relative;
+      overflow: hidden;
     }
 
     .card:hover {
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-lg);
       transform: translateY(-2px);
     }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--success-color);
+    }
+
+    /* Card-specific top border colors */
+    .card:nth-child(1)::before { background: var(--success-color); }
+    .card:nth-child(2)::before { background: var(--warning-color); }
+    .card:nth-child(3)::before { background: var(--success-color); }
+    .card:nth-child(4)::before { background: var(--info-color); }
+    .card:nth-child(5)::before { background: var(--purple-color); }
+    .card:nth-child(6)::before { background: var(--teal-color); }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
     }
 
     .card-title {
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: var(--text-secondary);
-      line-height: 1.3;
-      margin: 0 0 var(--spacing-xs) 0;
+      line-height: 1.2;
+      margin: 0 0 var(--spacing-sm) 0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
     }
 
     .card-badge {
       background: var(--success-color);
       color: white;
-      padding: var(--spacing-xs);
+      padding: var(--spacing-sm);
       border-radius: 50%;
-      font-size: 0.7rem;
+      font-size: 1rem;
       font-weight: 600;
-      min-width: 20px;
-      height: 20px;
+      min-width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
     }
 
+    /* Card-specific badge colors */
+    .card:nth-child(1) .card-badge { background: var(--success-color); }
+    .card:nth-child(2) .card-badge { background: var(--warning-color); }
+    .card:nth-child(3) .card-badge { background: var(--success-color); }
+    .card:nth-child(4) .card-badge { background: var(--info-color); }
+    .card:nth-child(5) .card-badge { background: var(--purple-color); }
+    .card:nth-child(6) .card-badge { background: var(--teal-color); }
+
     .card-value {
-      font-size: 1.5rem;
+      font-size: 2.25rem;
       font-weight: 700;
       color: var(--text-primary);
+      margin: 0 0 var(--spacing-sm) 0;
+      line-height: 1.1;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
       margin: 0;
+      font-weight: 500;
+    }
+
+    .card-progress {
+      margin-top: var(--spacing-sm);
+    }
+
+    .progress-bar-horizontal {
+      width: 100%;
+      height: 6px;
+      background: var(--border-light);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .progress-fill-horizontal {
+      height: 100%;
+      background: var(--info-color);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .budget-details {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: var(--spacing-sm);
+      line-height: 1.4;
+    }
+
+    .data-unavailable {
+      display: inline-block;
+      background: var(--border-light);
+      color: var(--text-muted);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-top: var(--spacing-sm);
+      border: 1px solid var(--border-color);
     }
 
     /* Wide Card */
@@ -262,29 +351,39 @@
     .chart-section {
       background: var(--panel-color);
       border-radius: var(--radius-md);
-      padding: var(--spacing-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      margin-top: var(--spacing-lg);
-      max-width: 800px;
+      padding: var(--spacing-2xl);
+      border: none;
+      box-shadow: var(--shadow-md);
+      margin-top: var(--spacing-2xl);
+      max-width: 1200px;
       margin-left: auto;
       margin-right: auto;
     }
 
     .chart-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
       margin-bottom: var(--spacing-md);
       text-align: center;
+      position: relative;
+    }
+
+    .chart-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+      font-weight: 400;
     }
 
     .chart-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: var(--spacing-lg);
+      gap: var(--spacing-2xl);
       flex-wrap: wrap;
+      margin-top: var(--spacing-lg);
     }
 
     .chart-wrap {
@@ -339,11 +438,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: var(--spacing-xs) var(--spacing-sm);
-      background: var(--border-light);
+      padding: var(--spacing-md);
+      background: var(--panel-color);
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
-      margin-bottom: var(--spacing-xs);
+      margin-bottom: var(--spacing-sm);
+      box-shadow: var(--shadow-sm);
     }
 
     .legend-left {
@@ -375,6 +475,11 @@
         grid-template-columns: repeat(2, 1fr);
       }
       
+      #tank-kpi-section .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, auto);
+      }
+      
       .card-wide {
         grid-column: span 1;
       }
@@ -383,7 +488,7 @@
     @media (max-width: 768px) {
       .main-content-area {
         margin-left: 0;
-        padding: var(--spacing-md);
+        padding: var(--spacing-lg);
       }
       
       .right-column {
@@ -392,6 +497,11 @@
       
       .cards-grid {
         grid-template-columns: 1fr;
+      }
+      
+      #tank-kpi-section .cards-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(6, auto);
       }
       
       .chart-container {
@@ -535,6 +645,113 @@
         </div>
       </div>
 
+      <!-- Tank Rehabilitation KPI Cards Section -->
+      <div class="chart-section" id="tank-kpi-section" style="display: none;">
+        <h2 class="chart-title">Tank Rehabilitation KPIs</h2>
+        <p class="chart-subtitle">Real-time monitoring and performance metrics</p>
+        
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Tanks</h3>
+              <div class="card-badge">
+                <i class="fas fa-water"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['total_tanks'] ?? 0 }}</p>
+            <p class="card-subtitle">Infrastructure projects</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Ongoing</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-tools"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['ongoing'] ?? 0 }}</p>
+            <p class="card-subtitle">Active rehabilitation</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Completed</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-check-circle"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['completed'] ?? 0 }}</p>
+            <p class="card-subtitle">Successfully finished</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Avg. Physical Progress %</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['avg_physical_progress'] ?? 0 }}%</p>
+            <p class="card-subtitle">Overall completion rate</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $tankRehabKPIs['avg_physical_progress'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Budget vs Spent (Utilization %)</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-coins"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['budget_utilization'] ?? 0 }}%</p>
+            <p class="card-subtitle">Efficient resource usage</p>
+            <div class="budget-details">
+              Budget: {{ number_format($tankRehabKPIs['total_budget'] ?? 0, 2) }} | 
+              Spent: {{ number_format($tankRehabKPIs['total_spent'] ?? 0, 2) }}
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Irrigated Area (ha)</h3>
+              <div class="card-badge" style="background: #059669;">
+                <i class="fas fa-map"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['irrigated_area'] ?? 0 }} ha</p>
+            <p class="card-subtitle">Agricultural coverage</p>
+            <div class="data-unavailable">Data not available</div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Capacity Restored (MCM)</h3>
+              <div class="card-badge" style="background: #0891b2;">
+                <i class="fas fa-tint"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $tankRehabKPIs['capacity_restored'] ?? 0 }} MCM</p>
+            <p class="card-subtitle">Water storage capacity</p>
+            <div class="data-unavailable">Data not available</div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Beneficiary HHs</h3>
+              <div class="card-badge" style="background: #dc2626;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ number_format($tankRehabKPIs['beneficiary_hhs'] ?? 0) }}</p>
+            <p class="card-subtitle">Households served</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Chart Section -->
       <div class="chart-section" id="tank-chart-section">
         <h2 class="chart-title">Tank Status Summary</h2>
@@ -543,7 +760,7 @@
           <div class="chart-wrap">
             <canvas id="tankDonut"></canvas>
             <div id="donut-center">
-              <div class="big">{{ $totalTanks ?? 0 }}</div>
+              <div class="big">{{ $tankRehabKPIs['total_tanks'] ?? 0 }}</div>
               <div class="small">Total Tanks</div>
             </div>
           </div>
@@ -555,14 +772,14 @@
                   <span class="legend-swatch" style="background: #ef4444;"></span>
                   <span class="legend-label">Completed</span>
                 </div>
-                <span class="legend-value">{{ $completedCount ?? 0 }}</span>
+                <span class="legend-value">{{ $tankRehabKPIs['completed'] ?? 0 }}</span>
               </li>
               <li class="legend-item">
                 <div class="legend-left">
                   <span class="legend-swatch" style="background: #f59e0b;"></span>
                   <span class="legend-label">Ongoing</span>
                 </div>
-                <span class="legend-value">{{ $ongoingCount ?? 0 }}</span>
+                <span class="legend-value">{{ $tankRehabKPIs['ongoing'] ?? 0 }}</span>
               </li>
               <li class="legend-item">
                 <div class="legend-left">
@@ -590,10 +807,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     (function(){
-      const completed = Number(@json($completedCount ?? 0));
-      const ongoing   = Number(@json($ongoingCount ?? 0));
+      // Use tank rehabilitation specific data instead of general tank data
+      const completed = Number(@json($tankRehabKPIs['completed'] ?? 0));
+      const ongoing   = Number(@json($tankRehabKPIs['ongoing'] ?? 0));
       const started   = Number(@json($startedCount ?? 0));
-      const total     = Number(@json($totalTanks ?? (completed + ongoing + started)));
+      const total     = Number(@json($tankRehabKPIs['total_tanks'] ?? 0));
 
       const data = [completed, ongoing, started];
       const labels = ['Completed','Ongoing','Started'];
@@ -651,10 +869,12 @@
       const moduleSelect = document.getElementById('module_id');
       const tankSelectionCard = document.getElementById('tank-selection-card');
       const tankChartSection = document.getElementById('tank-chart-section');
+      const tankKpiSection = document.getElementById('tank-kpi-section');
       const moduleSummarySection = document.getElementById('module-summary-section');
 
       // Initially hide tank chart and show module summary
       tankChartSection.style.display = 'none';
+      tankKpiSection.style.display = 'none';
       moduleSummarySection.style.display = 'block';
 
       moduleSelect.addEventListener('change', function() {
@@ -664,11 +884,13 @@
           // Show tank rehabilitation specific content
           tankSelectionCard.style.display = 'block';
           tankChartSection.style.display = 'block';
+          tankKpiSection.style.display = 'block';
           moduleSummarySection.style.display = 'none';
         } else if (selectedModule) {
           // Show module summary for other modules
           tankSelectionCard.style.display = 'none';
           tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
           moduleSummarySection.style.display = 'block';
           
           // Update module summary content
@@ -680,6 +902,7 @@
           // No module selected - show default state
           tankSelectionCard.style.display = 'none';
           tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
           moduleSummarySection.style.display = 'block';
           moduleSummarySection.querySelector('.chart-title').textContent = 'Module Summary';
           moduleSummarySection.querySelector('.text-muted').textContent = 'Select a module from the dropdown above to view its summary';
