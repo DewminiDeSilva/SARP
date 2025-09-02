@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tank;
-use App\Models\TankRehabilitation; 
+use App\Models\TankRehabilitation;
+use App\Models\Beneficiary;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -29,7 +30,8 @@ class DashboardController extends Controller
             'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'fingerling', 'infrastructure',
             'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'awpb',
             'costtab', 'projectdesignreport', 'vegitable', 'fruit', 'goat', 'dairy', 'poultary',
-            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions', 'nutrient_rich_home_garden'
+            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions', 'nutrient_rich_home_garden',
+            'project_types'
         ];
 
         $moduleLabels = [
@@ -73,8 +75,21 @@ class DashboardController extends Controller
             'agriculture' => 'Agriculture',
             'livestocks' => 'Livestocks',
             'expressions' => 'Expressions',
-            'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden'
+            'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden',
+            'project_types' => 'Project Types'
         ];
+        // Calculate beneficiary statistics
+        $beneficiaryStats = $this->calculateBeneficiaryStats();
+        
+        // Calculate project type statistics
+        $projectTypeStats = $this->calculateProjectTypeStats();
+
+        $moduleStats = [
+        'beneficiary' => [
+            'count' => Beneficiary::count(),
+        ],
+        // later you can add more: 'training' => ['count' => Training::count()],
+    ];
 
         // pass to dashboard view (merge with other data you already pass)
         return view('dashboard', compact(
@@ -85,7 +100,10 @@ class DashboardController extends Controller
             'startedCount', 
             'modules', 
             'moduleLabels',
-            'tankRehabKPIs'
+            'tankRehabKPIs',
+            'moduleStats',
+            'beneficiaryStats',
+            'projectTypeStats'
         ));
     }
 
@@ -170,4 +188,97 @@ class DashboardController extends Controller
             'total_spent' => $totalSpent
         ];
     }
+
+    private function calculateBeneficiaryStats()
+    {
+        // Get all beneficiaries
+        $beneficiaries = Beneficiary::all();
+
+        // Query builder (for DB-level aggregations)
+    $base = Beneficiary::query();
+
+
+        // 1. Total beneficiaries
+        $totalBeneficiaries = $beneficiaries->count();
+
+        // 2) Gender (normalize: trim + lower + map M/F)
+    $genderCounts = (clone $base)
+    ->selectRaw("
+        CASE
+            WHEN LOWER(TRIM(gender)) IN ('male','m')   THEN 'male'
+            WHEN LOWER(TRIM(gender)) IN ('female','f') THEN 'female'
+            ELSE 'other'
+        END AS g
+    ")
+    ->selectRaw("COUNT(*) AS c")
+    ->groupBy('g')
+    ->pluck('c','g');
+
+$maleCount         = $genderCounts['male']   ?? 0;
+$femaleCount       = $genderCounts['female'] ?? 0;
+$otherGenderCount  = $genderCounts['other']  ?? 0;
+
+// 3) Age groups (cast to number to avoid text issues)
+$youthCount      = (clone $base)->whereRaw("CAST(age AS UNSIGNED) < 30")->count();
+$middleAgeCount  = (clone $base)->whereRaw("CAST(age AS UNSIGNED) BETWEEN 30 AND 59")->count();
+$seniorCount     = (clone $base)->whereRaw("CAST(age AS UNSIGNED) >= 60")->count();
+
+
+        // 4. Education levels (assuming education field contains education level)
+        $educationStats = $beneficiaries->groupBy('education')->map->count();
+
+        // 5. Province distribution
+        $provinceStats = $beneficiaries->groupBy('province_name')->map->count();
+
+        // 6) Family size (cast to numeric to avoid text like '' or '  ')
+    $avgFamilySize = (clone $base)
+    ->whereNotNull('number_of_family_members')
+    ->whereRaw("NULLIF(TRIM(number_of_family_members), '') IS NOT NULL")
+    ->avg(DB::raw('CAST(number_of_family_members AS DECIMAL(10,2))'));
+
+$totalHouseholdMembers = (clone $base)
+    ->whereNotNull('number_of_family_members')
+    ->whereRaw("NULLIF(TRIM(number_of_family_members), '') IS NOT NULL")
+    ->sum(DB::raw('CAST(number_of_family_members AS UNSIGNED)'));
+
+return [
+    'total_beneficiaries'      => $totalBeneficiaries,
+    'male_count'               => $maleCount,
+    'female_count'             => $femaleCount,
+    'other_gender_count'       => $otherGenderCount,
+    'youth_count'              => $youthCount,
+    'middle_age_count'         => $middleAgeCount,
+    'senior_count'             => $seniorCount,
+    'education_stats'          => $educationStats,
+    'province_stats'           => $provinceStats,
+    'avg_family_size'          => $avgFamilySize ? round($avgFamilySize, 1) : 0,
+    'total_household_members'  => (int) $totalHouseholdMembers,
+];
+}
+
+private function calculateProjectTypeStats()
+{
+    // Get project type counts from beneficiaries table
+    $resilienceCount = Beneficiary::where('project_type', 'resilience')->count();
+    $youthCount = Beneficiary::where('project_type', 'youth')->count();
+    $fourPCount = Beneficiary::where('project_type', '4p')->count();
+    $nutritionCount = Beneficiary::where('project_type', 'nutrition')->count();
+    
+    // Also get counts from dedicated tables for more comprehensive data
+    $youthProposalCount = \App\Models\YouthProposal::count();
+    $nutritionProgramCount = \App\Models\Nutrition::count();
+    
+    // Calculate total projects
+    $totalProjects = $resilienceCount + $youthCount + $fourPCount + $nutritionCount;
+    
+    return [
+        'resilience_count' => $resilienceCount,
+        'youth_count' => $youthCount,
+        'four_p_count' => $fourPCount,
+        'nutrition_count' => $nutritionCount,
+        'youth_proposal_count' => $youthProposalCount,
+        'nutrition_program_count' => $nutritionProgramCount,
+        'total_projects' => $totalProjects
+    ];
+}
 }

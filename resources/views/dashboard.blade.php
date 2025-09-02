@@ -513,6 +513,12 @@
         width: 250px;
         height: 250px;
       }
+      
+      /* Responsive charts grid for beneficiary module */
+      .chart-container[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
     }
 
     /* Utility Classes */
@@ -793,6 +799,284 @@
         </div>
       </div>
 
+      <!-- Beneficiary Summary Section -->
+      <div class="chart-section" id="beneficiary-summary-section" style="display: none;">
+        <h2 class="chart-title">Beneficiary Summary</h2>
+        <p class="chart-subtitle">Comprehensive overview of beneficiary data and demographics</p>
+        
+        <!-- Beneficiary KPI Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Beneficiaries</h3>
+              <div class="card-badge">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $beneficiaryStats['total_beneficiaries'] ?? 0 }}</p>
+            <p class="card-subtitle">Registered beneficiaries</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Male Beneficiaries</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-male"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $beneficiaryStats['male_count'] ?? 0 }}</p>
+            <p class="card-subtitle">{{ $beneficiaryStats['total_beneficiaries'] > 0 ? round(($beneficiaryStats['male_count'] / $beneficiaryStats['total_beneficiaries']) * 100, 1) : 0 }}% of total</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Female Beneficiaries</h3>
+              <div class="card-badge" style="background: #ec4899;">
+                <i class="fas fa-female"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $beneficiaryStats['female_count'] ?? 0 }}</p>
+            <p class="card-subtitle">{{ $beneficiaryStats['total_beneficiaries'] > 0 ? round(($beneficiaryStats['female_count'] / $beneficiaryStats['total_beneficiaries']) * 100, 1) : 0 }}% of total</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Youth (Under 30)</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-child"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $beneficiaryStats['youth_count'] ?? 0 }}</p>
+            <p class="card-subtitle">Young beneficiaries</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Household Members</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-home"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ number_format($beneficiaryStats['total_household_members'] ?? 0) }}</p>
+            <p class="card-subtitle">Including family members</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Average Family Size</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $beneficiaryStats['avg_family_size'] ?? 0 }}</p>
+            <p class="card-subtitle">Members per household</p>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Gender Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #3b82f6; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Gender Distribution</h3>
+            <div class="chart-wrap" style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <canvas id="beneficiaryGenderChart"></canvas>
+              <div id="beneficiary-gender-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 2rem; font-weight: 700; color: #1f2937; line-height: 1;">{{ number_format($beneficiaryStats['total_beneficiaries'] ?? 0) }}</div>
+                <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-top: 0.25rem;">Total Beneficiaries</div>
+              </div>
+            </div>
+
+            <div class="chart-legend" style="margin-top: 1.5rem;">
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #3b82f6;"></div>
+                  <span style="color: #374151; font-weight: 500;">Male</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($beneficiaryStats['male_count'] ?? 0) }}</span>
+              </div>
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #ec4899;"></div>
+                  <span style="color: #374151; font-weight: 500;">Female</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($beneficiaryStats['female_count'] ?? 0) }}</span>
+              </div>
+              @if(($beneficiaryStats['other_gender_count'] ?? 0) > 0)
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #6b7280;"></div>
+                  <span style="color: #374151; font-weight: 500;">Other</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($beneficiaryStats['other_gender_count'] ?? 0) }}</span>
+              </div>
+              @endif
+            </div>
+          </div>
+
+          <!-- Project Type Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #10b981; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Project Type Distribution</h3>
+            <div class="chart-wrap" style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <canvas id="beneficiaryProjectTypeChart"></canvas>
+              <div id="beneficiary-project-type-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 2rem; font-weight: 700; color: #1f2937; line-height: 1;">{{ number_format($projectTypeStats['total_projects'] ?? 0) }}</div>
+                <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-top: 0.25rem;">Total Projects</div>
+              </div>
+            </div>
+
+            <div class="chart-legend" style="margin-top: 1.5rem;">
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #3b82f6;"></div>
+                  <span style="color: #374151; font-weight: 500;">Youth Enterprises</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($projectTypeStats['youth_count'] ?? 0) }}</span>
+              </div>
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981;"></div>
+                  <span style="color: #374151; font-weight: 500;">Resilience Projects</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($projectTypeStats['resilience_count'] ?? 0) }}</span>
+              </div>
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b;"></div>
+                  <span style="color: #374151; font-weight: 500;">4P Projects</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($projectTypeStats['four_p_count'] ?? 0) }}</span>
+              </div>
+              <div class="legend-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #ec4899;"></div>
+                  <span style="color: #374151; font-weight: 500;">Nutrition Programs</span>
+                </div>
+                <span style="color: #6b7280; font-weight: 600;">{{ number_format($projectTypeStats['nutrition_count'] ?? 0) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Type Summary Section -->
+      <div class="chart-section" id="project-type-summary-section" style="display: none;">
+        <h2 class="chart-title">Project Type Distribution</h2>
+        <p class="chart-subtitle">Overview of different project types and their distribution</p>
+        
+        <!-- Project Type KPI Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Resilience Projects</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $projectTypeStats['resilience_count'] ?? 0 }}</p>
+            <p class="card-subtitle">Climate resilience initiatives</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Youth Enterprises</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-rocket"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $projectTypeStats['youth_count'] ?? 0 }}</p>
+            <p class="card-subtitle">Youth-led business ventures</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">4P Projects</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-handshake"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $projectTypeStats['four_p_count'] ?? 0 }}</p>
+            <p class="card-subtitle">Public-private partnerships</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Nutrition Programs</h3>
+              <div class="card-badge" style="background: #ec4899;">
+                <i class="fas fa-apple-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $projectTypeStats['nutrition_count'] ?? 0 }}</p>
+            <p class="card-subtitle">Nutritional improvement programs</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Projects</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-project-diagram"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $projectTypeStats['total_projects'] ?? 0 }}</p>
+            <p class="card-subtitle">All project types combined</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Youth Proposals</h3>
+              <div class="card-badge" style="background: #06b6d4;">
+                <i class="fas fa-file-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $projectTypeStats['youth_proposal_count'] ?? 0 }}</p>
+            <p class="card-subtitle">Submitted proposals</p>
+          </div>
+        </div>
+
+        <!-- Project Type Distribution Chart -->
+        <div class="chart-container">
+          <div class="chart-wrap">
+            <canvas id="projectTypeChart"></canvas>
+            <div id="project-type-center">
+              <div class="big">{{ $projectTypeStats['total_projects'] ?? 0 }}</div>
+              <div class="small">Total Projects</div>
+            </div>
+          </div>
+
+          <div class="chart-legend">
+            <ul class="legend-list">
+              <li class="legend-item">
+                <div class="legend-left">
+                  <span class="legend-swatch" style="background: #10b981;"></span>
+                  <span class="legend-label">Resilience Projects</span>
+                </div>
+                <span class="legend-value">{{ $projectTypeStats['resilience_count'] ?? 0 }}</span>
+              </li>
+              <li class="legend-item">
+                <div class="legend-left">
+                  <span class="legend-swatch" style="background: #3b82f6;"></span>
+                  <span class="legend-label">Youth Enterprises</span>
+                </div>
+                <span class="legend-value">{{ $projectTypeStats['youth_count'] ?? 0 }}</span>
+              </li>
+              <li class="legend-item">
+                <div class="legend-left">
+                  <span class="legend-swatch" style="background: #f59e0b;"></span>
+                  <span class="legend-label">4P Projects</span>
+                </div>
+                <span class="legend-value">{{ $projectTypeStats['four_p_count'] ?? 0 }}</span>
+              </li>
+              <li class="legend-item">
+                <div class="legend-left">
+                  <span class="legend-swatch" style="background: #ec4899;"></span>
+                  <span class="legend-label">Nutrition Programs</span>
+                </div>
+                <span class="legend-value">{{ $projectTypeStats['nutrition_count'] ?? 0 }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <!-- Module Summary Section (Default) -->
       <div class="chart-section" id="module-summary-section">
         <h2 class="chart-title">Module Summary</h2>
@@ -865,16 +1149,284 @@
         }
       });
 
+      // Beneficiary Gender Chart
+      const beneficiaryGenderData = {
+        male: Number(@json($beneficiaryStats['male_count'] ?? 0)),
+        female: Number(@json($beneficiaryStats['female_count'] ?? 0)),
+        other: Number(@json($beneficiaryStats['other_gender_count'] ?? 0))
+      };
+
+      const beneficiaryGenderLabels = [];
+      const beneficiaryGenderValues = [];
+      const beneficiaryGenderColors = [];
+
+      if (beneficiaryGenderData.male > 0) {
+        beneficiaryGenderLabels.push('Male');
+        beneficiaryGenderValues.push(beneficiaryGenderData.male);
+        beneficiaryGenderColors.push('#3b82f6');
+      }
+      if (beneficiaryGenderData.female > 0) {
+        beneficiaryGenderLabels.push('Female');
+        beneficiaryGenderValues.push(beneficiaryGenderData.female);
+        beneficiaryGenderColors.push('#ec4899');
+      }
+      if (beneficiaryGenderData.other > 0) {
+        beneficiaryGenderLabels.push('Other');
+        beneficiaryGenderValues.push(beneficiaryGenderData.other);
+        beneficiaryGenderColors.push('#6b7280');
+      }
+
+      // Create beneficiary gender chart
+      const beneficiaryGenderCtx = document.getElementById('beneficiaryGenderChart');
+      const beneficiaryGenderCenterEl = document.getElementById('beneficiary-gender-center');
+      let beneficiaryGenderChart = null;
+
+      function createBeneficiaryGenderChart() {
+        if (beneficiaryGenderChart) {
+          beneficiaryGenderChart.destroy();
+        }
+
+        const totalBeneficiaries = beneficiaryGenderData.male + beneficiaryGenderData.female + beneficiaryGenderData.other;
+        
+        function setBeneficiaryGenderCenter(title, count, pct) {
+          if (pct === null) {
+            beneficiaryGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+          } else {
+            beneficiaryGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+          }
+        }
+
+        setBeneficiaryGenderCenter('Total Beneficiaries', totalBeneficiaries, null);
+
+        const chartData = beneficiaryGenderValues.length > 0 ? beneficiaryGenderValues : [1];
+        const chartLabels = beneficiaryGenderValues.length > 0 ? beneficiaryGenderLabels : ['No data'];
+        const chartColors = beneficiaryGenderValues.length > 0 ? beneficiaryGenderColors : ['#e5e7eb'];
+
+        beneficiaryGenderChart = new Chart(beneficiaryGenderCtx, {
+          type: 'doughnut',
+          data: {
+            labels: chartLabels,
+            datasets: [{ 
+              data: chartData, 
+              backgroundColor: chartColors, 
+              borderColor: '#ffffff', 
+              borderWidth: 3 
+            }]
+          },
+          options: {
+            cutout: '70%',
+            plugins: { 
+              legend: { display: false }, 
+              tooltip: { enabled: beneficiaryGenderValues.length > 0 } 
+            },
+            onClick(evt, items) {
+              if (!items.length) { 
+                setBeneficiaryGenderCenter('Total Beneficiaries', totalBeneficiaries, null); 
+                return; 
+              }
+              const idx = items[0].index;
+              const val = this.data.datasets[0].data[idx] || 0;
+              const pct = totalBeneficiaries ? (val/totalBeneficiaries*100) : 0;
+              setBeneficiaryGenderCenter(this.data.labels[idx], val, pct);
+            }
+          }
+        });
+      }
+
+      // Beneficiary Project Type Chart (for beneficiary module)
+      const beneficiaryProjectTypeData = {
+        resilience: Number(@json($projectTypeStats['resilience_count'] ?? 0)),
+        youth: Number(@json($projectTypeStats['youth_count'] ?? 0)),
+        fourP: Number(@json($projectTypeStats['four_p_count'] ?? 0)),
+        nutrition: Number(@json($projectTypeStats['nutrition_count'] ?? 0))
+      };
+
+      const beneficiaryProjectTypeLabels = [];
+      const beneficiaryProjectTypeValues = [];
+      const beneficiaryProjectTypeColors = [];
+
+      if (beneficiaryProjectTypeData.resilience > 0) {
+        beneficiaryProjectTypeLabels.push('Resilience Projects');
+        beneficiaryProjectTypeValues.push(beneficiaryProjectTypeData.resilience);
+        beneficiaryProjectTypeColors.push('#10b981');
+      }
+      if (beneficiaryProjectTypeData.youth > 0) {
+        beneficiaryProjectTypeLabels.push('Youth Enterprises');
+        beneficiaryProjectTypeValues.push(beneficiaryProjectTypeData.youth);
+        beneficiaryProjectTypeColors.push('#3b82f6');
+      }
+      if (beneficiaryProjectTypeData.fourP > 0) {
+        beneficiaryProjectTypeLabels.push('4P Projects');
+        beneficiaryProjectTypeValues.push(beneficiaryProjectTypeData.fourP);
+        beneficiaryProjectTypeColors.push('#f59e0b');
+      }
+      if (beneficiaryProjectTypeData.nutrition > 0) {
+        beneficiaryProjectTypeLabels.push('Nutrition Programs');
+        beneficiaryProjectTypeValues.push(beneficiaryProjectTypeData.nutrition);
+        beneficiaryProjectTypeColors.push('#ec4899');
+      }
+
+      // Create beneficiary project type chart
+      const beneficiaryProjectTypeCtx = document.getElementById('beneficiaryProjectTypeChart');
+      const beneficiaryProjectTypeCenterEl = document.getElementById('beneficiary-project-type-center');
+      let beneficiaryProjectTypeChart = null;
+
+      function createBeneficiaryProjectTypeChart() {
+        if (beneficiaryProjectTypeChart) {
+          beneficiaryProjectTypeChart.destroy();
+        }
+
+        const totalProjects = beneficiaryProjectTypeData.resilience + beneficiaryProjectTypeData.youth + beneficiaryProjectTypeData.fourP + beneficiaryProjectTypeData.nutrition;
+        
+        function setBeneficiaryProjectTypeCenter(title, count, pct) {
+          if (pct === null) {
+            beneficiaryProjectTypeCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+          } else {
+            beneficiaryProjectTypeCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+          }
+        }
+
+        setBeneficiaryProjectTypeCenter('Total Projects', totalProjects, null);
+
+        const chartData = beneficiaryProjectTypeValues.length > 0 ? beneficiaryProjectTypeValues : [1];
+        const chartLabels = beneficiaryProjectTypeValues.length > 0 ? beneficiaryProjectTypeLabels : ['No data'];
+        const chartColors = beneficiaryProjectTypeValues.length > 0 ? beneficiaryProjectTypeColors : ['#e5e7eb'];
+
+        beneficiaryProjectTypeChart = new Chart(beneficiaryProjectTypeCtx, {
+          type: 'doughnut',
+          data: {
+            labels: chartLabels,
+            datasets: [{ 
+              data: chartData, 
+              backgroundColor: chartColors, 
+              borderColor: '#ffffff', 
+              borderWidth: 3 
+            }]
+          },
+          options: {
+            cutout: '70%',
+            plugins: { 
+              legend: { display: false }, 
+              tooltip: { enabled: beneficiaryProjectTypeValues.length > 0 } 
+            },
+            onClick(evt, items) {
+              if (!items.length) { 
+                setBeneficiaryProjectTypeCenter('Total Projects', totalProjects, null); 
+                return; 
+              }
+              const idx = items[0].index;
+              const val = this.data.datasets[0].data[idx] || 0;
+              const pct = totalProjects ? (val/totalProjects*100) : 0;
+              setBeneficiaryProjectTypeCenter(this.data.labels[idx], val, pct);
+            }
+          }
+        });
+      }
+
+      // Project Type Chart
+      const projectTypeData = {
+        resilience: Number(@json($projectTypeStats['resilience_count'] ?? 0)),
+        youth: Number(@json($projectTypeStats['youth_count'] ?? 0)),
+        fourP: Number(@json($projectTypeStats['four_p_count'] ?? 0)),
+        nutrition: Number(@json($projectTypeStats['nutrition_count'] ?? 0))
+      };
+
+      const projectTypeLabels = [];
+      const projectTypeValues = [];
+      const projectTypeColors = [];
+
+      if (projectTypeData.resilience > 0) {
+        projectTypeLabels.push('Resilience Projects');
+        projectTypeValues.push(projectTypeData.resilience);
+        projectTypeColors.push('#10b981');
+      }
+      if (projectTypeData.youth > 0) {
+        projectTypeLabels.push('Youth Enterprises');
+        projectTypeValues.push(projectTypeData.youth);
+        projectTypeColors.push('#3b82f6');
+      }
+      if (projectTypeData.fourP > 0) {
+        projectTypeLabels.push('4P Projects');
+        projectTypeValues.push(projectTypeData.fourP);
+        projectTypeColors.push('#f59e0b');
+      }
+      if (projectTypeData.nutrition > 0) {
+        projectTypeLabels.push('Nutrition Programs');
+        projectTypeValues.push(projectTypeData.nutrition);
+        projectTypeColors.push('#ec4899');
+      }
+
+      // Create project type chart
+      const projectTypeCtx = document.getElementById('projectTypeChart');
+      const projectTypeCenterEl = document.getElementById('project-type-center');
+      let projectTypeChart = null;
+
+      function createProjectTypeChart() {
+        if (projectTypeChart) {
+          projectTypeChart.destroy();
+        }
+
+        const totalProjects = projectTypeData.resilience + projectTypeData.youth + projectTypeData.fourP + projectTypeData.nutrition;
+        
+        function setProjectTypeCenter(title, count, pct) {
+          if (pct === null) {
+            projectTypeCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+          } else {
+            projectTypeCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+          }
+        }
+
+        setProjectTypeCenter('Total Projects', totalProjects, null);
+
+        const chartData = projectTypeValues.length > 0 ? projectTypeValues : [1];
+        const chartLabels = projectTypeValues.length > 0 ? projectTypeLabels : ['No data'];
+        const chartColors = projectTypeValues.length > 0 ? projectTypeColors : ['#e5e7eb'];
+
+        projectTypeChart = new Chart(projectTypeCtx, {
+          type: 'doughnut',
+          data: {
+            labels: chartLabels,
+            datasets: [{ 
+              data: chartData, 
+              backgroundColor: chartColors, 
+              borderColor: '#ffffff', 
+              borderWidth: 3 
+            }]
+          },
+          options: {
+            cutout: '70%',
+            plugins: { 
+              legend: { display: false }, 
+              tooltip: { enabled: projectTypeValues.length > 0 } 
+            },
+            onClick(evt, items) {
+              if (!items.length) { 
+                setProjectTypeCenter('Total Projects', totalProjects, null); 
+                return; 
+              }
+              const idx = items[0].index;
+              const val = this.data.datasets[0].data[idx] || 0;
+              const pct = totalProjects ? (val/totalProjects*100) : 0;
+              setProjectTypeCenter(this.data.labels[idx], val, pct);
+            }
+          }
+        });
+      }
+
       // Module selection functionality
       const moduleSelect = document.getElementById('module_id');
       const tankSelectionCard = document.getElementById('tank-selection-card');
       const tankChartSection = document.getElementById('tank-chart-section');
       const tankKpiSection = document.getElementById('tank-kpi-section');
       const moduleSummarySection = document.getElementById('module-summary-section');
+      const beneficiarySummarySection = document.getElementById('beneficiary-summary-section');
+      const projectTypeSummarySection = document.getElementById('project-type-summary-section');
 
-      // Initially hide tank chart and show module summary
+      // Initially hide all sections and show module summary
       tankChartSection.style.display = 'none';
       tankKpiSection.style.display = 'none';
+      beneficiarySummarySection.style.display = 'none';
+      projectTypeSummarySection.style.display = 'none';
       moduleSummarySection.style.display = 'block';
 
       moduleSelect.addEventListener('change', function() {
@@ -885,12 +1437,43 @@
           tankSelectionCard.style.display = 'block';
           tankChartSection.style.display = 'block';
           tankKpiSection.style.display = 'block';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'none';
+        } else if (selectedModule === 'beneficiary') {
+          // Show beneficiary specific content
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'block';
+          projectTypeSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          
+          // Create both beneficiary charts when showing the section
+          setTimeout(() => {
+            createBeneficiaryGenderChart();
+            createBeneficiaryProjectTypeChart();
+          }, 100);
+        } else if (selectedModule === 'project_types') {
+          // Show project type specific content
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'block';
+          moduleSummarySection.style.display = 'none';
+          
+          // Create the project type chart when showing the section
+          setTimeout(() => {
+            createProjectTypeChart();
+          }, 100);
         } else if (selectedModule) {
           // Show module summary for other modules
           tankSelectionCard.style.display = 'none';
           tankChartSection.style.display = 'none';
           tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'block';
           
           // Update module summary content
@@ -903,6 +1486,8 @@
           tankSelectionCard.style.display = 'none';
           tankChartSection.style.display = 'none';
           tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'block';
           moduleSummarySection.querySelector('.chart-title').textContent = 'Module Summary';
           moduleSummarySection.querySelector('.text-muted').textContent = 'Select a module from the dropdown above to view its summary';
