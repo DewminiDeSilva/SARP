@@ -76,7 +76,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background: url('{{ asset('assets/images/sarpf.jpg') }}') no-repeat center center/cover;
+            background: url('{{ asset('assets/images/sarpf.webp') }}') no-repeat center center/cover;
             height: 100vh;
             display: flex;
             justify-content: flex-end;
@@ -308,7 +308,7 @@ button:hover {
     </div>
 
     <div class="main-header">
-        
+
         <p class="project-title">Smallholder Agribusiness & Resilience Project</p>
         <br>
         <br>

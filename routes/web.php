@@ -61,7 +61,7 @@ use App\Http\Controllers\YouthController;
 use App\Http\Controllers\YouthProposalController;
 use App\Http\Controllers\EOIBeneficiaryController;
 use App\Http\Controllers\NutrientRichHomeGardenController;
-
+use App\Http\Controllers\ProgressReportController;
 
 
 
@@ -1157,7 +1157,7 @@ Route::middleware(['auth', 'check.permission:infrastructure,view'])->group(funct
 
 
 
-    
+
     Route::get('/Training', function () {
         return view('training.training_program');
     });
@@ -2194,6 +2194,33 @@ Route::middleware(['auth'])->group(function () {
         ->name('nutrient-home.show')
         ->middleware('check.permission:nutrient_rich_home_garden,view');
 });
+
+
+//Progress Report Routes
+Route::middleware(['auth'])->group(function () {
+    // Hub
+    Route::get('/progress', [ProgressReportController::class,'index'])->name('progress.index');
+
+    // Monthly
+    Route::get('/progress/monthly', [ProgressReportController::class,'monthlyIndex'])->name('progress.monthly.index');
+    Route::get('/progress/monthly/create', [ProgressReportController::class,'monthlyCreate'])->name('progress.monthly.create');
+    Route::post('/progress/monthly', [ProgressReportController::class,'monthlyStore'])->name('progress.monthly.store');
+
+    // Quarterly
+    Route::get('/progress/quarterly', [ProgressReportController::class,'quarterlyIndex'])->name('progress.quarterly.index');
+    Route::get('/progress/quarterly/create', [ProgressReportController::class,'quarterlyCreate'])->name('progress.quarterly.create');
+    Route::post('/progress/quarterly', [ProgressReportController::class,'quarterlyStore'])->name('progress.quarterly.store');
+
+    // Annual
+    Route::get('/progress/annual', [ProgressReportController::class,'annualIndex'])->name('progress.annual.index');
+    Route::get('/progress/annual/create', [ProgressReportController::class,'annualCreate'])->name('progress.annual.create');
+    Route::post('/progress/annual', [ProgressReportController::class,'annualStore'])->name('progress.annual.store');
+
+    // File actions
+    Route::get('/progress/file/{report}/view', [ProgressReportController::class,'viewFile'])->name('progress.file.view');
+    Route::get('/progress/file/{report}/download', [ProgressReportController::class,'downloadFile'])->name('progress.file.download');
+});
+
 
 
 Route::patch('/staff_profile/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])->name('staff_profile.updateStatus');
