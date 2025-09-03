@@ -51,7 +51,9 @@ class Beneficiary extends Model
         'input2',
         'input3',
         'project_type',
-        'youth_proposal_id',        
+        'youth_proposal_id',
+        'eoi_business_title',
+        'eoi_category',
     ];
 
     /**
