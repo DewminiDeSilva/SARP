@@ -7,6 +7,7 @@ use App\Models\Tank;
 use App\Models\TankRehabilitation;
 use App\Models\Beneficiary;
 use Illuminate\Support\Facades\DB;
+use App\Models\Infrastructure;
 
 class DashboardController extends Controller
 {
@@ -84,6 +85,9 @@ class DashboardController extends Controller
         // Calculate project type statistics
         $projectTypeStats = $this->calculateProjectTypeStats();
 
+        // Infrastructure stats
+        $infrastructureStats = $this->calculateInfrastructureStats();
+
         $moduleStats = [
         'beneficiary' => [
             'count' => Beneficiary::count(),
@@ -104,6 +108,7 @@ class DashboardController extends Controller
             'moduleStats',
             'beneficiaryStats',
             'projectTypeStats'
+            ,'infrastructureStats'
         ));
     }
 
@@ -255,6 +260,68 @@ return [
     'total_household_members'  => (int) $totalHouseholdMembers,
 ];
 }
+
+    private function calculateInfrastructureStats()
+    {
+        $query = Infrastructure::query();
+
+        $all = $query->get();
+
+        $total = $all->count();
+
+        // Normalize status comparisons
+        $statusCounts = [
+            'identified' => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'identified'; })->count(),
+            'started'    => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'started'; })->count(),
+            'on_going'   => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'on going'; })->count(),
+            'finished'   => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'finished'; })->count(),
+        ];
+
+        // Average progress from infrastructure_progress (may be number or string with %)
+        $progressValues = $all->pluck('infrastructure_progress')
+            ->filter(function($progress){
+                if (is_null($progress)) return false;
+                if (is_numeric($progress)) return $progress >= 0 && $progress <= 100;
+                if (is_string($progress)) {
+                    $clean = str_replace('%','', trim($progress));
+                    return is_numeric($clean) && $clean >= 0 && $clean <= 100;
+                }
+                return false;
+            })
+            ->map(function($progress){
+                if (is_string($progress)) {
+                    return (float) str_replace('%','', trim($progress));
+                }
+                return (float) $progress;
+            })
+            ->values();
+
+        $avgProgress = $progressValues->count() > 0 ? round($progressValues->avg(), 1) : 0;
+
+        // Progress distribution buckets (0–25–50–75–100]
+        $buckets = [
+            'b0_25'  => 0,
+            'b26_50' => 0,
+            'b51_75' => 0,
+            'b76_99' => 0,
+            'b100'   => 0,
+        ];
+
+        foreach ($progressValues as $val) {
+            if ($val <= 25) { $buckets['b0_25']++; }
+            elseif ($val <= 50) { $buckets['b26_50']++; }
+            elseif ($val <= 75) { $buckets['b51_75']++; }
+            elseif ($val < 100) { $buckets['b76_99']++; }
+            else { $buckets['b100']++; }
+        }
+
+        return [
+            'total' => $total,
+            'status_counts' => $statusCounts,
+            'avg_progress' => $avgProgress,
+            'progress_buckets' => $buckets,
+        ];
+    }
 
 private function calculateProjectTypeStats()
 {

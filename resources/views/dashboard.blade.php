@@ -1077,6 +1077,52 @@
         </div>
       </div>
 
+      <!-- Infrastructure Summary Section -->
+      <div class="chart-section" id="infrastructure-summary-section" style="display: none;">
+        <h2 class="chart-title">Infrastructure Summary</h2>
+        <p class="chart-subtitle">Totals, pipeline by status, and progress distribution</p>
+
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Infrastructures</h3>
+              <div class="card-badge"><i class="fas fa-industry"></i></div>
+            </div>
+            <p class="card-value">{{ $infrastructureStats['total'] ?? 0 }}</p>
+            <p class="card-subtitle">All infrastructure records</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Average Progress %</h3>
+              <div class="card-badge" style="background:#3b82f6;"><i class="fas fa-percentage"></i></div>
+            </div>
+            <p class="card-value">{{ $infrastructureStats['avg_progress'] ?? 0 }}%</p>
+            <p class="card-subtitle">From infrastructure_progress</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $infrastructureStats['avg_progress'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Pipeline by Status</h3>
+              <div class="card-badge" style="background:#f59e0b;"><i class="fas fa-stream"></i></div>
+            </div>
+            <p class="card-subtitle">Identified / Started / On Going / Finished</p>
+            <canvas id="infrastructureStatusChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-container" style="margin-top: 1rem;">
+          <div class="chart-wrap" style="width: 100%; height: 260px;">
+            <canvas id="infrastructureProgressHistogram"></canvas>
+          </div>
+        </div>
+      </div>
+
       <!-- Module Summary Section (Default) -->
       <div class="chart-section" id="module-summary-section">
         <h2 class="chart-title">Module Summary</h2>
@@ -1421,6 +1467,7 @@
       const moduleSummarySection = document.getElementById('module-summary-section');
       const beneficiarySummarySection = document.getElementById('beneficiary-summary-section');
       const projectTypeSummarySection = document.getElementById('project-type-summary-section');
+      const infrastructureSummarySection = document.getElementById('infrastructure-summary-section');
 
       // Initially hide all sections and show module summary
       tankChartSection.style.display = 'none';
@@ -1440,6 +1487,16 @@
           beneficiarySummarySection.style.display = 'none';
           projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'none';
+        } else if (selectedModule === 'infrastructure') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'block';
+
+          setTimeout(() => { createInfrastructureCharts(); }, 100);
         } else if (selectedModule === 'beneficiary') {
           // Show beneficiary specific content
           tankSelectionCard.style.display = 'none';
@@ -1493,6 +1550,40 @@
           moduleSummarySection.querySelector('.text-muted').textContent = 'Select a module from the dropdown above to view its summary';
         }
       });
+
+      function createInfrastructureCharts(){
+        const statusCtx = document.getElementById('infrastructureStatusChart');
+        const histCtx = document.getElementById('infrastructureProgressHistogram');
+        if (!statusCtx || !histCtx) return;
+
+        const infra = @json($infrastructureStats ?? []);
+        const statusCounts = infra.status_counts || {identified:0, started:0, on_going:0, finished:0};
+
+        new Chart(statusCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Identified','Started','On Going','Finished'],
+            datasets: [{
+              data: [statusCounts.identified||0, statusCounts.started||0, statusCounts.on_going||0, statusCounts.finished||0],
+              backgroundColor: ['#6b7280','#3b82f6','#f59e0b','#10b981']
+            }]
+          },
+          options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+
+        const buckets = (infra.progress_buckets || {b0_25:0,b26_50:0,b51_75:0,b76_99:0,b100:0});
+        new Chart(histCtx, {
+          type: 'bar',
+          data: {
+            labels: ['0–25','26–50','51–75','76–99','100'],
+            datasets: [{
+              data: [buckets.b0_25||0,buckets.b26_50||0,buckets.b51_75||0,buckets.b76_99||0,buckets.b100||0],
+              backgroundColor: '#60a5fa'
+            }]
+          },
+          options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+      }
     })();
   </script>
 </body>
