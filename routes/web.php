@@ -61,7 +61,11 @@ use App\Http\Controllers\YouthController;
 use App\Http\Controllers\YouthProposalController;
 use App\Http\Controllers\EOIBeneficiaryController;
 use App\Http\Controllers\NutrientRichHomeGardenController;
+<<<<<<< HEAD
 use App\Http\Controllers\ProgressReportController;
+=======
+use App\Http\Controllers\AgroForestController;
+>>>>>>> dev
 
 
 
@@ -2261,3 +2265,8 @@ Route::get('/youth-proposal/agreement-signed', [YouthProposalController::class, 
 
 Route::get('/youth-proposals/{id}/beneficiaries', [YouthProposalController::class, 'showBeneficiaries'])->name('youth-proposals.beneficiaries');
 
+Route::resource('agro-forest', AgroForestController::class);
+
+
+Route::get('/gn-divisions', [GNDivisionController::class, 'getAll'])
+    ->name('gn.divisions.all');
