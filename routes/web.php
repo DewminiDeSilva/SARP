@@ -61,11 +61,10 @@ use App\Http\Controllers\YouthController;
 use App\Http\Controllers\YouthProposalController;
 use App\Http\Controllers\EOIBeneficiaryController;
 use App\Http\Controllers\NutrientRichHomeGardenController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\ProgressReportController;
-=======
+
 use App\Http\Controllers\AgroForestController;
->>>>>>> dev
 
 
 
