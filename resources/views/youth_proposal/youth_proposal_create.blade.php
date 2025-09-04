@@ -181,7 +181,7 @@
                         <input type="email" class="form-control" name="email">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Name of the value changing</label>
+                        <label class="form-label">Market Problem</label>
                         <textarea class="form-control" name="market_problem" ></textarea>
                     </div>
                     <div class="mb-3">
