@@ -636,12 +636,21 @@
           
           <div class="form-group">
             <label for="module_id" class="form-label">Select Module</label>
-            <select name="module_id" id="module_id" class="form-select">
-              <option value="">-- Choose module --</option>
-              @foreach($modules ?? [] as $module)
-                <option value="{{ $module }}">{{ $moduleLabels[$module] ?? ucfirst(str_replace('_', ' ', $module)) }}</option>
-              @endforeach
-            </select>
+           <select name="module_id" id="module_id" class="form-select">
+  <option value="">-- Choose module --</option>
+  <option value="beneficiary">Beneficiary</option>
+  <option value="tank_rehabilitation">Tank Rehabilitation</option>
+  <option value="infrastructure">Infrastructure Development</option>
+  <option value="social_inclusion_and_gender">Social Inclusion & Gender</option>
+  <option value="resilience_projects">Resilience Projects</option>
+  <option value="youth_enterprises">Youth Enterprises</option>
+  <option value="4p_agri_business">4P Agri Business Projects</option>
+  <option value="agro_enterprise">Agro Enterprise</option>
+  <option value="nrm">Natural Resource Management (NRM)</option>
+  <option value="ffs">Farmer Field Schools (FFS)</option>
+  <option value="nutrition_training">Nutrition Training Program</option>
+  <option value="project_documents">Project Documents</option>
+</select>
           </div>
 
           <div class="d-flex gap-3 mt-3">
@@ -1475,7 +1484,7 @@
       beneficiarySummarySection.style.display = 'none';
       projectTypeSummarySection.style.display = 'none';
       moduleSummarySection.style.display = 'block';
-
+      infrastructureSummarySection.style.display = 'none';
       moduleSelect.addEventListener('change', function() {
         const selectedModule = this.value;
         
@@ -1532,6 +1541,7 @@
           beneficiarySummarySection.style.display = 'none';
           projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'block';
+          infrastructureSummarySection.style.display = 'block';
           
           // Update module summary content
           const moduleLabels = @json($moduleLabels ?? []);
