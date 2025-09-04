@@ -182,7 +182,8 @@ li:hover {
                 <a href="#" style="color: #FFFFFF">Youth Enterprises</a>
                     <ul class="nested">
                             <li><a href="/youth-proposals" style="color: #FFFFFF">Youth Proposals</a></li>
-                            <li><a href="/youth" style="color: #FFFFFF">Youth Projects</a></li>
+                            <!-- <li><a href="/youth" style="color: #FFFFFF">Youth Projects</a></li> -->
+                            <li><a href="/youth-proposal/agreement-signed" style="color: #FFFFFF">Youth Projects</a></li>
                     </ul>
             </li>
             <li class="submenu">

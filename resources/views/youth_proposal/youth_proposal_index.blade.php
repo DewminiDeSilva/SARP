@@ -147,7 +147,9 @@
 
         td {
             vertical-align: middle;
-            white-space: nowrap;
+            white-space: normal;  /* ✅ allow wrapping */
+            word-wrap: break-word;  /* ✅ break long words if needed */
+            max-width: 300px;       /* ✅ optional: limit column width */
         }
 
         .pagination .page-link {
@@ -372,11 +374,11 @@
                     <thead class="thead-light">
                         <tr>
                             <th>ID</th>
-                            <th>Organization Name</th>
+                            <th style="width:280px;">Organization Name</th>
                             <th>Contact Person</th>
                             <th>Mobile Phone</th>
                             <th>Market Problem</th>
-                            <th>Business Title</th>
+                            <th style="width:300px;">Business Title</th>
                             <th style="width:308px;" >Status</th> 
                             <th>Actions</th>                           
                         </tr>
@@ -388,11 +390,11 @@
                     <tr @if($youth_proposal->status === 'Agreement Signed') class="highlight-row" @endif>
 
                         <td>{{ $youth_proposal->id }}</td>
-                        <td>{{ $youth_proposal->organization_name }}</td>
+                        <td class="wrap-org">{{ $youth_proposal->organization_name }}</td>
                         <td>{{ $youth_proposal->contact_person }}</td>
                         <td>{{ $youth_proposal->mobile_phone }}</td>
                         <td>{{ Str::limit($youth_proposal->market_problem, 50) }}</td>
-                        <td>{{ $youth_proposal->business_title }}</td>
+                        <td class="wrap-title">{{ $youth_proposal->business_title }}</td>
 
                         <!-- ✅ Status Column -->
                         <td class="text-center">
