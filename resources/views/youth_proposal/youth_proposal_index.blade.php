@@ -377,7 +377,7 @@
                             <th>Mobile Phone</th>
                             <th>Market Problem</th>
                             <th>Business Title</th>
-                            <th>Status</th> 
+                            <th style="width:308px;" >Status</th> 
                             <th>Actions</th>                           
                         </tr>
                     </thead>
