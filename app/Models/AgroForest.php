@@ -17,6 +17,11 @@ class AgroForest extends Model
         'province_name',
         'district',
         'gn_division_name',
+        'gn_division_name_2',
+        'gn_division_name_3',
+        'ds_division_name',
+        'no_of_trees_plans',
+        'paid_amount',
 
         // Tanks
         'tank_name',

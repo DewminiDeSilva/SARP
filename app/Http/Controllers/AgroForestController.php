@@ -36,6 +36,11 @@ class AgroForestController extends Controller
             'province_name'               => 'nullable|string',
             'district'                    => 'nullable|string',
             'gn_division_name'            => 'nullable|string|max:255',
+            'gn_division_name_2'            => 'nullable|string|max:255',
+            'gn_division_name_3'            => 'nullable|string|max:255',
+            'ds_division_name'            => 'nullable|string|max:255',
+            'no_of_trees_plans'           => 'nullable|integer',
+            'paid_amount'                 => 'nullable|numeric',
             'tank_name'                   => 'nullable|string',
             'tank_name_2'                 => 'nullable|string',
             'tank_name_3'                 => 'nullable|string',
@@ -53,6 +58,10 @@ class AgroForestController extends Controller
             'species_counts_arr.*'        => 'nullable|integer',
             'nursery_locations_extra'     => 'nullable|array',
             'nursery_locations_extra.*'   => 'nullable|string',
+            'nursery_plants_extra'     => 'nullable|array',
+            'nursery_plants_extra.*'   => 'nullable|integer',
+
+            
         ]);
 
         if ($request->hasFile('project_proposal')) {
@@ -76,12 +85,26 @@ class AgroForestController extends Controller
             }
 
             // nurseries
-            foreach ($request->input('nursery_locations_extra', []) as $loc) {
+            // foreach ($request->input('nursery_locations_extra', []) as $loc) {
+            //     $loc = trim((string)$loc);
+            //     if ($loc !== '') {
+            //         $agro->nurseries()->create(['location' => $loc]);
+            //     }
+            // }
+
+            $locations = $request->input('nursery_locations_extra', []);
+            $plants    = $request->input('nursery_plants_extra', []);
+
+            foreach ($locations as $i => $loc) {
                 $loc = trim((string)$loc);
                 if ($loc !== '') {
-                    $agro->nurseries()->create(['location' => $loc]);
+                    $agro->nurseries()->create([
+                        'location'        => $loc,
+                        'number_of_plants'=> $plants[$i] ?? null,
+                    ]);
                 }
-            }
+        }
+
         });
 
         return redirect()->route('agro-forest.index')
@@ -111,6 +134,11 @@ class AgroForestController extends Controller
             'province_name'               => 'nullable|string|max:255',
             'district'                    => 'nullable|string|max:255',
             'gn_division_name'            => 'nullable|string|max:255',
+            'gn_division_name_2'          => 'nullable|string|max:255',
+            'gn_division_name_3'          => 'nullable|string|max:255',
+            'ds_division_name'            => 'nullable|string|max:255',
+            'no_of_trees_plans'           => 'nullable|integer|min:0',
+            'paid_amount'                 => 'nullable|numeric|min:0',
             'tank_name'                   => 'nullable|string|max:255',
             'tank_name_2'                 => 'nullable|string|max:255',
             'tank_name_3'                 => 'nullable|string|max:255',
@@ -128,6 +156,8 @@ class AgroForestController extends Controller
 
             'nursery_locations_extra'     => 'nullable|array',
             'nursery_locations_extra.*'   => 'nullable|string|max:255',
+            'nursery_plants_extra'        => 'nullable|array',
+            'nursery_plants_extra.*'      => 'nullable|integer|min:0',
         ]);
 
         if ($request->hasFile('project_proposal')) {
@@ -154,12 +184,23 @@ class AgroForestController extends Controller
                 }
             }
 
-            foreach ($request->input('nursery_locations_extra', []) as $loc) {
-                $loc = trim((string)$loc);
-                if ($loc !== '') {
-                    $agro_forest->nurseries()->create(['location' => $loc]);
-                }
+            // foreach ($request->input('nursery_locations_extra', []) as $loc) {
+            //     $loc = trim((string)$loc);
+            //     if ($loc !== '') {
+            //         $agro_forest->nurseries()->create(['location' => $loc]);
+            //     }
+            // }
+             $locations = $request->input('nursery_locations_extra', []);
+        $plants    = $request->input('nursery_plants_extra', []);
+        foreach ($locations as $i => $loc) {
+            $loc = trim((string)$loc);
+            if ($loc !== '') {
+                $agro_forest->nurseries()->create([
+                    'location'        => $loc,
+                    'number_of_plants'=> $plants[$i] ?? null,
+                ]);
             }
+        }
         });
 
         return redirect()->route('agro-forest.show', $agro_forest->id)

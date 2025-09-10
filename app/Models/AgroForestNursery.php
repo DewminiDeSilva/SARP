@@ -11,6 +11,7 @@ class AgroForestNursery extends Model
     protected $fillable = [
         'agro_forest_id',
         'location',
+        'number_of_plants',
     ];
 
     public function agroForest()
