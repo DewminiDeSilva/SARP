@@ -177,7 +177,7 @@
                 </a>
             </div>
 
-            <h2 class="text-center" style="color: green;">Agro Forest — Create</h2>
+            <h2 class="text-center" style="color: green;">Agro Forest Registration</h2>
 
             {{-- Validation Errors --}}
             @if ($errors->any())
@@ -213,13 +213,6 @@
     <input type="hidden" id="provinceName" name="province_name">
   </div>
 
-  <!-- <div class="col-12 col-md-4">
-    <label for="districtDropdown" class="form-label dropdown-label">District</label>
-    <select id="districtDropdown" name="district" class="form-control">
-      <option value="">Select District</option>
-    </select>
-  </div>
-</div> -->
 
  <div class="col">
             <div class="dropdown">
@@ -232,12 +225,7 @@
         </div>
 
 
-<!-- <div class="col-12 col-md-4">
-  <label for="dsDivisionDropdown" class="form-label dropdown-label">DS Division</label>
-  <select id="dsDivisionDropdown" name="ds_division_name" class="form-control">
-    <option value="">Select DS Division</option>
-  </select>
-</div> -->
+
          <div class="col">
             <div class="dropdown">
                 <label for="dsDivisionDropdown" class="form-label dropdown-label">DS Division</label>
@@ -250,12 +238,7 @@
 
 <!-- Row 2: GN 1 + GN 2 + GN 3 -->
 <div class="row g-3 mt-2">
-  <!-- <div class="col-12 col-md-4">
-    <label for="gndDropdown1" class="form-label dropdown-label">GN Division</label>
-    <select id="gndDropdown1" name="gn_division_name" class="form-control">
-      <option value="">Select GN Division</option>
-    </select>
-  </div> -->
+ 
     <div class="col">
             <div class="dropdown">
                 <label for="gndDropdown" class="form-label dropdown-label">GN Division</label>
@@ -288,29 +271,33 @@
     
     </div>
     
-        
-
     </div>
-  <!-- <div class="col-12 col-md-4">
-    <label for="gndDropdown2" class="form-label dropdown-label">GN Division 2</label>
-    <select id="gndDropdown2" name="gn_division_name_2" class="form-control">
-      <option value="">Select GN Division 2</option>
-    </select>
-  </div>
-  <div class="col-12 col-md-4">
-    <label for="gndDropdown3" class="form-label dropdown-label">GN Division 3</label>
-    <select id="gndDropdown3" name="gn_division_name_3" class="form-control">
-      <option value="">Select GN Division 3</option>
-    </select>
-  </div>
-</div> -->
+ 
 
-<!-- Row 3: Tank (centered) -->
 <div class="row g-3 mt-2">
   <div class="col-12 col-md-4 offset-md-4">
     <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
-    <select id="tankDropdown" name="tank_name" class="form-control">
+    <select name="tank_name" class="form-control tankDropdown">
       <option value="">Select Tank</option>
+     
+    </select>
+  </div>
+</div>
+
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-4 offset-md-4">
+    <label class="form-label dropdown-label">Select Tank Name</label>
+    <select name="tank_name_2" class="form-control tankDropdown">
+      <option value="">Select Tank 2</option>
+    </select>
+  </div>
+</div>
+
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-4 offset-md-4">
+    <label class="form-label dropdown-label">Select Tank Name</label>
+    <select name="tank_name_3" class="form-control tankDropdown">
+      <option value="">Select Tank 3</option>
     </select>
   </div>
 </div>
@@ -339,35 +326,52 @@
                     </div>
 
                     <!-- Species (dynamic) -->
-                    <h5 class="mt-3">Species Details</h5>
-                    <table class="table table-bordered" id="speciesTable">
-                        <thead class="table-success">
-                            <tr>
-                                <th>Species Name</th>
-                                <th>No. of Plants</th>
-                                <th style="width: 120px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $oldNames  = old('species_names_arr', ['']);
-                                $oldCounts = old('species_counts_arr', ['']);
-                            @endphp
-                            @foreach($oldNames as $i => $n)
-                                <tr>
-                                    <td><input type="text" name="species_names_arr[]" class="form-control" value="{{ $n }}"></td>
-                                    <td><input type="number" name="species_counts_arr[]" class="form-control" value="{{ $oldCounts[$i] ?? '' }}"></td>
-                                    <td>
-                                        @if($i === array_key_first($oldNames))
-                                            <button type="button" class="btn btn-sm btn-success addSpecies">Add</button>
-                                        @else
-                                            <button type="button" class="btn btn-sm btn-danger removeRow">Remove</button>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+<h5 class="mt-3">Species Details</h5>
+<table class="table table-bordered" id="speciesTable">
+    <thead class="table-success">
+        <tr>
+            <th>Species Name</th>
+            <th>No. of Plants</th>
+            <th style="width: 120px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @php
+            // If validation failed → old() values
+            $oldNames  = old('species_names_arr');
+            $oldCounts = old('species_counts_arr');
+
+            if ($oldNames !== null && $oldCounts !== null) {
+                $speciesData = collect($oldNames)->map(function($name, $i) use ($oldCounts) {
+                    return ['name' => $name, 'count' => $oldCounts[$i] ?? ''];
+                });
+            } else {
+                // Otherwise → previously stored values from DB
+                $speciesData = $replanting->species ?? collect([['name' => '', 'count' => '']]);
+            }
+        @endphp
+
+        @foreach($speciesData as $i => $species)
+            <tr>
+                <td>
+                    <input type="text" name="species_names_arr[]" class="form-control"
+                           value="{{ is_array($species) ? $species['name'] : $species->species_name }}">
+                </td>
+                <td>
+                    <input type="number" name="species_counts_arr[]" class="form-control"
+                           value="{{ is_array($species) ? $species['count'] : $species->no_of_plants }}">
+                </td>
+                <td>
+                    @if($loop->first)
+                        <button type="button" class="btn btn-sm btn-success addSpecies">Add</button>
+                    @else
+                        <button type="button" class="btn btn-sm btn-danger removeRow">Remove</button>
+                    @endif
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
 
                     <!-- Nursery Locations (dynamic) -->
                     <h5 class="mt-3">Plant Nursery Location</h5>
@@ -455,125 +459,29 @@ $('#nurseryTable').on('click', '.addNursery', function () {
             });
 
             // Tanks
-            $.get('/tanks', function (data) {
-                $('#tankDropdown').empty().append('<option value="">Select Tank</option>');
-                $.each(data, function (index, tank) {
-                    $('#tankDropdown').append(
-                        $('<option>', { value: tank.tank_name, text: tank.tank_name })
-                    );
-                });
-            });
-
+            // $.get('/tanks', function (data) {
+            //     $('#tankDropdown').empty().append('<option value="">Select Tank</option>');
+            //     $.each(data, function (index, tank) {
+            //         $('#tankDropdown').append(
+            //             $('<option>', { value: tank.tank_name, text: tank.tank_name })
+            //         );
+            //     });
+            // });
+$.get('/tanks', function (data) {
+    // Loop through each dropdown
+    $('.tankDropdown').each(function () {
+        const dropdown = $(this);
+        dropdown.empty().append('<option value="">Select Tank</option>');
+        $.each(data, function (index, tank) {
+            dropdown.append(
+                $('<option>', { value: tank.tank_name, text: tank.tank_name })
+            );
+        });
+    });
+});
     </script>
     <script>
-    // $(document).ready(function () {
-
-    //     // Fetch all provinces on page load
-    //     $.ajax({
-    //         url: '/provinces',
-    //         type: 'GET',
-    //         success: function (data) {
-    //             $('#provinceDropdown').append($('<option>', {
-    //                 value: '',
-    //                 text: 'Select Province'
-    //             }));
-    //             $.each(data, function (index, province) {
-    //                 $('#provinceDropdown').append($('<option>', {
-    //                     value: province.id,
-    //                     text: province.name
-    //                 }));
-    //             });
-    //         }
-    //     });
-
-    //     // When a province is selected
-    //     $('#provinceDropdown').change(function () {
-    //         var provinceId = $(this).val();
-    //         $('#provinceName').val($(this).find('option:selected').text());
-
-    //         // Reset downstream dropdowns
-    //         $('#districtDropdown').empty().append('<option value="">Select District</option>');
-    //         $('#dsDivisionDropdown').empty().append('<option value="">Select DS Division</option>');
-    //         resetGNDs();
-
-    //         if (provinceId !== '') {
-    //             $.ajax({
-    //                 url: '/provinces/' + provinceId + '/districts',
-    //                 type: 'GET',
-    //                 success: function (data) {
-    //                     $.each(data, function (index, district) {
-    //                         $('#districtDropdown').append($('<option>', {
-    //                             value: district.id,
-    //                             text: district.district
-    //                         }));
-    //                     });
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     // When a district is selected
-    //     $('#districtDropdown').change(function () {
-    //         var districtId = $(this).val();
-    //         $('#districtName').val($(this).find('option:selected').text());
-
-    //         // Reset downstream dropdowns
-    //         $('#dsDivisionDropdown').empty().append('<option value="">Select DS Division</option>');
-    //         resetGNDs();
-
-    //         if (districtId !== '') {
-    //             $.ajax({
-    //                 url: '/districts/' + districtId + '/ds-divisions',
-    //                 type: 'GET',
-    //                 success: function (data) {
-    //                     $.each(data, function (index, dsDivision) {
-    //                         $('#dsDivisionDropdown').append($('<option>', {
-    //                             value: dsDivision.id,
-    //                             text: dsDivision.division
-    //                         }));
-    //                     });
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     // When a DS Division is selected
-    //     $('#dsDivisionDropdown').change(function () {
-    //         var dsDivisionId = $(this).val();
-    //         $('#dsDivisionName').val($(this).find('option:selected').text());
-
-    //         resetGNDs();
-
-    //         if (dsDivisionId !== '') {
-    //             $.ajax({
-    //                 url: '/ds-divisions/' + dsDivisionId + '/gn-divisions',
-    //                 type: 'GET',
-    //                 success: function (data) {
-    //                     $.each(data, function (index, gnd) {
-    //                         // Append to all 3 GN dropdowns
-    //                         ['#gndDropdown', '#gndDropdown2', '#gndDropdown3'].forEach(function (dropdownId) {
-    //                             $(dropdownId).append($('<option>', {
-    //                                 value: gnd.id,
-    //                                 text: gnd.gn_division_name
-    //                             }));
-    //                         });
-    //                     });
-    //                 },
-    //                 error: function (xhr, status, error) {
-    //                     console.error(xhr.responseText);
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     // Helper to reset all GN dropdowns
-    //     function resetGNDs() {
-    //         ['#gndDropdown', '#gndDropdown2', '#gndDropdown3'].forEach(function (id) {
-    //             $(id).empty().append('<option value="">Select GN Division</option>');
-    //         });
-    //     }
-
-    // });
+    
     $(document).ready(function () {
 
     // Load Provinces
