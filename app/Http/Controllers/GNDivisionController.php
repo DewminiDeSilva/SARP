@@ -33,6 +33,15 @@ class GNDivisionController extends Controller
     return response()->json($gnds);
     }
 
+    public function getAll()
+{
+    $gnds = \App\Models\GNDivision::select('id','gn_division_name')
+        ->orderBy('gn_division_name')
+        ->get();
+
+    return response()->json($gnds);
+}
+
     /**
      * Show the form for creating a new resource.
      */
