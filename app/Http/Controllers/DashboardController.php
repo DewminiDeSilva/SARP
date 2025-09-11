@@ -8,6 +8,12 @@ use App\Models\TankRehabilitation;
 use App\Models\Beneficiary;
 use Illuminate\Support\Facades\DB;
 use App\Models\Infrastructure;
+use App\Models\CDF;
+use App\Models\AscRegistration;
+use App\Models\FarmerOrganization;
+use App\Models\Training;
+use App\Models\Grievance;
+use App\Models\YouthProposal;
 
 class DashboardController extends Controller
 {
@@ -77,7 +83,8 @@ class DashboardController extends Controller
             'livestocks' => 'Livestocks',
             'expressions' => 'Expressions',
             'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden',
-            'project_types' => 'Project Types'
+            'project_types' => 'Project Types',
+            'resilience_projects' => 'Resilience Projects'
         ];
         // Calculate beneficiary statistics
         $beneficiaryStats = $this->calculateBeneficiaryStats();
@@ -87,6 +94,15 @@ class DashboardController extends Controller
 
         // Infrastructure stats
         $infrastructureStats = $this->calculateInfrastructureStats();
+
+        // Resilience stats
+        $resilienceStats = $this->calculateResilienceStats();
+
+        // Social Inclusion & Gender stats
+        $socialInclusionStats = $this->calculateSocialInclusionStats();
+
+        // Youth Enterprises stats
+        $youthStats = $this->calculateYouthStats();
 
         $moduleStats = [
         'beneficiary' => [
@@ -109,6 +125,9 @@ class DashboardController extends Controller
             'beneficiaryStats',
             'projectTypeStats'
             ,'infrastructureStats'
+            ,'resilienceStats'
+            ,'socialInclusionStats'
+            ,'youthStats'
         ));
     }
 
@@ -348,4 +367,125 @@ private function calculateProjectTypeStats()
         'total_projects' => $totalProjects
     ];
 }
+
+    private function calculateResilienceStats()
+    {
+        // Base filter: project_type = resilience
+        $base = Beneficiary::query()->whereRaw("LOWER(TRIM(COALESCE(project_type,''))) = 'resilience'");
+
+        // Prefer dedicated tables; fallback to Beneficiary fields if empty
+        $agriTableCount = DB::table('agriculture_data')->count();
+        $liveTableCount = DB::table('livestocks')->count();
+
+        // Agriculture counts
+        if ($agriTableCount > 0) {
+            $totalFarmersAgri = (int) DB::table('agriculture_data')
+                ->whereNotNull('beneficiary_id')
+                ->distinct('beneficiary_id')
+                ->count('beneficiary_id');
+
+            $farmersByCategory = DB::table('agriculture_data')
+                ->selectRaw("LOWER(TRIM(COALESCE(category,''))) AS cat")
+                ->selectRaw('COUNT(DISTINCT beneficiary_id) AS cnt')
+                ->groupBy('cat')
+                ->pluck('cnt','cat')
+                ->filter(function($v,$k){ return $k !== ''; });
+
+            $farmersByCrop = DB::table('agriculture_data')
+                ->selectRaw("LOWER(TRIM(COALESCE(crop_name,''))) AS crop")
+                ->selectRaw('COUNT(DISTINCT beneficiary_id) AS cnt')
+                ->groupBy('crop')
+                ->pluck('cnt','crop')
+                ->filter(function($v,$k){ return $k !== ''; });
+        } else {
+            // Fallback to beneficiaries fields
+            $totalFarmersAgri = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'agriculture'")
+                ->count();
+
+            $farmersByCategory = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'agriculture'")
+                ->selectRaw("LOWER(TRIM(COALESCE(input2,''))) AS cat")
+                ->selectRaw('COUNT(*) AS cnt')
+                ->groupBy('cat')
+                ->pluck('cnt','cat')
+                ->filter(function($v,$k){ return $k !== ''; });
+
+            $farmersByCrop = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'agriculture'")
+                ->selectRaw("LOWER(TRIM(COALESCE(input3,''))) AS crop")
+                ->selectRaw('COUNT(*) AS cnt')
+                ->groupBy('crop')
+                ->pluck('cnt','crop')
+                ->filter(function($v,$k){ return $k !== ''; });
+        }
+
+        // Livestock counts
+        if ($liveTableCount > 0) {
+            $totalFarmersLivestock = (int) DB::table('livestocks')
+                ->whereNotNull('beneficiary_id')
+                ->distinct('beneficiary_id')
+                ->count('beneficiary_id');
+        } else {
+            $totalFarmersLivestock = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'livestock'")
+                ->count();
+        }
+
+        // Production focus from livestocks table if available
+        $focusRows = DB::table('livestocks')
+            ->selectRaw("CASE 
+                WHEN LOWER(TRIM(COALESCE(production_focus,''))) IN ('subsistence') THEN 'subsistence'
+                WHEN LOWER(TRIM(COALESCE(production_focus,''))) IN ('commercial') THEN 'commercial'
+                WHEN LOWER(TRIM(COALESCE(production_focus,''))) IN ('mixed','mix') THEN 'mixed'
+                ELSE 'other' END AS f")
+            ->selectRaw('COUNT(*) AS c')
+            ->groupBy('f')
+            ->pluck('c','f');
+
+        return [
+            'total_farmers_agri' => (int) $totalFarmersAgri,
+            'total_farmers_livestock' => (int) $totalFarmersLivestock,
+            'farmers_by_category' => $farmersByCategory,
+            'farmers_by_crop' => $farmersByCrop,
+            'production_focus' => [
+                'subsistence' => (int) ($focusRows['subsistence'] ?? 0),
+                'commercial'  => (int) ($focusRows['commercial'] ?? 0),
+                'mixed'       => (int) ($focusRows['mixed'] ?? 0),
+                'other'       => (int) ($focusRows['other'] ?? 0),
+            ],
+        ];
+    }
+
+    private function calculateSocialInclusionStats()
+    {
+        $cdfCount = CDF::count();
+        $ascCount = AscRegistration::count();
+        $farmerOrgCount = FarmerOrganization::count();
+        $trainingCount = class_exists(Training::class) ? Training::count() : 0;
+        $grievanceCount = class_exists(Grievance::class) ? Grievance::count() : 0;
+
+        return [
+            'cdf' => $cdfCount,
+            'asc' => $ascCount,
+            'farmer_organization' => $farmerOrgCount,
+            'training' => $trainingCount,
+            'grievances' => $grievanceCount,
+        ];
+    }
+
+    private function calculateYouthStats()
+    {
+        $total = YouthProposal::count();
+        $signed = YouthProposal::where('status', 'Agreement Signed')->count();
+        $notSigned = YouthProposal::whereNull('status')
+            ->orWhere('status', '!=', 'Agreement Signed')
+            ->count();
+
+        return [
+            'total' => $total,
+            'signed' => $signed,
+            'not_signed' => $notSigned,
+        ];
+    }
 }
