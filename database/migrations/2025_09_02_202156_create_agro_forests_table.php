@@ -30,20 +30,7 @@ return new class extends Migration {
             $table->decimal('gps_longitude', 11, 7)->nullable();
             $table->decimal('gps_latitude', 10, 7)->nullable();
 
-            // // Species + plants
-            // // For simple cases you can store a single line:
-            // $table->text('species_names')->nullable();              // comma-separated or JSON text
-            // $table->unsignedInteger('no_of_plants')->nullable();    // total plants (if single value)
-
-            // // For "Add more" (multiple rows), use these JSON arrays:
-            // // e.g., [{"name":"Teak","count":500},{"name":"Mahogany","count":300}]
-            // $table->json('species_rows')->nullable();
-
-            // // Nursery locations: three inputs + ability to add more
-            // $table->string('nursery_location_1')->nullable();
-            // $table->string('nursery_location_2')->nullable();
-            // $table->string('nursery_location_3')->nullable();
-            // $table->json('nursery_locations_extra')->nullable();    // array of extra locations
+           
 
             // Cost
             $table->decimal('establish_cost', 16, 2)->nullable();
