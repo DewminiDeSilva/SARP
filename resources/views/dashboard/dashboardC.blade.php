@@ -182,7 +182,8 @@ li:hover {
                 <a href="#" style="color: #FFFFFF">Youth Enterprises</a>
                     <ul class="nested">
                             <li><a href="/youth-proposals" style="color: #FFFFFF">Youth Proposals</a></li>
-                            <li><a href="/youth" style="color: #FFFFFF">Youth Projects</a></li>
+                            <!-- <li><a href="/youth" style="color: #FFFFFF">Youth Projects</a></li> -->
+                            <li><a href="/youth-proposal/agreement-signed" style="color: #FFFFFF">Youth Projects</a></li>
                     </ul>
             </li>
             <li class="submenu">
@@ -240,6 +241,7 @@ li:hover {
                     <li href="/awpb"><a href="/awpb" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
                     <li href="/costtab"><a href="/costtab" style="color: #FFFFFF">Cost TAB</a></li>
                     <li href="/projectdesignreport"><a href="/projectdesignreport" style="color: #FFFFFF">Project Design Report</a></li>
+                    <li href="/progress"><a href="/progress" style="color: #FFFFFF">Progress Report</a></li>
                 </ul>
 
             </li>

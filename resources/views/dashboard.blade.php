@@ -636,12 +636,21 @@
           
           <div class="form-group">
             <label for="module_id" class="form-label">Select Module</label>
-            <select name="module_id" id="module_id" class="form-select">
-              <option value="">-- Choose module --</option>
-              @foreach($modules ?? [] as $module)
-                <option value="{{ $module }}">{{ $moduleLabels[$module] ?? ucfirst(str_replace('_', ' ', $module)) }}</option>
-              @endforeach
-            </select>
+           <select name="module_id" id="module_id" class="form-select">
+  <option value="">-- Choose module --</option>
+  <option value="beneficiary">Beneficiary</option>
+  <option value="tank_rehabilitation">Tank Rehabilitation</option>
+  <option value="infrastructure">Infrastructure Development</option>
+  <option value="social_inclusion_and_gender">Social Inclusion & Gender</option>
+  <option value="resilience_projects">Resilience Projects</option>
+  <option value="youth_enterprises">Youth Enterprises</option>
+  <option value="4p_agri_business">4P Agri Business Projects</option>
+  <option value="agro_enterprise">Agro Enterprise</option>
+  <option value="nrm">Natural Resource Management (NRM)</option>
+  <option value="ffs">Farmer Field Schools (FFS)</option>
+  <option value="nutrition_training">Nutrition Training Program</option>
+  <option value="project_documents">Project Documents</option>
+</select>
           </div>
 
           <div class="d-flex gap-3 mt-3">
@@ -1077,6 +1086,185 @@
         </div>
       </div>
 
+      <!-- Resilience Projects Summary Section -->
+      <div class="chart-section" id="resilience-summary-section" style="display: none;">
+        <h2 class="chart-title">Resilience Projects - Agriculture & Livestock</h2>
+        <p class="chart-subtitle">Farmers and distributions</p>
+
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Farmers (Agriculture)</h3>
+              <div class="card-badge"><i class="fas fa-user"></i></div>
+            </div>
+            <p class="card-value">{{ $resilienceStats['total_farmers_agri'] ?? 0 }}</p>
+            <p class="card-subtitle">Beneficiaries with any agriculture record</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Farmers (Livestock)</h3>
+              <div class="card-badge" style="background:#3b82f6;"><i class="fas fa-paw"></i></div>
+            </div>
+            <p class="card-value">{{ $resilienceStats['total_farmers_livestock'] ?? 0 }}</p>
+            <p class="card-subtitle">Beneficiaries with any livestock record</p>
+          </div>
+        </div>
+
+        <div class="chart-container" style="margin-top: 1rem; flex-direction: column; gap: 2rem;">
+          <!-- Agri vs Livestock total farmers comparison -->
+          <div class="chart-container" style="width: 100%; gap: 1.5rem; align-items: stretch;">
+            <div class="chart-wrap" style="width: 100%; height: 260px; max-width: 520px;">
+              <canvas id="resilienceAgriVsLivestockBar"></canvas>
+            </div>
+            <div class="d-flex flex-column" style="gap: 0.75rem;">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cropCountModal">View Crop-wise Counts</button>
+            </div>
+          </div>
+
+          <div class="chart-wrap" style="width: 100%; height: 280px; max-width: 1000px;">
+            <canvas id="resilienceCropTypeBar"></canvas>
+          </div>
+
+          <div class="chart-container" style="gap: 2rem;">
+            <div class="chart-wrap">
+              <canvas id="resilienceCategoryDonut"></canvas>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="resilienceFocusDonut"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crop Count Modal -->
+      <div class="modal fade" id="cropCountModal" tabindex="-1" role="dialog" aria-labelledby="cropCountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="cropCountModalLabel">Summary of Beneficiaries by Crop Name</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Crop Name</th>
+                      <th style="width: 140px;" class="text-right">Count</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cropCountTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infrastructure Summary Section -->
+      <div class="chart-section" id="infrastructure-summary-section" style="display: none;">
+        <h2 class="chart-title">Infrastructure Summary</h2>
+        <p class="chart-subtitle">Totals, pipeline by status, and progress distribution</p>
+
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Infrastructures</h3>
+              <div class="card-badge"><i class="fas fa-industry"></i></div>
+            </div>
+            <p class="card-value">{{ $infrastructureStats['total'] ?? 0 }}</p>
+            <p class="card-subtitle">All infrastructure records</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Average Progress %</h3>
+              <div class="card-badge" style="background:#3b82f6;"><i class="fas fa-percentage"></i></div>
+            </div>
+            <p class="card-value">{{ $infrastructureStats['avg_progress'] ?? 0 }}%</p>
+            <p class="card-subtitle">From infrastructure_progress</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $infrastructureStats['avg_progress'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Pipeline by Status</h3>
+              <div class="card-badge" style="background:#f59e0b;"><i class="fas fa-stream"></i></div>
+            </div>
+            <p class="card-subtitle">Identified / Started / On Going / Finished</p>
+            <canvas id="infrastructureStatusChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-container" style="margin-top: 1rem;">
+          <div class="chart-wrap" style="width: 100%; height: 260px;">
+            <canvas id="infrastructureProgressHistogram"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Inclusion & Gender Section -->
+      <div class="chart-section" id="social-inclusion-section" style="display: none;">
+        <h2 class="chart-title">Social Inclusion & Gender</h2>
+        <p class="chart-subtitle">Community Development, Services, Organizations, Trainings, Grievances</p>
+
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Community Development Forum</h3>
+              <div class="card-badge"><i class="fas fa-users"></i></div>
+            </div>
+            <p class="card-value">{{ $socialInclusionStats['cdf'] ?? 0 }}</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Agrarian Services Center</h3>
+              <div class="card-badge" style="background:#3b82f6;"><i class="fas fa-tractor"></i></div>
+            </div>
+            <p class="card-value">{{ $socialInclusionStats['asc'] ?? 0 }}</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Farmer Organization</h3>
+              <div class="card-badge" style="background:#10b981;"><i class="fas fa-seedling"></i></div>
+            </div>
+            <p class="card-value">{{ $socialInclusionStats['farmer_organization'] ?? 0 }}</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Training Program Details</h3>
+              <div class="card-badge" style="background:#f59e0b;"><i class="fas fa-chalkboard-teacher"></i></div>
+            </div>
+            <p class="card-value">{{ $socialInclusionStats['training'] ?? 0 }}</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Grievances</h3>
+              <div class="card-badge" style="background:#ef4444;"><i class="fas fa-exclamation-circle"></i></div>
+            </div>
+            <p class="card-value">{{ $socialInclusionStats['grievances'] ?? 0 }}</p>
+          </div>
+        </div>
+
+        <div class="chart-wrap" style="width: 100%; height: 280px; max-width: 1000px;">
+          <canvas id="socialInclusionBar"></canvas>
+        </div>
+      </div>
+
       <!-- Module Summary Section (Default) -->
       <div class="chart-section" id="module-summary-section">
         <h2 class="chart-title">Module Summary</h2>
@@ -1421,6 +1609,58 @@
       const moduleSummarySection = document.getElementById('module-summary-section');
       const beneficiarySummarySection = document.getElementById('beneficiary-summary-section');
       const projectTypeSummarySection = document.getElementById('project-type-summary-section');
+      const infrastructureSummarySection = document.getElementById('infrastructure-summary-section');
+      const resilienceSummarySection = document.getElementById('resilience-summary-section');
+      const socialInclusionSection = document.getElementById('social-inclusion-section');
+      // Youth section
+      const youthSection = document.createElement('div');
+      youthSection.className = 'chart-section';
+      youthSection.id = 'youth-section';
+      youthSection.style.display = 'none';
+      youthSection.innerHTML = `
+        <h2 class="chart-title">Agreement Dashboard</h2>
+        <p class="chart-subtitle">Contract signing status overview</p>
+        
+        <div style="display: flex; gap: 2rem; align-items: center; margin: 2rem 0;">
+          <div style="flex: 1; max-width: 400px;">
+            <div style="position: relative; width: 100%; height: 300px;">
+              <canvas id="youthAgreementDonut"></canvas>
+              <div id="youthDonutCenter" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                <div style="font-size: 2rem; font-weight: bold; color: #1f2937;">TOTAL</div>
+                <div id="youthTotalCount" style="font-size: 3rem; font-weight: bold; color: #1f2937; margin: 0.5rem 0;">${Number(@json($youthStats['total'] ?? 0))}</div>
+                <div id="youthCompletionPercent" style="font-size: 1.2rem; color: #10b981; font-weight: 600;">0% Complete</div>
+              </div>
+            </div>
+          </div>
+          
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-left: 4px solid #10b981;">
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-check" style="color: white; font-size: 1.2rem;"></i>
+                </div>
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #1f2937;">Agreement Signed</h3>
+              </div>
+              <div id="youthSignedCount" style="font-size: 2.5rem; font-weight: bold; color: #1f2937; margin: 0.5rem 0;">${Number(@json($youthStats['signed'] ?? 0))}</div>
+              <div id="youthSignedPercent" style="font-size: 1rem; color: #10b981; font-weight: 600; margin-bottom: 0.5rem;">0.0%</div>
+              <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Successfully completed contracts</p>
+            </div>
+            
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-left: 4px solid #ef4444;">
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-hourglass-half" style="color: white; font-size: 1.2rem;"></i>
+                </div>
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #1f2937;">Pending Signature</h3>
+              </div>
+              <div id="youthPendingCount" style="font-size: 2.5rem; font-weight: bold; color: #1f2937; margin: 0.5rem 0;">${Number(@json($youthStats['not_signed'] ?? 0))}</div>
+              <div id="youthPendingPercent" style="font-size: 1rem; color: #ef4444; font-weight: 600; margin-bottom: 0.5rem;">0.0%</div>
+              <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Awaiting completion</p>
+            </div>
+          </div>
+        </div>
+      `;
+      document.querySelector('.right-column').appendChild(youthSection);
 
       // Initially hide all sections and show module summary
       tankChartSection.style.display = 'none';
@@ -1428,7 +1668,10 @@
       beneficiarySummarySection.style.display = 'none';
       projectTypeSummarySection.style.display = 'none';
       moduleSummarySection.style.display = 'block';
-
+      infrastructureSummarySection.style.display = 'none';
+      resilienceSummarySection.style.display = 'none';
+      socialInclusionSection.style.display = 'none';
+      youthSection.style.display = 'none';
       moduleSelect.addEventListener('change', function() {
         const selectedModule = this.value;
         
@@ -1440,6 +1683,19 @@
           beneficiarySummarySection.style.display = 'none';
           projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'none';
+        } else if (selectedModule === 'infrastructure') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'block';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+
+          setTimeout(() => { createInfrastructureCharts(); }, 100);
         } else if (selectedModule === 'beneficiary') {
           // Show beneficiary specific content
           tankSelectionCard.style.display = 'none';
@@ -1448,6 +1704,10 @@
           beneficiarySummarySection.style.display = 'block';
           projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
           
           // Create both beneficiary charts when showing the section
           setTimeout(() => {
@@ -1462,11 +1722,53 @@
           beneficiarySummarySection.style.display = 'none';
           projectTypeSummarySection.style.display = 'block';
           moduleSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
           
           // Create the project type chart when showing the section
           setTimeout(() => {
             createProjectTypeChart();
           }, 100);
+        } else if (selectedModule === 'resilience_projects') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'block';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+
+          setTimeout(() => { createResilienceCharts(); }, 100);
+        } else if (selectedModule === 'social_inclusion_and_gender') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'block';
+
+          setTimeout(() => { createSocialInclusionChart(); }, 100);
+        } else if (selectedModule === 'youth_enterprises') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'block';
+
+          setTimeout(() => { createYouthChart(); }, 100);
         } else if (selectedModule) {
           // Show module summary for other modules
           tankSelectionCard.style.display = 'none';
@@ -1475,6 +1777,10 @@
           beneficiarySummarySection.style.display = 'none';
           projectTypeSummarySection.style.display = 'none';
           moduleSummarySection.style.display = 'block';
+          infrastructureSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
           
           // Update module summary content
           const moduleLabels = @json($moduleLabels ?? []);
@@ -1491,8 +1797,206 @@
           moduleSummarySection.style.display = 'block';
           moduleSummarySection.querySelector('.chart-title').textContent = 'Module Summary';
           moduleSummarySection.querySelector('.text-muted').textContent = 'Select a module from the dropdown above to view its summary';
+          infrastructureSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
         }
       });
+
+      function createInfrastructureCharts(){
+        const statusCtx = document.getElementById('infrastructureStatusChart');
+        const histCtx = document.getElementById('infrastructureProgressHistogram');
+        if (!statusCtx || !histCtx) return;
+
+        const infra = @json($infrastructureStats ?? []);
+        const statusCounts = infra.status_counts || {identified:0, started:0, on_going:0, finished:0};
+
+        new Chart(statusCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Identified','Started','On Going','Finished'],
+            datasets: [{
+              data: [statusCounts.identified||0, statusCounts.started||0, statusCounts.on_going||0, statusCounts.finished||0],
+              backgroundColor: ['#6b7280','#3b82f6','#f59e0b','#10b981']
+            }]
+          },
+          options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+
+        const buckets = (infra.progress_buckets || {b0_25:0,b26_50:0,b51_75:0,b76_99:0,b100:0});
+        new Chart(histCtx, {
+          type: 'bar',
+          data: {
+            labels: ['0–25','26–50','51–75','76–99','100'],
+            datasets: [{
+              data: [buckets.b0_25||0,buckets.b26_50||0,buckets.b51_75||0,buckets.b76_99||0,buckets.b100||0],
+              backgroundColor: '#60a5fa'
+            }]
+          },
+          options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+      }
+
+      function createResilienceCharts(){
+        const stats = @json($resilienceStats ?? []);
+        if (!stats) return;
+
+        // Agri vs Livestock bar
+        const agLivCtx = document.getElementById('resilienceAgriVsLivestockBar');
+        if (agLivCtx) {
+          new Chart(agLivCtx, {
+            type: 'bar',
+            data: {
+              labels: ['Agriculture','Livestock'],
+              datasets: [{
+                data: [stats.total_farmers_agri||0, stats.total_farmers_livestock||0],
+                backgroundColor: ['#10b981','#3b82f6']
+              }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+          });
+        }
+
+        // Bar: Farmers by Crop Type
+        const cropLabels = Object.keys(stats.farmers_by_crop || {});
+        const cropValues = Object.values(stats.farmers_by_crop || {});
+        const cropCtx = document.getElementById('resilienceCropTypeBar');
+        if (cropCtx) {
+          new Chart(cropCtx, {
+            type: 'bar',
+            data: {
+              labels: cropLabels.length ? cropLabels : ['No data'],
+              datasets: [{
+                data: cropValues.length ? cropValues : [0],
+                backgroundColor: '#60a5fa'
+              }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+          });
+        }
+
+        // Donut: Farmers by Crop Category
+        const catLabels = Object.keys(stats.farmers_by_category || {});
+        const catValues = Object.values(stats.farmers_by_category || {});
+        const catCtx = document.getElementById('resilienceCategoryDonut');
+        if (catCtx) {
+          new Chart(catCtx, {
+            type: 'doughnut',
+            data: {
+              labels: catLabels.length ? catLabels : ['No data'],
+              datasets: [{
+                data: catValues.length ? catValues : [1],
+                backgroundColor: ['#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#84cc16']
+              }]
+            },
+            options: { plugins: { legend: { display: true } }, cutout: '60%' }
+          });
+        }
+
+        // Donut: Production Focus
+        const focus = stats.production_focus || {};
+        const fLabels = ['subsistence','commercial','mixed'];
+        const fValues = [focus.subsistence||0, focus.commercial||0, focus.mixed||0];
+        const fCtx = document.getElementById('resilienceFocusDonut');
+        if (fCtx) {
+          new Chart(fCtx, {
+            type: 'doughnut',
+            data: {
+              labels: fLabels,
+              datasets: [{
+                data: fValues,
+                backgroundColor: ['#22c55e','#f59e0b','#3b82f6']
+              }]
+            },
+            options: { plugins: { legend: { display: true } }, cutout: '60%' }
+          });
+        }
+
+        // Populate modal table with crop counts (sorted desc)
+        const tbody = document.getElementById('cropCountTableBody');
+        if (tbody) {
+          tbody.innerHTML = '';
+          const entries = Object.entries(stats.farmers_by_crop || {}).sort((a,b)=> (b[1]||0)-(a[1]||0));
+          if (!entries.length) {
+            tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted">No data</td></tr>';
+          } else {
+            entries.forEach(([name,count])=>{
+              const tr = document.createElement('tr');
+              const td1 = document.createElement('td');
+              const td2 = document.createElement('td');
+              td1.textContent = name ? name : '-';
+              td2.textContent = Number(count||0).toLocaleString();
+              td2.className = 'text-right';
+              tr.appendChild(td1);
+              tr.appendChild(td2);
+              tbody.appendChild(tr);
+            });
+          }
+        }
+      }
+
+      function createYouthChart(){
+        const ctx = document.getElementById('youthAgreementDonut');
+        if (!ctx) return;
+        const ys = @json($youthStats ?? []);
+        const total = (ys.total||0);
+        const signed = (ys.signed||0);
+        const notSigned = (ys.not_signed||0);
+        
+        // Calculate percentages
+        const signedPercent = total > 0 ? ((signed / total) * 100).toFixed(1) : 0;
+        const notSignedPercent = total > 0 ? ((notSigned / total) * 100).toFixed(1) : 0;
+        
+        // Update center text
+        document.getElementById('youthTotalCount').textContent = total;
+        document.getElementById('youthCompletionPercent').textContent = signedPercent + '% Complete';
+        
+        // Update card percentages
+        document.getElementById('youthSignedPercent').textContent = signedPercent + '%';
+        document.getElementById('youthPendingPercent').textContent = notSignedPercent + '%';
+        
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: { 
+            labels: ['Agreement Signed','Pending Signature'], 
+            datasets: [{ 
+              data: [signed, notSigned], 
+              backgroundColor: ['#10b981','#ef4444'], 
+              borderColor: '#ffffff', 
+              borderWidth: 4,
+              hoverBorderWidth: 6
+            }] 
+          },
+          options: { 
+            cutout: '70%', 
+            plugins: { 
+              legend: { 
+                display: false 
+              } 
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+
+      function createSocialInclusionChart(){
+        const ctx = document.getElementById('socialInclusionBar');
+        if (!ctx) return;
+        const s = @json($socialInclusionStats ?? []);
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['CDF','ASC','Farmer Org','Training','Grievances'],
+            datasets: [{
+              data: [s.cdf||0, s.asc||0, s.farmer_organization||0, s.training||0, s.grievances||0],
+              backgroundColor: ['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444']
+            }]
+          },
+          options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+      }
     })();
   </script>
 </body>

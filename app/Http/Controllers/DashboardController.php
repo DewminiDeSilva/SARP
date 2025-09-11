@@ -7,6 +7,13 @@ use App\Models\Tank;
 use App\Models\TankRehabilitation;
 use App\Models\Beneficiary;
 use Illuminate\Support\Facades\DB;
+use App\Models\Infrastructure;
+use App\Models\CDF;
+use App\Models\AscRegistration;
+use App\Models\FarmerOrganization;
+use App\Models\Training;
+use App\Models\Grievance;
+use App\Models\YouthProposal;
 
 class DashboardController extends Controller
 {
@@ -76,13 +83,26 @@ class DashboardController extends Controller
             'livestocks' => 'Livestocks',
             'expressions' => 'Expressions',
             'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden',
-            'project_types' => 'Project Types'
+            'project_types' => 'Project Types',
+            'resilience_projects' => 'Resilience Projects'
         ];
         // Calculate beneficiary statistics
         $beneficiaryStats = $this->calculateBeneficiaryStats();
         
         // Calculate project type statistics
         $projectTypeStats = $this->calculateProjectTypeStats();
+
+        // Infrastructure stats
+        $infrastructureStats = $this->calculateInfrastructureStats();
+
+        // Resilience stats
+        $resilienceStats = $this->calculateResilienceStats();
+
+        // Social Inclusion & Gender stats
+        $socialInclusionStats = $this->calculateSocialInclusionStats();
+
+        // Youth Enterprises stats
+        $youthStats = $this->calculateYouthStats();
 
         $moduleStats = [
         'beneficiary' => [
@@ -104,6 +124,10 @@ class DashboardController extends Controller
             'moduleStats',
             'beneficiaryStats',
             'projectTypeStats'
+            ,'infrastructureStats'
+            ,'resilienceStats'
+            ,'socialInclusionStats'
+            ,'youthStats'
         ));
     }
 
@@ -256,6 +280,68 @@ return [
 ];
 }
 
+    private function calculateInfrastructureStats()
+    {
+        $query = Infrastructure::query();
+
+        $all = $query->get();
+
+        $total = $all->count();
+
+        // Normalize status comparisons
+        $statusCounts = [
+            'identified' => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'identified'; })->count(),
+            'started'    => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'started'; })->count(),
+            'on_going'   => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'on going'; })->count(),
+            'finished'   => $all->filter(function($r){ return strtolower(trim((string)$r->status)) === 'finished'; })->count(),
+        ];
+
+        // Average progress from infrastructure_progress (may be number or string with %)
+        $progressValues = $all->pluck('infrastructure_progress')
+            ->filter(function($progress){
+                if (is_null($progress)) return false;
+                if (is_numeric($progress)) return $progress >= 0 && $progress <= 100;
+                if (is_string($progress)) {
+                    $clean = str_replace('%','', trim($progress));
+                    return is_numeric($clean) && $clean >= 0 && $clean <= 100;
+                }
+                return false;
+            })
+            ->map(function($progress){
+                if (is_string($progress)) {
+                    return (float) str_replace('%','', trim($progress));
+                }
+                return (float) $progress;
+            })
+            ->values();
+
+        $avgProgress = $progressValues->count() > 0 ? round($progressValues->avg(), 1) : 0;
+
+        // Progress distribution buckets (0–25–50–75–100]
+        $buckets = [
+            'b0_25'  => 0,
+            'b26_50' => 0,
+            'b51_75' => 0,
+            'b76_99' => 0,
+            'b100'   => 0,
+        ];
+
+        foreach ($progressValues as $val) {
+            if ($val <= 25) { $buckets['b0_25']++; }
+            elseif ($val <= 50) { $buckets['b26_50']++; }
+            elseif ($val <= 75) { $buckets['b51_75']++; }
+            elseif ($val < 100) { $buckets['b76_99']++; }
+            else { $buckets['b100']++; }
+        }
+
+        return [
+            'total' => $total,
+            'status_counts' => $statusCounts,
+            'avg_progress' => $avgProgress,
+            'progress_buckets' => $buckets,
+        ];
+    }
+
 private function calculateProjectTypeStats()
 {
     // Get project type counts from beneficiaries table
@@ -281,4 +367,125 @@ private function calculateProjectTypeStats()
         'total_projects' => $totalProjects
     ];
 }
+
+    private function calculateResilienceStats()
+    {
+        // Base filter: project_type = resilience
+        $base = Beneficiary::query()->whereRaw("LOWER(TRIM(COALESCE(project_type,''))) = 'resilience'");
+
+        // Prefer dedicated tables; fallback to Beneficiary fields if empty
+        $agriTableCount = DB::table('agriculture_data')->count();
+        $liveTableCount = DB::table('livestocks')->count();
+
+        // Agriculture counts
+        if ($agriTableCount > 0) {
+            $totalFarmersAgri = (int) DB::table('agriculture_data')
+                ->whereNotNull('beneficiary_id')
+                ->distinct('beneficiary_id')
+                ->count('beneficiary_id');
+
+            $farmersByCategory = DB::table('agriculture_data')
+                ->selectRaw("LOWER(TRIM(COALESCE(category,''))) AS cat")
+                ->selectRaw('COUNT(DISTINCT beneficiary_id) AS cnt')
+                ->groupBy('cat')
+                ->pluck('cnt','cat')
+                ->filter(function($v,$k){ return $k !== ''; });
+
+            $farmersByCrop = DB::table('agriculture_data')
+                ->selectRaw("LOWER(TRIM(COALESCE(crop_name,''))) AS crop")
+                ->selectRaw('COUNT(DISTINCT beneficiary_id) AS cnt')
+                ->groupBy('crop')
+                ->pluck('cnt','crop')
+                ->filter(function($v,$k){ return $k !== ''; });
+        } else {
+            // Fallback to beneficiaries fields
+            $totalFarmersAgri = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'agriculture'")
+                ->count();
+
+            $farmersByCategory = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'agriculture'")
+                ->selectRaw("LOWER(TRIM(COALESCE(input2,''))) AS cat")
+                ->selectRaw('COUNT(*) AS cnt')
+                ->groupBy('cat')
+                ->pluck('cnt','cat')
+                ->filter(function($v,$k){ return $k !== ''; });
+
+            $farmersByCrop = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'agriculture'")
+                ->selectRaw("LOWER(TRIM(COALESCE(input3,''))) AS crop")
+                ->selectRaw('COUNT(*) AS cnt')
+                ->groupBy('crop')
+                ->pluck('cnt','crop')
+                ->filter(function($v,$k){ return $k !== ''; });
+        }
+
+        // Livestock counts
+        if ($liveTableCount > 0) {
+            $totalFarmersLivestock = (int) DB::table('livestocks')
+                ->whereNotNull('beneficiary_id')
+                ->distinct('beneficiary_id')
+                ->count('beneficiary_id');
+        } else {
+            $totalFarmersLivestock = (clone $base)
+                ->whereRaw("LOWER(TRIM(COALESCE(input1,''))) = 'livestock'")
+                ->count();
+        }
+
+        // Production focus from livestocks table if available
+        $focusRows = DB::table('livestocks')
+            ->selectRaw("CASE 
+                WHEN LOWER(TRIM(COALESCE(production_focus,''))) IN ('subsistence') THEN 'subsistence'
+                WHEN LOWER(TRIM(COALESCE(production_focus,''))) IN ('commercial') THEN 'commercial'
+                WHEN LOWER(TRIM(COALESCE(production_focus,''))) IN ('mixed','mix') THEN 'mixed'
+                ELSE 'other' END AS f")
+            ->selectRaw('COUNT(*) AS c')
+            ->groupBy('f')
+            ->pluck('c','f');
+
+        return [
+            'total_farmers_agri' => (int) $totalFarmersAgri,
+            'total_farmers_livestock' => (int) $totalFarmersLivestock,
+            'farmers_by_category' => $farmersByCategory,
+            'farmers_by_crop' => $farmersByCrop,
+            'production_focus' => [
+                'subsistence' => (int) ($focusRows['subsistence'] ?? 0),
+                'commercial'  => (int) ($focusRows['commercial'] ?? 0),
+                'mixed'       => (int) ($focusRows['mixed'] ?? 0),
+                'other'       => (int) ($focusRows['other'] ?? 0),
+            ],
+        ];
+    }
+
+    private function calculateSocialInclusionStats()
+    {
+        $cdfCount = CDF::count();
+        $ascCount = AscRegistration::count();
+        $farmerOrgCount = FarmerOrganization::count();
+        $trainingCount = class_exists(Training::class) ? Training::count() : 0;
+        $grievanceCount = class_exists(Grievance::class) ? Grievance::count() : 0;
+
+        return [
+            'cdf' => $cdfCount,
+            'asc' => $ascCount,
+            'farmer_organization' => $farmerOrgCount,
+            'training' => $trainingCount,
+            'grievances' => $grievanceCount,
+        ];
+    }
+
+    private function calculateYouthStats()
+    {
+        $total = YouthProposal::count();
+        $signed = YouthProposal::where('status', 'Agreement Signed')->count();
+        $notSigned = YouthProposal::whereNull('status')
+            ->orWhere('status', '!=', 'Agreement Signed')
+            ->count();
+
+        return [
+            'total' => $total,
+            'signed' => $signed,
+            'not_signed' => $notSigned,
+        ];
+    }
 }

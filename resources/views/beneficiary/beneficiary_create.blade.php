@@ -642,14 +642,6 @@
 
     </div>
 
-
-
-
-
-
-
-
-
     <!-- Phone, Address, and Family Members Count -->
     <div class="form-row">
 
