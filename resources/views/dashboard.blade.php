@@ -1272,6 +1272,48 @@
           <p class="text-muted">Select a module from the dropdown above to view its summary</p>
         </div>
       </div>
+
+      <!-- 4P Agri Business Projects (EOI) Section -->
+      <div class="chart-section" id="fourp-summary-section" style="display: none;">
+        <h2 class="chart-title">4P Agri Business Development Projects</h2>
+        <p class="chart-subtitle">Expressions of Interest status overview</p>
+
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Total EOIs Received</h3><div class="card-badge"><i class="fas fa-inbox"></i></div></div>
+            <p class="card-value">{{ $fourPStats['total'] ?? 0 }}</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Rejected EOIs</h3><div class="card-badge" style="background:#ef4444"><i class="fas fa-times"></i></div></div>
+            <p class="card-value">{{ $fourPStats['rejected'] ?? 0 }}</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">BPEC Approved</h3><div class="card-badge" style="background:#3b82f6"><i class="fas fa-stamp"></i></div></div>
+            <p class="card-value">{{ $fourPStats['bpec_approved'] ?? 0 }}</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Agreement Signed</h3><div class="card-badge" style="background:#10b981"><i class="fas fa-file-signature"></i></div></div>
+            <p class="card-value">{{ $fourPStats['agreement_signed'] ?? 0 }}</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">IFAD Approved</h3><div class="card-badge" style="background:#8b5cf6"><i class="fas fa-check"></i></div></div>
+            <p class="card-value">{{ $fourPStats['ifad_approved'] ?? 0 }}</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">NSC Approved</h3><div class="card-badge" style="background:#f59e0b"><i class="fas fa-thumbs-up"></i></div></div>
+            <p class="card-value">{{ $fourPStats['nsc_approved'] ?? 0 }}</p>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-wrap" style="width: 100%; height: 280px; max-width: 720px;">
+            <canvas id="fourPStatusBar"></canvas>
+          </div>
+          <div class="chart-wrap" style="width: 220px; height: 220px;">
+            <canvas id="fourPStatusDonut"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1612,6 +1654,7 @@
       const infrastructureSummarySection = document.getElementById('infrastructure-summary-section');
       const resilienceSummarySection = document.getElementById('resilience-summary-section');
       const socialInclusionSection = document.getElementById('social-inclusion-section');
+      const fourPSummarySection = document.getElementById('fourp-summary-section');
       // Youth section
       const youthSection = document.createElement('div');
       youthSection.className = 'chart-section';
@@ -1671,6 +1714,7 @@
       infrastructureSummarySection.style.display = 'none';
       resilienceSummarySection.style.display = 'none';
       socialInclusionSection.style.display = 'none';
+      fourPSummarySection.style.display = 'none';
       youthSection.style.display = 'none';
       moduleSelect.addEventListener('change', function() {
         const selectedModule = this.value;
@@ -1769,6 +1813,20 @@
           youthSection.style.display = 'block';
 
           setTimeout(() => { createYouthChart(); }, 100);
+        } else if (selectedModule === '4p_agri_business') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'block';
+
+          setTimeout(() => { createFourPCharts(); }, 100);
         } else if (selectedModule) {
           // Show module summary for other modules
           tankSelectionCard.style.display = 'none';
@@ -1781,6 +1839,7 @@
           resilienceSummarySection.style.display = 'none';
           socialInclusionSection.style.display = 'none';
           youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'none';
           
           // Update module summary content
           const moduleLabels = @json($moduleLabels ?? []);
@@ -1801,6 +1860,7 @@
           resilienceSummarySection.style.display = 'none';
           socialInclusionSection.style.display = 'none';
           youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'none';
         }
       });
 
@@ -1996,6 +2056,38 @@
           },
           options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
         });
+      }
+
+      function createFourPCharts(){
+        const s = @json($fourPStats ?? []);
+        const barCtx = document.getElementById('fourPStatusBar');
+        const donutCtx = document.getElementById('fourPStatusDonut');
+        if (barCtx) {
+          new Chart(barCtx, {
+            type: 'bar',
+            data: {
+              labels: ['Total','Rejected','BPEC Approved','Agreement Signed','IFAD Approved','NSC Approved'],
+              datasets: [{
+                data: [s.total||0, s.rejected||0, s.bpec_approved||0, s.agreement_signed||0, s.ifad_approved||0, s.nsc_approved||0],
+                backgroundColor: ['#6366f1','#ef4444','#3b82f6','#10b981','#8b5cf6','#f59e0b']
+              }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+          });
+        }
+        if (donutCtx) {
+          new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Rejected','BPEC','Signed','IFAD','NSC'],
+              datasets: [{
+                data: [s.rejected||0, s.bpec_approved||0, s.agreement_signed||0, s.ifad_approved||0, s.nsc_approved||0],
+                backgroundColor: ['#ef4444','#3b82f6','#10b981','#8b5cf6','#f59e0b']
+              }]
+            },
+            options: { plugins: { legend: { display: true } }, cutout: '60%' }
+          });
+        }
       }
     })();
   </script>
