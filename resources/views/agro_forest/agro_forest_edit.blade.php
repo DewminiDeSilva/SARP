@@ -58,7 +58,7 @@
             </a>
         </div>
 
-        <h2 class="text-center" style="color: green;">Agro Forest — Edit</h2>
+        <h2 class="text-center" style="color: green;">Agro Forest Edit</h2>
 
         {{-- Validation Errors --}}
         @if ($errors->any())
@@ -81,99 +81,144 @@
                 @method('PUT')
 
                 {{-- Province / District / GN (optional) --}}
-                <div class="row">
-                    <div class="col">
-                        <div class="dropdown">
-                            <label for="provinceDropdown" class="form-label dropdown-label">Province</label>
-                            <select id="provinceDropdown" name="province_name" class="form-control">
-                                <option value="">Select Province</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="dropdown">
-                            <label for="districtDropdown" class="form-label dropdown-label">District</label>
-                            <select id="districtDropdown" name="district" class="form-control">
-                                <option value="">Select District</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="dropdown">
-                            <label for="gndDropdown" class="form-label dropdown-label">GN Division (Optional)</label>
-                            <select id="gndDropdown" name="gn_division_name" class="form-control">
-                                <option value="">Select GN Division</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <br>
-
-                <div class="three-dropdown-row">
-                    <div class="col">
-                        <div class="dropdown">
-                            <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
-                            <select id="tankDropdown" class="btn btn-success dropdown-toggle greenbackground" name="tank_name">
-                                <option value="">Select Tank</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Other basic fields --}}
-               @php
-    $riverBasins = ['Mee Oya', 'Daduru Oya', 'Malwathu Oya'];
-    $currentBasin = old('river_basin', $agro_forest->river_basin);
-@endphp
-
-<div class="form-group mb-3">
-    <label for="river_basin" class="form-label dropdown-label">River Basin</label>
-    <select class="form-control btn btn-success" name="river_basin" id="river_basin" required>
-        <option value="">Select River Basin</option>
-        @foreach ($riverBasins as $rb)
-            <option value="{{ $rb }}" {{ $currentBasin === $rb ? 'selected' : '' }}>
-                {{ $rb }}
-            </option>
-        @endforeach
+               <div class="row g-3">
+  <div class="col-12 col-md-3">
+    <label for="river_basin" class="form-label">River Basin</label>
+    <select class="form-select" name="river_basin" id="river_basin" required>
+      <option value="">Select River Basin</option>
+      <option value="Mee Oya">Mee Oya</option>
+      <option value="Daduru Oya">Daduru Oya</option>
+      <option value="Malwathu Oya">Malwathu Oya</option>
+      <option selected>{{ $agro_forest->river_basin ?? 'N/A' }}</option>
     </select>
+  </div>
+
+  <div class="col-12 col-md-3">
+    <label for="provinceDropdown" class="form-label">Province</label>
+    <select id="provinceDropdown" name="province_id" class="form-select">
+      <option value="">Select Province</option>
+      <option selected>{{ $agro_forest->province_name ?? 'N/A' }}</option>
+    </select>
+    <input type="hidden" id="provinceName" name="province_name">
+  </div>
+
+  <div class="col-12 col-md-3">
+    <label for="districtDropdown" class="form-label">District</label>
+    <select id="districtDropdown" name="district_id" class="form-select">
+        <option selected>{{ $agro_forest->district?? 'N/A' }}</option>
+      <option value="">Select District</option>
+    </select>
+    <input type="hidden" id="districtName" name="district">
+  </div>
+
+  <div class="col-12 col-md-3">
+    <label for="dsDivisionDropdown" class="form-label">DS Division</label>
+    <select id="dsDivisionDropdown" name="ds_division_id" class="form-select">
+      <option value="">Select DS Division</option>
+       <option selected>{{ $agro_forest->ds_division_name ?? 'N/A' }}</option>
+    </select>
+    <input type="hidden" id="dsDivisionName" name="ds_division_name">
+  </div>
 </div>
 
-                <div class="form-group mb-3">
-                    <label class="bold-label">Replanting Forest Beat Name</label>
-                    <input type="text" class="form-control" name="replanting_forest_beat_name" value="{{ old('replanting_forest_beat_name', $agro_forest->replanting_forest_beat_name) }}">
-                </div>
+<!-- Row 2: GN Divisions -->
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-4">
+    <label for="gndDropdown" class="form-label">GN Division</label>
+    <select id="gndDropdown" name="gn_division_name" class="form-select">
+      <option value="">Select GN Division</option>
+       <option selected>{{ $agro_forest->gn_division_name ?? 'N/A' }}</option>
+    </select>
+    <input type="hidden" id="gndName" name="gn_division_name">
+  </div>
 
-                <div class="form-group mb-3">
-                    <label class="bold-label">Number of Hectares (Ha)</label>
-                    <input type="number" step="0.01" class="form-control" name="number_of_hectares" value="{{ old('number_of_hectares', $agro_forest->number_of_hectares) }}">
-                </div>
+  <div class="col-12 col-md-4">
+    <label for="gndDropdown2" class="form-label">GN Division 2</label>
+    <select id="gndDropdown2" name="gn_division_name_2" class="form-select">
+      <option value="">Select GN Division 2</option>
+      <option selected>{{ $agro_forest->gn_division_name_2 ?? 'N/A' }}</option>
+    </select>
+    <input type="hidden" id="gndName2" name="gn_division_name_2">
+  </div>
 
-                <div class="form-row">
-                    <div class="form-group col">
-                        <label class="bold-label">GPS Longitude</label>
-                        <input type="text" class="form-control" name="gps_longitude" value="{{ old('gps_longitude', $agro_forest->gps_longitude) }}">
-                    </div>
-                    <div class="form-group col">
-                        <label class="bold-label">GPS Latitude</label>
-                        <input type="text" class="form-control" name="gps_latitude" value="{{ old('gps_latitude', $agro_forest->gps_latitude) }}">
-                    </div>
-                </div>
+  <div class="col-12 col-md-4">
+    <label for="gndDropdown3" class="form-label">GN Division 3</label>
+    <select id="gndDropdown3" name="gn_division_name_3" class="form-select">
+      <option value="">Select GN Division 3</option>
+      <option selected>{{ $agro_forest->gn_division_name_2 ?? 'N/A' }}</option>
+    </select>
+    <input type="hidden" id="gndName3" name="gn_division_name_3">
+  </div>
+</div>
 
-                {{-- Optional extra tank names if you use them --}}
-                <div class="form-row">
-                    <div class="form-group col">
-                        <label class="bold-label">Tank Name 2 (Optional)</label>
-                        <input type="text" class="form-control" name="tank_name_2" value="{{ old('tank_name_2', $agro_forest->tank_name_2) }}">
-                    </div>
-                    <div class="form-group col">
-                        <label class="bold-label">Tank Name 3 (Optional)</label>
-                        <input type="text" class="form-control" name="tank_name_3" value="{{ old('tank_name_3', $agro_forest->tank_name_3) }}">
-                    </div>
-                </div>
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-4 offset-md-4">
+    <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
+    <select name="tank_name" class="form-control tankDropdown">
+      <option value="">Select Tank</option>
+      <option selected>{{ $agro_forest->tank_name ?? 'N/A' }}</option>
+    </select>
+  </div>
+</div>
 
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-4 offset-md-4">
+    <label class="form-label dropdown-label">Select Tank Name 2</label>
+    <select name="tank_name_2" class="form-control tankDropdown">
+      <option value="">Select Tank 2</option>
+        <option selected>{{ $agro_forest->tank_name_2 ?? 'N/A' }}</option>
+    </select>
+  </div>
+</div>
+
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-4 offset-md-4">
+    <label class="form-label dropdown-label">Select Tank Name 3</label>
+    <select name="tank_name_3" class="form-control tankDropdown">
+      <option value="">Select Tank 3</option>
+        <option selected>{{ $agro_forest->tank_name_3 ?? 'N/A' }}</option>
+    </select>
+  </div>
+</div>
+                 <div class="form-group mb-3">
+    <label class="bold-label">Replanting Forest Beat Name</label>
+    <input 
+        type="text" 
+        class="form-control" 
+        name="replanting_forest_beat_name" 
+        value="{{ old('replanting_forest_beat_name', $agro_forest->replanting_forest_beat_name ?? '') }}">
+</div>
+
+<div class="form-group mb-3">
+    <label class="bold-label">Number of Hectares (Ha)</label>
+    <input 
+        type="number" 
+        step="0.01" 
+        class="form-control" 
+        name="number_of_hectares" 
+        value="{{ old('number_of_hectares', $agro_forest->number_of_hectares ?? '') }}">
+</div>
+
+<div class="form-row">
+    <div class="form-group col">
+        <label class="bold-label">GPS Longitude</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            name="gps_longitude" 
+            value="{{ old('gps_longitude', $agro_forest->gps_longitude ?? '') }}">
+    </div>
+    <div class="form-group col">
+        <label class="bold-label">GPS Latitude</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            name="gps_latitude" 
+            value="{{ old('gps_latitude', $agro_forest->gps_latitude ?? '') }}">
+    </div>
+</div>
+
+                    
                 {{-- Species --}}
                 <h5 class="mt-3">Species Details</h5>
                 <table class="table table-bordered" id="speciesTable">
@@ -206,59 +251,113 @@
                     </tbody>
                 </table>
 
-                {{-- Nursery --}}
-                <h5 class="mt-3">Nursery Locations</h5>
-                <table class="table table-bordered" id="nurseryTable">
-                    <thead class="table-success">
-                        <tr>
-                            <th>Location</th>
-                            <th style="width:120px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $nurseryLocs = old('nursery_locations_extra') ?? $agro_forest->nurseries->pluck('location')->toArray();
-                            if (empty($nurseryLocs)) { $nurseryLocs = ['']; }
-                        @endphp
-                        @foreach($nurseryLocs as $i => $loc)
-                            <tr>
-                                <td><input type="text" name="nursery_locations_extra[]" class="form-control" value="{{ $loc }}"></td>
-                                <td>
-                                    @if($loop->first)
-                                        <button type="button" class="btn btn-sm btn-success addNursery">Add</button>
-                                    @else
-                                        <button type="button" class="btn btn-sm btn-danger removeRow">Remove</button>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+           <!-- Nursery Locations (dynamic) -->
+<h5 class="mt-3">Plant Nursery Location</h5>
+<table class="table table-bordered" id="nurseryTable">
+    <thead class="table-success">
+        <tr>
+            <th>Location</th>
+            <th>No. of Plants</th>
+            <th style="width: 120px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @php
+            // Case 1: After validation failure → show old inputs
+            $oldLocs   = old('nursery_locations_extra');
+            $oldPlants = old('nursery_plants_extra');
 
-                {{-- Cost + Proposal --}}
-                <div class="form-group mb-3">
-                    <label class="bold-label">Establish Cost</label>
-                    <input type="number" step="0.01" class="form-control" name="establish_cost" value="{{ old('establish_cost', $agro_forest->establish_cost) }}">
-                </div>
+            if ($oldLocs !== null && $oldPlants !== null) {
+                $nurseryData = collect($oldLocs)->map(function($loc, $i) use ($oldPlants) {
+                    return ['location' => $loc, 'plants' => $oldPlants[$i] ?? ''];
+                });
+            } else {
+                // Case 2: Edit mode → show saved DB values
+                // Assuming $agro_forest->nurseries is a collection/array of models
+                $nurseryData = $agro_forest->nurseries && $agro_forest->nurseries->count() > 0
+                    ? $agro_forest->nurseries
+                    : collect([['location' => '', 'plants' => '']]); // Case 3: default empty row
+            }
+        @endphp
 
-                <div class="form-group mb-3">
-                    <label class="bold-label d-block">Project Proposal (PDF)</label>
-                    @php
-                        $proposalUrl = $agro_forest->project_proposal_path ? asset('storage/'.$agro_forest->project_proposal_path) : null;
-                    @endphp
-                    @if($proposalUrl)
-                        <div class="mb-2 d-flex flex-wrap gap-2">
-                            <a href="{{ $proposalUrl }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                <i class="fa fa-file-pdf me-1"></i> View current
-                            </a>
-                            <a href="{{ $proposalUrl }}" download class="btn btn-outline-secondary btn-sm">
-                                <i class="fa fa-download me-1"></i> Download
-                            </a>
-                        </div>
-                        <small class="text-muted d-block mb-2">Upload a new file to replace the current one (optional).</small>
+        @foreach($nurseryData as $i => $nursery)
+            <tr>
+                <td>
+                    <input type="text" name="nursery_locations_extra[]" class="form-control"
+                           value="{{ is_array($nursery) ? $nursery['location'] : $nursery->location }}">
+                </td>
+                <td>
+                    <input type="number" name="nursery_plants_extra[]" class="form-control"
+                           value="{{ is_array($nursery) ? $nursery['plants'] : $nursery->no_of_plants }}">
+                </td>
+                <td>
+                    @if($loop->first)
+                        <button type="button" class="btn btn-sm btn-success addNursery">Add</button>
+                    @else
+                        <button type="button" class="btn btn-sm btn-danger removeRow">Remove</button>
                     @endif
-                    <input type="file" class="form-control" name="project_proposal" accept="application/pdf">
-                </div>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
+            {{-- Cost + Proposal --}}
+<div class="form-group mb-3">
+    <label class="bold-label">Establish Cost</label>
+    <input 
+        type="number" 
+        step="0.01" 
+        class="form-control" 
+        name="establish_cost" 
+        value="{{ old('establish_cost', $agro_forest->establish_cost ?? '') }}">
+</div>
+
+
+               <div class="form-group mb-3">
+    <label class="bold-label d-block">Project Proposal (PDF)</label>
+    @php
+        $proposalUrl = $agro_forest->project_proposal_path 
+            ? asset('storage/' . $agro_forest->project_proposal_path) 
+            : null;
+    @endphp
+
+    {{-- If file exists, show actions --}}
+    @if($proposalUrl)
+        <div class="mb-2 d-flex flex-wrap gap-2">
+            <a href="{{ $proposalUrl }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                <i class="fa fa-file-pdf me-1"></i> View Current
+            </a>
+            <a href="{{ $proposalUrl }}" download class="btn btn-outline-secondary btn-sm">
+                <i class="fa fa-download me-1"></i> Download
+            </a>
+        </div>
+        <small class="text-muted d-block mb-2">
+            Upload a new file to replace the current one (optional).
+        </small>
+    @else
+        <small class="text-muted d-block mb-2">
+            No proposal uploaded yet. You can upload one below.
+        </small>
+    @endif
+
+    {{-- Upload new / replacement --}}
+    <input 
+        type="file" 
+        class="form-control" 
+        name="project_proposal" 
+        accept="application/pdf">
+</div>
+
+                   <div class="form-group mb-3">
+                        <label class="bold-label">Paid Amount</label>
+                        <input type="text" class="form-control" name="paid_amount" value="{{ old('paid_amount') }}">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="bold-label">Number of trees</label>
+                        <input type="number" step="0.01" class="form-control" name="no_of_trees_plans" value="{{ old('nno_of_trees_plans') }}">
+                    </div>
 
                 <div class="d-flex justify-content-center align-items-center">
                     <button type="submit" class="btn submitbtton mt-3">Update</button>
@@ -301,89 +400,148 @@ $(function () {
         $(this).closest('tr').remove();
     });
 
-    // ---- Prefill selects (Province -> District -> GN) ----
-    const savedProvince = @json(old('province_name', $agro_forest->province_name));
-    const savedDistrict = @json(old('district', $agro_forest->district));
-    const savedGN       = @json(old('gn_division_name', $agro_forest->gn_division_name));
-    const savedTank     = @json(old('tank_name', $agro_forest->tank_name));
+   
+});
+</script>
 
-    // Provinces: value = name, data-id = id (to fetch districts)
-    $.get('/provinces', function (data) {
-        const $prov = $('#provinceDropdown');
-        $prov.empty().append('<option value="">Select Province</option>');
+    <script>
+    
+    $(document).ready(function () {
 
-        let selectedProvId = null;
-        $.each(data, function (i, province) {
-            const selected = (province.name === savedProvince) ? 'selected' : '';
-            if (selected) selectedProvId = province.id;
-            $prov.append(`<option data-id="${province.id}" value="${province.name}" ${selected}>${province.name}</option>`);
-        });
-
-        // Load districts if we know the province id
-        if (selectedProvId) {
-            loadDistricts(selectedProvId, savedDistrict, function () {
-                // After districts loaded, load GNs (optional)
-                if (savedDistrict) loadGNs(savedDistrict, savedGN);
+    // Load Provinces
+    $.ajax({
+        url: '/provinces',
+        type: 'GET',
+        success: function (data) {
+            $('#provinceDropdown').append('<option value="">Select Province</option>');
+            $.each(data, function (index, province) {
+                $('#provinceDropdown').append($('<option>', {
+                    value: province.id,
+                    text: province.name
+                }));
             });
         }
     });
 
-    // On province change -> reload districts (and clear GN)
-    $('#provinceDropdown').on('change', function () {
-        const provId = $(this).find(':selected').data('id') || '';
-        $('#districtDropdown').empty().append('<option value="">Select District</option>');
-        $('#gndDropdown').empty().append('<option value="">Select GN Division</option>');
-        if (provId) loadDistricts(provId, null);
-    });
+    // On Province Change
+    $('#provinceDropdown').change(function () {
+        var selectedName = $(this).find('option:selected').text();
+        $('#provinceName').val(selectedName); // Store name
 
-    // On district change -> reload GNs
-    $('#districtDropdown').on('change', function () {
-        const district = $(this).val();
-        $('#gndDropdown').empty().append('<option value="">Select GN Division</option>');
-        if (district) loadGNs(district, null);
-    });
+        var provinceId = $(this).val();
+        resetDropdown('#districtDropdown', 'Select District');
+        resetDropdown('#dsDivisionDropdown', 'Select DS Division');
+        resetGNDs();
 
-    function loadDistricts(provinceId, selectedDistrict = null, cb = null) {
-        $.get(`/provinces/${encodeURIComponent(provinceId)}/districts`, function (data) {
-            const $dist = $('#districtDropdown');
-            $dist.empty().append('<option value="">Select District</option>');
-            $.each(data, function (i, d) {
-                const sel = (d.district === selectedDistrict) ? 'selected' : '';
-                $dist.append(`<option value="${d.district}" ${sel}>${d.district}</option>`);
+        if (provinceId !== '') {
+            $.ajax({
+                url: '/provinces/' + provinceId + '/districts',
+                type: 'GET',
+                success: function (data) {
+                    $.each(data, function (index, district) {
+                        $('#districtDropdown').append($('<option>', {
+                            value: district.id,
+                            text: district.district
+                        }));
+                    });
+                }
             });
-            if (cb) cb();
-        });
+        }
+    });
+
+    // On District Change
+    $('#districtDropdown').change(function () {
+        var selectedName = $(this).find('option:selected').text();
+        $('#districtName').val(selectedName); // Store name
+
+        var districtId = $(this).val();
+        resetDropdown('#dsDivisionDropdown', 'Select DS Division');
+        resetGNDs();
+
+        if (districtId !== '') {
+            $.ajax({
+                url: '/districts/' + districtId + '/ds-divisions',
+                type: 'GET',
+                success: function (data) {
+                    $.each(data, function (index, dsDivision) {
+                        $('#dsDivisionDropdown').append($('<option>', {
+                            value: dsDivision.id,
+                            text: dsDivision.division
+                        }));
+                    });
+                }
+            });
+        }
+    });
+
+    // On DS Division Change
+    $('#dsDivisionDropdown').change(function () {
+        var selectedName = $(this).find('option:selected').text();
+        $('#dsDivisionName').val(selectedName); // Store name
+
+        var dsDivisionId = $(this).val();
+        resetGNDs();
+
+        if (dsDivisionId !== '') {
+            $.ajax({
+                url: '/ds-divisions/' + dsDivisionId + '/gn-divisions',
+                type: 'GET',
+                success: function (data) {
+                    $.each(data, function (index, gnd) {
+                        ['#gndDropdown', '#gndDropdown2', '#gndDropdown3'].forEach(function (dropdownId) {
+                            $(dropdownId).append($('<option>', {
+                                value: gnd.id,
+                                text: gnd.gn_division_name
+                            }));
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+    // On GN Division selections: store names
+    $('#gndDropdown').change(function () {
+        var name = $(this).find('option:selected').text();
+        $('#gndName').val(name);
+    });
+
+    $('#gndDropdown2').change(function () {
+        var name = $(this).find('option:selected').text();
+        $('#gndName2').val(name);
+    });
+
+    $('#gndDropdown3').change(function () {
+        var name = $(this).find('option:selected').text();
+        $('#gndName3').val(name);
+    });
+
+    // Helpers
+    function resetDropdown(selector, placeholder) {
+        $(selector).empty().append('<option value="">' + placeholder + '</option>');
     }
 
-    function loadGNs(districtName, selectedGN = null) {
-        $.get('/gn-divisions', { district: districtName }, function (data) {
-            const $gnd = $('#gndDropdown');
-            $gnd.empty().append('<option value="">Select GN Division</option>');
-            $.each(data, function (i, g) {
-                const sel = (g.gn_division_name === selectedGN) ? 'selected' : '';
-                $gnd.append(`<option value="${g.gn_division_name}" ${sel}>${g.gn_division_name}</option>`);
-            });
+    function resetGNDs() {
+        ['#gndDropdown', '#gndDropdown2', '#gndDropdown3'].forEach(function (id) {
+            resetDropdown(id, 'Select GN Division');
         });
+
+        // Also clear the hidden inputs
+        $('#gndName, #gndName2, #gndName3').val('');
     }
 
-    // Tanks
-    $.get('/tanks', function (data) {
-        const $tank = $('#tankDropdown');
-        $tank.empty().append('<option value="">Select Tank</option>');
-        $.each(data, function (i, t) {
-            const sel = (t.tank_name === savedTank) ? 'selected' : '';
-            $tank.append(`<option value="${t.tank_name}" ${sel}>${t.tank_name}</option>`);
-        });
-    });
-
-    $.get("{{ url('/gn-divisions') }}", function (data) {
-    $('#gndDropdown').empty().append('<option value="">Select GN Division</option>');
-    $.each(data, function (i, gnd) {
-        $('#gndDropdown').append(
-            $('<option>', { value: gnd.gn_division_name, text: gnd.gn_division_name })
-        );
-    });
 });
+$.get('/tanks', function (data) {
+    // Loop through each dropdown
+    $('.tankDropdown').each(function () {
+        const dropdown = $(this);
+        dropdown.empty().append('<option value="">Select Tank</option>');
+        $.each(data, function (index, tank) {
+            dropdown.append(
+                $('<option>', { value: tank.tank_name, text: tank.tank_name })
+            );
+        });
+    });
 });
 </script>
 </body>
