@@ -111,6 +111,9 @@ class DashboardController extends Controller
         // later you can add more: 'training' => ['count' => Training::count()],
     ];
 
+        // 4P (EOI) stats
+        $fourPStats = $this->calculateFourPStats();
+
         // pass to dashboard view (merge with other data you already pass)
         return view('dashboard', compact(
             'tanks',
@@ -128,6 +131,7 @@ class DashboardController extends Controller
             ,'resilienceStats'
             ,'socialInclusionStats'
             ,'youthStats'
+            ,'fourPStats'
         ));
     }
 
@@ -454,6 +458,26 @@ private function calculateProjectTypeStats()
                 'mixed'       => (int) ($focusRows['mixed'] ?? 0),
                 'other'       => (int) ($focusRows['other'] ?? 0),
             ],
+        ];
+    }
+
+    private function calculateFourPStats()
+    {
+        // Expressions of Interest status-based KPIs
+        $totalEOIs        = \App\Models\EOI::count();
+        $rejectedEOIs     = \App\Models\EOI::where('status', 'Rejected')->count();
+        $bpecApprovedEOIs = \App\Models\EOI::where('status', 'BPEC Approved')->count();
+        $agreementSigned  = \App\Models\EOI::where('status', 'Agreement Signed')->count();
+        $ifadApproved     = \App\Models\EOI::where('status', 'IFAD Approved')->count();
+        $nscApproved      = \App\Models\EOI::where('status', 'NSC Approved')->count();
+
+        return [
+            'total' => (int) $totalEOIs,
+            'rejected' => (int) $rejectedEOIs,
+            'bpec_approved' => (int) $bpecApprovedEOIs,
+            'agreement_signed' => (int) $agreementSigned,
+            'ifad_approved' => (int) $ifadApproved,
+            'nsc_approved' => (int) $nscApproved,
         ];
     }
 
