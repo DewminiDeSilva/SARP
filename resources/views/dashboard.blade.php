@@ -1314,6 +1314,443 @@
           </div>
         </div>
       </div>
+
+      <!-- Agro Enterprise Summary Section -->
+      <div class="chart-section" id="agro-enterprise-summary-section" style="display: none;">
+        <h2 class="chart-title">Agro Enterprise Dashboard</h2>
+        <p class="chart-subtitle">Comprehensive overview of agro enterprises, shareholders, assets, and agro forests</p>
+
+        <!-- Agro Enterprise KPI Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Enterprises</h3>
+              <div class="card-badge">
+                <i class="fas fa-building"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['total_enterprises'] ?? 0 }}</p>
+            <p class="card-subtitle">Registered agro enterprises</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Shareholders</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['total_shareholders'] ?? 0 }}</p>
+            <p class="card-subtitle">Enterprise stakeholders</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Assets</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['total_assets'] ?? 0 }}</p>
+            <p class="card-subtitle">Enterprise assets</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Asset Value</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($agroEnterpriseStats['total_asset_value'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Combined asset value</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Agro Forests</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-tree"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['total_agro_forests'] ?? 0 }}</p>
+            <p class="card-subtitle">Forest projects</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Hectares</h3>
+              <div class="card-badge" style="background: #06b6d4;">
+                <i class="fas fa-map"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ number_format($agroEnterpriseStats['agro_forest_stats']['total_hectares'] ?? 0, 1) }} ha</p>
+            <p class="card-subtitle">Forest coverage</p>
+          </div>
+        </div>
+
+        <!-- Financial Summary Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Share Capital</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-coins"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($agroEnterpriseStats['shareholder_stats']['total_share_capital'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Shareholder investments</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Forest Establishment Cost</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-seedling"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($agroEnterpriseStats['agro_forest_stats']['total_establishment_cost'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Forest development investment</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Combined Enterprise Value</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-chart-pie"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($agroEnterpriseStats['financial_summary']['combined_enterprise_value'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Total portfolio value</p>
+          </div>
+        </div>
+
+        <!-- Performance Indicators -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Asset Utilization Rate</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-percentage"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['performance_indicators']['asset_utilization_rate'] ?? 0 }}%</p>
+            <p class="card-subtitle">Enterprises with assets</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $agroEnterpriseStats['performance_indicators']['asset_utilization_rate'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Shareholder Participation</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-handshake"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['performance_indicators']['shareholder_participation_rate'] ?? 0 }}%</p>
+            <p class="card-subtitle">Enterprises with shareholders</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $agroEnterpriseStats['performance_indicators']['shareholder_participation_rate'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Business Plan Coverage</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-file-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $agroEnterpriseStats['performance_indicators']['enterprises_with_business_plans'] ?? 0 }}</p>
+            <p class="card-subtitle">Enterprises with business plans</p>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Business Nature Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #3b82f6; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Business Nature Distribution</h3>
+            <div class="chart-wrap" style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <canvas id="businessNatureChart"></canvas>
+              <div id="business-nature-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 2rem; font-weight: 700; color: #1f2937; line-height: 1;">{{ $agroEnterpriseStats['total_enterprises'] ?? 0 }}</div>
+                <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-top: 0.25rem;">Total Enterprises</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shareholder Gender Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #10b981; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Shareholder Gender Distribution</h3>
+            <div class="chart-wrap" style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <canvas id="shareholderGenderChart"></canvas>
+              <div id="shareholder-gender-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 2rem; font-weight: 700; color: #1f2937; line-height: 1;">{{ $agroEnterpriseStats['total_shareholders'] ?? 0 }}</div>
+                <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-top: 0.25rem;">Total Shareholders</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asset Distribution and Species Distribution -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Asset Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #f59e0b; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Top Asset Types by Value</h3>
+            <div class="chart-wrap" style="width: 100%; height: 300px;">
+              <canvas id="assetDistributionChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Species Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #8b5cf6; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Top Species by Plant Count</h3>
+            <div class="chart-wrap" style="width: 100%; height: 300px;">
+              <canvas id="speciesDistributionChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Geographic Distribution -->
+        <div style="margin-top: 2rem;">
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #06b6d4; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Province Distribution of Agro Forests</h3>
+            <div class="chart-wrap" style="width: 100%; height: 400px;">
+              <canvas id="provinceDistributionChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NRM (Natural Resources Management) Summary Section -->
+      <div class="chart-section" id="nrm-summary-section" style="display: none;">
+        <h2 class="chart-title">Natural Resources Management Dashboard</h2>
+        <p class="chart-subtitle">Comprehensive overview of NRM training programs, participants, and nutrient-rich home gardens</p>
+
+        <!-- NRM KPI Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Training Programs</h3>
+              <div class="card-badge">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['total_training_programs'] ?? 0 }}</p>
+            <p class="card-subtitle">NRM training programs conducted</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Participants</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['total_participants'] ?? 0 }}</p>
+            <p class="card-subtitle">Training participants</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Nutrient Home Gardens</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-seedling"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['total_nutrient_home_gardens'] ?? 0 }}</p>
+            <p class="card-subtitle">Home garden projects</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Garden Area</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-map"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ number_format($nrmStats['total_garden_area'] ?? 0, 1) }} acres</p>
+            <p class="card-subtitle">Total cultivated area</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Youth Participants</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-child"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['youth_participants'] ?? 0 }}</p>
+            <p class="card-subtitle">Young participants</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Average Age</h3>
+              <div class="card-badge" style="background: #06b6d4;">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['avg_participant_age'] ?? 0 }} years</p>
+            <p class="card-subtitle">Average participant age</p>
+          </div>
+        </div>
+
+        <!-- Financial Summary Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Training Cost</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nrmStats['total_training_cost'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Training program investment</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Resource Person Payments</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nrmStats['total_resource_person_payment'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Instructor payments</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Garden Cost</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-seedling"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nrmStats['total_garden_cost'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Home garden investment</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Credit Utilization</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-percentage"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['credit_utilization_rate'] ?? 0 }}%</p>
+            <p class="card-subtitle">Credit usage rate</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $nrmStats['credit_utilization_rate'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Indicators -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Avg Participants/Program</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['avg_participants_per_program'] ?? 0 }}</p>
+            <p class="card-subtitle">Average attendance</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cost per Participant</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nrmStats['avg_cost_per_participant'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Training cost efficiency</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Geographic Coverage</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nrmStats['performance_indicators']['geographic_coverage_score'] ?? 0 }}%</p>
+            <p class="card-subtitle">Province coverage</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $nrmStats['performance_indicators']['geographic_coverage_score'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Participant Gender Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #3b82f6; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Participant Gender Distribution</h3>
+            <div class="chart-wrap" style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <canvas id="nrmParticipantGenderChart"></canvas>
+              <div id="nrm-participant-gender-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 2rem; font-weight: 700; color: #1f2937; line-height: 1;">{{ $nrmStats['total_participants'] ?? 0 }}</div>
+                <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-top: 0.25rem;">Total Participants</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Crop Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #10b981; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Training Crop Distribution</h3>
+            <div class="chart-wrap" style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <canvas id="nrmCropDistributionChart"></canvas>
+              <div id="nrm-crop-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 2rem; font-weight: 700; color: #1f2937; line-height: 1;">{{ $nrmStats['total_training_programs'] ?? 0 }}</div>
+                <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-top: 0.25rem;">Training Programs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Province Distribution and Production Focus -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Province Distribution Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #f59e0b; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Province Distribution</h3>
+            <div class="chart-wrap" style="width: 100%; height: 300px;">
+              <canvas id="nrmProvinceDistributionChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Production Focus Chart -->
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #8b5cf6; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Production Focus Distribution</h3>
+            <div class="chart-wrap" style="width: 100%; height: 300px;">
+              <canvas id="nrmProductionFocusChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resource Person Analysis -->
+        <div style="margin-top: 2rem;">
+          <div class="chart-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9; border-top: 4px solid #06b6d4; padding: 1.5rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #1f2937; font-size: 1.25rem; font-weight: 600;">Top Resource Persons by Program Count</h3>
+            <div class="chart-wrap" style="width: 100%; height: 400px;">
+              <canvas id="nrmResourcePersonChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1655,6 +2092,8 @@
       const resilienceSummarySection = document.getElementById('resilience-summary-section');
       const socialInclusionSection = document.getElementById('social-inclusion-section');
       const fourPSummarySection = document.getElementById('fourp-summary-section');
+      const agroEnterpriseSection = document.getElementById('agro-enterprise-summary-section');
+      const nrmSummarySection = document.getElementById('nrm-summary-section');
       // Youth section
       const youthSection = document.createElement('div');
       youthSection.className = 'chart-section';
@@ -1716,6 +2155,8 @@
       socialInclusionSection.style.display = 'none';
       fourPSummarySection.style.display = 'none';
       youthSection.style.display = 'none';
+      agroEnterpriseSection.style.display = 'none';
+      nrmSummarySection.style.display = 'none';
       moduleSelect.addEventListener('change', function() {
         const selectedModule = this.value;
         
@@ -1827,6 +2268,37 @@
           fourPSummarySection.style.display = 'block';
 
           setTimeout(() => { createFourPCharts(); }, 100);
+        } else if (selectedModule === 'agro_enterprise') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'none';
+          agroEnterpriseSection.style.display = 'block';
+
+          setTimeout(() => { createAgroEnterpriseCharts(); }, 100);
+        } else if (selectedModule === 'nrm') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'none';
+          agroEnterpriseSection.style.display = 'none';
+          nrmSummarySection.style.display = 'block';
+
+          setTimeout(() => { createNRMCharts(); }, 100);
         } else if (selectedModule) {
           // Show module summary for other modules
           tankSelectionCard.style.display = 'none';
@@ -1840,6 +2312,8 @@
           socialInclusionSection.style.display = 'none';
           youthSection.style.display = 'none';
           fourPSummarySection.style.display = 'none';
+          agroEnterpriseSection.style.display = 'none';
+          nrmSummarySection.style.display = 'none';
           
           // Update module summary content
           const moduleLabels = @json($moduleLabels ?? []);
@@ -1861,6 +2335,8 @@
           socialInclusionSection.style.display = 'none';
           youthSection.style.display = 'none';
           fourPSummarySection.style.display = 'none';
+          agroEnterpriseSection.style.display = 'none';
+          nrmSummarySection.style.display = 'none';
         }
       });
 
@@ -2086,6 +2562,603 @@
               }]
             },
             options: { plugins: { legend: { display: true } }, cutout: '60%' }
+          });
+        }
+      }
+
+      function createAgroEnterpriseCharts(){
+        const stats = @json($agroEnterpriseStats ?? []);
+        if (!stats) return;
+
+        // Business Nature Chart
+        const businessNatureCtx = document.getElementById('businessNatureChart');
+        const businessNatureCenterEl = document.getElementById('business-nature-center');
+        let businessNatureChart = null;
+
+        if (businessNatureCtx) {
+          const businessNatureData = stats.business_nature || {};
+          const businessLabels = Object.keys(businessNatureData);
+          const businessValues = Object.values(businessNatureData);
+          const businessColors = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16', '#f97316'];
+
+          function createBusinessNatureChart() {
+            if (businessNatureChart) {
+              businessNatureChart.destroy();
+            }
+
+            const totalEnterprises = stats.total_enterprises || 0;
+            
+            function setBusinessNatureCenter(title, count, pct) {
+              if (pct === null) {
+                businessNatureCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                businessNatureCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setBusinessNatureCenter('Total Enterprises', totalEnterprises, null);
+
+            const chartData = businessValues.length > 0 ? businessValues : [1];
+            const chartLabels = businessValues.length > 0 ? businessLabels : ['No data'];
+            const chartColors = businessValues.length > 0 ? businessColors.slice(0, businessValues.length) : ['#e5e7eb'];
+
+            businessNatureChart = new Chart(businessNatureCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { display: false }, 
+                  tooltip: { enabled: businessValues.length > 0 } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setBusinessNatureCenter('Total Enterprises', totalEnterprises, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalEnterprises ? (val/totalEnterprises*100) : 0;
+                  setBusinessNatureCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createBusinessNatureChart();
+        }
+
+        // Shareholder Gender Chart
+        const shareholderGenderCtx = document.getElementById('shareholderGenderChart');
+        const shareholderGenderCenterEl = document.getElementById('shareholder-gender-center');
+        let shareholderGenderChart = null;
+
+        if (shareholderGenderCtx) {
+          const shareholderGenderData = stats.shareholder_gender || {};
+          const genderLabels = [];
+          const genderValues = [];
+          const genderColors = [];
+
+          if (shareholderGenderData.male > 0) {
+            genderLabels.push('Male');
+            genderValues.push(shareholderGenderData.male);
+            genderColors.push('#3b82f6');
+          }
+          if (shareholderGenderData.female > 0) {
+            genderLabels.push('Female');
+            genderValues.push(shareholderGenderData.female);
+            genderColors.push('#ec4899');
+          }
+          if (shareholderGenderData.other > 0) {
+            genderLabels.push('Other');
+            genderValues.push(shareholderGenderData.other);
+            genderColors.push('#6b7280');
+          }
+
+          function createShareholderGenderChart() {
+            if (shareholderGenderChart) {
+              shareholderGenderChart.destroy();
+            }
+
+            const totalShareholders = stats.total_shareholders || 0;
+            
+            function setShareholderGenderCenter(title, count, pct) {
+              if (pct === null) {
+                shareholderGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                shareholderGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setShareholderGenderCenter('Total Shareholders', totalShareholders, null);
+
+            const chartData = genderValues.length > 0 ? genderValues : [1];
+            const chartLabels = genderValues.length > 0 ? genderLabels : ['No data'];
+            const chartColors = genderValues.length > 0 ? genderColors : ['#e5e7eb'];
+
+            shareholderGenderChart = new Chart(shareholderGenderCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { display: false }, 
+                  tooltip: { enabled: genderValues.length > 0 } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setShareholderGenderCenter('Total Shareholders', totalShareholders, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalShareholders ? (val/totalShareholders*100) : 0;
+                  setShareholderGenderCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createShareholderGenderChart();
+        }
+
+        // Asset Distribution Chart
+        const assetDistributionCtx = document.getElementById('assetDistributionChart');
+        if (assetDistributionCtx) {
+          const assetData = stats.asset_distribution || [];
+          const topAssets = assetData.slice(0, 10); // Top 10 assets
+          
+          const assetLabels = topAssets.map(asset => asset.name);
+          const assetValues = topAssets.map(asset => asset.total_value);
+
+          new Chart(assetDistributionCtx, {
+            type: 'bar',
+            data: {
+              labels: assetLabels.length > 0 ? assetLabels : ['No data'],
+              datasets: [{
+                data: assetValues.length > 0 ? assetValues : [0],
+                backgroundColor: '#f59e0b',
+                borderColor: '#d97706',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.parsed.y.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                      });
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function(value) {
+                      return '$' + value.toLocaleString();
+                    }
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Species Distribution Chart
+        const speciesDistributionCtx = document.getElementById('speciesDistributionChart');
+        if (speciesDistributionCtx) {
+          const speciesData = stats.species_distribution || [];
+          const topSpecies = speciesData.slice(0, 10); // Top 10 species
+          
+          const speciesLabels = topSpecies.map(species => species.name);
+          const speciesValues = topSpecies.map(species => species.total_plants);
+
+          new Chart(speciesDistributionCtx, {
+            type: 'bar',
+            data: {
+              labels: speciesLabels.length > 0 ? speciesLabels : ['No data'],
+              datasets: [{
+                data: speciesValues.length > 0 ? speciesValues : [0],
+                backgroundColor: '#8b5cf6',
+                borderColor: '#7c3aed',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.parsed.y.toLocaleString() + ' plants';
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function(value) {
+                      return value.toLocaleString();
+                    }
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Province Distribution Chart
+        const provinceDistributionCtx = document.getElementById('provinceDistributionChart');
+        if (provinceDistributionCtx) {
+          const provinceData = stats.province_distribution || [];
+          
+          const provinceLabels = provinceData.map(province => province.name);
+          const provinceValues = provinceData.map(province => province.total_hectares);
+
+          new Chart(provinceDistributionCtx, {
+            type: 'bar',
+            data: {
+              labels: provinceLabels.length > 0 ? provinceLabels : ['No data'],
+              datasets: [{
+                data: provinceValues.length > 0 ? provinceValues : [0],
+                backgroundColor: '#06b6d4',
+                borderColor: '#0891b2',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.parsed.y.toLocaleString() + ' hectares';
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function(value) {
+                      return value.toLocaleString() + ' ha';
+                    }
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+
+      function createNRMCharts(){
+        const stats = @json($nrmStats ?? []);
+        if (!stats) return;
+
+        // NRM Participant Gender Chart
+        const nrmParticipantGenderCtx = document.getElementById('nrmParticipantGenderChart');
+        const nrmParticipantGenderCenterEl = document.getElementById('nrm-participant-gender-center');
+        let nrmParticipantGenderChart = null;
+
+        if (nrmParticipantGenderCtx) {
+          const participantGenderData = stats.participant_gender || {};
+          const genderLabels = [];
+          const genderValues = [];
+          const genderColors = [];
+
+          if (participantGenderData.male > 0) {
+            genderLabels.push('Male');
+            genderValues.push(participantGenderData.male);
+            genderColors.push('#3b82f6');
+          }
+          if (participantGenderData.female > 0) {
+            genderLabels.push('Female');
+            genderValues.push(participantGenderData.female);
+            genderColors.push('#ec4899');
+          }
+
+          function createNRMParticipantGenderChart() {
+            if (nrmParticipantGenderChart) {
+              nrmParticipantGenderChart.destroy();
+            }
+
+            const totalParticipants = stats.total_participants || 0;
+            
+            function setNRMParticipantGenderCenter(title, count, pct) {
+              if (pct === null) {
+                nrmParticipantGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                nrmParticipantGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setNRMParticipantGenderCenter('Total Participants', totalParticipants, null);
+
+            const chartData = genderValues.length > 0 ? genderValues : [1];
+            const chartLabels = genderValues.length > 0 ? genderLabels : ['No data'];
+            const chartColors = genderValues.length > 0 ? genderColors : ['#e5e7eb'];
+
+            nrmParticipantGenderChart = new Chart(nrmParticipantGenderCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { display: false }, 
+                  tooltip: { enabled: genderValues.length > 0 } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setNRMParticipantGenderCenter('Total Participants', totalParticipants, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalParticipants ? (val/totalParticipants*100) : 0;
+                  setNRMParticipantGenderCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createNRMParticipantGenderChart();
+        }
+
+        // NRM Crop Distribution Chart
+        const nrmCropDistributionCtx = document.getElementById('nrmCropDistributionChart');
+        const nrmCropCenterEl = document.getElementById('nrm-crop-center');
+        let nrmCropDistributionChart = null;
+
+        if (nrmCropDistributionCtx) {
+          const cropData = stats.crop_distribution || {};
+          const cropLabels = Object.keys(cropData);
+          const cropValues = Object.values(cropData);
+          const cropColors = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16', '#f97316'];
+
+          function createNRMCropDistributionChart() {
+            if (nrmCropDistributionChart) {
+              nrmCropDistributionChart.destroy();
+            }
+
+            const totalPrograms = stats.total_training_programs || 0;
+            
+            function setNRMCropCenter(title, count, pct) {
+              if (pct === null) {
+                nrmCropCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                nrmCropCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setNRMCropCenter('Training Programs', totalPrograms, null);
+
+            const chartData = cropValues.length > 0 ? cropValues : [1];
+            const chartLabels = cropValues.length > 0 ? cropLabels : ['No data'];
+            const chartColors = cropValues.length > 0 ? cropColors.slice(0, cropValues.length) : ['#e5e7eb'];
+
+            nrmCropDistributionChart = new Chart(nrmCropDistributionCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { display: false }, 
+                  tooltip: { enabled: cropValues.length > 0 } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setNRMCropCenter('Training Programs', totalPrograms, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalPrograms ? (val/totalPrograms*100) : 0;
+                  setNRMCropCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createNRMCropDistributionChart();
+        }
+
+        // NRM Province Distribution Chart
+        const nrmProvinceDistributionCtx = document.getElementById('nrmProvinceDistributionChart');
+        if (nrmProvinceDistributionCtx) {
+          const provinceData = stats.province_distribution || {};
+          const provinceLabels = Object.keys(provinceData);
+          const provinceValues = Object.values(provinceData);
+
+          new Chart(nrmProvinceDistributionCtx, {
+            type: 'bar',
+            data: {
+              labels: provinceLabels.length > 0 ? provinceLabels : ['No data'],
+              datasets: [{
+                data: provinceValues.length > 0 ? provinceValues : [0],
+                backgroundColor: '#f59e0b',
+                borderColor: '#d97706',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.parsed.y + ' programs';
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // NRM Production Focus Chart
+        const nrmProductionFocusCtx = document.getElementById('nrmProductionFocusChart');
+        if (nrmProductionFocusCtx) {
+          const productionData = stats.production_focus || {};
+          const productionLabels = Object.keys(productionData);
+          const productionValues = Object.values(productionData);
+
+          new Chart(nrmProductionFocusCtx, {
+            type: 'bar',
+            data: {
+              labels: productionLabels.length > 0 ? productionLabels : ['No data'],
+              datasets: [{
+                data: productionValues.length > 0 ? productionValues : [0],
+                backgroundColor: '#8b5cf6',
+                borderColor: '#7c3aed',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.parsed.y + ' gardens';
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // NRM Resource Person Chart
+        const nrmResourcePersonCtx = document.getElementById('nrmResourcePersonChart');
+        if (nrmResourcePersonCtx) {
+          const resourceData = stats.top_resource_persons || {};
+          const resourceLabels = Object.keys(resourceData);
+          const resourceValues = Object.values(resourceData);
+
+          new Chart(nrmResourcePersonCtx, {
+            type: 'bar',
+            data: {
+              labels: resourceLabels.length > 0 ? resourceLabels : ['No data'],
+              datasets: [{
+                data: resourceValues.length > 0 ? resourceValues : [0],
+                backgroundColor: '#06b6d4',
+                borderColor: '#0891b2',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.parsed.y + ' programs';
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
           });
         }
       }
