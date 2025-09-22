@@ -65,7 +65,8 @@ use App\Http\Controllers\NutrientRichHomeGardenController;
 use App\Http\Controllers\ProgressReportController;
 
 use App\Http\Controllers\AgroForestController;
-
+use App\Http\Controllers\LogframeController;
+use App\Http\Controllers\ProjectGoalController;
 
 
 // -----------------------------------------
@@ -2266,6 +2267,15 @@ Route::get('/youth-proposals/{id}/beneficiaries', [YouthProposalController::clas
 
 Route::resource('agro-forest', AgroForestController::class);
 
+// Logframe Tank Routes
+Route::get('/logframe/tanks',        [LogframeController::class, 'index'])->name('logframe.tanks.index');
+Route::get('/logframe/tanks/create', [LogframeController::class, 'create'])->name('logframe.tanks.create');
+Route::post('/logframe/tanks',       [LogframeController::class, 'store'])->name('logframe.tanks.store');
+
+// Logframe Project Goal Routes
+Route::get('/logframe/project-goal',        [ProjectGoalController::class, 'index'])->name('logframe.project-goal.index');
+Route::get('/logframe/project-goal/create', [ProjectGoalController::class, 'create'])->name('logframe.project-goal.create');
+Route::post('/logframe/project-goal',       [ProjectGoalController::class, 'store'])->name('logframe.project-goal.store');
 
 Route::get('/gn-divisions', [GNDivisionController::class, 'getAll'])
     ->name('gn.divisions.all');
