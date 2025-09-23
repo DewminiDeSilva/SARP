@@ -234,6 +234,15 @@ li:hover {
 
                 </ul>
             </li>
+            
+    <li class="submenu">
+                <a href="#" style="color: #FFFFFF">Agro Forest</a>
+                <ul class="nested">
+                    <li href="/agro-forest"><a href="/agro-forest" style="color: #FFFFFF">Agro forest Details</a></li>
+                     <li href="/agro-forest/create"><a href="/agro-forest/create" style="color: #FFFFFF">Agro forest Registration</a></li>
+                </ul>
+            </li>
+
 
             <li class="submenu">
                 <a href="#" style="color: #FFFFFF">Project Documents</a>
@@ -244,14 +253,6 @@ li:hover {
                     <li href="/progress"><a href="/progress" style="color: #FFFFFF">Progress Report</a></li>
                 </ul>
 
-            </li>
-
-    <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Agro Forest</a>
-                <ul class="nested">
-                    <li href="/agro-forest"><a href="/agro-forest" style="color: #FFFFFF">Agro forest Details</a></li>
-                     <li href="/agro-forest/create"><a href="/agro-forest/create" style="color: #FFFFFF">Agro forest Registration</a></li>
-                </ul>
             </li>
 
 
