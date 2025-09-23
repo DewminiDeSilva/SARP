@@ -88,6 +88,7 @@ li:hover {
         @endif
 
             <li><a href="/dashboard" style="color: #FFFFFF">Dashboard</a></li>
+            <li><a href="/logframe/tanks" style="color: #FFFFFF">Log frame</a></li>
             <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
             <li><a href="/staff_profile" style="color: #FFFFFF">Staff Profile</a></li>
             <li><a href="/gallery" style="color: #FFFFFF">Gallery</a></li>

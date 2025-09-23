@@ -573,6 +573,7 @@
       <!-- Home Button Container -->
   <div class="home-button-container">
     <a href="{{ route('beneficiary.index') }}" class="home-btn">Home</a>
+    <a href="{{ route('logframe.tanks.index') }}" class="home-btn" style="background:#2563eb;">Tank Logframe</a>
   </div>
       <!-- Data Cards -->
       <div class="cards-grid">
