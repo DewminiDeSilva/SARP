@@ -14,6 +14,15 @@ use App\Models\FarmerOrganization;
 use App\Models\Training;
 use App\Models\Grievance;
 use App\Models\YouthProposal;
+use App\Models\Agro;
+use App\Models\AgroAsset;
+use App\Models\Shareholder;
+use App\Models\AgroForest;
+use App\Models\AgroForestSpecies;
+use App\Models\AgroForestNursery;
+use App\Models\NrmTraining;
+use App\Models\NrmParticipant;
+use App\Models\NutrientHomeGarden;
 
 class DashboardController extends Controller
 {
@@ -111,6 +120,15 @@ class DashboardController extends Controller
         // later you can add more: 'training' => ['count' => Training::count()],
     ];
 
+        // 4P (EOI) stats
+        $fourPStats = $this->calculateFourPStats();
+
+        // Agro Enterprise stats
+        $agroEnterpriseStats = $this->calculateAgroEnterpriseStats();
+
+        // NRM stats
+        $nrmStats = $this->calculateNRMStats();
+
         // pass to dashboard view (merge with other data you already pass)
         return view('dashboard', compact(
             'tanks',
@@ -128,6 +146,9 @@ class DashboardController extends Controller
             ,'resilienceStats'
             ,'socialInclusionStats'
             ,'youthStats'
+            ,'fourPStats'
+            ,'agroEnterpriseStats'
+            ,'nrmStats'
         ));
     }
 
@@ -457,6 +478,26 @@ private function calculateProjectTypeStats()
         ];
     }
 
+    private function calculateFourPStats()
+    {
+        // Expressions of Interest status-based KPIs
+        $totalEOIs        = \App\Models\EOI::count();
+        $rejectedEOIs     = \App\Models\EOI::where('status', 'Rejected')->count();
+        $bpecApprovedEOIs = \App\Models\EOI::where('status', 'BPEC Approved')->count();
+        $agreementSigned  = \App\Models\EOI::where('status', 'Agreement Signed')->count();
+        $ifadApproved     = \App\Models\EOI::where('status', 'IFAD Approved')->count();
+        $nscApproved      = \App\Models\EOI::where('status', 'NSC Approved')->count();
+
+        return [
+            'total' => (int) $totalEOIs,
+            'rejected' => (int) $rejectedEOIs,
+            'bpec_approved' => (int) $bpecApprovedEOIs,
+            'agreement_signed' => (int) $agreementSigned,
+            'ifad_approved' => (int) $ifadApproved,
+            'nsc_approved' => (int) $nscApproved,
+        ];
+    }
+
     private function calculateSocialInclusionStats()
     {
         $cdfCount = CDF::count();
@@ -486,6 +527,320 @@ private function calculateProjectTypeStats()
             'total' => $total,
             'signed' => $signed,
             'not_signed' => $notSigned,
+        ];
+    }
+
+    private function calculateAgroEnterpriseStats()
+    {
+        // 1. Basic Enterprise Statistics
+        $totalEnterprises = Agro::count();
+        $totalShareholders = Shareholder::count();
+        $totalAssets = AgroAsset::count();
+        $totalAgroForests = AgroForest::count();
+
+        // 2. Enterprise Registration Analysis
+        $registrationInstitutes = Agro::selectRaw('institute_of_registration, COUNT(*) as count')
+            ->groupBy('institute_of_registration')
+            ->pluck('count', 'institute_of_registration')
+            ->filter(function($count, $institute) {
+                return !empty(trim($institute));
+            });
+
+        // 3. Business Nature Analysis
+        $businessNature = Agro::selectRaw('nature_of_business, COUNT(*) as count')
+            ->groupBy('nature_of_business')
+            ->pluck('count', 'nature_of_business')
+            ->filter(function($count, $nature) {
+                return !empty(trim($nature));
+            });
+
+        // 4. Asset Analysis
+        $totalAssetValue = AgroAsset::sum('asset_value');
+        $avgAssetValue = AgroAsset::avg('asset_value');
+        $assetDistribution = AgroAsset::selectRaw('asset_name, COUNT(*) as count, SUM(asset_value) as total_value')
+            ->groupBy('asset_name')
+            ->orderBy('total_value', 'desc')
+            ->get()
+            ->map(function($asset) {
+                return [
+                    'name' => $asset->asset_name,
+                    'count' => $asset->count,
+                    'total_value' => (float) $asset->total_value
+                ];
+            });
+
+        // 5. Shareholder Analysis
+        $shareholderStats = [
+            'total_shares' => Shareholder::sum('number_of_shares'),
+            'total_share_capital' => Shareholder::sum('share_capital'),
+            'avg_shares_per_shareholder' => Shareholder::avg('number_of_shares'),
+            'avg_share_capital' => Shareholder::avg('share_capital'),
+        ];
+
+        // Gender distribution of shareholders
+        $shareholderGender = Shareholder::selectRaw("
+            CASE
+                WHEN LOWER(TRIM(gender)) IN ('male','m') THEN 'male'
+                WHEN LOWER(TRIM(gender)) IN ('female','f') THEN 'female'
+                ELSE 'other'
+            END AS gender_category
+        ")
+        ->selectRaw('COUNT(*) as count')
+        ->groupBy('gender_category')
+        ->pluck('count', 'gender_category');
+
+        // 6. Agro Forest Analysis
+        $agroForestStats = [
+            'total_hectares' => AgroForest::sum('number_of_hectares'),
+            'total_establishment_cost' => AgroForest::sum('establish_cost'),
+            'avg_hectares_per_forest' => AgroForest::avg('number_of_hectares'),
+            'avg_cost_per_hectare' => 0, // Will calculate below
+        ];
+
+        // Calculate average cost per hectare
+        $totalHectares = $agroForestStats['total_hectares'];
+        $totalCost = $agroForestStats['total_establishment_cost'];
+        if ($totalHectares > 0) {
+            $agroForestStats['avg_cost_per_hectare'] = round($totalCost / $totalHectares, 2);
+        }
+
+        // Species analysis
+        $speciesCount = AgroForestSpecies::count();
+        $totalPlants = AgroForestSpecies::sum('no_of_plants');
+        $speciesDistribution = AgroForestSpecies::selectRaw('species_name, COUNT(*) as forest_count, SUM(no_of_plants) as total_plants')
+            ->groupBy('species_name')
+            ->orderBy('total_plants', 'desc')
+            ->get()
+            ->map(function($species) {
+                return [
+                    'name' => $species->species_name,
+                    'forest_count' => $species->forest_count,
+                    'total_plants' => (int) $species->total_plants
+                ];
+            });
+
+        // 7. Geographic Distribution
+        $provinceDistribution = AgroForest::selectRaw('province_name, COUNT(*) as count, SUM(number_of_hectares) as total_hectares')
+            ->whereNotNull('province_name')
+            ->groupBy('province_name')
+            ->orderBy('count', 'desc')
+            ->get()
+            ->map(function($province) {
+                return [
+                    'name' => $province->province_name,
+                    'count' => $province->count,
+                    'total_hectares' => (float) $province->total_hectares
+                ];
+            });
+
+        // 8. Financial Summary
+        $financialSummary = [
+            'total_asset_value' => (float) $totalAssetValue,
+            'total_share_capital' => (float) $shareholderStats['total_share_capital'],
+            'total_forest_establishment_cost' => (float) $totalCost,
+            'combined_enterprise_value' => (float) ($totalAssetValue + $shareholderStats['total_share_capital'] + $totalCost),
+        ];
+
+        // 9. Performance Indicators
+        $performanceIndicators = [
+            'enterprises_with_assets' => Agro::whereHas('assets')->count(),
+            'enterprises_with_shareholders' => Agro::whereHas('shareholders')->count(),
+            'enterprises_with_business_plans' => Agro::whereNotNull('business_plan')->count(),
+            'asset_utilization_rate' => $totalEnterprises > 0 ? round(($totalAssets / $totalEnterprises) * 100, 1) : 0,
+            'shareholder_participation_rate' => $totalEnterprises > 0 ? round(($totalShareholders / $totalEnterprises) * 100, 1) : 0,
+        ];
+
+        return [
+            // Basic counts
+            'total_enterprises' => $totalEnterprises,
+            'total_shareholders' => $totalShareholders,
+            'total_assets' => $totalAssets,
+            'total_agro_forests' => $totalAgroForests,
+            
+            // Registration analysis
+            'registration_institutes' => $registrationInstitutes,
+            
+            // Business analysis
+            'business_nature' => $businessNature,
+            
+            // Asset analysis
+            'total_asset_value' => (float) $totalAssetValue,
+            'avg_asset_value' => (float) $avgAssetValue,
+            'asset_distribution' => $assetDistribution,
+            
+            // Shareholder analysis
+            'shareholder_stats' => $shareholderStats,
+            'shareholder_gender' => $shareholderGender,
+            
+            // Agro forest analysis
+            'agro_forest_stats' => $agroForestStats,
+            'species_count' => $speciesCount,
+            'total_plants' => (int) $totalPlants,
+            'species_distribution' => $speciesDistribution,
+            
+            // Geographic distribution
+            'province_distribution' => $provinceDistribution,
+            
+            // Financial summary
+            'financial_summary' => $financialSummary,
+            
+            // Performance indicators
+            'performance_indicators' => $performanceIndicators,
+        ];
+    }
+
+    private function calculateNRMStats()
+    {
+        // 1. NRM Training Program Statistics
+        $totalTrainingPrograms = NrmTraining::count();
+        $totalParticipants = NrmParticipant::count();
+        $totalNutrientHomeGardens = NutrientHomeGarden::count();
+
+        // 2. Training Program Analysis
+        $trainingPrograms = NrmTraining::all();
+        
+        // Training cost analysis
+        $totalTrainingCost = $trainingPrograms->sum(function($program) {
+            return is_numeric($program->training_program_cost) ? (float) $program->training_program_cost : 0;
+        });
+        
+        $totalResourcePersonPayment = $trainingPrograms->sum(function($program) {
+            return is_numeric($program->resource_person_payment) ? (float) $program->resource_person_payment : 0;
+        });
+
+        // 3. Geographic Distribution of Training Programs
+        $provinceDistribution = $trainingPrograms->groupBy('province_name')->map->count();
+        $districtDistribution = $trainingPrograms->groupBy('district')->map->count();
+        $dsDivisionDistribution = $trainingPrograms->groupBy('ds_division_name')->map->count();
+
+        // 4. Crop-wise Training Analysis
+        $cropDistribution = $trainingPrograms->groupBy('crop_name')->map->count();
+
+        // 5. Participant Analysis
+        $participants = NrmParticipant::all();
+        
+        // Gender distribution
+        $participantGender = $participants->groupBy('gender')->map->count();
+        
+        // Age group analysis
+        $youthParticipants = $participants->where('youth', 'yes')->count();
+        $adultParticipants = $participants->where('youth', 'no')->count();
+        
+        // Average age
+        $avgAge = $participants->whereNotNull('age')->avg('age');
+
+        // 6. Training Program Performance Metrics
+        $avgParticipantsPerProgram = $totalTrainingPrograms > 0 ? round($totalParticipants / $totalTrainingPrograms, 1) : 0;
+        $avgCostPerProgram = $totalTrainingPrograms > 0 ? round($totalTrainingCost / $totalTrainingPrograms, 2) : 0;
+        $avgCostPerParticipant = $totalParticipants > 0 ? round($totalTrainingCost / $totalParticipants, 2) : 0;
+
+        // 7. Nutrient Rich Home Garden Analysis
+        $homeGardens = NutrientHomeGarden::all();
+        
+        // Total area and cost analysis
+        $totalGardenArea = $homeGardens->sum('total_acres');
+        $totalGardenCost = $homeGardens->sum('total_cost');
+        $avgGardenArea = $totalNutrientHomeGardens > 0 ? round($totalGardenArea / $totalNutrientHomeGardens, 2) : 0;
+        $avgGardenCost = $totalNutrientHomeGardens > 0 ? round($totalGardenCost / $totalNutrientHomeGardens, 2) : 0;
+
+        // Production focus analysis
+        $productionFocus = $homeGardens->groupBy('production_focus')->map->count();
+
+        // Crop analysis for home gardens
+        $gardenCropDistribution = $homeGardens->groupBy('crop_name')->map->count();
+
+        // 8. Financial Analysis
+        $totalCreditAmount = $homeGardens->sum('credit_amount');
+        $totalCreditBalance = $homeGardens->sum('credit_balance');
+        $creditUtilization = $totalCreditAmount > 0 ? round((($totalCreditAmount - $totalCreditBalance) / $totalCreditAmount) * 100, 1) : 0;
+
+        // 9. Resource Person Analysis
+        $resourcePersons = $trainingPrograms->groupBy('resource_person_name')->map->count();
+        $topResourcePersons = $resourcePersons->sortDesc()->take(10);
+
+        // 10. Venue Analysis
+        $venueDistribution = $trainingPrograms->groupBy('venue')->map->count();
+
+        // 11. Time-based Analysis (if date field is properly formatted)
+        $monthlyTrainingDistribution = $trainingPrograms->groupBy(function($program) {
+            try {
+                return \Carbon\Carbon::parse($program->date)->format('Y-m');
+            } catch (\Exception $e) {
+                return 'Unknown';
+            }
+        })->map->count();
+
+        // 12. Performance Indicators
+        $performanceIndicators = [
+            'training_program_completion_rate' => 100, // Assuming all programs are completed
+            'participant_retention_rate' => 100, // Would need additional data to calculate
+            'cost_efficiency_score' => $avgCostPerParticipant > 0 ? round(100 - min($avgCostPerParticipant / 100, 1) * 100, 1) : 0,
+            'geographic_coverage_score' => $provinceDistribution->count() > 0 ? round(($provinceDistribution->count() / 9) * 100, 1) : 0, // Assuming 9 provinces
+        ];
+
+        // 13. Integration with Other Modules
+        $integratedStats = [
+            'beneficiaries_with_nrm_training' => NrmParticipant::whereHas('nrmTraining')->distinct('nic')->count(),
+            'beneficiaries_with_home_gardens' => NutrientHomeGarden::distinct('beneficiary_id')->count(),
+            'total_beneficiaries_reached' => max(
+                NrmParticipant::distinct('nic')->count(),
+                NutrientHomeGarden::distinct('beneficiary_id')->count()
+            ),
+        ];
+
+        return [
+            // Basic counts
+            'total_training_programs' => $totalTrainingPrograms,
+            'total_participants' => $totalParticipants,
+            'total_nutrient_home_gardens' => $totalNutrientHomeGardens,
+            
+            // Financial metrics
+            'total_training_cost' => (float) $totalTrainingCost,
+            'total_resource_person_payment' => (float) $totalResourcePersonPayment,
+            'total_garden_cost' => (float) $totalGardenCost,
+            'total_credit_amount' => (float) $totalCreditAmount,
+            'total_credit_balance' => (float) $totalCreditBalance,
+            'credit_utilization_rate' => $creditUtilization,
+            
+            // Area metrics
+            'total_garden_area' => (float) $totalGardenArea,
+            'avg_garden_area' => $avgGardenArea,
+            'avg_garden_cost' => $avgGardenCost,
+            
+            // Performance metrics
+            'avg_participants_per_program' => $avgParticipantsPerProgram,
+            'avg_cost_per_program' => $avgCostPerProgram,
+            'avg_cost_per_participant' => $avgCostPerParticipant,
+            'avg_participant_age' => $avgAge ? round($avgAge, 1) : 0,
+            
+            // Demographics
+            'participant_gender' => $participantGender,
+            'youth_participants' => $youthParticipants,
+            'adult_participants' => $adultParticipants,
+            
+            // Geographic distribution
+            'province_distribution' => $provinceDistribution,
+            'district_distribution' => $districtDistribution,
+            'ds_division_distribution' => $dsDivisionDistribution,
+            
+            // Content analysis
+            'crop_distribution' => $cropDistribution,
+            'garden_crop_distribution' => $gardenCropDistribution,
+            'production_focus' => $productionFocus,
+            
+            // Resource analysis
+            'resource_persons' => $resourcePersons,
+            'top_resource_persons' => $topResourcePersons,
+            'venue_distribution' => $venueDistribution,
+            
+            // Time analysis
+            'monthly_training_distribution' => $monthlyTrainingDistribution,
+            
+            // Performance indicators
+            'performance_indicators' => $performanceIndicators,
+            
+            // Integration stats
+            'integrated_stats' => $integratedStats,
         ];
     }
 }

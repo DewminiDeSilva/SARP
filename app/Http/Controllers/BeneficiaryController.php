@@ -20,7 +20,7 @@ class BeneficiaryController extends Controller
      */
     public function search(Request $request)
     {
-        // search function crop names
+        // search function crop names 
         $search = $request->get('search', ''); // Default value if not provided
         $beneficiaries = Beneficiary::where('nic', 'like', '%'.$search.'%')
             ->orWhere('name_with_initials', 'like', '%'.$search.'%')
@@ -61,7 +61,7 @@ class BeneficiaryController extends Controller
             ->orWhere('input3', 'like', '%' . $search . '%') // New input
             ->orWhere('project_type', 'like', '%' . $search . '%')
             ->paginate(10);
-
+                            
             $allBeneficiaries = Beneficiary::all();
 
     $convertedMap = [];
@@ -90,12 +90,12 @@ class BeneficiaryController extends Controller
         'convertedMap'
     ));
 }
-
-
+        
+    
         // Check if you want to return the beneficiary_index or beneficiary_list view
-
-
-
+        
+    
+    
     /**
      * Import data.
      */
@@ -105,23 +105,23 @@ class BeneficiaryController extends Controller
          $request->validate([
              'csv_file' => 'required|mimes:csv,txt|max:2048',
          ]);
-
+     
          // Read the CSV file
          if ($file = $request->file('csv_file')) {
              $csvData = file_get_contents($file);
              $rows = array_map('str_getcsv', explode("\n", $csvData));
              $header = array_shift($rows); // Extract header row
-
+     
              // Process each row and insert into the database
              foreach ($rows as $row) {
                  if (count($row) === count($header)) {
                      $beneficiaryData = array_combine($header, $row);
-
+     
                      // Handle invalid or empty DOB
-                     $dob = isset($beneficiaryData['Date Of Birth']) && !empty($beneficiaryData['Date Of Birth'])
+                     $dob = isset($beneficiaryData['Date Of Birth']) && !empty($beneficiaryData['Date Of Birth']) 
                          ? $beneficiaryData['Date Of Birth'] // No format conversion
                          : null;
-
+     
                      // Insert into Beneficiary model
                      Beneficiary::create([
                          'nic' => $beneficiaryData['NIC'] ?? null,
@@ -166,11 +166,11 @@ class BeneficiaryController extends Controller
                  }
              }
          }
-
+     
          // Redirect back with a success message
          return redirect()->back()->with('success', 'CSV uploaded and beneficiary records added successfully.');
      }
-
+     
 
 public function generateCsv()
 {
@@ -237,7 +237,7 @@ public function generateCsv()
             $beneficiary->project_type,
         ];
 
-
+        
 
         // Insert data row into CSV
         fputcsv($file, $data);
@@ -350,7 +350,7 @@ public function index(Request $request)
 
     public function store(Request $request)
     {
-
+        
     // Validate the request data
     $request->validate([
         'nic' => 'required|string|max:12|unique:beneficiaries,nic', // Not nullable
@@ -392,10 +392,8 @@ public function index(Request $request)
         'input3' => 'nullable|string|max:255',
         'project_type' => 'nullable|string|max:255',
         'youth_proposal_id' => 'nullable|exists:youth_proposals,id',
-        'eoi_business_title' => 'required_if:project_type,4p|nullable|string|max:255',
-        'eoi_category'       => 'required_if:project_type,4p|nullable|string|max:255',
     ]);
-
+ 
 
 
 
@@ -429,7 +427,7 @@ public function index(Request $request)
         // Fetch all Youth Proposals with 'Agreement Signed' status
         $agreementSignedYouth = \App\Models\YouthProposal::where('status', 'Agreement Signed')
             ->get(['id', 'organization_name']);
-
+    
         return view('beneficiary.beneficiary_edit', compact('beneficiary', 'agreementSignedYouth'));
     }
 
@@ -478,10 +476,10 @@ public function index(Request $request)
         'training_details_description' => 'nullable|string|max:500',
         ]);
         $beneficiary->save();
-
+    
         // Update beneficiary data
         $beneficiary->update($request->all());
-
+    
         // Redirect with success message
         return redirect()->route('beneficiary.index')->with('success', 'Beneficiary updated successfully.');
     }*/
@@ -542,7 +540,7 @@ public function index(Request $request)
     return response()->json(['message' => 'Beneficiary updated successfully!']);
 }
 
-
+    
 
     /**
      * Remove the specified resource from storage.
@@ -576,25 +574,25 @@ public function index(Request $request)
     $filename = 'beneficiary_report.csv';
     $fp = fopen($filename, 'w+'); // Corrected file path
     fputcsv($fp, [
-        'NIC', 'Name with Initials', 'Address', 'Date Of Birth', 'Gender', 'Age', 'Phone', 'Email', 'Income Source', 'Average Income',
-        'Monthly Household Expenses', 'Number of Family Members', 'Education', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area',
-        'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'Tank Name', 'AI Division', 'Account Number', 'Bank Name',
-        'Bank Branch', 'Latitude', 'Longitude', 'Head of Householder Name', 'Householder Number', 'Household Level Assets Description',
+        'NIC', 'Name with Initials', 'Address', 'Date Of Birth', 'Gender', 'Age', 'Phone', 'Email', 'Income Source', 'Average Income', 
+        'Monthly Household Expenses', 'Number of Family Members', 'Education', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area', 
+        'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'Tank Name', 'AI Division', 'Account Number', 'Bank Name', 
+        'Bank Branch', 'Latitude', 'Longitude', 'Head of Householder Name', 'Householder Number', 'Household Level Assets Description', 
         'Community-Based Organization', 'Type of Water Resource', 'Training Details Description','Input1', 'Input2', 'Input3','project_type'
     ]);
 
     foreach ($beneficiaries as $row) {
         fputcsv($fp, [
-            $row->nic, $row->name_with_initials, $row->address, $row->dob, $row->gender, $row->age, $row->phone, $row->email, $row->income_source,
-            $row->average_income, $row->monthly_household_expenses, $row->number_of_family_members, $row->education, $row->land_ownership_total_extent,
-            $row->land_ownership_proposed_cultivation_area, $row->province_name, $row->district_name, $row->ds_division_name, $row->gn_division_name,
-            $row->as_center, $row->cascade_name, $row->tank_name, $row->ai_division, $row->account_number, $row->bank_name, $row->bank_branch,
-            $row->latitude, $row->longitude, $row->head_of_householder_name, $row->householder_number, $row->household_level_assets_description,
+            $row->nic, $row->name_with_initials, $row->address, $row->dob, $row->gender, $row->age, $row->phone, $row->email, $row->income_source, 
+            $row->average_income, $row->monthly_household_expenses, $row->number_of_family_members, $row->education, $row->land_ownership_total_extent, 
+            $row->land_ownership_proposed_cultivation_area, $row->province_name, $row->district_name, $row->ds_division_name, $row->gn_division_name, 
+            $row->as_center, $row->cascade_name, $row->tank_name, $row->ai_division, $row->account_number, $row->bank_name, $row->bank_branch, 
+            $row->latitude, $row->longitude, $row->head_of_householder_name, $row->householder_number, $row->household_level_assets_description, 
             $row->community_based_organization, $row->type_of_water_resource, $row->training_details_description,$row->input1, // Added field
             $row->input2, // Added field
             $row->input3,
             $row->project_type,
-
+            
               // Added field
         ]);
     }
@@ -634,5 +632,5 @@ public function getCategoriesByBusinessTitle($title)
 
 
 
-
+    
 }
