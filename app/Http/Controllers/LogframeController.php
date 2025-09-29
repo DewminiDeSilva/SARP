@@ -127,6 +127,21 @@ class LogframeController extends Controller
         }
 
         return redirect()->route('logframe.tanks.index')
-            ->with('status', 'Tank logframe saved successfully.');
+            ->with('status', 'Tank logframe updated successfully.');
+    }
+
+    // Delete indicator
+    public function destroy(Request $request, $indicatorKey)
+    {
+        try {
+            // Delete all records for this indicator key
+            TankLogframe::where('indicator_key', $indicatorKey)->delete();
+            
+            return redirect()->route('logframe.tanks.index')
+                ->with('status', 'Indicator deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('logframe.tanks.index')
+                ->with('status', 'Error deleting indicator: ' . $e->getMessage());
+        }
     }
 }
