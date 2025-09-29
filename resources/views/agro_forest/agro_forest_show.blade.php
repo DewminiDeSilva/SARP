@@ -177,7 +177,7 @@
     </div>
 
     <div class="container-fluid">
-      <h2 class="text-success text-center mb-3">Agro Forest — Details</h2>
+      <h2 class="text-success text-center mb-3">Agro Forest Details</h2>
 
       @if (session('success')) <div class="alert alert-success mt-2">{{ session('success') }}</div> @endif
       @if (session('error'))   <div class="alert alert-danger  mt-2">{{ session('error') }}</div>   @endif
