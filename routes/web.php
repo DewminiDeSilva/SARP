@@ -2267,10 +2267,17 @@ Route::get('/youth-proposals/{id}/beneficiaries', [YouthProposalController::clas
 
 Route::resource('agro-forest', AgroForestController::class);
 
+// Logframe Main Routes
+Route::get('/logframe', function () {
+    return view('logframe.index');
+})->name('logframe.index');
+
+
 // Logframe Tank Routes
 Route::get('/logframe/tanks',        [LogframeController::class, 'index'])->name('logframe.tanks.index');
 Route::get('/logframe/tanks/create', [LogframeController::class, 'create'])->name('logframe.tanks.create');
 Route::post('/logframe/tanks',       [LogframeController::class, 'store'])->name('logframe.tanks.store');
+Route::delete('/logframe/tanks/{indicatorKey}', [LogframeController::class, 'destroy'])->name('logframe.tanks.destroy');
 
 // Logframe Project Goal Routes
 Route::get('/logframe/project-goal',        [ProjectGoalController::class, 'index'])->name('logframe.project-goal.index');

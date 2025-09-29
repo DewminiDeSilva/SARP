@@ -12,6 +12,1926 @@
     $pct = $target != 0 ? ($diff / max(1e-9, $target)) * 100 : ($result != 0 ? 100 : 0);
     return ['diff' => $diff, 'pct' => $pct];
   };
+
+  // Helper: zero map for all years (used for rows that should start at 0 and be independent)
+  $zerosByYear = [];
+  foreach ($years as $yy) { $zerosByYear[$yy] = 0; }
+
+  // Latest year helper for setting current-year-only results
+  $latestYear = end($years);
+  reset($years);
+  // Completed tanks per year from Tank module (using updated_at year)
+  $completedByYear = [];
+  foreach ($years as $yy) {
+    $completedByYear[$yy] = \App\Models\TankRehabilitation::where('status', 'Completed')
+      ->whereYear('updated_at', $yy)
+      ->count();
+  }
+
+  // ---- Sections / Parts list (1..15) ----
+  // If you later have per-part meta/targets/results, attach them like:
+  // 'meta' => [...], 'targets' => [...], 'results' => [...]
+  $parts = [
+    [
+      'key' => 'outreach',
+      'title' => ' Outreach',
+      'desc' => 'Outreach – awareness, engagement and communications.',
+      // Optional per-row overrides shown only for Outreach (others will use single-row fallback)
+      'rows' => [
+        [
+          'ind_name' => '1.b Estimated corresponding total number of households members',
+          'ind_desc' => 'Household members - Number of people',
+            // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1.a  Corresponding number of households reached',
+          'ind_desc' => 'Women-headed households  - Households',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1.a  Corresponding number of households reached',
+          'ind_desc' => 'Non-women-headed households - Households',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1.a  Corresponding number of households reached',
+          'ind_desc' => 'Households - Households',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1  Persons receiving services promoted or supported by the project',
+          'ind_desc' => 'Males - Males',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1  Persons receiving services promoted or supported by the project',
+          'ind_desc' => 'Females - Females',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1  Persons receiving services promoted or supported by the project',
+          'ind_desc' => 'Young - Young people',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1  Persons receiving services promoted or supported by the project',
+          'ind_desc' => 'Total number of persons receiving services - Number of people',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1  Persons receiving services promoted or supported by the project',
+          'ind_desc' => 'Male - Percentage (%)',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+        [
+          'ind_name' => '1  Persons receiving services promoted or supported by the project',
+          'ind_desc' => 'Female - Percentage (%)',
+
+          // Independent values for this row (not linked to tanks): default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+            
+          // 'meta' => [...], 'targets' => [...], 'results' => [...] // (optional per-row overrides)
+        ],
+      ],
+    ],
+    [
+      'key' => 'project-goal',
+      'title' => ' Project Goal', 
+      'desc' => 'Contribute to smallholder poverty reduction, food security and nutrition in target Dry Zone districts.',
+      'rows' => [
+        [
+          'ind_name' => '70% of project supported HHs reporting a > 30% increase in their income',
+          'ind_desc' => 'Number of HHs - Number of people',
+
+          // Independent values for this row: default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '% HH reporting improved food security',
+          'ind_desc' => 'Households - Percentage (%)',
+
+          // Independent values for this row: default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'dev-obj',
+      'title' => ' Development Objective', 
+      'desc' => 'Build resilience and market participation of rural households in areas affected by climate change.',
+      'rows' => [
+        [
+          'ind_name' => 'No. of individual entrepreneurs and HH report a > 50% increase in resilience score',
+          'ind_desc' => 'Number of people - Number of people',
+
+          // Independent values for this row: default everything to 0
+            'meta'    => [
+              'baseline' => 0,
+              'mid_term' => 0,
+              'end_target' => 0,
+              'source' => '',
+              'frequency' => '',
+              'responsibility' => '',
+              'assumptions' => ''
+            ],
+            'targets' => $zerosByYear,
+            'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.8  Women reporting minimum dietary diversity (MDDW)',
+          'ind_desc' => 'Women (%) - Percentage (%)',
+
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.8  Women reporting minimum dietary diversity (MDDW)',
+          'ind_desc' => 'Women (number) - Females',
+
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.8  Women reporting minimum dietary diversity (MDDW)',
+          'ind_desc' => 'Households (%) - Percentage (%)',
+
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.8  Women reporting minimum dietary diversity (MDDW)',
+          'ind_desc' => 'Households (number) - Households',
+
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.8  Women reporting minimum dietary diversity (MDDW)',
+          'ind_desc' => 'Household members - Number of people',
+
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'outcome-1',
+      'title' => ' Outcome',
+      'desc' => 'Climate-resilient and value-chain capacity built.',
+      'rows' => [
+        // 1) No. of producer organizations ...
+        [
+          'ind_name' => 'No. of producer organizations with capacity to manage group enterprises in a financially profitable and sustainable way',
+          'ind_desc' => 'Number of POs - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) Number of smallholder farmers, women and youth managing their enterprises profitably
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Males - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Females - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Young - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Not Young - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Number of people - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) 3.2.2 Households reporting adoption ...
+        [
+          'ind_name' => '3.2.2  Households reporting adoption of environmentally sustainable and climate-resilient technologies and practices',
+          'ind_desc' => 'Total number of household members - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.2.2  Households reporting adoption of environmentally sustainable and climate-resilient technologies and practices',
+          'ind_desc' => 'Households - Percentage (%)',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.2.2  Households reporting adoption of environmentally sustainable and climate-resilient technologies and practices',
+          'ind_desc' => 'Households - Households',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 4) % increase in average volume and value of sales through 4P agreements
+        [
+          'ind_name' => '% increase in average volume and value of sales through 4P agreements',
+          'ind_desc' => '% of average volume and value of sales - Percentage (%)',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-1',
+      'title' => ' Output',
+      'desc' => "Service providers and producers' groups created and capacitated for better land and water management.",
+      'rows' => [
+        // 1) Number of water user associations supported to manage climate-related risks
+        [
+          'ind_name' => 'Number of water user associations supported to manage climate-related risks',
+          'ind_desc' => 'No. water user associations - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Total size of groups - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Groups supported - Groups',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Indigenous people - Indigenous people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+      ],
+    ],
+    [
+      'key' => 'output-2',
+      'title' => ' Output',
+      'desc' => "Service providers and producers' groups created and capacitated for better land and water management.",
+      'rows' => [
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Total size of groups - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Groups supported - Groups',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.1.1  Groups supported to sustainably manage natural resources and climate-related risks',
+          'ind_desc' => 'Indigenous people - Indigenous people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-3',
+      'title' => ' Output',
+      'desc' => 'Farmers, especially women and youth, trained in business and marketing.',
+      'rows' => [
+        // Indicator 1: 2.1.2 Persons trained in IGAs or BM
+        [
+          'ind_name' => '2.1.2 Persons trained in income-generating activities or business management',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.2 Persons trained in income-generating activities or business management',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.2 Persons trained in income-generating activities or business management',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.2 Persons trained in income-generating activities or business management',
+          'ind_desc' => 'Persons trained in IGAs or BM (total) - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // Indicator 2: No. of persons engaged in 4Ps
+        [
+          'ind_name' => 'No. of persons engaged in 4Ps',
+          'ind_desc' => 'Total persons participating - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of persons engaged in 4Ps',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of persons engaged in 4Ps',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of persons engaged in 4Ps',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-4',
+      'title' => ' Output',
+      'desc' => 'Advocacy and policy meetings conducted.',
+      'rows' => [
+        [
+          'ind_name' => 'Policy 1  Policy-relevant knowledge products completed',
+          'ind_desc' => 'Number - Knowledge Products',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'outcome-2',
+      'title' => ' Outcome',
+      'desc' => 'Climate-resilient climate change and value-chain investments made.',
+      'rows' => [
+        // 1) 1.2.1 Households reporting improved access to land, forests, water or water bodies for production purposes
+        [
+          'ind_name' => '1.2.1  Households reporting improved access to land, forests, water or water bodies for production purposes',
+          'ind_desc' => 'Households reporting improved access to water - Percentage (%)',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.1  Households reporting improved access to land, forests, water or water bodies for production purposes',
+          'ind_desc' => 'Size of households reporting improved access to water - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.1  Households reporting improved access to land, forests, water or water bodies for production purposes',
+          'ind_desc' => 'Total no. of households reporting improved access to water - Households',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) 4P partnerships agreements signed by rural enterprises
+        [
+          'ind_name' => '4P partnerships agreements signed by rural enterprises',
+          'ind_desc' => '4P partnership agreements signed - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) 2.2.1 Persons with new jobs/employment opportunities
+        [
+          'ind_name' => '2.2.1  Persons with new jobs/employment opportunities',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.2.1  Persons with new jobs/employment opportunities',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.2.1  Persons with new jobs/employment opportunities',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.2.1  Persons with new jobs/employment opportunities',
+          'ind_desc' => 'Total number of persons with new jobs/employment opportunities - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-5',
+      'title' => ' Output',
+      'desc' => 'Minor irrigation tanks and water harvesting infrastructure constructed or rehabilitated.',
+      'rows' => [
+        [
+          'ind_name' => 'Rehabilitation/construction of tanks',
+          'ind_desc' => 'Tanks rehabilitated/constructed - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $completedByYear,
+        ],
+
+        // 2) 1.1.2 Farmland under water-related infrastructure constructed/rehabilitated
+        [
+          'ind_name' => '1.1.2  Farmland under water-related infrastructure constructed/rehabilitated',
+          'ind_desc' => 'Hectares of land - Area (ha)',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) 2.1.6 Market, processing or storage facilities constructed or rehabilitated
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Total number of facilities - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Market facilities constructed/rehabilitated - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Processing facilities constructed/rehabilitated - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Storage facilities constructed/rehabilitated - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-6',
+      'title' => ' Output',
+      'desc' => 'Beneficiaries with access to market infrastructure and business services.',
+      'rows' => [
+        // 1) 1.1.5 Persons in rural areas accessing financial services (credit)
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Men in rural areas accessing financial services - credit - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Women in rural areas accessing financial services - credit - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Young people in rural areas accessing financial services - credit - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Total persons accessing financial services - credit - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) 1.1.8 Households provided with targeted support to improve their nutrition
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Total persons participating - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Households - Households',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Household members benefitted - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) No. of HHs benefited rural feeder roads constructed and/ or rehabilitated
+        [
+          'ind_name' => 'No. of HHs benefited rural feeder roads constructed and/ or rehabilitated',
+          'ind_desc' => 'Households - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 4) 2.1.5 Roads constructed, rehabilitated or upgraded
+        [
+          'ind_name' => '2.1.5: Roads constructed, rehabilitated or upgraded',
+          'ind_desc' => 'Length of roads (km)',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'outcome-3',
+      'title' => ' Outcome',
+      'desc' => 'Climate-resilient climate change and value-chain investments made.',
+      'rows' => [
+        // 1) Number of smallholder farmers, women and youth managing their enterprises profitably
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Males - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Females - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Young - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Not Young - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'Number of smallholder farmers, women and youth managing their enterprises profitably',
+          'ind_desc' => 'Number of people - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) No. of farmers, women and youth reporting the use of knowledge in business and marketing
+        [
+          'ind_name' => 'No. of farmers, women and youth reporting the use of knowledge in business and marketing',
+          'ind_desc' => 'Males - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of farmers, women and youth reporting the use of knowledge in business and marketing',
+          'ind_desc' => 'Females - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of farmers, women and youth reporting the use of knowledge in business and marketing',
+          'ind_desc' => 'Number of people - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of farmers, women and youth reporting the use of knowledge in business and marketing',
+          'ind_desc' => 'Young - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => 'No. of farmers, women and youth reporting the use of knowledge in business and marketing',
+          'ind_desc' => 'Not Young - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) 1.2.1 Households reporting improved access ...
+        [
+          'ind_name' => '1.2.1  Households reporting improved access to land, forests, water or water bodies for production purposes',
+          'ind_desc' => 'Households reporting improved access to water - Percentage (%)',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.1  Households reporting improved access to land, forests, water or water bodies for production purposes',
+          'ind_desc' => 'Size of households reporting improved access to water - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.2.1  Households reporting improved access to land, forests, water or water bodies for production purposes',
+          'ind_desc' => 'Total no. of households reporting improved access to water - Households',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 4) 3.2.2 Households reporting adoption ...
+        [
+          'ind_name' => '3.2.2  Households reporting adoption of environmentally sustainable and climate-resilient technologies and practices',
+          'ind_desc' => 'Total number of household members - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.2.2  Households reporting adoption of environmentally sustainable and climate-resilient technologies and practices',
+          'ind_desc' => 'Households - Percentage (%)',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '3.2.2  Households reporting adoption of environmentally sustainable and climate-resilient technologies and practices',
+          'ind_desc' => 'Households - Households',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 5) 2.2.2 Supported rural enterprises reporting an increase in profit
+        [
+          'ind_name' => '2.2.2  Supported rural enterprises reporting an increase in profit',
+          'ind_desc' => 'Number of enterprises - Enterprises',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.2.2  Supported rural enterprises reporting an increase in profit',
+          'ind_desc' => 'Percentage of enterprises - Percentage (%)',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.2.2  Supported rural enterprises reporting an increase in profit',
+          'ind_desc' => 'Farm - Farms',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 6) Partnerships agreements signed by rural enterprises
+        [
+          'ind_name' => 'Partnerships agreements signed by rural enterprises',
+          'ind_desc' => 'Partnership agreements signed - Number - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 7) Rehabilitation/construction of tanks (wired to dynamic per-year completed counts)
+        [
+          'ind_name' => 'Rehabilitation/construction of tanks',
+          'ind_desc' => 'Tanks rehabilitated/constructed - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $completedByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-7',
+      'title' => ' Output',
+      'desc' => 'Minor irrigation tanks and water harvesting infrastructure constructed or rehabilitated.',
+      'rows' => [
+        // 1) 1.1.2 Farmland under water-related infrastructure constructed/rehabilitated
+        [
+          'ind_name' => '1.1.2  Farmland under water-related infrastructure constructed/rehabilitated',
+          'ind_desc' => 'Hectares of land - Area (ha)',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) 2.1.6 Market, processing or storage facilities constructed or rehabilitated
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Total number of facilities - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Market facilities constructed/rehabilitated - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Processing facilities constructed/rehabilitated - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '2.1.6  Market, processing or storage facilities constructed or rehabilitated',
+          'ind_desc' => 'Storage facilities constructed/rehabilitated - Facilities',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) 1.1.5 Persons in rural areas accessing financial services (savings & credit)
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Women in rural areas accessing financial services - savings - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Young people in rural areas accessing financial services - savings - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Men in rural areas accessing financial services -  savings - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Men in rural areas accessing financial services - credit - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Women in rural areas accessing financial services - credit - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Young people in rural areas accessing financial services - credit - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Total persons accessing financial services - savings - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Total persons accessing financial services - credit - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-8',
+      'title' => ' Output',
+      'desc' => 'Beneficiaries with access to market infrastructure and business services.',
+      'rows' => [
+        // 1) No. of HHs utilising rural feeder roads constructed and/or rehabilitated
+        [
+          'ind_name' => 'No. of HHs utilising rural feeder roads constructed and/ or rehabilitated',
+          'ind_desc' => 'Households - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) No. of HHs with access to improved support services through the ASCs
+        [
+          'ind_name' => 'No. of HHs with access to improved support services through the ASCs',
+          'ind_desc' => 'Households - Number',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) 1.1.8 Households provided with targeted support to improve their nutrition
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Total persons participating - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Households - Households',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Household members benefitted - Number of people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [
+            'baseline' => 0,
+            'mid_term' => 0,
+            'end_target' => 0,
+            'source' => '',
+            'frequency' => '',
+            'responsibility' => '',
+            'assumptions' => ''
+          ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+    [
+      'key' => 'output-9',
+      'title' => ' Output',
+      'desc' => 'Beneficiaries with access to market infrastructure and business services.',
+      'rows' => [
+        // 1) 1.1.5 Persons in rural areas accessing financial services (credit)
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Men in rural areas accessing financial services - credit - Males',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Women in rural areas accessing financial services - credit - Females',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Young people in rural areas accessing financial services - credit - Young people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.5  Persons in rural areas accessing financial services',
+          'ind_desc' => 'Total persons accessing financial services - credit - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 2) 1.1.8 Households provided with targeted support to improve their nutrition
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Total persons participating - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Males - Males',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Females - Females',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Households - Households',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Household members benefitted - Number of people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+        [
+          'ind_name' => '1.1.8  Households provided with targeted support to improve their nutrition',
+          'ind_desc' => 'Young - Young people',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 3) No. of HHs benefited rural feeder roads constructed and/ or rehabilitated
+        [
+          'ind_name' => 'No. of HHs benefited rural feeder roads constructed and/ or rehabilitated',
+          'ind_desc' => 'Households - Number',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+
+        // 4) 2.1.5: Roads constructed, rehabilitated or upgraded
+        [
+          'ind_name' => '2.1.5: Roads constructed, rehabilitated or upgraded',
+          'ind_desc' => 'Length of roads (km)',
+          'meta'    => [ 'baseline' => 0, 'mid_term' => 0, 'end_target' => 0, 'source' => '', 'frequency' => '', 'responsibility' => '', 'assumptions' => '' ],
+          'targets' => $zerosByYear,
+          'results' => $zerosByYear,
+        ],
+      ],
+    ],
+  ];
 @endphp
 
 {{-- OLD --}}
@@ -31,12 +1951,12 @@
   --success:#16a34a; --success-soft:#dcfce7; --warning:#d97706; --warning-soft:#fff7ed; --danger:#dc2626; --danger-soft:#fee2e2;
 }
 .logframe-wrap{max-width:100%;margin:0 auto;padding:16px;background:linear-gradient(180deg, #f8fafc 0%, #f5f7fb 100%);} 
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);} 
 .h1{font-size:28px;font-weight:800;color:var(--text);} 
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:12px;border:1px solid var(--line);text-decoration:none;color:var(--text);background:#fff;font-size:15px;} 
-.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
-.btn-primary:hover{background:var(--accent-2);}
-.btn:hover{background:#f9fafb;}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);} 
+.btn-primary:hover{background:var(--accent-2);} 
+.btn:hover{background:#f9fafb;} 
 .btn.active{background:#eef2ff;border-color:#c7d2fe;}
 
 .table-wrap{position:relative;overflow:auto;}
@@ -89,13 +2009,31 @@ th[colspan]{text-align:center;}
 .cell-result.bad{background:var(--danger-soft);} 
 .cell-cum{text-align:center;font-weight:700;background:linear-gradient(180deg,#fafafa 0%,#ffffff 100%);} 
 .progress{height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:.35rem;} 
-.progress > span{display:block;height:100%;background:var(--accent);}
+.progress > span{display:block;height:100%;background:var(--accent);} 
 
 /* header polish */
-thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
+thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);} 
 @media (max-width:640px){
   th,td{padding:.5rem;}
 }
+
+/* Accordion (details/summary) */
+.section{margin-top:12px;}
+.section details{border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;}
+.section summary{
+  padding:12px 14px;cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+  background:linear-gradient(180deg,#f9fafb 0%, #ffffff 100%);
+  font-weight:700;color:var(--text);
+}
+.section summary::-webkit-details-marker{display:none;}
+.section .section-title{font-size:18px;}
+.section .section-desc{font-weight:500;color:var(--muted);}
+.section .section-body{padding:8px 12px 12px 12px;}
+.section[open] summary{border-bottom:1px solid var(--line);} 
+
+/* Jump menu */
+.jump-wrap{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.jump-select{padding:.55rem .7rem;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px;}
 </style>
 
 <div class="logframe-wrap">
@@ -104,7 +2042,7 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
   @endif
 
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-    <div class="h1">Tank Rehabilitation — Logframe</div>
+    <div class="h1">Smallholder Agribusiness and Resilience Project - Logical Framework</div>
     <div style="display:flex;gap:.5rem;">
       <a class="btn" href="{{ route('dashboard') }}">Home</a>
       <a class="btn" href="{{ route('logframe.tanks.index') }}">Refresh</a>
@@ -112,8 +2050,8 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
     </div>
   </div>
 
-  <div class="card table-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem .75rem .25rem .75rem;flex-wrap:wrap;gap:.5rem;">
+  <div class="card" style="padding:.75rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:.25rem;flex-wrap:wrap;gap:.5rem;">
       <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
         <span class="badge">Show Years:</span>
         @foreach($years as $y)
@@ -133,6 +2071,22 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
         <button id="zoom-3x" class="btn" type="button">3x</button>
         <button id="toggle-emph" class="btn" type="button">Emphasis</button>
       </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:.75rem;margin-top:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.35rem;">
+      <div class="jump-wrap">
+        <span class="badge">Jump to section</span>
+        <select id="jump-select" class="jump-select">
+          @foreach($parts as $p)
+            <option value="{{ $p['key'] }}">{{ $p['title'] }}</option>
+          @endforeach
+        </select>
+        <button id="open-all" class="btn" type="button">Open all</button>
+        <button id="close-all" class="btn" type="button">Close all</button>
+      </div>
+
       <div class="legend">
         <span><i class="dot ok"></i>Better than target</span>
         <span><i class="dot warn"></i>Close to target (±10%)</span>
@@ -140,65 +2094,271 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
         <span><i class="dot muted"></i>Cumulative</span>
       </div>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th rowspan="2">Results Hierarchy</th>
-          <th rowspan="2">Indicators: Name</th>
-          <th rowspan="2">Baseline</th>
-          <th rowspan="2">Mid-Term</th>
-          <th rowspan="2">End Target</th>
-          <th rowspan="2">Source</th>
-          <th rowspan="2">Frequency</th>
-          <th rowspan="2">Responsibility</th>
-          <th rowspan="2">Assumptions</th>
-          @foreach($years as $y)
-            <th class="year-group year-col" data-year-idx="{{ $loop->index }}">Project Yr ({{ $y }})</th>
-          @endforeach
-        </tr>
-        {{-- collapsed: removed per-year subheaders; stacked inside body cells --}}
-      </thead>
-      <tbody>
-        <tr>
-          <td class="desc"><strong>{!! $nl2br("Output\nMinor irrigation tanks and water harvesting infrastructure constructed or rehabilitated") !!}</strong></td>
-          <td class="desc"><strong>{!! $nl2br("Rehabilitation/construction of tanks — Tanks rehabilitated/constructed (Number)") !!}</strong></td>
-          <td style="text-align:center;">{{ $meta['baseline'] }}</td>
-          <td style="text-align:center;">{{ $meta['mid_term'] }}</td>
-          <td style="text-align:center;font-weight:600;">{{ $meta['end_target'] }}</td>
-          <td style="text-align:center;"><span class="badge">{{ $meta['source'] }}</span></td>
-          <td style="text-align:center;">{{ $meta['frequency'] }}</td>
-          <td style="text-align:center;">{{ $meta['responsibility'] }}</td>
-          <td>{{ $meta['assumptions'] ?: '—' }}</td>
-
-          @foreach($years as $y)
-            @php
-              $t = (int)($yearTargets[$y] ?? 0);
-              $r = (int)($yearResults[$y] ?? 0);
-              $d = $delta($t, $r);
-              $absPct = abs($d['pct']);
-              $flag = $r >= $t ? 'ok' : ($absPct <= 10 ? 'warn' : 'bad');
-              $arrow = $r > $t ? 'up' : ($r < $t ? 'down' : 'flat');
-              $pctDisp = $t != 0 ? number_format($d['pct'], 1) . '%' : '—';
-              $progress = $t > 0 ? max(0, min(100, round(($r / max(1e-9, $t)) * 100))) : 0;
-            @endphp
-            <td class="year-col" data-year-idx="{{ $loop->index }}">
-              <div style="display:flex;flex-direction:column;gap:.25rem;align-items:stretch;">
-                <div class="cell-target" style="text-align:center;">Target: {{ $t }}</div>
-                <div class="cell-result {{ $flag }}" style="text-align:center;">Result: {{ $r }}</div>
-                <div class="delta {{ $arrow }}" title="Result vs Target: {{ $r }} vs {{ $t }} ({{ $pctDisp }})">
-                  @if($arrow === 'up') ▲ @elseif($arrow === 'down') ▼ @else ▬ @endif
-                  <span>{{ $pctDisp }}</span>
-                </div>
-                <div class="progress"><span style="width: {{ $progress }}%"></span></div>
-                <div class="cell-cum" style="text-align:center;">Cumulative: {{ $cumulative[$y] }}</div>
-              </div>
-            </td>
-          @endforeach
-        </tr>
-      </tbody>
-    </table>
   </div>
+
+  @foreach($parts as $p)
+    @php
+      // If you have per-part data, attach like $p['meta'] / ['targets'] / ['results']
+      $pMeta   = $p['meta']   ?? $meta;
+      $pTgts   = $p['targets']?? $yearTargets;
+      $pRes    = $p['results']?? $yearResults;
+
+      // Recompute cumulative per part
+      $pRunning = 0; $pCum = [];
+      foreach ($years as $y) { $pRunning += ($pRes[$y] ?? 0); $pCum[$y] = $pRunning; }
+
+      // Badge label heuristic
+      $lower = strtolower($p['title']);
+      $badge = str_starts_with($lower, 'outcome') ? 'Outcome' : (str_starts_with($lower, 'output') ? 'Output' : (str_starts_with($lower, '1.') ? 'Component' : 'Component'));
+    @endphp
+
+    <div id="{{ $p['key'] }}" class="section card">
+      <details {{ $loop->first ? 'open' : '' }}>
+        <summary>
+          <span class="section-title"><strong>{{ $p['title'] }}</strong></span>
+          <span class="badge">{{ $badge }}</span>
+          <span class="section-desc">— {{ $p['desc'] }}</span>
+        </summary>
+        <div class="section-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th rowspan="2">Indicators Name</th>
+                  <th rowspan="2">Description</th>
+                  <th rowspan="2">Baseline</th>
+                  <th rowspan="2">Mid-Term</th>
+                  <th rowspan="2">End Target</th>
+                  <th rowspan="2">Source</th>
+                  <th rowspan="2">Frequency</th>
+                  <th rowspan="2">Responsibility</th>
+                  <th rowspan="2">Assumptions</th>
+                  @foreach($years as $y)
+                    <th class="year-group year-col" data-year-idx="{{ $loop->index }}">Project Yr ({{ $y }})</th>
+                  @endforeach
+                </tr>
+              </thead>
+              <tbody>
+              @php
+                // Rows within a section: if provided in $p['rows'], loop them; otherwise single row fallback
+                $rows = $p['rows'] ?? [[ 'ind_name' => $p['title'], 'ind_desc' => $p['desc'] ]];
+              @endphp
+               @foreach($rows as $row)
+                @php
+                  $rowMeta = $row['meta'] ?? $pMeta;
+                  $rowTgts = $row['targets'] ?? $pTgts;
+                  $rowRes  = $row['results'] ?? $pRes;
+
+                  // recompute cumulative per row (in case per-row results differ)
+                  $rowRunning = 0; $rowCum = [];
+                  foreach ($years as $y) { $rowRunning += ($rowRes[$y] ?? 0); $rowCum[$y] = $rowRunning; }
+                @endphp
+                 <tr data-part="{{ $p['key'] }}" data-row="{{ $loop->index }}">
+                  <td class="desc">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                      <div><strong>{{ $row['ind_name'] }}</strong></div>
+                      <div style="display:flex;gap:4px;flex-shrink:0;">
+                         <button type="button" class="btn" style="padding:.25rem .5rem;font-size:12px;" onclick="openRowEditor('{{ $p['key'] }}', {{ $loop->index }})">Edit</button>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="desc"><strong>{!! $nl2br($row['ind_desc']) !!}</strong></td>
+                   <td style="text-align:center;" data-cell="baseline">{{ $rowMeta['baseline'] }}</td>
+                   <td style="text-align:center;" data-cell="mid_term">{{ $rowMeta['mid_term'] }}</td>
+                   <td style="text-align:center;font-weight:600;" data-cell="end_target">{{ $rowMeta['end_target'] }}</td>
+                  <td style="text-align:center;"><span class="badge">{{ $rowMeta['source'] }}</span></td>
+                  <td style="text-align:center;">{{ $rowMeta['frequency'] }}</td>
+                  <td style="text-align:center;">{{ $rowMeta['responsibility'] }}</td>
+                  <td>{{ $rowMeta['assumptions'] ?? '—' }}</td>
+
+                  @foreach($years as $y)
+                    @php
+                      $t = (int)($rowTgts[$y] ?? 0);
+                      $r = (int)($rowRes[$y] ?? 0);
+                      $d = $delta($t, $r);
+                      $absPct = abs($d['pct']);
+                      $flag = $r >= $t ? 'ok' : ($absPct <= 10 ? 'warn' : 'bad');
+                      $arrow = $r > $t ? 'up' : ($r < $t ? 'down' : 'flat');
+                      $pctDisp = $t != 0 ? number_format($d['pct'], 1) . '%' : '—';
+                      $progress = $t > 0 ? max(0, min(100, round(($r / max(1e-9, $t)) * 100))) : 0;
+                    @endphp
+                     <td class="year-col" data-year-idx="{{ $loop->index }}" data-year="{{ $y }}">
+                      <div style="display:flex;flex-direction:column;gap:.25rem;align-items:stretch;">
+                         <div class="cell-target" style="text-align:center;" data-cell="target">Target: {{ $t }}</div>
+                         <div class="cell-result {{ $flag }}" style="text-align:center;" data-cell="result">Result: {{ $r }}</div>
+                        <div class="delta {{ $arrow }}" title="Result vs Target: {{ $r }} vs {{ $t }} ({{ $pctDisp }})">
+                          @if($arrow === 'up') ▲ @elseif($arrow === 'down') ▼ @else ▬ @endif
+                          <span>{{ $pctDisp }}</span>
+                        </div>
+                         <div class="progress"><span style="width: {{ $progress }}%" data-cell="progress"></span></div>
+                         <div class="cell-cum" style="text-align:center;" data-cell="cumulative">Cumulative: {{ $rowCum[$y] }}</div>
+                      </div>
+                    </td>
+                  @endforeach
+                </tr>
+              @endforeach
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+    </div>
+  @endforeach
+
   <script>
+  // Inline editor modal for per-row values (persist to localStorage)
+  function openRowEditor(partKey, rowIndex){
+    const row = document.querySelector(`tr[data-part="${partKey}"][data-row="${rowIndex}"]`);
+    if(!row) return;
+    const title = row.querySelector('td.desc strong')?.textContent?.trim() || 'Edit Row';
+
+    // Gather current values
+    const baseline = row.querySelector('[data-cell="baseline"]').textContent.trim();
+    const midTerm = row.querySelector('[data-cell="mid_term"]').textContent.trim();
+    const endTarget = row.querySelector('[data-cell="end_target"]').textContent.trim();
+    const yearCells = Array.from(row.querySelectorAll('td.year-col'));
+
+    // Build modal HTML
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.inset = '0';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
+    overlay.style.zIndex = '9999';
+
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.background = '#fff';
+    modal.style.border = '1px solid #e5e7eb';
+    modal.style.borderRadius = '14px';
+    modal.style.width = 'min(700px, 92vw)';
+    modal.style.maxHeight = '85vh';
+    modal.style.overflow = 'auto';
+    modal.style.boxShadow = '0 10px 25px rgba(0,0,0,0.15)';
+    modal.style.padding = '16px';
+
+    const header = document.createElement('div');
+    header.style.display = 'flex';
+    header.style.justifyContent = 'space-between';
+    header.style.alignItems = 'center';
+    header.style.marginBottom = '12px';
+    header.innerHTML = `<div style="font-weight:800;font-size:18px;">${title} — Edit</div>`;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn';
+    closeBtn.textContent = 'Close';
+    closeBtn.onclick = () => document.body.removeChild(overlay);
+    header.appendChild(closeBtn);
+
+    const form = document.createElement('div');
+    form.style.display = 'grid';
+    form.style.gap = '12px';
+
+    // Meta inputs
+    const metaWrap = document.createElement('div');
+    metaWrap.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+        <div><label>Baseline</label><input id="edit-baseline" type="number" value="${Number(baseline)||0}" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px;"></div>
+        <div><label>Mid-Term</label><input id="edit-mid" type="number" value="${Number(midTerm)||0}" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px;"></div>
+        <div><label>End Target</label><input id="edit-end" type="number" value="${Number(endTarget)||0}" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px;"></div>
+      </div>
+    `;
+    form.appendChild(metaWrap);
+
+    // Year inputs
+    const yearsWrap = document.createElement('div');
+    yearsWrap.innerHTML = `<div style="font-weight:700;margin:8px 0 4px;">Per-Year Values</div>`;
+    const yearsGrid = document.createElement('div');
+    yearsGrid.style.display = 'grid';
+    yearsGrid.style.gridTemplateColumns = 'repeat(auto-fit,minmax(180px,1fr))';
+    yearsGrid.style.gap = '10px';
+
+    yearCells.forEach((cell) => {
+      const year = cell.getAttribute('data-year');
+      const targetText = cell.querySelector('[data-cell="target"]').textContent.replace('Target:','').trim();
+      const resultText = cell.querySelector('[data-cell="result"]').textContent.replace('Result:','').trim();
+      const block = document.createElement('div');
+      block.style.border = '1px solid #e5e7eb';
+      block.style.borderRadius = '10px';
+      block.style.padding = '10px';
+      block.innerHTML = `
+        <div style="font-weight:600;margin-bottom:6px;">${year}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div><label>Target</label><input type="number" class="edit-target" data-year="${year}" value="${Number(targetText)||0}" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px;"></div>
+          <div><label>Result</label><input type="number" class="edit-result" data-year="${year}" value="${Number(resultText)||0}" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px;"></div>
+        </div>
+      `;
+      yearsGrid.appendChild(block);
+    });
+    yearsWrap.appendChild(yearsGrid);
+    form.appendChild(yearsWrap);
+
+    const save = document.createElement('button');
+    save.className = 'btn btn-primary';
+    save.textContent = 'Save';
+    save.onclick = () => {
+      // Read values
+      const newBaseline = Number(document.getElementById('edit-baseline').value)||0;
+      const newMid = Number(document.getElementById('edit-mid').value)||0;
+      const newEnd = Number(document.getElementById('edit-end').value)||0;
+      // Update meta cells
+      row.querySelector('[data-cell="baseline"]').textContent = newBaseline;
+      row.querySelector('[data-cell="mid_term"]').textContent = newMid;
+      row.querySelector('[data-cell="end_target"]').textContent = newEnd;
+
+      // Targets/results
+      const targetInputs = Array.from(modal.querySelectorAll('.edit-target'));
+      const resultInputs = Array.from(modal.querySelectorAll('.edit-result'));
+      const updatedTargets = {}; const updatedResults = {};
+      targetInputs.forEach(inp => { updatedTargets[inp.getAttribute('data-year')] = Number(inp.value)||0; });
+      resultInputs.forEach(inp => { updatedResults[inp.getAttribute('data-year')] = Number(inp.value)||0; });
+
+      // Update year cells visuals
+      const yearCols = Array.from(row.querySelectorAll('td.year-col'));
+      let running = 0;
+      yearCols.forEach(col => {
+        const y = col.getAttribute('data-year');
+        const t = updatedTargets[y] ?? 0;
+        const r = updatedResults[y] ?? 0;
+        running += r;
+        col.querySelector('[data-cell="target"]').textContent = `Target: ${t}`;
+        const resultEl = col.querySelector('[data-cell="result"]');
+        resultEl.textContent = `Result: ${r}`;
+        // flag/arrow
+        const diff = r - t;
+        const pct = t !== 0 ? (diff/Math.max(1e-9,t))*100 : (r !== 0 ? 100 : 0);
+        const absPct = Math.abs(pct);
+        const flag = r >= t ? 'ok' : (absPct <= 10 ? 'warn' : 'bad');
+        resultEl.classList.remove('ok','warn','bad');
+        resultEl.classList.add(flag);
+        const delta = col.querySelector('.delta');
+        delta.classList.remove('up','down','flat');
+        const arrow = r > t ? 'up' : (r < t ? 'down' : 'flat');
+        delta.classList.add(arrow);
+        delta.setAttribute('title', `Result vs Target: ${r} vs ${t} (${t!==0?pct.toFixed(1)+'%':'—'})`);
+        delta.innerHTML = `${arrow==='up'?'▲':(arrow==='down'?'▼':'▬')} <span>${t!==0?pct.toFixed(1)+'%':'—'}</span>`;
+        // progress + cumulative
+        col.querySelector('[data-cell="progress"]').style.width = `${t>0?Math.max(0,Math.min(100,Math.round((r/Math.max(1e-9,t))*100))):0}%`;
+        col.querySelector('[data-cell="cumulative"]').textContent = `Cumulative: ${running}`;
+      });
+
+      // Persist to localStorage
+      const key = `logframe:${partKey}:${rowIndex}`;
+      const payload = { meta:{baseline:newBaseline, mid_term:newMid, end_target:newEnd}, targets:updatedTargets, results:updatedResults };
+      localStorage.setItem(key, JSON.stringify(payload));
+
+      document.body.removeChild(overlay);
+    };
+
+    modal.appendChild(header);
+    modal.appendChild(form);
+    modal.appendChild(save);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+  }
+
   (function(){
     const years = @json(array_values($years));
     const checkboxes = Array.from(document.querySelectorAll('.yr-toggle'));
@@ -242,6 +2402,102 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
     checkboxes.forEach((cb, i) => cb.checked = (i === checkboxes.length - 1));
     render();
   })();
+
+  // Load saved edits from localStorage on page load
+  (function(){
+    document.querySelectorAll('tr[data-part][data-row]').forEach(tr => {
+      const partKey = tr.getAttribute('data-part');
+      const rowIndex = tr.getAttribute('data-row');
+      const key = `logframe:${partKey}:${rowIndex}`;
+      const saved = localStorage.getItem(key);
+      if(!saved) return;
+      try{
+        const data = JSON.parse(saved);
+        if(data?.meta){
+          tr.querySelector('[data-cell="baseline"]').textContent = Number(data.meta.baseline)||0;
+          tr.querySelector('[data-cell="mid_term"]').textContent = Number(data.meta.mid_term)||0;
+          tr.querySelector('[data-cell="end_target"]').textContent = Number(data.meta.end_target)||0;
+        }
+        const yearCols = Array.from(tr.querySelectorAll('td.year-col'));
+        let running = 0;
+        yearCols.forEach(col => {
+          const y = col.getAttribute('data-year');
+          const t = Number((data.targets??{})[y] ?? col.querySelector('[data-cell="target"]').textContent.replace('Target:',''))||0;
+          const r = Number((data.results??{})[y] ?? col.querySelector('[data-cell="result"]').textContent.replace('Result:',''))||0;
+          running += r;
+          col.querySelector('[data-cell="target"]').textContent = `Target: ${t}`;
+          const resultEl = col.querySelector('[data-cell="result"]');
+          resultEl.textContent = `Result: ${r}`;
+          const diff = r - t;
+          const pct = t !== 0 ? (diff/Math.max(1e-9,t))*100 : (r !== 0 ? 100 : 0);
+          const absPct = Math.abs(pct);
+          const flag = r >= t ? 'ok' : (absPct <= 10 ? 'warn' : 'bad');
+          resultEl.classList.remove('ok','warn','bad');
+          resultEl.classList.add(flag);
+          const delta = col.querySelector('.delta');
+          delta.classList.remove('up','down','flat');
+          const arrow = r > t ? 'up' : (r < t ? 'down' : 'flat');
+          delta.classList.add(arrow);
+          delta.setAttribute('title', `Result vs Target: ${r} vs ${t} (${t!==0?pct.toFixed(1)+'%':'—'})`);
+          delta.innerHTML = `${arrow==='up'?'▲':(arrow==='down'?'▼':'▬')} <span>${t!==0?pct.toFixed(1)+'%':'—'}</span>`;
+          col.querySelector('[data-cell="progress"]').style.width = `${t>0?Math.max(0,Math.min(100,Math.round((r/Math.max(1e-9,t))*100))):0}%`;
+          col.querySelector('[data-cell="cumulative"]').textContent = `Cumulative: ${running}`;
+        });
+      }catch(e){ /* ignore */ }
+    });
+  })();
+
+  // Jump to a section + open it; open/close all
+  (function(){
+    const jump = document.getElementById('jump-select');
+    const openAll = document.getElementById('open-all');
+    const closeAll = document.getElementById('close-all');
+
+    jump?.addEventListener('change', () => {
+      const id = jump.value;
+      const section = document.getElementById(id);
+      if(section){
+        const det = section.querySelector('details');
+        if(det) det.open = true;
+        section.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+
+    openAll?.addEventListener('click', () => {
+      document.querySelectorAll('.section details').forEach(d => d.open = true);
+    });
+    closeAll?.addEventListener('click', () => {
+      document.querySelectorAll('.section details').forEach(d => d.open = false);
+    });
+  })();
+
+  // Delete confirmation function (unchanged)
+  function confirmDelete(indicatorKey, indicatorName) {
+    if (confirm(`Are you sure you want to delete the "${indicatorName}" indicator? This action cannot be undone.`)) {
+      // Create a form to submit the delete request
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '{{ route("logframe.tanks.destroy", ":id") }}'.replace(':id', indicatorKey);
+      
+      // Add CSRF token
+      const csrfToken = document.createElement('input');
+      csrfToken.type = 'hidden';
+      csrfToken.name = '_token';
+      csrfToken.value = '{{ csrf_token() }}';
+      form.appendChild(csrfToken);
+      
+      // Add method override for DELETE
+      const methodField = document.createElement('input');
+      methodField.type = 'hidden';
+      methodField.name = '_method';
+      methodField.value = 'DELETE';
+      form.appendChild(methodField);
+      
+      // Submit the form
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
   </script>
 </div>
 @endsection
