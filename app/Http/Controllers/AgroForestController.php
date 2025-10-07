@@ -44,6 +44,9 @@ class AgroForestController extends Controller
             'tank_name'                   => 'nullable|string',
             'tank_name_2'                 => 'nullable|string',
             'tank_name_3'                 => 'nullable|string',
+
+             'tank_names'                  => 'nullable|array',
+             'tank_names.*'                => 'nullable|string|max:255',
             'replanting_forest_beat_name' => 'nullable|string',
             'number_of_hectares'          => 'nullable|numeric',
             'gps_longitude'               => 'nullable|numeric',
@@ -63,10 +66,19 @@ class AgroForestController extends Controller
 
             
         ]);
+        // Map dynamic tanks to fixed columns (keep DB unchanged)
+    $names = array_values(array_filter($request->input('tank_names', []), fn($v) => trim((string)$v) !== ''));
+    $data['tank_name']   = $names[0] ?? ($data['tank_name']   ?? null);
+    $data['tank_name_2'] = $names[1] ?? ($data['tank_name_2'] ?? null);
+    $data['tank_name_3'] = $names[2] ?? ($data['tank_name_3'] ?? null);
 
-        if ($request->hasFile('project_proposal')) {
-            $data['project_proposal_path'] = $request->file('project_proposal')->store('proposals', 'public');
-        }
+    if ($request->hasFile('project_proposal')) {
+        $data['project_proposal_path'] = $request->file('project_proposal')->store('proposals', 'public');
+    }
+
+        // if ($request->hasFile('project_proposal')) {
+        //     $data['project_proposal_path'] = $request->file('project_proposal')->store('proposals', 'public');
+        // }
 
         DB::transaction(function () use ($request, $data) {
             $agro = AgroForest::create($data);
@@ -142,6 +154,10 @@ class AgroForestController extends Controller
             'tank_name'                   => 'nullable|string|max:255',
             'tank_name_2'                 => 'nullable|string|max:255',
             'tank_name_3'                 => 'nullable|string|max:255',
+
+            'tank_names'                  => 'nullable|array',
+             'tank_names.*'                => 'nullable|string|max:255',
+
             'replanting_forest_beat_name' => 'nullable|string|max:255',
             'number_of_hectares'          => 'nullable|numeric',
             'gps_longitude'               => 'nullable|numeric',
@@ -159,6 +175,11 @@ class AgroForestController extends Controller
             'nursery_plants_extra'        => 'nullable|array',
             'nursery_plants_extra.*'      => 'nullable|integer|min:0',
         ]);
+
+         $names = array_values(array_filter($request->input('tank_names', []), fn($v) => trim((string)$v) !== ''));
+    $data['tank_name']   = $names[0] ?? ($data['tank_name']   ?? null);
+    $data['tank_name_2'] = $names[1] ?? ($data['tank_name_2'] ?? null);
+    $data['tank_name_3'] = $names[2] ?? ($data['tank_name_3'] ?? null);
 
         if ($request->hasFile('project_proposal')) {
             $data['project_proposal_path'] = $request->file('project_proposal')->store('proposals', 'public');

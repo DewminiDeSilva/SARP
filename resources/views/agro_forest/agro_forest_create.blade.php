@@ -197,7 +197,7 @@
 <div class="row g-3">
   <div class="col-12 col-md-4">
     <label for="river_basin" class="form-label dropdown-label">River Basin</label>
-    <select class="form-control" name="river_basin" id="river_basin" required>
+    <select class="form-control" name="river_basin" id="river_basin">
       <option value="">Select River Basin</option>
       <option value="Mee Oya">Mee Oya</option>
       <option value="Daduru Oya">Daduru Oya</option>
@@ -243,7 +243,7 @@
             <div class="dropdown">
                 <label for="gndDropdown" class="form-label dropdown-label">GN Division</label>
                 <select id="gndDropdown" name="gn_division_name" class="btn btn-success dropdown-toggle" >
-                    <option value="">Select GN Division</option>
+                    <option value="">Select GN Division 1</option>
                 </select>
                <input type="hidden" id="gndName" name="gn_division_name">
             </div>
@@ -262,7 +262,7 @@
             <div class="dropdown">
                 <label for="gndDropdown3" class="form-label dropdown-label">GN Division</label>
                 <select id="gndDropdown3" name="gn_division_name_3" class="btn btn-success dropdown-toggle" >
-                    <option value="">Select GN Division</option>
+                    <option value="">Select GN Division 3</option>
                 </select>
                 <input type="hidden" id="gndName3" name="gn_division_name_3">
             </div>
@@ -273,7 +273,7 @@
     
     </div>
  
-
+<!-- 
 <div class="row g-3 mt-2">
   <div class="col-12 col-md-4 offset-md-4">
     <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
@@ -299,6 +299,58 @@
     <select name="tank_name_3" class="form-control tankDropdown">
       <option value="">Select Tank 3</option>
     </select>
+  </div>
+</div> -->
+{{-- Dynamic Tanks --}}
+@php
+    // Seed initial rows from old() or existing 3 fields
+    $initialTanks = old('tank_names', array_values(array_filter([
+        $agro_forest->tank_name ?? null,
+        $agro_forest->tank_name_2 ?? null,
+        $agro_forest->tank_name_3 ?? null,
+    ])));
+    if (empty($initialTanks)) { $initialTanks = ['']; }
+@endphp
+
+<div class="row g-3 mt-2">
+  <div class="col-12 col-md-6 offset-md-3">
+    <label class="form-label dropdown-label">Select Tank Name(s)</label>
+
+    <div id="tankRows" class="d-flex flex-column gap-2">
+      @foreach($initialTanks as $i => $tVal)
+        <div class="input-group tank-row">
+          <select name="tank_names[]" class="form-control tankDropdown" data-selected="{{ $tVal }}">
+            <option value="">Select Tank</option>
+            {{-- options inserted by JS --}}
+          </select>
+          <button type="button"
+                  class="btn btn-outline-success addTankRow {{ $loop->last ? '' : 'd-none' }}">
+            <i class="fa fa-plus"></i>
+          </button>
+          <button type="button"
+                  class="btn btn-outline-danger removeTankRow {{ $loop->first && $loop->last ? 'd-none' : '' }}">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+      @endforeach
+    </div>
+
+    {{-- Template (cloned by JS) --}}
+    <template id="tankRowTemplate">
+      <div class="input-group tank-row">
+        <select name="tank_names[]" class="form-control tankDropdown">
+          <option value="">Select Tank</option>
+        </select>
+        <button type="button" class="btn btn-outline-success addTankRow">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button type="button" class="btn btn-outline-danger removeTankRow">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+    </template>
+
+    <small class="text-muted d-block mt-2">Use + to add more tanks and the bin to remove a row.</small>
   </div>
 </div>
 
@@ -609,6 +661,68 @@ $.get('/tanks', function (data) {
 });
 
 </script>
+<script>
+(function () {
+  let tankList = []; // will hold [{tank_name: "..."}] or strings
+  // Load tanks once
+  $.get('/tanks', function (data) {
+    // Normalize to array of strings: tank_name
+    tankList = (data || []).map(function (t) {
+      return (typeof t === 'string') ? t : (t.tank_name || '');
+    }).filter(Boolean);
+
+    // Populate existing rows
+    $('#tankRows .tankDropdown').each(function () {
+      const selected = $(this).data('selected') || '';
+      populateTankSelect(this, selected);
+    });
+  });
+
+  function populateTankSelect(selectEl, selectedVal) {
+    const $sel = $(selectEl);
+    $sel.find('option:not(:first)').remove();
+    tankList.forEach(function (name) {
+      const $opt = $('<option>', { value: name, text: name });
+      if (selectedVal && selectedVal === name) $opt.prop('selected', true);
+      $sel.append($opt);
+    });
+  }
+
+  // Add new row
+  $(document).on('click', '.addTankRow', function () {
+    const $template = $($('#tankRowTemplate').html());
+    // Populate options
+    populateTankSelect($template.find('.tankDropdown')[0], '');
+    // Append row
+    $('#tankRows').append($template);
+
+    // Update buttons: only last row shows the + button
+    refreshTankRowButtons();
+  });
+
+  // Remove row (keep at least 1)
+  $(document).on('click', '.removeTankRow', function () {
+    const $rows = $('#tankRows .tank-row');
+    if ($rows.length <= 1) return; // don't remove the last one
+    $(this).closest('.tank-row').remove();
+    refreshTankRowButtons();
+  });
+
+  // Ensure only the last row shows the add button; show remove on all if >1
+  function refreshTankRowButtons() {
+    const $rows = $('#tankRows .tank-row');
+    $rows.find('.addTankRow').addClass('d-none');
+    $rows.last().find('.addTankRow').removeClass('d-none');
+
+    if ($rows.length === 1) {
+      $rows.find('.removeTankRow').addClass('d-none');
+    } else {
+      $rows.find('.removeTankRow').removeClass('d-none');
+    }
+  }
+})();
+</script>
+
 
 </body>
 </html>
