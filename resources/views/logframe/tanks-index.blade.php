@@ -2317,7 +2317,7 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
     <div style="display:flex;gap:.5rem;">
       <a class="btn" href="{{ route('dashboard') }}">Home</a>
       <a class="btn" href="{{ route('logframe.tanks.index') }}">Refresh</a>
-      <a class="btn btn-primary" href="{{ route('logframe.tanks.create') }}">Create / Edit</a>
+      <!-- <a class="btn btn-primary" href="{{ route('logframe.tanks.create') }}">Create / Edit</a> -->
     </div>
   </div>
 
@@ -2477,7 +2477,7 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
   @endforeach
 
   <script>
-  // Inline editor modal for per-row values (persist to localStorage)
+  // Inline editor modal for per-row values (persist to database)
   function openRowEditor(partKey, rowIndex){
     const row = document.querySelector(`tr[data-part="${partKey}"][data-row="${rowIndex}"]`);
     if(!row) return;
@@ -2569,58 +2569,123 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
     const save = document.createElement('button');
     save.className = 'btn btn-primary';
     save.textContent = 'Save';
-    save.onclick = () => {
-      // Read values
-      const newBaseline = Number(document.getElementById('edit-baseline').value)||0;
-      const newMid = Number(document.getElementById('edit-mid').value)||0;
-      const newEnd = Number(document.getElementById('edit-end').value)||0;
-      // Update meta cells
-      row.querySelector('[data-cell="baseline"]').textContent = newBaseline;
-      row.querySelector('[data-cell="mid_term"]').textContent = newMid;
-      row.querySelector('[data-cell="end_target"]').textContent = newEnd;
+    save.onclick = async () => {
+      // Show loading state
+      save.textContent = 'Saving...';
+      save.disabled = true;
 
-      // Targets/results
-      const targetInputs = Array.from(modal.querySelectorAll('.edit-target'));
-      const resultInputs = Array.from(modal.querySelectorAll('.edit-result'));
-      const updatedTargets = {}; const updatedResults = {};
-      targetInputs.forEach(inp => { updatedTargets[inp.getAttribute('data-year')] = Number(inp.value)||0; });
-      resultInputs.forEach(inp => { updatedResults[inp.getAttribute('data-year')] = Number(inp.value)||0; });
+      try {
+        // Read values
+        const newBaseline = Number(document.getElementById('edit-baseline').value)||0;
+        const newMid = Number(document.getElementById('edit-mid').value)||0;
+        const newEnd = Number(document.getElementById('edit-end').value)||0;
+        
+        // Targets/results
+        const targetInputs = Array.from(modal.querySelectorAll('.edit-target'));
+        const resultInputs = Array.from(modal.querySelectorAll('.edit-result'));
+        const updatedTargets = {}; 
+        const updatedResults = {};
+        targetInputs.forEach(inp => { updatedTargets[inp.getAttribute('data-year')] = Number(inp.value)||0; });
+        resultInputs.forEach(inp => { updatedResults[inp.getAttribute('data-year')] = Number(inp.value)||0; });
 
-      // Update year cells visuals
-      const yearCols = Array.from(row.querySelectorAll('td.year-col'));
-      let running = 0;
-      yearCols.forEach(col => {
-        const y = col.getAttribute('data-year');
-        const t = updatedTargets[y] ?? 0;
-        const r = updatedResults[y] ?? 0;
-        running += r;
-        col.querySelector('[data-cell="target"]').textContent = `Target: ${t}`;
-        const resultEl = col.querySelector('[data-cell="result"]');
-        resultEl.textContent = `Result: ${r}`;
-        // flag/arrow
-        const diff = r - t;
-        const pct = t !== 0 ? (diff/Math.max(1e-9,t))*100 : (r !== 0 ? 100 : 0);
-        const absPct = Math.abs(pct);
-        const flag = r >= t ? 'ok' : (absPct <= 10 ? 'warn' : 'bad');
-        resultEl.classList.remove('ok','warn','bad');
-        resultEl.classList.add(flag);
-        const delta = col.querySelector('.delta');
-        delta.classList.remove('up','down','flat');
-        const arrow = r > t ? 'up' : (r < t ? 'down' : 'flat');
-        delta.classList.add(arrow);
-        delta.setAttribute('title', `Result vs Target: ${r} vs ${t} (${t!==0?pct.toFixed(1)+'%':'—'})`);
-        delta.innerHTML = `${arrow==='up'?'▲':(arrow==='down'?'▼':'▬')} <span>${t!==0?pct.toFixed(1)+'%':'—'}</span>`;
-        // progress + cumulative
-        col.querySelector('[data-cell="progress"]').style.width = `${t>0?Math.max(0,Math.min(100,Math.round((r/Math.max(1e-9,t))*100))):0}%`;
-        col.querySelector('[data-cell="cumulative"]').textContent = `Cumulative: ${running}`;
-      });
+        // Create or update indicator in database
+        const indicatorData = {
+          section_key: partKey,
+          indicator_name: title,
+          indicator_description: row.querySelector('td.desc:nth-child(2) strong')?.textContent?.trim() || '',
+          baseline: newBaseline,
+          mid_term: newMid,
+          end_target: newEnd,
+          yearly_targets: updatedTargets,
+          yearly_results: updatedResults,
+          source: 'MIS',
+          frequency: 'Monthly',
+          responsibility: 'PMU',
+          assumptions: 'Extreme climate change shocks do not occur'
+        };
 
-      // Persist to localStorage
-      const key = `logframe:${partKey}:${rowIndex}`;
-      const payload = { meta:{baseline:newBaseline, mid_term:newMid, end_target:newEnd}, targets:updatedTargets, results:updatedResults };
-      localStorage.setItem(key, JSON.stringify(payload));
+        // Check if indicator exists (you might want to add an ID to the row)
+        const indicatorId = row.getAttribute('data-indicator-id');
+        
+        let response;
+        if (indicatorId) {
+          // Update existing indicator
+          response = await fetch(`/api/logframe/indicators/${indicatorId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(indicatorData)
+          });
+        } else {
+          // Create new indicator
+          response = await fetch('/api/logframe/indicators', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(indicatorData)
+          });
+        }
 
-      document.body.removeChild(overlay);
+        if (!response.ok) {
+          throw new Error('Failed to save indicator');
+        }
+
+        const result = await response.json();
+        
+        // Update the row with the new ID if it was created
+        if (!indicatorId && result.id) {
+          row.setAttribute('data-indicator-id', result.id);
+        }
+
+        // Update meta cells
+        row.querySelector('[data-cell="baseline"]').textContent = newBaseline;
+        row.querySelector('[data-cell="mid_term"]').textContent = newMid;
+        row.querySelector('[data-cell="end_target"]').textContent = newEnd;
+
+        // Update year cells visuals
+        const yearCols = Array.from(row.querySelectorAll('td.year-col'));
+        let running = 0;
+        yearCols.forEach(col => {
+          const y = col.getAttribute('data-year');
+          const t = updatedTargets[y] ?? 0;
+          const r = updatedResults[y] ?? 0;
+          running += r;
+          col.querySelector('[data-cell="target"]').textContent = `Target: ${t}`;
+          const resultEl = col.querySelector('[data-cell="result"]');
+          resultEl.textContent = `Result: ${r}`;
+          // flag/arrow
+          const diff = r - t;
+          const pct = t !== 0 ? (diff/Math.max(1e-9,t))*100 : (r !== 0 ? 100 : 0);
+          const absPct = Math.abs(pct);
+          const flag = r >= t ? 'ok' : (absPct <= 10 ? 'warn' : 'bad');
+          resultEl.classList.remove('ok','warn','bad');
+          resultEl.classList.add(flag);
+          const delta = col.querySelector('.delta');
+          delta.classList.remove('up','down','flat');
+          const arrow = r > t ? 'up' : (r < t ? 'down' : 'flat');
+          delta.classList.add(arrow);
+          delta.setAttribute('title', `Result vs Target: ${r} vs ${t} (${t!==0?pct.toFixed(1)+'%':'—'})`);
+          delta.innerHTML = `${arrow==='up'?'▲':(arrow==='down'?'▼':'▬')} <span>${t!==0?pct.toFixed(1)+'%':'—'}</span>`;
+          // progress + cumulative
+          col.querySelector('[data-cell="progress"]').style.width = `${t>0?Math.max(0,Math.min(100,Math.round((r/Math.max(1e-9,t))*100))):0}%`;
+          col.querySelector('[data-cell="cumulative"]').textContent = `Cumulative: ${running}`;
+        });
+
+        document.body.removeChild(overlay);
+        
+        // Show success message
+        showNotification('Indicator saved successfully!', 'success');
+        
+      } catch (error) {
+        console.error('Error saving indicator:', error);
+        showNotification('Error saving indicator. Please try again.', 'error');
+        save.textContent = 'Save';
+        save.disabled = false;
+      }
     };
 
     modal.appendChild(header);
@@ -2628,6 +2693,36 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
     modal.appendChild(save);
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+  }
+
+  // Notification function
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.padding = '12px 20px';
+    notification.style.borderRadius = '8px';
+    notification.style.color = '#fff';
+    notification.style.fontWeight = '600';
+    notification.style.zIndex = '10000';
+    notification.textContent = message;
+    
+    if (type === 'success') {
+      notification.style.background = '#10b981';
+    } else if (type === 'error') {
+      notification.style.background = '#ef4444';
+    } else {
+      notification.style.background = '#3b82f6';
+    }
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
+    }, 3000);
   }
 
   (function(){
@@ -2674,48 +2769,77 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
     render();
   })();
 
-  // Load saved edits from localStorage on page load
-  (function(){
-    document.querySelectorAll('tr[data-part][data-row]').forEach(tr => {
-      const partKey = tr.getAttribute('data-part');
-      const rowIndex = tr.getAttribute('data-row');
-      const key = `logframe:${partKey}:${rowIndex}`;
-      const saved = localStorage.getItem(key);
-      if(!saved) return;
-      try{
-        const data = JSON.parse(saved);
-        if(data?.meta){
-          tr.querySelector('[data-cell="baseline"]').textContent = Number(data.meta.baseline)||0;
-          tr.querySelector('[data-cell="mid_term"]').textContent = Number(data.meta.mid_term)||0;
-          tr.querySelector('[data-cell="end_target"]').textContent = Number(data.meta.end_target)||0;
+  // Load indicators from database on page load
+  (async function(){
+    try {
+      const response = await fetch('/api/logframe/indicators');
+      if (!response.ok) return;
+      
+      const indicators = await response.json();
+      
+      // Group indicators by section
+      const indicatorsBySection = {};
+      Object.keys(indicators).forEach(sectionKey => {
+        indicatorsBySection[sectionKey] = indicators[sectionKey];
+      });
+      
+      // Update each row with database data
+      document.querySelectorAll('tr[data-part][data-row]').forEach(tr => {
+        const partKey = tr.getAttribute('data-part');
+        const rowIndex = tr.getAttribute('data-row');
+        const indicatorName = tr.querySelector('td.desc strong')?.textContent?.trim();
+        
+        // Find matching indicator in database
+        const sectionIndicators = indicatorsBySection[partKey] || [];
+        const matchingIndicator = sectionIndicators.find(ind => 
+          ind.indicator_name === indicatorName
+        );
+        
+        if (matchingIndicator) {
+          // Set the indicator ID for future updates
+          tr.setAttribute('data-indicator-id', matchingIndicator.id);
+          
+          // Update meta data
+          tr.querySelector('[data-cell="baseline"]').textContent = matchingIndicator.baseline || 0;
+          tr.querySelector('[data-cell="mid_term"]').textContent = matchingIndicator.mid_term || 0;
+          tr.querySelector('[data-cell="end_target"]').textContent = matchingIndicator.end_target || 0;
+          
+          // Update year columns
+          const yearCols = Array.from(tr.querySelectorAll('td.year-col'));
+          let running = 0;
+          yearCols.forEach(col => {
+            const y = col.getAttribute('data-year');
+            const t = matchingIndicator.yearly_targets?.[y] || 0;
+            const r = matchingIndicator.yearly_results?.[y] || 0;
+            running += r;
+            
+            col.querySelector('[data-cell="target"]').textContent = `Target: ${t}`;
+            const resultEl = col.querySelector('[data-cell="result"]');
+            resultEl.textContent = `Result: ${r}`;
+            
+            // Update visual indicators
+            const diff = r - t;
+            const pct = t !== 0 ? (diff/Math.max(1e-9,t))*100 : (r !== 0 ? 100 : 0);
+            const absPct = Math.abs(pct);
+            const flag = r >= t ? 'ok' : (absPct <= 10 ? 'warn' : 'bad');
+            resultEl.classList.remove('ok','warn','bad');
+            resultEl.classList.add(flag);
+            
+            const delta = col.querySelector('.delta');
+            delta.classList.remove('up','down','flat');
+            const arrow = r > t ? 'up' : (r < t ? 'down' : 'flat');
+            delta.classList.add(arrow);
+            delta.setAttribute('title', `Result vs Target: ${r} vs ${t} (${t!==0?pct.toFixed(1)+'%':'—'})`);
+            delta.innerHTML = `${arrow==='up'?'▲':(arrow==='down'?'▼':'▬')} <span>${t!==0?pct.toFixed(1)+'%':'—'}</span>`;
+            
+            col.querySelector('[data-cell="progress"]').style.width = `${t>0?Math.max(0,Math.min(100,Math.round((r/Math.max(1e-9,t))*100))):0}%`;
+            col.querySelector('[data-cell="cumulative"]').textContent = `Cumulative: ${running}`;
+          });
         }
-        const yearCols = Array.from(tr.querySelectorAll('td.year-col'));
-        let running = 0;
-        yearCols.forEach(col => {
-          const y = col.getAttribute('data-year');
-          const t = Number((data.targets??{})[y] ?? col.querySelector('[data-cell="target"]').textContent.replace('Target:',''))||0;
-          const r = Number((data.results??{})[y] ?? col.querySelector('[data-cell="result"]').textContent.replace('Result:',''))||0;
-          running += r;
-          col.querySelector('[data-cell="target"]').textContent = `Target: ${t}`;
-          const resultEl = col.querySelector('[data-cell="result"]');
-          resultEl.textContent = `Result: ${r}`;
-          const diff = r - t;
-          const pct = t !== 0 ? (diff/Math.max(1e-9,t))*100 : (r !== 0 ? 100 : 0);
-          const absPct = Math.abs(pct);
-          const flag = r >= t ? 'ok' : (absPct <= 10 ? 'warn' : 'bad');
-          resultEl.classList.remove('ok','warn','bad');
-          resultEl.classList.add(flag);
-          const delta = col.querySelector('.delta');
-          delta.classList.remove('up','down','flat');
-          const arrow = r > t ? 'up' : (r < t ? 'down' : 'flat');
-          delta.classList.add(arrow);
-          delta.setAttribute('title', `Result vs Target: ${r} vs ${t} (${t!==0?pct.toFixed(1)+'%':'—'})`);
-          delta.innerHTML = `${arrow==='up'?'▲':(arrow==='down'?'▼':'▬')} <span>${t!==0?pct.toFixed(1)+'%':'—'}</span>`;
-          col.querySelector('[data-cell="progress"]').style.width = `${t>0?Math.max(0,Math.min(100,Math.round((r/Math.max(1e-9,t))*100))):0}%`;
-          col.querySelector('[data-cell="cumulative"]').textContent = `Cumulative: ${running}`;
-        });
-      }catch(e){ /* ignore */ }
-    });
+      });
+    } catch (error) {
+      console.error('Error loading indicators from database:', error);
+    }
   })();
 
   // Jump to a section + open it; open/close all

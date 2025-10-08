@@ -47,6 +47,7 @@ use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\FingerlingController;
 use App\Http\Controllers\TankController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\LogframeIndicatorController;
 use App\Models\Beneficiary;
 use App\Models\FarmerOrganization;
 use App\Models\Nutrition;
@@ -2283,6 +2284,18 @@ Route::delete('/logframe/tanks/{indicatorKey}', [LogframeController::class, 'des
 Route::get('/logframe/project-goal',        [ProjectGoalController::class, 'index'])->name('logframe.project-goal.index');
 Route::get('/logframe/project-goal/create', [ProjectGoalController::class, 'create'])->name('logframe.project-goal.create');
 Route::post('/logframe/project-goal',       [ProjectGoalController::class, 'store'])->name('logframe.project-goal.store');
+
+// Logframe Indicator API routes
+Route::prefix('api/logframe')->group(function () {
+    Route::get('/indicators/{sectionKey}', [LogframeIndicatorController::class, 'getBySection'])->name('logframe.indicators.by-section');
+    Route::get('/indicators', [LogframeIndicatorController::class, 'getAllForDisplay'])->name('logframe.indicators.all');
+    Route::get('/indicators/{id}', [LogframeIndicatorController::class, 'show'])->name('logframe.indicators.show');
+    Route::post('/indicators', [LogframeIndicatorController::class, 'store'])->name('logframe.indicators.store');
+    Route::put('/indicators/{id}', [LogframeIndicatorController::class, 'update'])->name('logframe.indicators.update');
+    Route::put('/indicators/{id}/year-data', [LogframeIndicatorController::class, 'updateYearData'])->name('logframe.indicators.update-year');
+    Route::put('/indicators/{id}/meta', [LogframeIndicatorController::class, 'updateMeta'])->name('logframe.indicators.update-meta');
+    Route::delete('/indicators/{id}', [LogframeIndicatorController::class, 'destroy'])->name('logframe.indicators.destroy');
+});
 
 Route::get('/gn-divisions', [GNDivisionController::class, 'getAll'])
     ->name('gn.divisions.all');
