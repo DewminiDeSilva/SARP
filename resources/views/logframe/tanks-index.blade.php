@@ -2788,11 +2788,14 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
         const partKey = tr.getAttribute('data-part');
         const rowIndex = tr.getAttribute('data-row');
         const indicatorName = tr.querySelector('td.desc strong')?.textContent?.trim();
+        // Read the row description text (second column bold text)
+        const descCell = tr.querySelector('td.desc:nth-child(2) strong');
+        const indicatorDesc = descCell ? descCell.textContent.trim() : '';
         
         // Find matching indicator in database
         const sectionIndicators = indicatorsBySection[partKey] || [];
-        const matchingIndicator = sectionIndicators.find(ind => 
-          ind.indicator_name === indicatorName
+        const matchingIndicator = sectionIndicators.find(ind =>
+          ind.indicator_name === indicatorName && (ind.indicator_description || '') === indicatorDesc
         );
         
         if (matchingIndicator) {
