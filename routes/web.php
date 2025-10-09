@@ -1940,11 +1940,11 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/{staffProfile}/edit', [StaffProfileController::class, 'edit'])
             ->name('staff_profile.edit')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,edit');
 
         Route::put('/{staffProfile}', [StaffProfileController::class, 'update'])
             ->name('staff_profile.update')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,edit');
 
         Route::delete('/{staffProfile}', [StaffProfileController::class, 'destroy'])
             ->name('staff_profile.destroy')
@@ -1956,10 +1956,10 @@ Route::middleware('auth')->group(function () {
 
         Route::patch('/{staffProfile}/status', [StaffProfileController::class, 'updateStatus'])
             ->name('staff_profile.updateStatus')
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,edit');
 
         Route::post('/status/{id}', [StaffProfileController::class, 'updateStatus'])
-            ->middleware('check.permission:staff_profile,update');
+            ->middleware('check.permission:staff_profile,edit');
 
         Route::get('/search', [StaffProfileController::class, 'search'])
             ->name('searchstaff')
