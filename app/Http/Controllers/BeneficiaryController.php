@@ -254,11 +254,55 @@ public function generateCsv()
 
 public function index(Request $request)
     {
-        $search = '';
-        $entries = $request->get('entries', 10);
+        $search = $request->get('search', '');
+        $entries = $request->get('entries', 100);
         $showDuplicates = $request->get('duplicates');
 
         $query = Beneficiary::query();
+
+        // Apply search filters if provided
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('nic', 'like', '%'.$search.'%')
+                    ->orWhere('name_with_initials', 'like', '%'.$search.'%')
+                    ->orWhere('gender', '=', $search)
+                    ->orWhere('dob', 'like', '%'.$search.'%')
+                    ->orWhere('age', 'like', '%'.$search.'%')
+                    ->orWhere('address', 'like', '%'.$search.'%')
+                    ->orWhere('email', 'like', '%'.$search.'%')
+                    ->orWhere('phone', 'like', '%'.$search.'%')
+                    ->orWhere('income_source', 'like', '%'.$search.'%')
+                    ->orWhere('average_income', 'like', '%'.$search.'%')
+                    ->orWhere('monthly_household_expenses', 'like', '%'.$search.'%')
+                    ->orWhere('number_of_family_members', 'like', '%'.$search.'%')
+                    ->orWhere('education', 'like', '%'.$search.'%')
+                    ->orWhere('land_ownership_total_extent', 'like', '%'.$search.'%')
+                    ->orWhere('land_ownership_proposed_cultivation_area', 'like', '%'.$search.'%')
+                    ->orWhere('province_name', 'like', '%'.$search.'%')
+                    ->orWhere('district_name', 'like', '%'.$search.'%')
+                    ->orWhere('ds_division_name', 'like', '%'.$search.'%')
+                    ->orWhere('gn_division_name', 'like', '%'.$search.'%')
+                    ->orWhere('as_center', 'like', '%'.$search.'%')
+                    ->orWhere('cascade_name', 'like', '%'.$search.'%')
+                    ->orWhere('ai_division', 'like', '%'.$search.'%')
+                    ->orWhere('tank_name', 'like', '%'.$search.'%')
+                    ->orWhere('bank_name', 'like', '%'.$search.'%')
+                    ->orWhere('bank_branch', 'like', '%'.$search.'%')
+                    ->orWhere('account_number', 'like', '%'.$search.'%')
+                    ->orWhere('head_of_householder_name', 'like', '%'.$search.'%')
+                    ->orWhere('householder_number', 'like', '%'.$search.'%')
+                    ->orWhere('household_level_assets_description', 'like', '%'.$search.'%')
+                    ->orWhere('community_based_organization', 'like', '%'.$search.'%')
+                    ->orWhere('type_of_water_resource', 'like', '%'.$search.'%')
+                    ->orWhere('training_details_description', 'like', '%'.$search.'%')
+                    ->orWhere('latitude', 'like', '%'.$search.'%')
+                    ->orWhere('longitude', 'like', '%'.$search.'%')
+                    ->orWhere('input1', 'like', '%'.$search.'%')
+                    ->orWhere('input2', 'like', '%'.$search.'%')
+                    ->orWhere('input3', 'like', '%'.$search.'%')
+                    ->orWhere('project_type', 'like', '%'.$search.'%');
+            });
+        }
 
         // Get all beneficiaries (for duplicate detection)
         $allBeneficiaries = Beneficiary::all();
@@ -297,10 +341,7 @@ public function index(Request $request)
             $query->whereIn('id', $duplicateNICs);
         }
 
-        $beneficiaries = $query->latest()->paginate($entries)->appends([
-            'entries' => $entries,
-            'duplicates' => $showDuplicates
-        ]);
+        $beneficiaries = $query->latest()->paginate($entries)->appends($request->query());
 
         $input3Summary = Beneficiary::select('input3', DB::raw('COUNT(*) as count'))
                                     ->groupBy('input3')->get();
