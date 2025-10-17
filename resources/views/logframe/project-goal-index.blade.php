@@ -99,7 +99,7 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
     <div class="h1">Project Goal — Logframe</div>
     <div style="display:flex;gap:.5rem;">
-      <a class="btn" href="{{ route('dashboard') }}">Home</a>
+      <a href="{{ route('beneficiary.index') }}" class="home-btn">Home</a>
       <a class="btn" href="{{ route('logframe.project-goal.index') }}">Refresh</a>
       <a class="btn btn-primary" href="{{ route('logframe.project-goal.create') }}">Create / Edit</a>
     </div>

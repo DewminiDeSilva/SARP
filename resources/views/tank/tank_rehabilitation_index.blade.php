@@ -894,22 +894,10 @@ table th:first-child, table td:first-child {
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const counters = document.querySelectorAll('.count');
-
         counters.forEach(counter => {
-            counter.innerText = '0';
-            const updateCounter = () => {
-                const target = +counter.getAttribute('data-target');
-                const current = +counter.innerText;
-                const increment = Math.ceil(target / 100); // Smaller = slower count
-
-                if (current < target) {
-                    counter.innerText = `${Math.min(current + increment, target)}`;
-                    setTimeout(updateCounter, 30); // Delay per frame
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            updateCounter();
+            const target = counter.getAttribute('data-target');
+            // Show the final value immediately for quick summary load
+            counter.innerText = target || '0';
         });
     });
 </script>
