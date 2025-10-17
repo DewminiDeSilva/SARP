@@ -541,13 +541,19 @@
 
 
                 <!-- Search form -->
-                <form method="GET" action="{{ route('search') }}" class="form-inline">
+                <form method="GET" action="{{ route('beneficiary.index') }}" class="form-inline">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="search">
+                            <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search','') }}">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="submit">Search</button>
                             </div>
                         </div>
+                        @if(request('duplicates'))
+                            <input type="hidden" name="duplicates" value="1">
+                        @endif
+                        @if(request('entries'))
+                            <input type="hidden" name="entries" value="{{ request('entries') }}">
+                        @endif
                     </form>
     </br>
 
@@ -882,34 +888,19 @@ document.getElementById('entriesSelect').addEventListener('change', function () 
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('entries', perPage);
 
-    if (window.location.search.includes('duplicates=1')) {
+    // preserve current search value and duplicates flag
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput && searchInput.value) {
+        urlParams.set('search', searchInput.value);
+    }
+    if ({{ request('duplicates') ? 'true' : 'false' }}) {
         urlParams.set('duplicates', '1');
     }
 
-    window.location.search = urlParams.toString();
-});
+    // reset to first page when page size changes
+    urlParams.delete('page');
 
-
-
-
-    $(document).ready(function() {
-        $('#entriesSelect').change(function() {
-            var perPage = $(this).val(); // Get selected value
-            window.location = '{{ route('beneficiary.index') }}?entries=' + perPage; // Redirect with selected value
-        });
-    });
-
-    function updateEntries() {
-        const entries = document.getElementById('entriesSelect').value;
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('entries', entries);
-        window.location.search = urlParams.toString();
-    }
-    document.getElementById('entriesSelect').addEventListener('change', function () {
-    const perPage = this.value;
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('entries', perPage);
-    window.location.search = urlParams.toString();
+    window.location = '{{ route('beneficiary.index') }}' + '?' + urlParams.toString();
 });
 
 </script>
