@@ -23,6 +23,10 @@ use App\Models\AgroForestNursery;
 use App\Models\NrmTraining;
 use App\Models\NrmParticipant;
 use App\Models\NutrientHomeGarden;
+use App\Models\FFSTraining;
+use App\Models\FFSParticipant;
+use App\Models\Nutrition;
+use App\Models\NutritionTrainee;
 
 class DashboardController extends Controller
 {
@@ -129,6 +133,12 @@ class DashboardController extends Controller
         // NRM stats
         $nrmStats = $this->calculateNRMStats();
 
+        // FFS Training stats
+        $ffsStats = $this->calculateFFSStats();
+
+        // Nutrition Training stats
+        $nutritionStats = $this->calculateNutritionStats();
+
         // pass to dashboard view (merge with other data you already pass)
         return view('dashboard', compact(
             'tanks',
@@ -149,6 +159,8 @@ class DashboardController extends Controller
             ,'fourPStats'
             ,'agroEnterpriseStats'
             ,'nrmStats'
+            ,'ffsStats'
+            ,'nutritionStats'
         ));
     }
 
@@ -838,6 +850,342 @@ private function calculateProjectTypeStats()
             
             // Performance indicators
             'performance_indicators' => $performanceIndicators,
+            
+            // Integration stats
+            'integrated_stats' => $integratedStats,
+        ];
+    }
+
+    private function calculateFFSStats()
+    {
+        // 1. Basic FFS Training Program Statistics
+        $totalTrainingPrograms = FFSTraining::count();
+        $totalParticipants = FFSParticipant::count();
+        
+        // 2. Financial Analysis
+        $trainingPrograms = FFSTraining::all();
+        
+        // Total costs
+        $totalProgramCost = $trainingPrograms->sum(function($program) {
+            return is_numeric($program->training_program_cost) ? (float) $program->training_program_cost : 0;
+        });
+        
+        $totalResourcePersonPayment = $trainingPrograms->sum(function($program) {
+            return is_numeric($program->resource_person_payment) ? (float) $program->resource_person_payment : 0;
+        });
+        
+        $totalTrainingCost = $totalProgramCost + $totalResourcePersonPayment;
+        
+        // 3. Geographic Distribution
+        $provinceDistribution = $trainingPrograms->groupBy('province_name')->map->count();
+        $districtDistribution = $trainingPrograms->groupBy('district')->map->count();
+        $dsDivisionDistribution = $trainingPrograms->groupBy('ds_division_name')->map->count();
+        
+        // 4. Crop-wise Training Analysis
+        $cropDistribution = $trainingPrograms->groupBy('crop_name')->map->count();
+        
+        // 5. Resource Person Analysis
+        $resourcePersons = $trainingPrograms->groupBy('resource_person_name')->map->count();
+        $topResourcePersons = $resourcePersons->sortDesc()->take(10);
+        
+        // 6. Venue Analysis
+        $venueDistribution = $trainingPrograms->groupBy('venue')->map->count();
+        
+        // 7. Participant Analysis
+        $participants = FFSParticipant::all();
+        
+        // Gender distribution
+        $participantGender = $participants->groupBy('gender')->map->count();
+        
+        // Age group analysis
+        $youthParticipants = $participants->where('youth', 'yes')->count();
+        $adultParticipants = $participants->where('youth', 'no')->count();
+        
+        // Average age
+        $avgAge = $participants->whereNotNull('age')->avg('age');
+        
+        // 8. Training Program Performance Metrics
+        $avgParticipantsPerProgram = $totalTrainingPrograms > 0 ? round($totalParticipants / $totalTrainingPrograms, 1) : 0;
+        $avgCostPerProgram = $totalTrainingPrograms > 0 ? round($totalTrainingCost / $totalTrainingPrograms, 2) : 0;
+        $avgCostPerParticipant = $totalParticipants > 0 ? round($totalTrainingCost / $totalParticipants, 2) : 0;
+        
+        // 9. Time-based Analysis
+        $monthlyTrainingDistribution = $trainingPrograms->groupBy(function($program) {
+            try {
+                return \Carbon\Carbon::parse($program->date)->format('Y-m');
+            } catch (\Exception $e) {
+                return 'Unknown';
+            }
+        })->map->count();
+        
+        // 10. Program Number Analysis
+        $programNumbers = $trainingPrograms->pluck('program_number')->filter()->unique()->count();
+        
+        // 11. Agrarian Service Center Analysis
+        $asCenterDistribution = $trainingPrograms->groupBy('as_center')->map->count();
+        
+        // 12. Designation Analysis (from participants)
+        $designationDistribution = $participants->groupBy('designation')->map->count();
+        
+        // 13. Contact Analysis
+        $participantsWithContact = $participants->whereNotNull('contact_number')->count();
+        $contactCoverage = $totalParticipants > 0 ? round(($participantsWithContact / $totalParticipants) * 100, 1) : 0;
+        
+        // 14. Performance Indicators
+        $performanceIndicators = [
+            'training_program_completion_rate' => 100, // Assuming all programs are completed
+            'participant_retention_rate' => 100, // Would need additional data to calculate
+            'cost_efficiency_score' => $avgCostPerParticipant > 0 ? round(100 - min($avgCostPerParticipant / 1000, 1) * 100, 1) : 0,
+            'geographic_coverage_score' => $provinceDistribution->count() > 0 ? round(($provinceDistribution->count() / 9) * 100, 1) : 0, // Assuming 9 provinces
+            'contact_coverage_rate' => $contactCoverage,
+        ];
+        
+        // 15. Integration with Other Modules
+        $integratedStats = [
+            'beneficiaries_with_ffs_training' => FFSParticipant::distinct('nic')->count(),
+            'unique_training_programs' => $programNumbers,
+            'total_beneficiaries_reached' => FFSParticipant::distinct('nic')->count(),
+        ];
+        
+        // 16. Financial Summary
+        $financialSummary = [
+            'total_program_cost' => (float) $totalProgramCost,
+            'total_resource_person_payment' => (float) $totalResourcePersonPayment,
+            'total_training_cost' => (float) $totalTrainingCost,
+            'avg_cost_per_program' => $avgCostPerProgram,
+            'avg_cost_per_participant' => $avgCostPerParticipant,
+        ];
+        
+        // 17. Demographics Summary
+        $demographicsSummary = [
+            'total_participants' => $totalParticipants,
+            'male_participants' => $participantGender['male'] ?? 0,
+            'female_participants' => $participantGender['female'] ?? 0,
+            'youth_participants' => $youthParticipants,
+            'adult_participants' => $adultParticipants,
+            'avg_participant_age' => $avgAge ? round($avgAge, 1) : 0,
+        ];
+        
+        // 18. Top Performing Areas
+        $topPerformingAreas = [
+            'top_provinces' => $provinceDistribution->sortDesc()->take(5),
+            'top_districts' => $districtDistribution->sortDesc()->take(5),
+            'top_crops' => $cropDistribution->sortDesc()->take(5),
+            'top_venues' => $venueDistribution->sortDesc()->take(5),
+            'top_resource_persons' => $topResourcePersons,
+        ];
+        
+        return [
+            // Basic counts
+            'total_training_programs' => $totalTrainingPrograms,
+            'total_participants' => $totalParticipants,
+            'unique_program_numbers' => $programNumbers,
+            
+            // Financial metrics
+            'financial_summary' => $financialSummary,
+            
+            // Demographics
+            'demographics_summary' => $demographicsSummary,
+            
+            // Performance metrics
+            'avg_participants_per_program' => $avgParticipantsPerProgram,
+            'performance_indicators' => $performanceIndicators,
+            
+            // Geographic distribution
+            'province_distribution' => $provinceDistribution,
+            'district_distribution' => $districtDistribution,
+            'ds_division_distribution' => $dsDivisionDistribution,
+            'as_center_distribution' => $asCenterDistribution,
+            
+            // Content analysis
+            'crop_distribution' => $cropDistribution,
+            'designation_distribution' => $designationDistribution,
+            
+            // Resource analysis
+            'resource_persons' => $resourcePersons,
+            'top_resource_persons' => $topResourcePersons,
+            'venue_distribution' => $venueDistribution,
+            
+            // Time analysis
+            'monthly_training_distribution' => $monthlyTrainingDistribution,
+            
+            // Top performing areas
+            'top_performing_areas' => $topPerformingAreas,
+            
+            // Integration stats
+            'integrated_stats' => $integratedStats,
+        ];
+    }
+
+    private function calculateNutritionStats()
+    {
+        // 1. Basic Nutrition Training Program Statistics
+        $totalNutritionPrograms = Nutrition::count();
+        $totalTrainees = NutritionTrainee::count();
+        
+        // 2. Financial Analysis
+        $nutritionPrograms = Nutrition::all();
+        
+        // Total costs
+        $totalProgramCost = $nutritionPrograms->sum(function($program) {
+            return is_numeric($program->cost_of_training_program) ? (float) $program->cost_of_training_program : 0;
+        });
+        
+        $avgCostPerProgram = $totalNutritionPrograms > 0 ? round($totalProgramCost / $totalNutritionPrograms, 2) : 0;
+        $avgCostPerTrainee = $totalTrainees > 0 ? round($totalProgramCost / $totalTrainees, 2) : 0;
+        
+        // 3. Geographic Distribution
+        $provinceDistribution = $nutritionPrograms->groupBy('province_name')->map->count();
+        $districtDistribution = $nutritionPrograms->groupBy('district_name')->map->count();
+        $dsDivisionDistribution = $nutritionPrograms->groupBy('ds_division_name')->map->count();
+        $ascDistribution = $nutritionPrograms->groupBy('asc_name')->map->count();
+        
+        // 4. Program Type Analysis
+        $programTypeDistribution = $nutritionPrograms->groupBy('program_type')->map->count();
+        
+        // 5. Program Conductor Analysis
+        $conductors = $nutritionPrograms->groupBy('program_conductor')->map->count();
+        $topConductors = $conductors->sortDesc()->take(10);
+        
+        // 6. Location Analysis
+        $locationDistribution = $nutritionPrograms->groupBy('location')->map->count();
+        
+        // 7. Trainee Analysis
+        $trainees = NutritionTrainee::all();
+        
+        // Gender distribution
+        $traineeGender = $trainees->groupBy('gender')->map->count();
+        
+        // Age group analysis
+        $ageGroups = [
+            'youth' => $trainees->filter(function($trainee) {
+                $age = is_numeric($trainee->age) ? (int) $trainee->age : 0;
+                return $age >= 18 && $age < 30;
+            })->count(),
+            'adult' => $trainees->filter(function($trainee) {
+                $age = is_numeric($trainee->age) ? (int) $trainee->age : 0;
+                return $age >= 30 && $age < 60;
+            })->count(),
+            'senior' => $trainees->filter(function($trainee) {
+                $age = is_numeric($trainee->age) ? (int) $trainee->age : 0;
+                return $age >= 60;
+            })->count(),
+        ];
+        
+        // Average age
+        $avgAge = $trainees->whereNotNull('age')->filter(function($trainee) {
+            return is_numeric($trainee->age);
+        })->avg(function($trainee) {
+            return (float) $trainee->age;
+        });
+        
+        // 8. Education Level Analysis
+        $educationDistribution = $trainees->groupBy('education_level')->map->count();
+        
+        // 9. Income Level Analysis
+        $incomeDistribution = $trainees->groupBy('income_level')->map->count();
+        
+        // 10. Performance Metrics
+        $avgTraineesPerProgram = $totalNutritionPrograms > 0 ? round($totalTrainees / $totalNutritionPrograms, 1) : 0;
+        
+        // 11. Time-based Analysis
+        $monthlyProgramDistribution = $nutritionPrograms->groupBy(function($program) {
+            try {
+                return \Carbon\Carbon::parse($program->date)->format('Y-m');
+            } catch (\Exception $e) {
+                return 'Unknown';
+            }
+        })->map->count();
+        
+        // 12. Contact Analysis
+        $traineesWithContact = $trainees->whereNotNull('mobile_number')->count();
+        $contactCoverage = $totalTrainees > 0 ? round(($traineesWithContact / $totalTrainees) * 100, 1) : 0;
+        
+        // 13. Special Remarks Analysis
+        $traineesWithRemarks = $trainees->whereNotNull('special_remark')->count();
+        $remarksCoverage = $totalTrainees > 0 ? round(($traineesWithRemarks / $totalTrainees) * 100, 1) : 0;
+        
+        // 14. Performance Indicators
+        $performanceIndicators = [
+            'program_completion_rate' => 100, // Assuming all programs are completed
+            'trainee_retention_rate' => 100, // Would need additional data to calculate
+            'cost_efficiency_score' => $avgCostPerTrainee > 0 ? round(100 - min($avgCostPerTrainee / 1000, 1) * 100, 1) : 0,
+            'geographic_coverage_score' => $provinceDistribution->count() > 0 ? round(($provinceDistribution->count() / 9) * 100, 1) : 0, // Assuming 9 provinces
+            'contact_coverage_rate' => $contactCoverage,
+            'remarks_coverage_rate' => $remarksCoverage,
+        ];
+        
+        // 15. Integration with Other Modules
+        $integratedStats = [
+            'beneficiaries_with_nutrition_training' => NutritionTrainee::distinct('nic')->count(),
+            'unique_program_types' => $programTypeDistribution->count(),
+            'total_beneficiaries_reached' => NutritionTrainee::distinct('nic')->count(),
+        ];
+        
+        // 16. Financial Summary
+        $financialSummary = [
+            'total_program_cost' => (float) $totalProgramCost,
+            'avg_cost_per_program' => $avgCostPerProgram,
+            'avg_cost_per_trainee' => $avgCostPerTrainee,
+        ];
+        
+        // 17. Demographics Summary
+        $demographicsSummary = [
+            'total_trainees' => $totalTrainees,
+            'male_trainees' => $traineeGender['male'] ?? 0,
+            'female_trainees' => $traineeGender['female'] ?? 0,
+            'youth_trainees' => $ageGroups['youth'],
+            'adult_trainees' => $ageGroups['adult'],
+            'senior_trainees' => $ageGroups['senior'],
+            'avg_trainee_age' => $avgAge ? round($avgAge, 1) : 0,
+        ];
+        
+        // 18. Top Performing Areas
+        $topPerformingAreas = [
+            'top_provinces' => $provinceDistribution->sortDesc()->take(5),
+            'top_districts' => $districtDistribution->sortDesc()->take(5),
+            'top_program_types' => $programTypeDistribution->sortDesc()->take(5),
+            'top_locations' => $locationDistribution->sortDesc()->take(5),
+            'top_conductors' => $topConductors,
+        ];
+        
+        return [
+            // Basic counts
+            'total_nutrition_programs' => $totalNutritionPrograms,
+            'total_trainees' => $totalTrainees,
+            'unique_program_types' => $programTypeDistribution->count(),
+            
+            // Financial metrics
+            'financial_summary' => $financialSummary,
+            
+            // Demographics
+            'demographics_summary' => $demographicsSummary,
+            
+            // Performance metrics
+            'avg_trainees_per_program' => $avgTraineesPerProgram,
+            'performance_indicators' => $performanceIndicators,
+            
+            // Geographic distribution
+            'province_distribution' => $provinceDistribution,
+            'district_distribution' => $districtDistribution,
+            'ds_division_distribution' => $dsDivisionDistribution,
+            'asc_distribution' => $ascDistribution,
+            
+            // Content analysis
+            'program_type_distribution' => $programTypeDistribution,
+            'education_distribution' => $educationDistribution,
+            'income_distribution' => $incomeDistribution,
+            
+            // Resource analysis
+            'conductors' => $conductors,
+            'top_conductors' => $topConductors,
+            'location_distribution' => $locationDistribution,
+            
+            // Time analysis
+            'monthly_program_distribution' => $monthlyProgramDistribution,
+            
+            // Top performing areas
+            'top_performing_areas' => $topPerformingAreas,
             
             // Integration stats
             'integrated_stats' => $integratedStats,
