@@ -519,6 +519,129 @@
         grid-template-columns: 1fr !important;
         gap: 1rem !important;
       }
+
+      /* FFS Charts Responsive */
+      .ffs-chart-container {
+        padding: 1.5rem;
+      }
+
+      .ffs-chart-wrapper {
+        height: 250px !important;
+      }
+
+      .ffs-center-number {
+        font-size: 2rem;
+      }
+
+      .ffs-center-label {
+        font-size: 0.75rem;
+      }
+
+      /* FFS Charts Grid Responsive */
+      .ffs-chart-container[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+    }
+
+    /* FFS Chart Styles */
+    .ffs-chart-container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 2px solid #8b5cf6;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ffs-chart-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #8b5cf6, #a855f7, #c084fc);
+    }
+
+    .ffs-chart-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #1f2937;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+
+    .ffs-chart-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 300px;
+    }
+
+    .ffs-chart-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .ffs-center-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .ffs-center-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* FFS Chart Legend Styles */
+    .ffs-chart-container .chartjs-legend {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .ffs-chart-container .chartjs-legend ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .ffs-chart-container .chartjs-legend li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .ffs-chart-container .chartjs-legend li span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
     }
 
     /* Utility Classes */
@@ -1754,6 +1877,487 @@
     </div>
   </div>
 
+      <!-- FFS (Farmer Field Schools) Summary Section -->
+      <div class="chart-section" id="ffs-summary-section" style="display: none;">
+        <h2 class="chart-title">Farmer Field Schools Dashboard</h2>
+        <p class="chart-subtitle">Comprehensive overview of FFS training programs, participants, and performance metrics</p>
+
+        <!-- FFS KPI Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Training Programs</h3>
+              <div class="card-badge">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['total_training_programs'] ?? 0 }}</p>
+            <p class="card-subtitle">FFS training programs conducted</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Participants</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['total_participants'] ?? 0 }}</p>
+            <p class="card-subtitle">Training participants</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Unique Programs</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-list-ol"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['unique_program_numbers'] ?? 0 }}</p>
+            <p class="card-subtitle">Distinct program numbers</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Youth Participants</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-child"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['demographics_summary']['youth_participants'] ?? 0 }}</p>
+            <p class="card-subtitle">Young participants</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Average Age</h3>
+              <div class="card-badge" style="background: #06b6d4;">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['demographics_summary']['avg_participant_age'] ?? 0 }} years</p>
+            <p class="card-subtitle">Average participant age</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Avg Participants/Program</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['avg_participants_per_program'] ?? 0 }}</p>
+            <p class="card-subtitle">Average attendance</p>
+          </div>
+        </div>
+
+        <!-- Financial Summary Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Program Cost</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($ffsStats['financial_summary']['total_program_cost'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Training program investment</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Resource Person Payments</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($ffsStats['financial_summary']['total_resource_person_payment'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Instructor payments</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Training Cost</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-calculator"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($ffsStats['financial_summary']['total_training_cost'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Combined investment</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cost per Participant</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-percentage"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($ffsStats['financial_summary']['avg_cost_per_participant'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Training cost efficiency</p>
+          </div>
+        </div>
+
+        <!-- Performance Indicators -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Geographic Coverage</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['performance_indicators']['geographic_coverage_score'] ?? 0 }}%</p>
+            <p class="card-subtitle">Province coverage</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $ffsStats['performance_indicators']['geographic_coverage_score'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Contact Coverage</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-phone"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['performance_indicators']['contact_coverage_rate'] ?? 0 }}%</p>
+            <p class="card-subtitle">Participants with contact info</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $ffsStats['performance_indicators']['contact_coverage_rate'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cost Efficiency</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $ffsStats['performance_indicators']['cost_efficiency_score'] ?? 0 }}%</p>
+            <p class="card-subtitle">Training efficiency score</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $ffsStats['performance_indicators']['cost_efficiency_score'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Participant Gender Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Participant Gender Distribution</h3>
+            <div class="ffs-chart-wrapper">
+              <canvas id="ffsParticipantGenderChart"></canvas>
+              <div id="ffs-participant-gender-center" class="ffs-chart-center">
+                <div class="ffs-center-number">{{ $ffsStats['total_participants'] ?? 0 }}</div>
+                <div class="ffs-center-label">Total Participants</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Crop Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Training Crop Distribution</h3>
+            <div class="ffs-chart-wrapper">
+              <canvas id="ffsCropDistributionChart"></canvas>
+              <div id="ffs-crop-center" class="ffs-chart-center">
+                <div class="ffs-center-number">{{ $ffsStats['total_training_programs'] ?? 0 }}</div>
+                <div class="ffs-center-label">Training Programs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Province Distribution and Designation Analysis -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Province Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Province Distribution</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="ffsProvinceChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Designation Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Participant Designation Distribution</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="ffsDesignationChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Resource Persons and Venue Analysis -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Top Resource Persons Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Top Resource Persons by Program Count</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="ffsResourcePersonChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Venue Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Training Venue Distribution</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="ffsVenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition Training Program Summary Section -->
+      <div class="chart-section" id="nutrition-summary-section" style="display: none;">
+        <h2 class="chart-title">Nutrition Training Program Dashboard</h2>
+        <p class="chart-subtitle">Comprehensive overview of nutrition training programs, trainees, and performance metrics</p>
+
+        <!-- Nutrition KPI Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Training Programs</h3>
+              <div class="card-badge">
+                <i class="fas fa-apple-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['total_nutrition_programs'] ?? 0 }}</p>
+            <p class="card-subtitle">Nutrition training programs conducted</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Trainees</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['total_trainees'] ?? 0 }}</p>
+            <p class="card-subtitle">Training participants</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Program Types</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-list-ol"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['unique_program_types'] ?? 0 }}</p>
+            <p class="card-subtitle">Distinct program types</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Youth Trainees</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-child"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['demographics_summary']['youth_trainees'] ?? 0 }}</p>
+            <p class="card-subtitle">Young participants (18-29)</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Average Age</h3>
+              <div class="card-badge" style="background: #06b6d4;">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['demographics_summary']['avg_trainee_age'] ?? 0 }} years</p>
+            <p class="card-subtitle">Average participant age</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Avg Trainees/Program</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['avg_trainees_per_program'] ?? 0 }}</p>
+            <p class="card-subtitle">Average attendance</p>
+          </div>
+        </div>
+
+        <!-- Financial Summary Cards -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Total Program Cost</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nutritionStats['financial_summary']['total_program_cost'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Training program investment</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cost per Program</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-calculator"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nutritionStats['financial_summary']['avg_cost_per_program'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Average program cost</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cost per Trainee</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-percentage"></i>
+              </div>
+            </div>
+            <p class="card-value">${{ number_format($nutritionStats['financial_summary']['avg_cost_per_trainee'] ?? 0, 2) }}</p>
+            <p class="card-subtitle">Training cost efficiency</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Contact Coverage</h3>
+              <div class="card-badge" style="background: #3b82f6;">
+                <i class="fas fa-phone"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['performance_indicators']['contact_coverage_rate'] ?? 0 }}%</p>
+            <p class="card-subtitle">Trainees with contact info</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $nutritionStats['performance_indicators']['contact_coverage_rate'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Indicators -->
+        <div class="cards-grid" style="margin-bottom: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Geographic Coverage</h3>
+              <div class="card-badge" style="background: #8b5cf6;">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['performance_indicators']['geographic_coverage_score'] ?? 0 }}%</p>
+            <p class="card-subtitle">Province coverage</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $nutritionStats['performance_indicators']['geographic_coverage_score'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cost Efficiency</h3>
+              <div class="card-badge" style="background: #f59e0b;">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['performance_indicators']['cost_efficiency_score'] ?? 0 }}%</p>
+            <p class="card-subtitle">Training efficiency score</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $nutritionStats['performance_indicators']['cost_efficiency_score'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Remarks Coverage</h3>
+              <div class="card-badge" style="background: #10b981;">
+                <i class="fas fa-sticky-note"></i>
+              </div>
+            </div>
+            <p class="card-value">{{ $nutritionStats['performance_indicators']['remarks_coverage_rate'] ?? 0 }}%</p>
+            <p class="card-subtitle">Trainees with special remarks</p>
+            <div class="card-progress">
+              <div class="progress-bar-horizontal">
+                <div class="progress-fill-horizontal" style="width: {{ $nutritionStats['performance_indicators']['remarks_coverage_rate'] ?? 0 }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Trainee Gender Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Trainee Gender Distribution</h3>
+            <div class="ffs-chart-wrapper">
+              <canvas id="nutritionTraineeGenderChart"></canvas>
+              <div id="nutrition-trainee-gender-center" class="ffs-chart-center">
+                <div class="ffs-center-number">{{ $nutritionStats['total_trainees'] ?? 0 }}</div>
+                <div class="ffs-center-label">Total Trainees</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Program Type Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Program Type Distribution</h3>
+            <div class="ffs-chart-wrapper">
+              <canvas id="nutritionProgramTypeChart"></canvas>
+              <div id="nutrition-program-type-center" class="ffs-chart-center">
+                <div class="ffs-center-number">{{ $nutritionStats['total_nutrition_programs'] ?? 0 }}</div>
+                <div class="ffs-center-label">Training Programs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Province Distribution and Education Analysis -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Province Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Province Distribution</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="nutritionProvinceChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Education Level Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Education Level Distribution</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="nutritionEducationChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Conductors and Income Analysis -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <!-- Top Conductors Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Top Program Conductors</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="nutritionConductorChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Income Level Distribution Chart -->
+          <div class="ffs-chart-container">
+            <h3 class="ffs-chart-title">Income Level Distribution</h3>
+            <div class="ffs-chart-wrapper" style="height: 400px;">
+              <canvas id="nutritionIncomeChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
@@ -2094,6 +2698,8 @@
       const fourPSummarySection = document.getElementById('fourp-summary-section');
       const agroEnterpriseSection = document.getElementById('agro-enterprise-summary-section');
       const nrmSummarySection = document.getElementById('nrm-summary-section');
+      const ffsSummarySection = document.getElementById('ffs-summary-section');
+      const nutritionSummarySection = document.getElementById('nutrition-summary-section');
       // Youth section
       const youthSection = document.createElement('div');
       youthSection.className = 'chart-section';
@@ -2157,6 +2763,8 @@
       youthSection.style.display = 'none';
       agroEnterpriseSection.style.display = 'none';
       nrmSummarySection.style.display = 'none';
+      ffsSummarySection.style.display = 'none';
+      nutritionSummarySection.style.display = 'none';
       moduleSelect.addEventListener('change', function() {
         const selectedModule = this.value;
         
@@ -2280,8 +2888,10 @@
           socialInclusionSection.style.display = 'none';
           youthSection.style.display = 'none';
           fourPSummarySection.style.display = 'none';
+          ffsSummarySection.style.display = 'none';
+          nrmSummarySection.style.display = 'none';
           agroEnterpriseSection.style.display = 'block';
-
+          
           setTimeout(() => { createAgroEnterpriseCharts(); }, 100);
         } else if (selectedModule === 'nrm') {
           tankSelectionCard.style.display = 'none';
@@ -2296,9 +2906,46 @@
           youthSection.style.display = 'none';
           fourPSummarySection.style.display = 'none';
           agroEnterpriseSection.style.display = 'none';
+          ffsSummarySection.style.display = 'none';
           nrmSummarySection.style.display = 'block';
 
           setTimeout(() => { createNRMCharts(); }, 100);
+        } else if (selectedModule === 'ffs') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'none';
+          agroEnterpriseSection.style.display = 'none';
+          nrmSummarySection.style.display = 'none';
+          ffsSummarySection.style.display = 'block';
+
+          setTimeout(() => { createFFSCharts(); }, 100);
+        } else if (selectedModule === 'nutrition_training') {
+          tankSelectionCard.style.display = 'none';
+          tankChartSection.style.display = 'none';
+          tankKpiSection.style.display = 'none';
+          beneficiarySummarySection.style.display = 'none';
+          projectTypeSummarySection.style.display = 'none';
+          infrastructureSummarySection.style.display = 'none';
+          moduleSummarySection.style.display = 'none';
+          resilienceSummarySection.style.display = 'none';
+          socialInclusionSection.style.display = 'none';
+          youthSection.style.display = 'none';
+          fourPSummarySection.style.display = 'none';
+          agroEnterpriseSection.style.display = 'none';
+          nrmSummarySection.style.display = 'none';
+          ffsSummarySection.style.display = 'none';
+          nutritionSummarySection.style.display = 'none';
+          nutritionSummarySection.style.display = 'block';
+
+          setTimeout(() => { createNutritionCharts(); }, 100);
         } else if (selectedModule) {
           // Show module summary for other modules
           tankSelectionCard.style.display = 'none';
@@ -2314,6 +2961,8 @@
           fourPSummarySection.style.display = 'none';
           agroEnterpriseSection.style.display = 'none';
           nrmSummarySection.style.display = 'none';
+          ffsSummarySection.style.display = 'none';
+          nutritionSummarySection.style.display = 'none';
           
           // Update module summary content
           const moduleLabels = @json($moduleLabels ?? []);
@@ -2337,6 +2986,8 @@
           fourPSummarySection.style.display = 'none';
           agroEnterpriseSection.style.display = 'none';
           nrmSummarySection.style.display = 'none';
+          ffsSummarySection.style.display = 'none';
+          nutritionSummarySection.style.display = 'none';
         }
       });
 
@@ -3140,6 +3791,878 @@
                   callbacks: {
                     label: function(context) {
                       return context.parsed.y + ' programs';
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+
+      function createFFSCharts(){
+        const stats = @json($ffsStats ?? []);
+        if (!stats) return;
+
+        // FFS Participant Gender Chart
+        const ffsParticipantGenderCtx = document.getElementById('ffsParticipantGenderChart');
+        const ffsParticipantGenderCenterEl = document.getElementById('ffs-participant-gender-center');
+        let ffsParticipantGenderChart = null;
+
+        if (ffsParticipantGenderCtx) {
+          const participantGenderData = stats.demographics_summary || {};
+          const genderLabels = [];
+          const genderValues = [];
+          const genderColors = [];
+
+          if (participantGenderData.male_participants > 0) {
+            genderLabels.push('Male');
+            genderValues.push(participantGenderData.male_participants);
+            genderColors.push('#3b82f6');
+          }
+          if (participantGenderData.female_participants > 0) {
+            genderLabels.push('Female');
+            genderValues.push(participantGenderData.female_participants);
+            genderColors.push('#ec4899');
+          }
+
+          function createFFSParticipantGenderChart() {
+            if (ffsParticipantGenderChart) {
+              ffsParticipantGenderChart.destroy();
+            }
+
+            const totalParticipants = stats.total_participants || 0;
+            
+            function setFFSParticipantGenderCenter(title, count, pct) {
+              if (pct === null) {
+                ffsParticipantGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                ffsParticipantGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setFFSParticipantGenderCenter('Total Participants', totalParticipants, null);
+
+            const chartData = genderValues.length > 0 ? genderValues : [1];
+            const chartLabels = genderValues.length > 0 ? genderLabels : ['No data'];
+            const chartColors = genderValues.length > 0 ? genderColors : ['#e5e7eb'];
+
+            ffsParticipantGenderChart = new Chart(ffsParticipantGenderCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { 
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      usePointStyle: true,
+                      padding: 20,
+                      font: {
+                        size: 12,
+                        weight: '500'
+                      }
+                    }
+                  }, 
+                  tooltip: { 
+                    enabled: genderValues.length > 0,
+                    callbacks: {
+                      label: function(context) {
+                        const label = context.label || '';
+                        const value = context.parsed;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                        return `${label}: ${value} (${percentage}%)`;
+                      }
+                    }
+                  } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setFFSParticipantGenderCenter('Total Participants', totalParticipants, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalParticipants ? (val/totalParticipants*100) : 0;
+                  setFFSParticipantGenderCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createFFSParticipantGenderChart();
+        }
+
+        // FFS Crop Distribution Chart
+        const ffsCropDistributionCtx = document.getElementById('ffsCropDistributionChart');
+        const ffsCropCenterEl = document.getElementById('ffs-crop-center');
+        let ffsCropDistributionChart = null;
+
+        if (ffsCropDistributionCtx) {
+          const cropData = stats.crop_distribution || {};
+          const cropLabels = [];
+          const cropValues = [];
+          const cropColors = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#ef4444'];
+
+          Object.entries(cropData).forEach(([crop, count], index) => {
+            if (count > 0) {
+              cropLabels.push(crop);
+              cropValues.push(count);
+              cropColors.push(cropColors[index % cropColors.length]);
+            }
+          });
+
+          function createFFSCropDistributionChart() {
+            if (ffsCropDistributionChart) {
+              ffsCropDistributionChart.destroy();
+            }
+
+            const totalPrograms = stats.total_training_programs || 0;
+            
+            function setFFSCropCenter(title, count, pct) {
+              if (pct === null) {
+                ffsCropCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                ffsCropCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setFFSCropCenter('Training Programs', totalPrograms, null);
+
+            const chartData = cropValues.length > 0 ? cropValues : [1];
+            const chartLabels = cropValues.length > 0 ? cropLabels : ['No data'];
+            const chartColors = cropValues.length > 0 ? cropColors.slice(0, cropValues.length) : ['#e5e7eb'];
+
+            ffsCropDistributionChart = new Chart(ffsCropDistributionCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { 
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      usePointStyle: true,
+                      padding: 20,
+                      font: {
+                        size: 12,
+                        weight: '500'
+                      }
+                    }
+                  }, 
+                  tooltip: { 
+                    enabled: cropValues.length > 0,
+                    callbacks: {
+                      label: function(context) {
+                        const label = context.label || '';
+                        const value = context.parsed;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                        return `${label}: ${value} programs (${percentage}%)`;
+                      }
+                    }
+                  } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setFFSCropCenter('Training Programs', totalPrograms, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalPrograms ? (val/totalPrograms*100) : 0;
+                  setFFSCropCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createFFSCropDistributionChart();
+        }
+
+        // FFS Province Chart
+        const ffsProvinceCtx = document.getElementById('ffsProvinceChart');
+        if (ffsProvinceCtx) {
+          const provinceData = stats.province_distribution || {};
+          const provinceLabels = Object.keys(provinceData);
+          const provinceValues = Object.values(provinceData);
+
+          new Chart(ffsProvinceCtx, {
+            type: 'bar',
+            data: {
+              labels: provinceLabels,
+              datasets: [{
+                label: 'Training Programs',
+                data: provinceValues,
+                backgroundColor: '#3b82f6',
+                borderColor: '#1d4ed8',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} programs`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // FFS Designation Chart
+        const ffsDesignationCtx = document.getElementById('ffsDesignationChart');
+        if (ffsDesignationCtx) {
+          const designationData = stats.designation_distribution || {};
+          const designationLabels = Object.keys(designationData);
+          const designationValues = Object.values(designationData);
+
+          new Chart(ffsDesignationCtx, {
+            type: 'bar',
+            data: {
+              labels: designationLabels,
+              datasets: [{
+                label: 'Participants',
+                data: designationValues,
+                backgroundColor: '#8b5cf6',
+                borderColor: '#7c3aed',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} participants`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // FFS Resource Person Chart
+        const ffsResourcePersonCtx = document.getElementById('ffsResourcePersonChart');
+        if (ffsResourcePersonCtx) {
+          const resourcePersonData = stats.top_resource_persons || {};
+          const resourcePersonLabels = Object.keys(resourcePersonData);
+          const resourcePersonValues = Object.values(resourcePersonData);
+
+          new Chart(ffsResourcePersonCtx, {
+            type: 'bar',
+            data: {
+              labels: resourcePersonLabels,
+              datasets: [{
+                label: 'Programs Conducted',
+                data: resourcePersonValues,
+                backgroundColor: '#06b6d4',
+                borderColor: '#0891b2',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} programs`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // FFS Venue Chart
+        const ffsVenueCtx = document.getElementById('ffsVenueChart');
+        if (ffsVenueCtx) {
+          const venueData = stats.venue_distribution || {};
+          const venueLabels = Object.keys(venueData);
+          const venueValues = Object.values(venueData);
+
+          new Chart(ffsVenueCtx, {
+            type: 'bar',
+            data: {
+              labels: venueLabels,
+              datasets: [{
+                label: 'Training Programs',
+                data: venueValues,
+                backgroundColor: '#ec4899',
+                borderColor: '#db2777',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} programs`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+
+      function createNutritionCharts(){
+        const stats = @json($nutritionStats ?? []);
+        if (!stats) return;
+
+        // Nutrition Trainee Gender Chart
+        const nutritionTraineeGenderCtx = document.getElementById('nutritionTraineeGenderChart');
+        const nutritionTraineeGenderCenterEl = document.getElementById('nutrition-trainee-gender-center');
+        let nutritionTraineeGenderChart = null;
+
+        if (nutritionTraineeGenderCtx) {
+          const traineeGenderData = stats.demographics_summary || {};
+          const genderLabels = [];
+          const genderValues = [];
+          const genderColors = [];
+
+          if (traineeGenderData.male_trainees > 0) {
+            genderLabels.push('Male');
+            genderValues.push(traineeGenderData.male_trainees);
+            genderColors.push('#3b82f6');
+          }
+          if (traineeGenderData.female_trainees > 0) {
+            genderLabels.push('Female');
+            genderValues.push(traineeGenderData.female_trainees);
+            genderColors.push('#ec4899');
+          }
+
+          function createNutritionTraineeGenderChart() {
+            if (nutritionTraineeGenderChart) {
+              nutritionTraineeGenderChart.destroy();
+            }
+
+            const totalTrainees = stats.total_trainees || 0;
+            
+            function setNutritionTraineeGenderCenter(title, count, pct) {
+              if (pct === null) {
+                nutritionTraineeGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                nutritionTraineeGenderCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setNutritionTraineeGenderCenter('Total Trainees', totalTrainees, null);
+
+            const chartData = genderValues.length > 0 ? genderValues : [1];
+            const chartLabels = genderValues.length > 0 ? genderLabels : ['No data'];
+            const chartColors = genderValues.length > 0 ? genderColors : ['#e5e7eb'];
+
+            nutritionTraineeGenderChart = new Chart(nutritionTraineeGenderCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { 
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      usePointStyle: true,
+                      padding: 20,
+                      font: {
+                        size: 12,
+                        weight: '500'
+                      }
+                    }
+                  }, 
+                  tooltip: { 
+                    enabled: genderValues.length > 0,
+                    callbacks: {
+                      label: function(context) {
+                        const label = context.label || '';
+                        const value = context.parsed;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                        return `${label}: ${value} (${percentage}%)`;
+                      }
+                    }
+                  } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setNutritionTraineeGenderCenter('Total Trainees', totalTrainees, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalTrainees ? (val/totalTrainees*100) : 0;
+                  setNutritionTraineeGenderCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createNutritionTraineeGenderChart();
+        }
+
+        // Nutrition Program Type Chart
+        const nutritionProgramTypeCtx = document.getElementById('nutritionProgramTypeChart');
+        const nutritionProgramTypeCenterEl = document.getElementById('nutrition-program-type-center');
+        let nutritionProgramTypeChart = null;
+
+        if (nutritionProgramTypeCtx) {
+          const programTypeData = stats.program_type_distribution || {};
+          const programTypeLabels = [];
+          const programTypeValues = [];
+          const programTypeColors = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#ef4444'];
+
+          Object.entries(programTypeData).forEach(([type, count], index) => {
+            if (count > 0) {
+              programTypeLabels.push(type);
+              programTypeValues.push(count);
+              programTypeColors.push(programTypeColors[index % programTypeColors.length]);
+            }
+          });
+
+          function createNutritionProgramTypeChart() {
+            if (nutritionProgramTypeChart) {
+              nutritionProgramTypeChart.destroy();
+            }
+
+            const totalPrograms = stats.total_nutrition_programs || 0;
+            
+            function setNutritionProgramTypeCenter(title, count, pct) {
+              if (pct === null) {
+                nutritionProgramTypeCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title}</div>`;
+              } else {
+                nutritionProgramTypeCenterEl.innerHTML = `<div class="big">${count}</div><div class="small">${title} · ${pct.toFixed(1)}%</div>`;
+              }
+            }
+
+            setNutritionProgramTypeCenter('Training Programs', totalPrograms, null);
+
+            const chartData = programTypeValues.length > 0 ? programTypeValues : [1];
+            const chartLabels = programTypeValues.length > 0 ? programTypeLabels : ['No data'];
+            const chartColors = programTypeValues.length > 0 ? programTypeColors.slice(0, programTypeValues.length) : ['#e5e7eb'];
+
+            nutritionProgramTypeChart = new Chart(nutritionProgramTypeCtx, {
+              type: 'doughnut',
+              data: {
+                labels: chartLabels,
+                datasets: [{ 
+                  data: chartData, 
+                  backgroundColor: chartColors, 
+                  borderColor: '#ffffff', 
+                  borderWidth: 3 
+                }]
+              },
+              options: {
+                cutout: '70%',
+                plugins: { 
+                  legend: { 
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      usePointStyle: true,
+                      padding: 20,
+                      font: {
+                        size: 12,
+                        weight: '500'
+                      }
+                    }
+                  }, 
+                  tooltip: { 
+                    enabled: programTypeValues.length > 0,
+                    callbacks: {
+                      label: function(context) {
+                        const label = context.label || '';
+                        const value = context.parsed;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                        return `${label}: ${value} programs (${percentage}%)`;
+                      }
+                    }
+                  } 
+                },
+                onClick(evt, items) {
+                  if (!items.length) { 
+                    setNutritionProgramTypeCenter('Training Programs', totalPrograms, null); 
+                    return; 
+                  }
+                  const idx = items[0].index;
+                  const val = this.data.datasets[0].data[idx] || 0;
+                  const pct = totalPrograms ? (val/totalPrograms*100) : 0;
+                  setNutritionProgramTypeCenter(this.data.labels[idx], val, pct);
+                }
+              }
+            });
+          }
+
+          createNutritionProgramTypeChart();
+        }
+
+        // Nutrition Province Chart
+        const nutritionProvinceCtx = document.getElementById('nutritionProvinceChart');
+        if (nutritionProvinceCtx) {
+          const provinceData = stats.province_distribution || {};
+          const provinceLabels = Object.keys(provinceData);
+          const provinceValues = Object.values(provinceData);
+
+          new Chart(nutritionProvinceCtx, {
+            type: 'bar',
+            data: {
+              labels: provinceLabels,
+              datasets: [{
+                label: 'Training Programs',
+                data: provinceValues,
+                backgroundColor: '#3b82f6',
+                borderColor: '#1d4ed8',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} programs`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Nutrition Education Chart
+        const nutritionEducationCtx = document.getElementById('nutritionEducationChart');
+        if (nutritionEducationCtx) {
+          const educationData = stats.education_distribution || {};
+          const educationLabels = Object.keys(educationData);
+          const educationValues = Object.values(educationData);
+
+          new Chart(nutritionEducationCtx, {
+            type: 'bar',
+            data: {
+              labels: educationLabels,
+              datasets: [{
+                label: 'Trainees',
+                data: educationValues,
+                backgroundColor: '#8b5cf6',
+                borderColor: '#7c3aed',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} trainees`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Nutrition Conductor Chart
+        const nutritionConductorCtx = document.getElementById('nutritionConductorChart');
+        if (nutritionConductorCtx) {
+          const conductorData = stats.top_conductors || {};
+          const conductorLabels = Object.keys(conductorData);
+          const conductorValues = Object.values(conductorData);
+
+          new Chart(nutritionConductorCtx, {
+            type: 'bar',
+            data: {
+              labels: conductorLabels,
+              datasets: [{
+                label: 'Programs Conducted',
+                data: conductorValues,
+                backgroundColor: '#06b6d4',
+                borderColor: '#0891b2',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} programs`;
+                    }
+                  }
+                }
+              },
+              scales: { 
+                y: { 
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Nutrition Income Chart
+        const nutritionIncomeCtx = document.getElementById('nutritionIncomeChart');
+        if (nutritionIncomeCtx) {
+          const incomeData = stats.income_distribution || {};
+          const incomeLabels = Object.keys(incomeData);
+          const incomeValues = Object.values(incomeData);
+
+          new Chart(nutritionIncomeCtx, {
+            type: 'bar',
+            data: {
+              labels: incomeLabels,
+              datasets: [{
+                label: 'Trainees',
+                data: incomeValues,
+                backgroundColor: '#ec4899',
+                borderColor: '#db2777',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: { 
+                legend: { 
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    usePointStyle: true,
+                    padding: 20,
+                    font: {
+                      size: 12,
+                      weight: '500'
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${context.parsed.y} trainees`;
                     }
                   }
                 }
