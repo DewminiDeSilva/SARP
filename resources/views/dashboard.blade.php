@@ -705,7 +705,11 @@
             <h3 class="card-title">1.A Estimated corresponding Total Number of Household members</h3>
             <div class="card-badge">1.A</div>
           </div>
-          <p class="card-value">{{ $householdMembers ?? '—' }}</p>
+          <p class="card-value">
+            Baseline: {{ $householdMembers->baseline ?? '—' }}<br>
+            Mid-Term: {{ $householdMembers->mid_term ?? '—' }}<br>
+            End Target: {{ $householdMembers->end_target ?? '—' }}
+          </p>
         </div>
 
         <div class="card">
@@ -713,7 +717,9 @@
             <h3 class="card-title">1.B Corresponding Number of households reached</h3>
             <div class="card-badge">1.B</div>
           </div>
-          <p class="card-value">{{ $householdsReached ?? '—' }}</p>
+          Baseline: {{ isset($householdsReached) ? $householdsReached->baseline : '—' }}<br>
+Mid-Term: {{ isset($householdsReached) ? $householdsReached->mid_term : '—' }}<br>
+End Target: {{ isset($householdsReached) ? $householdsReached->end_target : '—' }}
         </div>
 
         <div class="card">
@@ -723,7 +729,11 @@
               <i class="fas fa-hand-holding-heart"></i>
             </div>
           </div>
-          <p class="card-value">{{ $personsReceivingServices ?? '—' }}</p>
+          <p class="card-value">
+            Baseline: {{ isset($personsReceivingServices) ? $personsReceivingServices->baseline : '—' }}<br>
+            Mid-Term: {{ isset($personsReceivingServices) ? $personsReceivingServices->mid_term : '—' }}<br>
+            End Target: {{ isset($personsReceivingServices) ? $personsReceivingServices->end_target : '—' }}
+          </p>
         </div>
 
         <!-- Tank Selection Card -->
