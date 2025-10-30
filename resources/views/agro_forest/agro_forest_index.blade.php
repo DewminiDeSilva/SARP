@@ -52,6 +52,72 @@
         .left-column.hidden { display:none; }
         .right-column { transition:flex .3s ease, padding .3s ease; }
     </style>
+
+    <style>
+/* --- SUMMARY CARD STYLE --- */
+.summary-cards {
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  border: none;
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  background: linear-gradient(135deg, #f6fff7 0%, #e9fbe9 100%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.summary-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e6f5ea;
+  color: #1b7a3e;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.summary-content {
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #166534;
+  margin-bottom: 0.25rem;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f5132;
+}
+
+.summary-sub {
+  font-size: 0.8rem;
+  color: #388e3c;
+}
+
+/* Optional responsive tweak */
+@media (max-width: 576px) {
+  .summary-card {
+    text-align: center;
+  }
+  .summary-icon {
+    margin: 0 auto 0.5rem;
+  }
+}
+</style>
 </head>
 <body>
 @include('dashboard.header')
@@ -84,7 +150,58 @@
             @if(session('success'))
                 <div class="alert alert-success mt-3">{{ session('success') }}</div>
             @endif
+            
+           <div class="container summary-cards">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
 
+    <div class="col">
+      <div class="summary-card d-flex align-items-center gap-3">
+        <div class="summary-icon"><i class="fa fa-leaf"></i></div>
+        <div class="summary-content">
+          <div class="summary-label">Number of Plants</div>
+          <div class="summary-value">{{ number_format($numberOfPlants ?? 0) }}</div>
+          <div class="summary-sub">From species records</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="summary-card d-flex align-items-center gap-3">
+        <div class="summary-icon"><i class="fa fa-seedling"></i></div>
+        <div class="summary-content">
+          <div class="summary-label">Number of Species</div>
+          <div class="summary-value">{{ number_format($numberOfSpecies ?? 0) }}</div>
+          <div class="summary-sub">Unique species entries</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="summary-card d-flex align-items-center gap-3">
+        <div class="summary-icon"><i class="fa fa-warehouse"></i></div>
+        <div class="summary-content">
+          <div class="summary-label">Nursery Plants</div>
+          <div class="summary-value">{{ number_format($nurseryPlants ?? 0) }}</div>
+          <div class="summary-sub">Across all nurseries</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="summary-card d-flex align-items-center gap-3">
+        <div class="summary-icon"><i class="fa fa-water"></i></div>
+        <div class="summary-content">
+          <div class="summary-label">Tanks</div>
+          <div class="summary-value">{{ number_format($totalTanks ?? 0) }}</div>
+          <div class="summary-sub">Distinct tank names</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+            
             <!-- Entries per page -->
             <div class="entries-container my-3">
                 <label for="entriesSelect">Show</label>
@@ -113,7 +230,7 @@
                                 <th>No of plants</th>
                                 <!-- <th>Longitude</th>
                                 <th>Latitude</th> -->
-                                <th>Establish Amount</th>
+                                <th>Estimated Cost </th>
                                 <th>Project Proposal (PDF)</th>
                                 <th>Actions</th>
                                 <th>Edit/Delete</th>

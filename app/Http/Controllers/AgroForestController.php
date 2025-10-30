@@ -10,18 +10,68 @@ use Illuminate\Support\Facades\DB;
 
 class AgroForestController extends Controller
 {
-    public function index(Request $request)
-    {
-        $perPage = (int) $request->get('entries', 10);
+    // public function index(Request $request)
+    // {
+    //     $perPage = (int) $request->get('entries', 10);
 
-        $agroForests = AgroForest::with(['species', 'nurseries'])
-            ->withSum('species as total_plants', 'no_of_plants')
-            ->latest()
-            ->paginate($perPage);
 
-        // view: resources/views/agro_forest/agro_forest_index.blade.php
-        return view('agro_forest.agro_forest_index', compact('agroForests'));
-    }
+
+    //     $agroForests = AgroForest::with(['species', 'nurseries'])
+    //         ->withSum('species as total_plants', 'no_of_plants')
+    //         ->latest()
+    //         ->paginate($perPage);
+
+    //     // view: resources/views/agro_forest/agro_forest_index.blade.php
+    //     return view('agro_forest.agro_forest_index', compact('agroForests'));
+    // }
+public function index(Request $request)
+{
+    $perPage = (int) $request->get('entries', 10);
+
+    $agroForests = AgroForest::with(['species', 'nurseries'])
+        ->withSum('species as total_plants', 'no_of_plants')
+        ->withSum('nurseries as total_nursery_plants', 'number_of_plants')
+        ->latest()
+        ->paginate($perPage);
+
+    // --- Summary counts (overall, not filtered) ---
+    $numberOfPlants      = AgroForestSpecies::sum('no_of_plants');
+    $numberOfSpecies     = AgroForestSpecies::whereNotNull('species_name')
+                            ->whereRaw("TRIM(species_name) <> ''")
+                            ->distinct('species_name')
+                            ->count('species_name');
+    $nurseryPlants       = AgroForestNursery::sum('number_of_plants');
+
+    // Count distinct tanks across all tank_name fields
+    $tanks_1 = DB::table('agro_forests')
+                ->whereNotNull('tank_name')
+                ->whereRaw("TRIM(tank_name) <> ''")
+                ->distinct('tank_name')
+                ->count('tank_name');
+
+    $tanks_2 = DB::table('agro_forests')
+                ->whereNotNull('tank_name_2')
+                ->whereRaw("TRIM(tank_name_2) <> ''")
+                ->distinct('tank_name_2')
+                ->count('tank_name_2');
+
+    $tanks_3 = DB::table('agro_forests')
+                ->whereNotNull('tank_name_3')
+                ->whereRaw("TRIM(tank_name_3) <> ''")
+                ->distinct('tank_name_3')
+                ->count('tank_name_3');
+
+    $totalTanks = $tanks_1 + $tanks_2 + $tanks_3;
+
+    // Pass compact data
+    return view('agro_forest.agro_forest_index', compact(
+        'agroForests',
+        'numberOfPlants',
+        'numberOfSpecies',
+        'nurseryPlants',
+        'totalTanks'
+    ));
+}
 
     public function create()
     {
