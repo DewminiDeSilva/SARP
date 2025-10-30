@@ -213,6 +213,25 @@
     .card-progress {
       margin-top: var(--spacing-sm);
     }
+    .card-value-label {
+  color: #757990;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 11px;
+  margin-bottom: 0;
+  letter-spacing: 0.02em;
+}
+.card-value-amount {
+  font-size: 2.35rem;
+  font-weight: 800;
+  margin: 0 0 17px 0;
+  line-height: 1;
+  letter-spacing: 0.3px;
+  font-family: 'Inter', Arial, sans-serif;
+}
+.card-baseline { color: #316aff; }
+.card-midterm { color: #ad43ff; }
+.card-endtarget { color: #18b475; }
 
     .progress-bar-horizontal {
       width: 100%;
@@ -680,25 +699,7 @@
     .mt-3 {
       margin-top: var(--spacing-md);
     }
-    .card-value-label {
-  color: #757990;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 11px;
-  margin-bottom: 0;
-  letter-spacing: 0.02em;
-}
-.card-value-amount {
-  font-size: 2.35rem;
-  font-weight: 800;
-  margin: 0 0 17px 0;
-  line-height: 1;
-  letter-spacing: 0.3px;
-  font-family: 'Inter', Arial, sans-serif;
-}
-.card-baseline { color: #316aff; }
-.card-midterm { color: #ad43ff; }
-.card-endtarget { color: #18b475; }
+    
   </style>
 </head>
 <body>
