@@ -139,6 +139,20 @@ class DashboardController extends Controller
         // Nutrition Training stats
         $nutritionStats = $this->calculateNutritionStats();
 
+        // Fetch indicator values for each main logframe indicator
+        $householdMembers = DB::table('logframe_indicators')
+            ->where('indicator_name', 'like', '%Estimated corresponding total number of households members%')
+            ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
+            ->first();
+        $householdsReached = DB::table('logframe_indicators')
+            ->where('indicator_name', 'like', '%Corresponding number of households reached%')
+            ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
+            ->first();
+        $personsReceivingServices = DB::table('logframe_indicators')
+            ->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
+            ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
+            ->first();
+
         // pass to dashboard view (merge with other data you already pass)
         return view('dashboard', compact(
             'tanks',
@@ -161,6 +175,7 @@ class DashboardController extends Controller
             ,'nrmStats'
             ,'ffsStats'
             ,'nutritionStats'
+            ,'householdMembers', 'householdsReached', 'personsReceivingServices'
         ));
     }
 
