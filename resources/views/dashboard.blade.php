@@ -680,6 +680,25 @@
     .mt-3 {
       margin-top: var(--spacing-md);
     }
+    .card-value-label {
+  color: #757990;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 11px;
+  margin-bottom: 0;
+  letter-spacing: 0.02em;
+}
+.card-value-amount {
+  font-size: 2.35rem;
+  font-weight: 800;
+  margin: 0 0 17px 0;
+  line-height: 1;
+  letter-spacing: 0.3px;
+  font-family: 'Inter', Arial, sans-serif;
+}
+.card-baseline { color: #316aff; }
+.card-midterm { color: #ad43ff; }
+.card-endtarget { color: #18b475; }
   </style>
 </head>
 <body>
@@ -705,35 +724,36 @@
             <h3 class="card-title">1.A Estimated corresponding Total Number of Household members</h3>
             <div class="card-badge">1.A</div>
           </div>
-          <p class="card-value">
-            Baseline: {{ $householdMembers->baseline ?? '—' }}<br>
-            Mid-Term: {{ $householdMembers->mid_term ?? '—' }}<br>
-            End Target: {{ $householdMembers->end_target ?? '—' }}
-          </p>
+          <p class="card-value-label">Baseline</p>
+          <div class="card-value-amount card-baseline">{{ isset($householdMembers) ? $householdMembers->baseline : '—' }}</div>
+          <p class="card-value-label">Mid-Term</p>
+          <div class="card-value-amount card-midterm">{{ isset($householdMembers) ? $householdMembers->mid_term : '—' }}</div>
+          <p class="card-value-label">End Target</p>
+          <div class="card-value-amount card-endtarget">{{ isset($householdMembers) ? $householdMembers->end_target : '—' }}</div>
         </div>
-
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">1.B Corresponding Number of households reached</h3>
-            <div class="card-badge">1.B</div>
+            <div class="card-badge" style="background:#fbbc05;">1.B</div>
           </div>
-          Baseline: {{ isset($householdsReached) ? $householdsReached->baseline : '—' }}<br>
-Mid-Term: {{ isset($householdsReached) ? $householdsReached->mid_term : '—' }}<br>
-End Target: {{ isset($householdsReached) ? $householdsReached->end_target : '—' }}
+          <p class="card-value-label">Baseline</p>
+          <div class="card-value-amount card-baseline">{{ isset($householdsReached) ? $householdsReached->baseline : '—' }}</div>
+          <p class="card-value-label">Mid-Term</p>
+          <div class="card-value-amount card-midterm">{{ isset($householdsReached) ? $householdsReached->mid_term : '—' }}</div>
+          <p class="card-value-label">End Target</p>
+          <div class="card-value-amount card-endtarget">{{ isset($householdsReached) ? $householdsReached->end_target : '—' }}</div>
         </div>
-
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Persons Receiving Services Promoted or Supported by the Project</h3>
-            <div class="card-badge">
-              <i class="fas fa-hand-holding-heart"></i>
-            </div>
+            <div class="card-badge" style="background:#18b475;"><i class="fas fa-hand-holding-heart"></i></div>
           </div>
-          <p class="card-value">
-            Baseline: {{ isset($personsReceivingServices) ? $personsReceivingServices->baseline : '—' }}<br>
-            Mid-Term: {{ isset($personsReceivingServices) ? $personsReceivingServices->mid_term : '—' }}<br>
-            End Target: {{ isset($personsReceivingServices) ? $personsReceivingServices->end_target : '—' }}
-          </p>
+          <p class="card-value-label">Baseline</p>
+          <div class="card-value-amount card-baseline">{{ isset($personsReceivingServices) ? $personsReceivingServices->baseline : '—' }}</div>
+          <p class="card-value-label">Mid-Term</p>
+          <div class="card-value-amount card-midterm">{{ isset($personsReceivingServices) ? $personsReceivingServices->mid_term : '—' }}</div>
+          <p class="card-value-label">End Target</p>
+          <div class="card-value-amount card-endtarget">{{ isset($personsReceivingServices) ? $personsReceivingServices->end_target : '—' }}</div>
         </div>
 
         <!-- Tank Selection Card -->
