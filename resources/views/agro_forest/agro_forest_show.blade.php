@@ -209,7 +209,7 @@
                         <tr>
                             <td>{{ (is_array($n) ? ($n['location'] ?? '') : ($n->location ?? '')) ?: '—' }}</td>
                             <td class="text-end">
-                                @php $np = is_array($n) ? ($n['plants'] ?? null) : ($n->no_of_plants ?? null); @endphp
+                                @php $np = is_array($n) ? ($n['plants'] ?? null) : ($n->number_of_plants ?? null); @endphp
                                 {{ isset($np) && $np !== '' ? number_format((float)$np) : '—' }}
                             </td>
                         </tr>
