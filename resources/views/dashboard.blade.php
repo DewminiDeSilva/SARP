@@ -1518,7 +1518,7 @@
                 <i class="fas fa-dollar-sign"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($agroEnterpriseStats['total_asset_value'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($agroEnterpriseStats['total_asset_value'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Combined asset value</p>
           </div>
 
@@ -1554,7 +1554,7 @@
                 <i class="fas fa-coins"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($agroEnterpriseStats['shareholder_stats']['total_share_capital'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($agroEnterpriseStats['shareholder_stats']['total_share_capital'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Shareholder investments</p>
           </div>
 
@@ -1565,7 +1565,7 @@
                 <i class="fas fa-seedling"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($agroEnterpriseStats['agro_forest_stats']['total_establishment_cost'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($agroEnterpriseStats['agro_forest_stats']['total_establishment_cost'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Forest development investment</p>
           </div>
 
@@ -1576,7 +1576,7 @@
                 <i class="fas fa-chart-pie"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($agroEnterpriseStats['financial_summary']['combined_enterprise_value'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($agroEnterpriseStats['financial_summary']['combined_enterprise_value'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Total portfolio value</p>
           </div>
         </div>
@@ -1767,7 +1767,7 @@
                 <i class="fas fa-dollar-sign"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nrmStats['total_training_cost'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nrmStats['total_training_cost'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Training program investment</p>
           </div>
 
@@ -1778,7 +1778,7 @@
                 <i class="fas fa-chalkboard-teacher"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nrmStats['total_resource_person_payment'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nrmStats['total_resource_person_payment'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Instructor payments</p>
           </div>
 
@@ -1789,7 +1789,7 @@
                 <i class="fas fa-seedling"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nrmStats['total_garden_cost'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nrmStats['total_garden_cost'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Home garden investment</p>
           </div>
 
@@ -1830,7 +1830,7 @@
                 <i class="fas fa-dollar-sign"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nrmStats['avg_cost_per_participant'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nrmStats['avg_cost_per_participant'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Training cost efficiency</p>
           </div>
 
@@ -1993,7 +1993,7 @@
                 <i class="fas fa-dollar-sign"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($ffsStats['financial_summary']['total_program_cost'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($ffsStats['financial_summary']['total_program_cost'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Training program investment</p>
           </div>
 
@@ -2004,7 +2004,7 @@
                 <i class="fas fa-chalkboard-teacher"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($ffsStats['financial_summary']['total_resource_person_payment'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($ffsStats['financial_summary']['total_resource_person_payment'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Instructor payments</p>
           </div>
 
@@ -2015,7 +2015,7 @@
                 <i class="fas fa-calculator"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($ffsStats['financial_summary']['total_training_cost'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($ffsStats['financial_summary']['total_training_cost'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Combined investment</p>
           </div>
 
@@ -2026,7 +2026,7 @@
                 <i class="fas fa-percentage"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($ffsStats['financial_summary']['avg_cost_per_participant'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($ffsStats['financial_summary']['avg_cost_per_participant'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Training cost efficiency</p>
           </div>
         </div>
@@ -2231,7 +2231,7 @@
                 <i class="fas fa-dollar-sign"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nutritionStats['financial_summary']['total_program_cost'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nutritionStats['financial_summary']['total_program_cost'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Training program investment</p>
           </div>
 
@@ -2242,7 +2242,7 @@
                 <i class="fas fa-calculator"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nutritionStats['financial_summary']['avg_cost_per_program'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nutritionStats['financial_summary']['avg_cost_per_program'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Average program cost</p>
           </div>
 
@@ -2253,7 +2253,7 @@
                 <i class="fas fa-percentage"></i>
               </div>
             </div>
-            <p class="card-value">${{ number_format($nutritionStats['financial_summary']['avg_cost_per_trainee'] ?? 0, 2) }}</p>
+            <p class="card-value">{{ number_format($nutritionStats['financial_summary']['avg_cost_per_trainee'] ?? 0, 2) }}</p>
             <p class="card-subtitle">Training cost efficiency</p>
           </div>
 
