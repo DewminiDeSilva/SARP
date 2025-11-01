@@ -328,14 +328,14 @@
             </div>
 
             <div class="col-md-6 mb-3">
-            <label for="accountNumberInput" class="form-label">Payment</label>
+            <label for="accountNumberInput" class="form-label">Contract Amount (Rs.)</label>
             <input type="text" class="form-control" id="payment" name="payment" value="{{ $tankRehabilitation->payment }}" required>
           </div>
             </div>
 
             <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="eotInput" class="form-label">EOT</label>
+            <label for="eotInput" class="form-label">Time Extension (EOT)</label>
             <input type="text" class="form-control" id="" name="eot" value="{{ $tankRehabilitation->eot }}" required>
           </div>
 
@@ -347,7 +347,7 @@
 
             <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="constructionPeriodInput" class="form-label">Number Of Family Members</label>
+            <label for="constructionPeriodInput" class="form-label">Number of Households</label>
             <input type="text" class="form-control" id="" name="no_of_family" value="{{ $tankRehabilitation->no_of_family }}" required>
           </div>
 
@@ -378,7 +378,7 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label for="cumulative_amount" class="form-label">Cumulative Paid Amount</label>
+                <label for="cumulative_amount" class="form-label">Cumulative Paid Amount (Rs.)</label>
                 <input type="text" class="form-control" id="cumulative_amount" name="cumulative_amount" value="{{ $tankRehabilitation->cumulative_amount }}" required>
             </div>
             </div>

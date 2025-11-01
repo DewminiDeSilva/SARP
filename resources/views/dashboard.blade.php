@@ -731,6 +731,24 @@
           <div class="card-value-amount card-midterm">{{ isset($householdMembers) ? $householdMembers->mid_term : '—' }}</div>
           <p class="card-value-label">End Target</p>
           <div class="card-value-amount card-endtarget">{{ isset($householdMembers) ? $householdMembers->end_target : '—' }}</div>
+          
+          <!-- Cumulative and Result Squares -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">1. Cumulative</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ isset($householdMembers) && isset($householdMembers->cumulative) ? number_format($householdMembers->cumulative) : '—' }}</div>
+              @if(isset($householdMembers) && isset($householdMembers->last_updated_date))
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Last Updated: {{ $householdMembers->last_updated_date }}</p>
+              @else
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">No update date</p>
+              @endif
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">2. Result ({{ date('Y') }})</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--success-color); margin: 0;">{{ isset($householdMembers) && isset($householdMembers->current_year_result) ? number_format($householdMembers->current_year_result) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">This Year Value</p>
+            </div>
+          </div>
         </div>
         <div class="card">
           <div class="card-header">
@@ -743,6 +761,24 @@
           <div class="card-value-amount card-midterm">{{ isset($householdsReached) ? $householdsReached->mid_term : '—' }}</div>
           <p class="card-value-label">End Target</p>
           <div class="card-value-amount card-endtarget">{{ isset($householdsReached) ? $householdsReached->end_target : '—' }}</div>
+          
+          <!-- Cumulative and Result Squares -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">1. Cumulative</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ isset($householdsReached) && isset($householdsReached->cumulative) ? number_format($householdsReached->cumulative) : '—' }}</div>
+              @if(isset($householdsReached) && isset($householdsReached->last_updated_date))
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Last Updated: {{ $householdsReached->last_updated_date }}</p>
+              @else
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">No update date</p>
+              @endif
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">2. Result ({{ date('Y') }})</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--success-color); margin: 0;">{{ isset($householdsReached) && isset($householdsReached->current_year_result) ? number_format($householdsReached->current_year_result) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">This Year Value</p>
+            </div>
+          </div>
         </div>
         <div class="card">
           <div class="card-header">
