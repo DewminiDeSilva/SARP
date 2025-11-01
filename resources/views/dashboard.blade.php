@@ -725,12 +725,25 @@
             <h3 class="card-title">1.A Estimated corresponding Total Number of Household members</h3>
             <div class="card-badge">1.A</div>
           </div>
-          <p class="card-value-label">Baseline</p>
-          <div class="card-value-amount card-baseline">{{ isset($householdMembers) ? $householdMembers->baseline : '—' }}</div>
-          <p class="card-value-label">Mid-Term</p>
-          <div class="card-value-amount card-midterm">{{ isset($householdMembers) ? $householdMembers->mid_term : '—' }}</div>
-          <p class="card-value-label">End Target</p>
-          <div class="card-value-amount card-endtarget">{{ isset($householdMembers) ? $householdMembers->end_target : '—' }}</div>
+          
+          <!-- Baseline, Mid-Term, End Target Squares -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Baseline</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #316aff; margin: 0;">{{ isset($householdMembers) ? number_format($householdMembers->baseline) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Initial Value</p>
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Mid-Term</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #ad43ff; margin: 0;">{{ isset($householdMembers) ? number_format($householdMembers->mid_term) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Mid-Term Target</p>
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">End Target</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #18b475; margin: 0;">{{ isset($householdMembers) ? number_format($householdMembers->end_target) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Final Target</p>
+            </div>
+          </div>
           
           <!-- Cumulative and Result Squares -->
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
@@ -755,12 +768,25 @@
             <h3 class="card-title">1.B Corresponding Number of households reached</h3>
             <div class="card-badge" style="background:#fbbc05;">1.B</div>
           </div>
-          <p class="card-value-label">Baseline</p>
-          <div class="card-value-amount card-baseline">{{ isset($householdsReached) ? $householdsReached->baseline : '—' }}</div>
-          <p class="card-value-label">Mid-Term</p>
-          <div class="card-value-amount card-midterm">{{ isset($householdsReached) ? $householdsReached->mid_term : '—' }}</div>
-          <p class="card-value-label">End Target</p>
-          <div class="card-value-amount card-endtarget">{{ isset($householdsReached) ? $householdsReached->end_target : '—' }}</div>
+          
+          <!-- Baseline, Mid-Term, End Target Squares -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Baseline</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #316aff; margin: 0;">{{ isset($householdsReached) ? number_format($householdsReached->baseline) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Initial Value</p>
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Mid-Term</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #ad43ff; margin: 0;">{{ isset($householdsReached) ? number_format($householdsReached->mid_term) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Mid-Term Target</p>
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">End Target</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #18b475; margin: 0;">{{ isset($householdsReached) ? number_format($householdsReached->end_target) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Final Target</p>
+            </div>
+          </div>
           
           <!-- Cumulative and Result Squares -->
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
@@ -785,12 +811,43 @@
             <h3 class="card-title">Persons Receiving Services Promoted or Supported by the Project</h3>
             <div class="card-badge" style="background:#18b475;"><i class="fas fa-hand-holding-heart"></i></div>
           </div>
-          <p class="card-value-label">Baseline</p>
-          <div class="card-value-amount card-baseline">{{ isset($personsReceivingServices) ? $personsReceivingServices->baseline : '—' }}</div>
-          <p class="card-value-label">Mid-Term</p>
-          <div class="card-value-amount card-midterm">{{ isset($personsReceivingServices) ? $personsReceivingServices->mid_term : '—' }}</div>
-          <p class="card-value-label">End Target</p>
-          <div class="card-value-amount card-endtarget">{{ isset($personsReceivingServices) ? $personsReceivingServices->end_target : '—' }}</div>
+          
+          <!-- Baseline, Mid-Term, End Target Squares -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Baseline</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #316aff; margin: 0;">{{ isset($personsReceivingServices) ? number_format($personsReceivingServices->baseline) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Initial Value</p>
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Mid-Term</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #ad43ff; margin: 0;">{{ isset($personsReceivingServices) ? number_format($personsReceivingServices->mid_term) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Mid-Term Target</p>
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">End Target</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #18b475; margin: 0;">{{ isset($personsReceivingServices) ? number_format($personsReceivingServices->end_target) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Final Target</p>
+            </div>
+          </div>
+          
+          <!-- Cumulative and Result Squares -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">1. Cumulative</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ isset($personsReceivingServices) && isset($personsReceivingServices->cumulative) ? number_format($personsReceivingServices->cumulative) : '—' }}</div>
+              @if(isset($personsReceivingServices) && isset($personsReceivingServices->last_updated_date))
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">Last Updated: {{ $personsReceivingServices->last_updated_date }}</p>
+              @else
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">No update date</p>
+              @endif
+            </div>
+            <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
+              <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">2. Result ({{ date('Y') }})</p>
+              <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--success-color); margin: 0;">{{ isset($personsReceivingServices) && isset($personsReceivingServices->current_year_result) ? number_format($personsReceivingServices->current_year_result) : '—' }}</div>
+              <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 0;">This Year Value</p>
+            </div>
+          </div>
         </div>
 
         <!-- Tank Selection Card -->

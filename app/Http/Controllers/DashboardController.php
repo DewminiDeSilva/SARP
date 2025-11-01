@@ -213,9 +213,47 @@ class DashboardController extends Controller
         }
         
         $personsReceivingServices = DB::table('logframe_indicators')
-            ->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
+            ->where(function($query) {
+                $query->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
+                      ->orWhere('indicator_name', 'like', '%Total number of persons receiving services%')
+                      ->orWhere('indicator_name', 'like', '%Number of people%');
+            })
             ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
             ->first();
+        
+        // Get logframe indicator data for cumulative and current year result for persons receiving services
+        $personsReceivingServicesIndicators = LogframeIndicator::where(function($query) {
+            $query->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
+                  ->orWhere('indicator_name', 'like', '%Total number of persons receiving services%')
+                  ->orWhere('indicator_name', 'like', '%Number of people%');
+        })->get();
+        
+        $personsReceivingServicesCumulative = 0;
+        $personsReceivingServicesCurrentYearResult = 0;
+        $personsReceivingServicesLastUpdatedDate = null;
+        
+        if ($personsReceivingServicesIndicators->count() > 0) {
+            // Sum cumulative results across all matching indicators
+            foreach ($personsReceivingServicesIndicators as $indicator) {
+                $personsReceivingServicesCumulative += $indicator->getCumulativeResult($currentYear);
+                $personsReceivingServicesCurrentYearResult += $indicator->getResultForYear($currentYear);
+                
+                // Get the most recent updated date
+                if ($indicator->updated_at) {
+                    $updatedDate = $indicator->updated_at->format('Y-m-d');
+                    if (!$personsReceivingServicesLastUpdatedDate || $updatedDate > $personsReceivingServicesLastUpdatedDate) {
+                        $personsReceivingServicesLastUpdatedDate = $updatedDate;
+                    }
+                }
+            }
+        }
+        
+        // Add cumulative and result to personsReceivingServices object
+        if ($personsReceivingServices) {
+            $personsReceivingServices->cumulative = $personsReceivingServicesCumulative;
+            $personsReceivingServices->current_year_result = $personsReceivingServicesCurrentYearResult;
+            $personsReceivingServices->last_updated_date = $personsReceivingServicesLastUpdatedDate;
+        }
 
         // pass to dashboard view (merge with other data you already pass)
         return view('dashboard', compact(
