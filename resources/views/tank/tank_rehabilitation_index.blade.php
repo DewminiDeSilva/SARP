@@ -455,10 +455,10 @@ table th:first-child, table td:first-child {
                                     <!-- <th>Contractor</th> -->
                                     <!-- <th>Open Ref No</th> New field -->
                                     <th>Awarded Date</th> <!-- New field -->
-                                    <th>Cumulative Paid Amount</th> <!-- New field -->
-                                    <th>Paid Advanced Amount</th> <!-- New field -->
-                                    <th>Recommended IPC No</th> <!-- New field -->
-                                    <th>Recommended IPC Amount</th> <!-- New field -->
+                                    <th>Cumulative Paid Amount (Rs.)</th> <!-- New field -->
+                                    <!-- <th>Paid Advanced Amount</th> 
+                                    <th>Recommended IPC No</th> 
+                                    <th>Recommended IPC Amount</th> -->
                                     <!-- <th>Payment</th> -->
                                     <!-- <th>EOT</th> -->
                                     <!-- <th>Contract Period</th> -->
@@ -497,10 +497,10 @@ table th:first-child, table td:first-child {
                                     <!-- <td>{{ $tankRehabilitation->contractor }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->open_ref_no }}</td> New field -->
                                     <td>{{ $tankRehabilitation->awarded_date }}</td> <!-- New field -->
-                                    <td>RS.{{ !empty($tankRehabilitation->cumulative_amount) && is_numeric($tankRehabilitation->cumulative_amount) ? number_format((float) $tankRehabilitation->cumulative_amount, 2) : 'N/A' }}</td>
-                                    <td>{{ $tankRehabilitation->paid_advanced_amount }}</td> <!-- New field -->
-                                    <td>{{ $tankRehabilitation->recommended_ipc_no }}</td> <!-- New field -->
-                                    <td>{{ number_format($tankRehabilitation->recommended_ipc_amount, 2) }}</td>
+                                    <td>{{ !empty($tankRehabilitation->cumulative_amount) && is_numeric($tankRehabilitation->cumulative_amount) ? number_format((float) $tankRehabilitation->cumulative_amount, 2) : 'N/A' }}</td>
+                                    <!-- <td>{{ $tankRehabilitation->paid_advanced_amount }}</td> 
+                                    <td>{{ $tankRehabilitation->recommended_ipc_no }}</td>
+                                    <td>{{ number_format($tankRehabilitation->recommended_ipc_amount, 2) }}</td> -->
 
                                     <!-- <td>{{ $tankRehabilitation->payment }}</td> -->
                                     <!-- <td>{{ $tankRehabilitation->eot }}</td> -->

@@ -27,6 +27,7 @@ use App\Models\FFSTraining;
 use App\Models\FFSParticipant;
 use App\Models\Nutrition;
 use App\Models\NutritionTrainee;
+use App\Models\LogframeIndicator;
 
 class DashboardController extends Controller
 {
@@ -144,10 +145,73 @@ class DashboardController extends Controller
             ->where('indicator_name', 'like', '%Estimated corresponding total number of households members%')
             ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
             ->first();
+        
+        // Get logframe indicator data for cumulative and current year result
+        $currentYear = date('Y');
+        $householdMembersIndicators = LogframeIndicator::where('indicator_name', 'like', '%Estimated corresponding total number of households members%')->get();
+        
+        $householdMembersCumulative = 0;
+        $householdMembersCurrentYearResult = 0;
+        $householdMembersLastUpdatedDate = null;
+        
+        if ($householdMembersIndicators->count() > 0) {
+            // Sum cumulative results across all matching indicators
+            foreach ($householdMembersIndicators as $indicator) {
+                $householdMembersCumulative += $indicator->getCumulativeResult($currentYear);
+                $householdMembersCurrentYearResult += $indicator->getResultForYear($currentYear);
+                
+                // Get the most recent updated date
+                if ($indicator->updated_at) {
+                    $updatedDate = $indicator->updated_at->format('Y-m-d');
+                    if (!$householdMembersLastUpdatedDate || $updatedDate > $householdMembersLastUpdatedDate) {
+                        $householdMembersLastUpdatedDate = $updatedDate;
+                    }
+                }
+            }
+        }
+        
+        // Add cumulative and result to householdMembers object
+        if ($householdMembers) {
+            $householdMembers->cumulative = $householdMembersCumulative;
+            $householdMembers->current_year_result = $householdMembersCurrentYearResult;
+            $householdMembers->last_updated_date = $householdMembersLastUpdatedDate;
+        }
+        
         $householdsReached = DB::table('logframe_indicators')
             ->where('indicator_name', 'like', '%Corresponding number of households reached%')
             ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
             ->first();
+        
+        // Get logframe indicator data for cumulative and current year result for households reached
+        $householdsReachedIndicators = LogframeIndicator::where('indicator_name', 'like', '%Corresponding number of households reached%')->get();
+        
+        $householdsReachedCumulative = 0;
+        $householdsReachedCurrentYearResult = 0;
+        $householdsReachedLastUpdatedDate = null;
+        
+        if ($householdsReachedIndicators->count() > 0) {
+            // Sum cumulative results across all matching indicators
+            foreach ($householdsReachedIndicators as $indicator) {
+                $householdsReachedCumulative += $indicator->getCumulativeResult($currentYear);
+                $householdsReachedCurrentYearResult += $indicator->getResultForYear($currentYear);
+                
+                // Get the most recent updated date
+                if ($indicator->updated_at) {
+                    $updatedDate = $indicator->updated_at->format('Y-m-d');
+                    if (!$householdsReachedLastUpdatedDate || $updatedDate > $householdsReachedLastUpdatedDate) {
+                        $householdsReachedLastUpdatedDate = $updatedDate;
+                    }
+                }
+            }
+        }
+        
+        // Add cumulative and result to householdsReached object
+        if ($householdsReached) {
+            $householdsReached->cumulative = $householdsReachedCumulative;
+            $householdsReached->current_year_result = $householdsReachedCurrentYearResult;
+            $householdsReached->last_updated_date = $householdsReachedLastUpdatedDate;
+        }
+        
         $personsReceivingServices = DB::table('logframe_indicators')
             ->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
             ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')

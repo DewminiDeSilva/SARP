@@ -316,7 +316,7 @@ select[disabled] {
     </div>
     <div class="form-group">
         <label for="provinceDropdown" class="form-label dropdown-label color-label col-form-label">Province</label>
-        <select id="provinceDropdown" class="form-control greenbackground" name="province_name" disabled>
+        <select id="provinceDropdown" class="form-control greenbackground" name="province_name" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
             <option selected>{{ $beneficiary->province_name ?? 'N/A' }}</option>
         </select>
         <input type="hidden" name="province_name" value="{{ $beneficiary->province_name }}">
@@ -327,14 +327,14 @@ select[disabled] {
 <div class="form-row">
     <div class="form-group">
         <label for="districtDropdown" class="form-label bold-label color-label">District</label>
-        <select class="form-control greenbackground" id="districtDropdown" name="district_name" disabled>
+        <select class="form-control greenbackground" id="districtDropdown" name="district_name" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
             <option selected>{{ $beneficiary->district_name ?? 'N/A' }}</option>
         </select>
         <input type="hidden" name="district_name" value="{{ $beneficiary->district_name }}">
     </div>
     <div class="form-group">
         <label for="dsDivisionDropdown" class="form-label bold-label color-label">DS Division</label>
-        <select class="form-control greenbackground" id="dsDivisionDropdown" name="ds_division_name" disabled>
+        <select class="form-control greenbackground" id="dsDivisionDropdown" name="ds_division_name" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
             <option selected>{{ $beneficiary->ds_division_name ?? 'N/A' }}</option>
         </select>
         <input type="hidden" name="ds_division_name" value="{{ $beneficiary->ds_division_name }}">
@@ -345,14 +345,14 @@ select[disabled] {
 <div class="form-row">
     <div class="form-group">
         <label for="gnDropdown" class="form-label bold-label color-label">GN Division</label>
-        <select class="form-control greenbackground" id="gnDropdown" name="gn_division_name" disabled>
+        <select class="form-control greenbackground" id="gnDropdown" name="gn_division_name" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
             <option selected>{{ $beneficiary->gn_division_name ?? 'N/A' }}</option>
         </select>
         <input type="hidden" name="gn_division_name" value="{{ $beneficiary->gn_division_name }}">
     </div>
     <div class="form-group">
         <label for="ascDropdown" class="form-label bold-label color-label">ASC</label>
-        <select class="form-control greenbackground" id="ascDropdown" name="as_center" disabled>
+        <select class="form-control greenbackground" id="ascDropdown" name="as_center" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
             <option selected>{{ $beneficiary->as_center ?? 'N/A' }}</option>
         </select>
         <input type="hidden" name="as_center" value="{{ $beneficiary->as_center }}">
@@ -362,7 +362,7 @@ select[disabled] {
 <!-- Cascade Name -->
 <div class="form-group">
     <label for="cascadeDropdown" class="form-label bold-label color-label">Cascade Name</label>
-    <select class="form-control greenbackground" id="cascadeDropdown" name="cascade_name" disabled>
+    <select class="form-control greenbackground" id="cascadeDropdown" name="cascade_name" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
         <option selected>{{ $beneficiary->cascade_name ?? 'N/A' }}</option>
     </select>
     <input type="hidden" name="cascade_name" value="{{ $beneficiary->cascade_name }}">
@@ -455,17 +455,17 @@ select[disabled] {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nic">Beneficiary NIC</label>
-                        <input type="text" class="form-control" name="nic" value="{{ $beneficiary->nic }}" required>
+                        <input type="text" class="form-control" name="nic" value="{{ $beneficiary->nic }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="name_with_initials">Name with Initials</label>
-                        <input type="text" class="form-control" name="name_with_initials" value="{{ $beneficiary->name_with_initials }}" required>
+                        <input type="text" class="form-control" name="name_with_initials" value="{{ $beneficiary->name_with_initials }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="dob">Date Of Birth</label>
-                        <input type="text" class="form-control datepicker-container" id="dob" name="dob" value="{{ $beneficiary->dob }}" required>
+                        <input type="text" class="form-control datepicker-container" id="dob" name="dob" value="{{ $beneficiary->dob }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="age">Age</label>
@@ -477,15 +477,18 @@ select[disabled] {
                 <div class="form-group">
                     <label>Gender</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="male" value="male" {{ $beneficiary->gender == 'male' ? 'checked' : '' }} required>
+                        <input class="form-check-input" type="radio" name="gender" id="male" value="male" {{ $beneficiary->gender == 'male' ? 'checked' : '' }} {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
                         <label class="form-check-label" for="male">Male</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="female" value="female" {{ $beneficiary->gender == 'female' ? 'checked' : '' }} required>
+                        <input class="form-check-input" type="radio" name="gender" id="female" value="female" {{ $beneficiary->gender == 'female' ? 'checked' : '' }} {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
                         <label class="form-check-label" for="female">Female</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="other" value="other" {{ $beneficiary->gender == 'other' ? 'checked' : '' }} required>
+                        <input class="form-check-input" type="radio" name="gender" id="other" value="other" {{ $beneficiary->gender == 'other' ? 'checked' : '' }} {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
+                    @if($beneficiary->project_type === '4p')
+                        <input type="hidden" name="gender" value="{{ $beneficiary->gender }}">
+                    @endif
                         <label class="form-check-label" for="other">Other</label>
                     </div>
                 </div>
@@ -493,40 +496,43 @@ select[disabled] {
                 <!-- Education Level -->
                 <div class="form-group">
                     <label for="education">Education Level</label>
-                    <select class="form-control" name="education" required>
+                    <select class="form-control" name="education" {{ $beneficiary->project_type === '4p' ? 'disabled' : '' }}>
                         <option value="{{ $beneficiary->education }}" selected>{{ $beneficiary->education }}</option>
                     </select>
+                    @if($beneficiary->project_type === '4p')
+                        <input type="hidden" name="education" value="{{ $beneficiary->education }}">
+                    @endif
                 </div>
 
                 <!-- Email, Phone, Address, and Family Members -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" value="{{ $beneficiary->email }}">
+                        <input type="email" class="form-control" name="email" value="{{ $beneficiary->email }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="phone">Mobile Number</label>
-                        <input type="text" class="form-control" name="phone" value="{{ $beneficiary->phone }}">
+                        <input type="text" class="form-control" name="phone" value="{{ $beneficiary->phone }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="address">Address</label>
-                        <input type="text" class="form-control" name="address" value="{{ $beneficiary->address }}" required>
+                        <input type="text" class="form-control" name="address" value="{{ $beneficiary->address }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="number_of_family_members">Number of Family Members</label>
-                    <input type="number" class="form-control" name="number_of_family_members" value="{{ $beneficiary->number_of_family_members }}" required>
+                    <input type="number" class="form-control" name="number_of_family_members" value="{{ $beneficiary->number_of_family_members }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                 </div>
 
                 <!-- Land Ownership and Coordinates -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="land_ownership_total_extent">Land Ownership (Total Extent)</label>
-                        <input type="text" class="form-control" name="land_ownership_total_extent" value="{{ $beneficiary->land_ownership_total_extent }}" required>
+                        <input type="text" class="form-control" name="land_ownership_total_extent" value="{{ $beneficiary->land_ownership_total_extent }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="land_ownership_proposed_cultivation_area">Proposed Cultivation Area</label>
-                        <input type="text" class="form-control" name="land_ownership_proposed_cultivation_area" value="{{ $beneficiary->land_ownership_proposed_cultivation_area }}" required>
+                        <input type="text" class="form-control" name="land_ownership_proposed_cultivation_area" value="{{ $beneficiary->land_ownership_proposed_cultivation_area }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                 </div>
 
@@ -534,11 +540,11 @@ select[disabled] {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="latitude">Latitude</label>
-                        <input type="text" class="form-control" name="latitude" value="{{ $beneficiary->latitude }}">
+                        <input type="text" class="form-control" name="latitude" value="{{ $beneficiary->latitude }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="longitude">Longitude</label>
-                        <input type="text" class="form-control" name="longitude" value="{{ $beneficiary->longitude }}">
+                        <input type="text" class="form-control" name="longitude" value="{{ $beneficiary->longitude }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                 </div>
 
@@ -546,19 +552,19 @@ select[disabled] {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="income_source">Income Source</label>
-                        <input type="text" class="form-control" name="income_source" value="{{ $beneficiary->income_source }}" required>
+                        <input type="text" class="form-control" name="income_source" value="{{ $beneficiary->income_source }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="average_income">Average Income</label>
-                        <input type="text" class="form-control" name="average_income" value="{{ $beneficiary->average_income }}" required>
+                        <input type="text" class="form-control" name="average_income" value="{{ $beneficiary->average_income }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="monthly_household_expenses">Monthly Household Expenses</label>
-                        <input type="text" class="form-control" name="monthly_household_expenses" value="{{ $beneficiary->monthly_household_expenses }}" required>
+                        <input type="text" class="form-control" name="monthly_household_expenses" value="{{ $beneficiary->monthly_household_expenses }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="household_level_assets_description">Household Level Assets Description</label>
-                        <input type="text" class="form-control" name="household_level_assets_description" value="{{ $beneficiary->household_level_assets_description }}" required>
+                        <input type="text" class="form-control" name="household_level_assets_description" value="{{ $beneficiary->household_level_assets_description }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                 </div>
 
@@ -570,15 +576,15 @@ select[disabled] {
                     <div class="card-body">
                         <div class="form-group">
                             <label for="bank_name">Bank Name</label>
-                            <input type="text" class="form-control" name="bank_name" value="{{ $beneficiary->bank_name }}" required>
+                            <input type="text" class="form-control" name="bank_name" value="{{ $beneficiary->bank_name }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                         </div>
                         <div class="form-group">
                             <label for="bank_branch">Bank Branch</label>
-                            <input type="text" class="form-control" name="bank_branch" value="{{ $beneficiary->bank_branch }}" required>
+                            <input type="text" class="form-control" name="bank_branch" value="{{ $beneficiary->bank_branch }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                         </div>
                         <div class="form-group">
                             <label for="account_number">Account Number</label>
-                            <input type="text" class="form-control" name="account_number" value="{{ $beneficiary->account_number }}" required>
+                            <input type="text" class="form-control" name="account_number" value="{{ $beneficiary->account_number }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                         </div>
                     </div>
                 </div>
@@ -587,24 +593,24 @@ select[disabled] {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="head_of_householder_name">Head of Householder Name</label>
-                        <input type="text" class="form-control" name="head_of_householder_name" value="{{ $beneficiary->head_of_householder_name }}" required>
+                        <input type="text" class="form-control" name="head_of_householder_name" value="{{ $beneficiary->head_of_householder_name }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="householder_number">Householder Number</label>
-                        <input type="text" class="form-control" name="householder_number" value="{{ $beneficiary->householder_number }}" required>
+                        <input type="text" class="form-control" name="householder_number" value="{{ $beneficiary->householder_number }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="type_of_water_resource">Type of Water Resource</label>
-                        <input type="text" class="form-control" name="type_of_water_resource" value="{{ $beneficiary->type_of_water_resource }}" required>
+                        <input type="text" class="form-control" name="type_of_water_resource" value="{{ $beneficiary->type_of_water_resource }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label for="training_details_description">Training Details Description</label>
-                        <input type="text" class="form-control" name="training_details_description" value="{{ $beneficiary->training_details_description }}">
+                        <input type="text" class="form-control" name="training_details_description" value="{{ $beneficiary->training_details_description }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
 
                     <div class="form-group">
                         <label for="community_based_organization">Community-Based Organization</label>
-                        <input type="text" class="form-control" name="community_based_organization" value="{{ $beneficiary->community_based_organization }}">
+                        <input type="text" class="form-control" name="community_based_organization" value="{{ $beneficiary->community_based_organization }}" {{ $beneficiary->project_type === '4p' ? 'readonly' : '' }}>
                     </div>
                 </div>
 
