@@ -212,21 +212,40 @@ class DashboardController extends Controller
             $householdsReached->last_updated_date = $householdsReachedLastUpdatedDate;
         }
         
-        $personsReceivingServices = DB::table('logframe_indicators')
-            ->where(function($query) {
-                $query->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
-                      ->orWhere('indicator_name', 'like', '%Total number of persons receiving services%')
-                      ->orWhere('indicator_name', 'like', '%Number of people%');
-            })
-            ->selectRaw('SUM(baseline) as baseline, SUM(mid_term) as mid_term, SUM(end_target) as end_target')
-            ->first();
+        // Use ONLY the specific indicator: "1 Persons receiving services promoted or supported by the project"
+        // with description: "Total number of persons receiving services - Number of people"
+        // Try exact match first, then fallback to LIKE if needed
+        $personsReceivingServicesIndicator = LogframeIndicator::where(function($query) {
+            $query->where('indicator_name', '1 Persons receiving services promoted or supported by the project')
+                  ->orWhere('indicator_name', 'like', '%1 Persons receiving services promoted or supported by the project%');
+        })
+        ->where(function($query) {
+            $query->where('indicator_description', 'Total number of persons receiving services - Number of people')
+                  ->orWhere('indicator_description', 'like', '%Total number of persons receiving services - Number of people%');
+        })
+        ->first();
+        
+        // If not found, try with more flexible matching
+        if (!$personsReceivingServicesIndicator) {
+            $personsReceivingServicesIndicator = LogframeIndicator::where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
+                ->where('indicator_description', 'like', '%Total number of persons receiving services%')
+                ->where('indicator_description', 'like', '%Number of people%')
+                ->first();
+        }
+        
+        // Get baseline, mid_term, end_target from the found indicator
+        $personsReceivingServices = (object)[
+            'baseline' => $personsReceivingServicesIndicator ? (int)$personsReceivingServicesIndicator->baseline : 0,
+            'mid_term' => $personsReceivingServicesIndicator ? (int)$personsReceivingServicesIndicator->mid_term : 0,
+            'end_target' => $personsReceivingServicesIndicator ? (int)$personsReceivingServicesIndicator->end_target : 0,
+        ];
         
         // Get logframe indicator data for cumulative and current year result for persons receiving services
-        $personsReceivingServicesIndicators = LogframeIndicator::where(function($query) {
-            $query->where('indicator_name', 'like', '%Persons receiving services promoted or supported by the project%')
-                  ->orWhere('indicator_name', 'like', '%Total number of persons receiving services%')
-                  ->orWhere('indicator_name', 'like', '%Number of people%');
-        })->get();
+        // Use the same indicator found above
+        $personsReceivingServicesIndicators = collect();
+        if ($personsReceivingServicesIndicator) {
+            $personsReceivingServicesIndicators->push($personsReceivingServicesIndicator);
+        }
         
         $personsReceivingServicesCumulative = 0;
         $personsReceivingServicesCurrentYearResult = 0;
