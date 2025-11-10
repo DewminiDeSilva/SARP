@@ -886,7 +886,7 @@
             </div>
           </div>
 
-          <div class="card">
+          {{-- <div class="card">
             <div class="card-header">
               <h3 class="card-title">Irrigated Area (ha)</h3>
               <div class="card-badge" style="background: #059669;">
@@ -896,19 +896,19 @@
             <p class="card-value">{{ $tankRehabKPIs['irrigated_area'] ?? 0 }} ha</p>
             <p class="card-subtitle">Agricultural coverage</p>
             <div class="data-unavailable">Data not available</div>
-          </div>
+          </div> --}}
 
-          <div class="card">
-            <div class="card-header">
+          {{-- <div class="card"> --}}
+            {{-- <div class="card-header">
               <h3 class="card-title">Capacity Restored (MCM)</h3>
               <div class="card-badge" style="background: #0891b2;">
                 <i class="fas fa-tint"></i>
-              </div>
-            </div>
+              </div> --}}
+            {{-- </div>
             <p class="card-value">{{ $tankRehabKPIs['capacity_restored'] ?? 0 }} MCM</p>
             <p class="card-subtitle">Water storage capacity</p>
             <div class="data-unavailable">Data not available</div>
-          </div>
+          </div> --}}
 
           <div class="card">
             <div class="card-header">
