@@ -561,6 +561,22 @@
         grid-template-columns: 1fr !important;
         gap: 1rem !important;
       }
+
+      /* Module Selection Card Responsive */
+      .module-selection-card {
+        max-width: 100% !important;
+        margin: var(--spacing-lg) var(--spacing-md) !important;
+      }
+
+      .module-selection-card .d-flex.gap-3 {
+        flex-direction: column !important;
+        gap: var(--spacing-md) !important;
+      }
+
+      .module-selection-card button {
+        width: 100% !important;
+        min-width: auto !important;
+      }
     }
 
     /* FFS Chart Styles */
@@ -871,40 +887,50 @@
           
         </div>
 
-        <!-- Quick Actions Card -->
-        
-          
-          
+      </div>
 
-        <!-- Module Selection Card -->
-        <div class="card card-wide">
-          <div class="card-header">
-            <h3 class="card-title">Module Selection</h3>
-            <div class="card-badge">Modules</div>
+      <!-- Module Selection Card - Centered Rectangle -->
+      <div style="display: flex; justify-content: center; margin: var(--spacing-2xl) 0;">
+        <div class="card module-selection-card" style="max-width: 800px; width: 100%; margin: 0 auto; border: 2px solid var(--primary-color); box-shadow: var(--shadow-xl);">
+          <div class="card-header" style="background: linear-gradient(135deg, var(--primary-color) 0%, #6D4CBC 100%); color: white; border-radius: var(--radius-sm) var(--radius-sm) 0 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 class="card-title" style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700;">Module Selection</h3>
+              <div class="card-badge" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3);">
+                <i class="fas fa-cube" style="font-size: 1.2rem;"></i>
+              </div>
+            </div>
           </div>
           
-          <div class="form-group">
-            <label for="module_id" class="form-label">Select Module</label>
-           <select name="module_id" id="module_id" class="form-select">
-  <option value="">-- Choose module --</option>
-  <option value="beneficiary">Beneficiary</option>
-  <option value="tank_rehabilitation">Tank Rehabilitation</option>
-  <option value="infrastructure">Infrastructure Development</option>
-  <option value="social_inclusion_and_gender">Social Inclusion & Gender</option>
-  <option value="resilience_projects">Resilience Projects</option>
-  <option value="youth_enterprises">Youth Enterprises</option>
-  <option value="4p_agri_business">4P Agri Business Projects</option>
-  <option value="agro_enterprise">Agro Enterprise</option>
-  <option value="nrm">Natural Resource Management (NRM)</option>
-  <option value="ffs">Farmer Field Schools (FFS)</option>
-  <option value="nutrition_training">Nutrition Training Program</option>
-  <option value="project_documents">Project Documents</option>
-</select>
-          </div>
+          <div style="padding: var(--spacing-2xl);">
+            <div class="form-group" style="margin-bottom: var(--spacing-xl);">
+              <label for="module_id" class="form-label" style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md); color: var(--text-primary);">
+                <i class="fas fa-list-ul" style="margin-right: 8px; color: var(--primary-color);"></i>Select Module
+              </label>
+              <select name="module_id" id="module_id" class="form-select" style="font-size: 1rem; padding: var(--spacing-md) var(--spacing-lg); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--panel-color); transition: all 0.3s ease;">
+                <option value="">-- Choose module --</option>
+                <option value="beneficiary">Beneficiary</option>
+                <option value="tank_rehabilitation">Tank Rehabilitation</option>
+                <option value="infrastructure">Infrastructure Development</option>
+                <option value="social_inclusion_and_gender">Social Inclusion & Gender</option>
+                <option value="resilience_projects">Resilience Projects</option>
+                <option value="youth_enterprises">Youth Enterprises</option>
+                <option value="4p_agri_business">4P Agri Business Projects</option>
+                <option value="agro_enterprise">Agro Enterprise</option>
+                <option value="nrm">Natural Resource Management (NRM)</option>
+                <option value="ffs">Farmer Field Schools (FFS)</option>
+                <option value="nutrition_training">Nutrition Training Program</option>
+                <option value="project_documents">Project Documents</option>
+              </select>
+            </div>
 
-          <div class="d-flex gap-3 mt-3">
-            <button class="btn btn-outline btn-sm">View Module</button>
-            <button class="btn btn-success btn-sm">Generate Report</button>
+            <div class="d-flex gap-3" style="justify-content: center; margin-top: var(--spacing-xl);">
+              <button class="btn btn-outline" style="padding: var(--spacing-md) var(--spacing-xl); font-size: 1rem; font-weight: 600; border: 2px solid var(--border-color); min-width: 180px;">
+                <i class="fas fa-eye" style="margin-right: 8px;"></i>View Module
+              </button>
+              <button class="btn btn-success" style="padding: var(--spacing-md) var(--spacing-xl); font-size: 1rem; font-weight: 600; min-width: 180px; box-shadow: var(--shadow-md);">
+                <i class="fas fa-file-pdf" style="margin-right: 8px;"></i>Generate Report
+              </button>
+            </div>
           </div>
         </div>
       </div>
