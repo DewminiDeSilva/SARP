@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tank Registration</title>
+    <title>Tank Rehabilitation Registration</title>
 
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -19,9 +19,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* Custom styles */
+        /* Beautiful Simple CSS Styles */
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(to bottom, #f5f7fa 0%, #e8ecf1 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .container {
@@ -29,7 +30,7 @@
         }
 
         .dropdown {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -37,21 +38,45 @@
 
         .dropdown-menu {
             min-width: auto;
+            max-height: 250px;
+            overflow-y: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .dropdown-item {
-            padding: 10px;
-            font-size: 16px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            transform: translateX(5px);
         }
 
         .dropdown-toggle {
-            min-width: 250px;
+            min-width: 200px;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .dropdown-label {
             text-align: center;
-            font-size: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
         }
+
 
         .frame {
             display: flex;
@@ -63,20 +88,111 @@
         .left-column {
             flex: 0 0 20%;
             border-right: 1px solid #dee2e6;
+            background-color: #ffffff;
         }
 
         .right-column {
             flex: 0 0 80%;
-            padding: 20px;
+            padding: 25px;
         }
 
         .custom-border {
-            border-color: darkgreen !important;
+            border-color: #28a745 !important;
+            border-width: 2px !important;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            font-family: sans-serif;
-            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 2px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control {
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .form-control:hover {
+            border-color: #28a745;
+        }
+
+        .btn-success {
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .header-title {
+            color: #28a745 !important;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            border: 2px dashed #28a745;
+            border-radius: 6px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            background-color: #e8f5e9;
+            border-color: #20c997;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* Smooth animations */
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
     </style>
@@ -209,6 +325,7 @@
 
             <form action="{{ route('tank_rehabilitation.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <!-- Line 1: Province to GND -->
                 <div class="row">
                     <div class="col">
                         <div class="dropdown">
@@ -246,6 +363,10 @@
                             <input type="hidden" id="gndName" name="gn_division_name">
                         </div>
                     </div>
+                </div>
+
+                <!-- Line 2: ASC -->
+                <div class="row">
                     <div class="col">
                         <div class="dropdown">
                             <label for="asc" class="form-label dropdown-label">ASC</label>
@@ -256,11 +377,12 @@
                     </div>
                 </div>
 
+                <!-- Line 3: River Basin, Tank Status, Implementing Agency, Cascade Name - Same style as Province to ASC -->
                 <div class="row">
                     <div class="col">
                         <div class="dropdown">
                             <label for="river_basin" class="form-label dropdown-label">River Basin</label>
-                            <select class="form-control btn btn-success" name="river_basin" id="river_basin" required>
+                            <select class="btn btn-success dropdown-toggle" name="river_basin" id="river_basin" required>
                                 <option value="">Select River Basin</option>
                                 <option value="Mee Oya">Mee Oya</option>
                                 <option value="Daduru Oya">Daduru Oya</option>
@@ -271,8 +393,8 @@
                 
                     <div class="col">
                         <div class="dropdown">
-                            <label for="tank">Tank Status</label>
-                            <select class="form-control btn btn-success" name="status" required>
+                            <label for="status" class="form-label dropdown-label">Tank Status</label>
+                            <select class="btn btn-success dropdown-toggle" name="status" id="status" required>
                                 <option value="">Tank Status</option>
                                 <option value="Identified">Identified</option>
                                 <option value="Started">Started</option>
@@ -280,14 +402,14 @@
                                 <option value="Completed">Completed</option>
                                 <option value="PIR Completed">PIR Completed</option>
                                 <option value="Survey Completed">Survey Completed</option>
-                                <option value="Engineering Serveys">Engineering Serveys</option>
+                                <option value="Engineering Surveys">Engineering Surveys</option>
                                 <option value="Drawings and Designs Completed">Drawings and Designs Completed</option>
                                 <option value="BOQ Completed">BOQ Completed</option>
                                 <option value="Ratification meeting completed">Ratification meeting completed</option>
                                 <option value="Bidding documents completed">Bidding documents completed</option>
                                 <option value="IFAD no objection received">IFAD no objection received</option>
                                 <option value="Paper advertised">Paper advertised</option>
-                                <option value="Evalution of bids">Evalution of bids</option>
+                                <option value="Evaluation of bids">Evaluation of bids</option>
                                 <option value="Agreement Sign">Agreement Sign</option>
                             </select>
                         </div>
@@ -296,7 +418,7 @@
                     <div class="col">
                         <div class="dropdown">
                             <label for="agency" class="form-label dropdown-label">Implementing Agency</label>
-                            <select class="form-control btn btn-success" name="agency" required>
+                            <select class="btn btn-success dropdown-toggle" name="agency" id="agency" required>
                                 <option value="">Implementing Agency</option>
                                 <option value="Central(ID)">Central(ID)</option>
                                 <option value="DAD">DAD</option>
@@ -310,8 +432,8 @@
                     <div class="col">
                         <div class="dropdown">
                             <label for="cascadeDropdown" class="form-label dropdown-label">Cascade Name</label>
-                            <select class="form-control btn btn-success" id="cascadeDropdown" name="cascade_name" required>
-                                <option value="">Select Cascade name</option>
+                            <select class="btn btn-success dropdown-toggle" id="cascadeDropdown" name="cascade_name" required>
+                                <option value="">Select Cascade Name</option>
                             </select>
                         </div>
                     </div>
@@ -320,56 +442,58 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                      <label for="tank_id" class="form-label">Tank Id</label>
-                      <input type="text" class="form-control" name="tank_id" id="tank_id" required>
+                        <label for="tank_id" class="form-label">Tank ID</label>
+                        <input type="text" class="form-control" name="tank_id" id="tank_id" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label for="tankProgress" class="form-label">Tank Progress</label>
-                      <input type="text" class="form-control" id="tankProgress" name="progress" required>
+                        <label for="tankProgress" class="form-label">Tank Progress</label>
+                        <input type="text" class="form-control" id="tankProgress" name="progress" placeholder="e.g., 50%" required>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label for="tank_name">Tank Name</label>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="tank_name" class="form-label">Tank Name</label>
                         <input type="text" class="form-control" id="tank_name" name="tank_name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="no_of_family" class="form-label">Number of Household</label>
+                        <input type="text" class="form-control" id="no_of_family" name="no_of_family" required>
                     </div>
                 </div>
                 
 
-                <h2 class="mt-5 mb-4">Contract Information</h2>
+                <h2 class="mt-5 mb-4 text-center">Contract Information</h2>
 
+                <!-- First line: Contractor Name, Contract Amount (Rs), Awarded Date -->
                 <div class="row">
-                <div class="col-6 form-group">
+                <div class="col-4 form-group">
                     <label for="contractor" class="form-label">Contractor Name</label>
                     <input type="text" class="form-control" id="contractor" name="contractor" required>
                 </div>
 
-                <div class="col-6 form-group">
-                    <label for="payment" class="form-label">Payment</label>
+                <div class="col-4 form-group">
+                    <label for="payment" class="form-label">Contract Amount (Rs)</label>
                     <input type="text" class="form-control" id="payment" name="payment" required>
+                </div>
+
+                <div class="col-4 form-group">
+                    <label for="awarded_date" class="form-label">Awarded Date</label>
+                    <input type="date" class="form-control" id="awarded_date" name="awarded_date" required>
                 </div>
                 </div>
 
                 <div class="row">
-                <div class="col-6 form-group">
-                    <label for="eot" class="form-label">EOT</label>
+                <div class="col-4 form-group">
+                    <label for="eot" class="form-label">EOT (Extension of Time)</label>
                     <input type="text" class="form-control" id="eot" name="eot" required>
                 </div>
 
-                <div class="col-6 form-group">
-                    <label for="constructionPeriodInput" class="form-label">Construction Period (Months)</label>
-                    <input type="text" class="form-control" id="" name="contract_period" required>
-                </div>
-                </div>
-
-                <div class="row">
-                <div class="col-6 form-group">
-                    <label for="constructionPeriodInput" class="form-label">Number Of Family Members</label>
-                    <input type="text" class="form-control" id="" name="no_of_family" required>
+                <div class="col-4 form-group">
+                    <label for="contract_period" class="form-label">Construction Period (Months)</label>
+                    <input type="text" class="form-control" id="contract_period" name="contract_period" required>
                 </div>
 
-                <!-- New fields -->
-                <div class="col-6 form-group">
+                <div class="col-4 form-group">
                     <label for="open_ref_no" class="form-label">Open Reference Number</label>
                     <input type="text" class="form-control" id="open_ref_no" name="open_ref_no" required>
                 </div>
@@ -377,53 +501,48 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="latitudeInput" class="form-label">Latitude</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" required>
+                        <label for="latitude" class="form-label">Latitude</label>
+                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="e.g., 7.8731" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="longitudeInput" class="form-label">Longitude</label>
-                        <input type="text" class="form-control" id="longitude" name="longitude" required>
+                        <label for="longitude" class="form-label">Longitude</label>
+                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="e.g., 80.7718" required>
                     </div>
                 </div>
 
                 <div class="row">
-                <div class="col-6 form-group">
-                    <label for="awarded_date" class="form-label">Awarded Date</label>
-                    <input type="date" class="form-control" id="awarded_date" name="awarded_date" required>
+                <div class="col-4 form-group">
+                    <label for="paid_advanced_amount" class="form-label">Paid Advanced Amount (Rs)</label>
+                    <input type="text" class="form-control" id="paid_advanced_amount" name="paid_advanced_amount" required>
                 </div>
 
-                <div class="col-6 form-group">
-                    <label for="cumulative_amount" class="form-label">Cumulative Paid Amount</label>
+                <div class="col-4 form-group">
+                    <label for="recommended_ipc_no" class="form-label">Recommended IPC Number</label>
+                    <input type="text" class="form-control" id="recommended_ipc_no" name="recommended_ipc_no" required>
+                </div>
+
+                <div class="col-4 form-group">
+                    <label for="recommended_ipc_amount" class="form-label">Recommended IPC Amount (Rs)</label>
+                    <input type="text" class="form-control" id="recommended_ipc_amount" name="recommended_ipc_amount" required>
+                </div>
+                </div>
+
+                <div class="row">
+                <div class="col-12 form-group">
+                    <label for="cumulative_amount" class="form-label">Cumulative Paid Amount (Rs)</label>
                     <input type="text" class="form-control" id="cumulative_amount" name="cumulative_amount" required>
                 </div>
                 </div>
 
                 <div class="row">
-                <div class="col-6 form-group">
-                    <label for="paid_advanced_amount" class="form-label">Paid Advanced Amount</label>
-                    <input type="text" class="form-control" id="paid_advanced_amount" name="paid_advanced_amount" required>
-                </div>
-
-                <div class="col-6 form-group">
-                    <label for="recommended_ipc_no" class="form-label">Recommended IPC Number</label>
-                    <input type="text" class="form-control" id="recommended_ipc_no" name="recommended_ipc_no" required>
-                </div>
-                </div>
-
-                <div class="row">
-                <div class="col-6 form-group">
-                    <label for="recommended_ipc_amount" class="form-label">Recommended IPC Amount</label>
-                    <input type="text" class="form-control" id="recommended_ipc_amount" name="recommended_ipc_amount" required>
-                </div>
-
-                <div class="col-6 form-group">
-                    <label for="remarksInput" class="form-label">Remarks</label>
-                    <input type="text" class="form-control" id="remarks" name="remarks" required>
+                <div class="col-12 form-group">
+                    <label for="remarks" class="form-label">Remarks <span class="text-muted">(Optional)</span></label>
+                    <textarea class="form-control" id="remarks" name="remarks" rows="3" placeholder="Enter any additional remarks..."></textarea>
                 </div>
                 </div>
 
                 <!-- Image uploads -->
-                <h2 class="mt-5 mb-4">Construction Images</h2>
+                <h2 class="mt-5 mb-4 text-center">Construction Images</h2>
 
                 <div class="mb-3">
                     <label for="pre_construction_image" class="form-label">Pre-Construction Image</label>
@@ -454,17 +573,14 @@
 {{-- Tank names and asc --}}
 <script>
   $(document).ready(function () {
-    // Fetch tank names from the API endpoint
-    $.get('/tanks', function (data) {
-        // Populate the dropdown menu with tank names
-        $.each(data, function (index, tank) {
-            $('#tankDropdown').append($('<option>', {
-                value: tank.tank_name,
-                text: tank.tank_name
-            }));
-        });
-    });
-});
+      // Add '%' sign to tank progress input
+      $('#tankProgress').on('blur', function() {
+          let value = $(this).val();
+          if (value && !value.includes('%')) {
+              $(this).val(value + '%');
+          }
+      });
+  });
 
 $(document).ready(function () {
     // Fetch ASC names from the API endpoint
@@ -616,15 +732,6 @@ $(document).ready(function () {
       });
   });
 
-  $(document).ready(function () {
-      // Add '%' sign to tank progress input
-      $('#tankProgress').on('blur', function() {
-          let value = $(this).val();
-          if (value && !value.includes('%')) {
-              $(this).val(value + '%');
-          }
-      });
-  });
 
 </script>
 
