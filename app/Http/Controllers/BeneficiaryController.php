@@ -441,8 +441,12 @@ public function index(Request $request)
 
     // Create a new beneficiary instance after validation
     $beneficiary = new Beneficiary($request->all());
-    // $beneficiary->eoi_business_title = $request->eoi_business_title;
-    // $beneficiary->eoi_category = $request->eoi_category;
+    
+    // Save EOI fields if project type is 4p
+    if ($request->project_type === '4p') {
+        $beneficiary->eoi_business_title = $request->eoi_business_title;
+        $beneficiary->eoi_category = $request->eoi_category;
+    }
 
     $beneficiary->save();
 

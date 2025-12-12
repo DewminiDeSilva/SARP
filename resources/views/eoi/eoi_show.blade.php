@@ -172,6 +172,14 @@
 
         <h2 class="header-title">Expression of Interest Details</h2>
 
+        @if($expression->status === 'Agreement Signed')
+        <div class="mb-3">
+            <a href="{{ route('eoi.beneficiaries', $expression->id) }}" class="btn btn-success">
+                <i class="fas fa-users"></i> View Registered Beneficiaries
+            </a>
+        </div>
+        @endif
+
         <div class="custom-frame">
             <div class="info"><label>EOI ID:</label> <p>{{ $expression->eoi_code ?? 'N/A' }}</p></div>
             <div class="info"><label>Name of the Organization:</label> <p>{{ $expression->organization_name }}</p></div>

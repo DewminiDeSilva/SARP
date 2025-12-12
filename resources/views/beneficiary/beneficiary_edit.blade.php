@@ -421,8 +421,12 @@ select[disabled] {
 @elseif ($beneficiary->project_type === '4p')
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label><strong>Company Name (4P Project):</strong></label>
+            <label><strong>4P Project - Business Concept Title:</strong></label>
             <input type="text" class="form-control" value="{{ $beneficiary->eoi_business_title ?? 'N/A' }}" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label><strong>4P Project Category:</strong></label>
+            <input type="text" class="form-control" value="{{ $beneficiary->eoi_category ?? 'N/A' }}" readonly>
         </div>
     </div>
 

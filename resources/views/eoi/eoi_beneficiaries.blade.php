@@ -119,7 +119,7 @@
 
 
         <div class="center-heading text-center">
-            <h1 style="font-size: 2.5rem; color: green;">Registered Beneficiaries - {{  $eoi->eoi_business_title }} ({{ $eoi->category }})</h1>
+            <h1 style="font-size: 2.5rem; color: green;">Registered Beneficiaries - {{  $eoi->business_title }} ({{ $eoi->category }})</h1>
         </div>
 
         @if ($beneficiaries->isEmpty())

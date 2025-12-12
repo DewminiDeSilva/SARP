@@ -286,7 +286,9 @@ public function viewEOIBeneficiaries($id)
     $eoi = EOI::findOrFail($id);
 
     $beneficiaries = Beneficiary::where('eoi_business_title', $eoi->business_title)
+        ->where('eoi_category', $eoi->category)
         ->whereNotNull('eoi_business_title')
+        ->whereNotNull('eoi_category')
         ->get();
 
     return view('eoi.eoi_beneficiaries', compact('eoi', 'beneficiaries'));

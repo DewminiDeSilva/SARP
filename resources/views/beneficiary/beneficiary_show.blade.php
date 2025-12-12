@@ -560,11 +560,13 @@
     <!-- 4P Project -->
     <div class="row mb-3">
         <div class="col-md-6">
-            <strong>Company Name (4P Project):</strong>
+            <strong>4P Project - Business Concept Title:</strong>
         </div>
         <div class="col-md-6">
             {{ $beneficiary->eoi_business_title ?? 'N/A' }}
         </div>
+    </div>
+    <div class="row mb-3">
         <div class="col-md-6">
             <strong>4P Project Category:</strong>
         </div>
