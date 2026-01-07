@@ -204,6 +204,112 @@
     width: 100%; /* Ensure full width within each dropdown container */
 }
 
+/* Compact Form Styling */
+.container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+.form-control {
+    width: 100% !important;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #198754;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Bank Details Card Styling */
+.bank-details-card {
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bank-details-card .card-header {
+    padding: 12px 15px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.bank-details-card .card-body {
+    padding: 15px;
+}
+
+.bank-details-card .form-row {
+    margin-bottom: 0;
+}
+
+.bank-details-card .form-group {
+    margin-bottom: 0;
+}
+
+/* Card Styling */
+.card {
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    padding: 12px 15px;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #198754;
+    color: white;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+/* Input Focus States */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-group {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .bank-details-card .form-row {
+        flex-direction: column;
+    }
+}
 
 </style>
 <style>
@@ -378,7 +484,7 @@
     <div class="row">
         <div class="col">
             <div class="dropdown">
-                <label for="province" class="form-label dropdown-label">Province</label>
+                <label for="province" class="form-label dropdown-label">Province Name</label>
                 <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
                     <option value="">Select Province</option>
                 </select>
@@ -388,7 +494,7 @@
 
         <div class="col">
             <div class="dropdown">
-                <label for="district" class="form-label dropdown-label">District</label>
+                <label for="district" class="form-label dropdown-label">District Name</label>
                 <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
                     <option value="">Select District</option>
                 </select>
@@ -398,9 +504,9 @@
 
         <div class="col">
             <div class="dropdown">
-                <label for="dsDivisionDropdown" class="form-label dropdown-label">DS Division</label>
+                <label for="dsDivisionDropdown" class="form-label dropdown-label">Divisional Secretariat Division (DSD)</label>
                 <select id="dsDivisionDropdown" name="ds_division" class="btn btn-success dropdown-toggle" required>
-                    <option value="">Select DS Division</option>
+                    <option value="">Select DSD</option>
                 </select>
                 <input type="hidden" id="dsDivisionName" name="ds_division_name">
             </div>
@@ -408,9 +514,9 @@
 
         <div class="col">
             <div class="dropdown">
-                <label for="gndDropdown" class="form-label dropdown-label">GN Division</label>
+                <label for="gndDropdown" class="form-label dropdown-label">Grama Niladhari Division (GND)</label>
                 <select id="gndDropdown" name="gn_division_name" class="btn btn-success dropdown-toggle" required>
-                    <option value="">Select GN Division</option>
+                    <option value="">Select GND</option>
                 </select>
                 <input type="hidden" id="gndName" name="gn_division_name">
             </div>
@@ -424,7 +530,7 @@
 
         <div class="col">
             <div class="dropdown">
-                <label for="ascDropdown" class="form-label dropdown-label">Select ASC</label>
+                <label for="ascDropdown" class="form-label dropdown-label">Agriculture Service Centre (ASC)</label>
                 <select class="btn btn-success dropdown-toggle" id="ascDropdown" name="as_center" required>
                     <option value="">Select ASC</option>
                 </select>
@@ -433,7 +539,7 @@
 
         <div class="col">
             <div class="dropdown">
-                <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
+                <label for="tankDropdown" class="form-label dropdown-label">Tank Name</label>
                 <select id="tankDropdown" class="btn btn-success dropdown-toggle" name="tank_name" required>
                     <option value="" class="greenbackground">Select Tank</option>
                 </select>
@@ -578,13 +684,13 @@
     <div class="form-row">
 
         <div class="form-group">
-            <label for="ai_division">AI Division</label>
-            <input type="text" class="form-control" name="ai_division" placeholder="Enter AI Division" required>
+            <label for="ai_division">Agrarian Instructor Division (AID)</label>
+            <input type="text" class="form-control" name="ai_division" placeholder="Enter AID" required>
         </div>
 
         <div class="form-group">
-            <label for="nic">Beneficiary NIC</label>
-            <input type="text" class="form-control" name="nic" placeholder="Enter Beneficiary NIC" required>
+            <label for="nic">NIC Number</label>
+            <input type="text" class="form-control" name="nic" placeholder="Enter NIC Number" required>
         </div>
 
     </div>
@@ -628,7 +734,7 @@
         </div>
 
         <div class="form-group">
-        <label for="education">Education Level</label>
+        <label for="education">Highest Education Level</label>
             <select class="form-control" name="education" required>
                 <option value="">Select Education Level</option>
                 <option value="Primary">Primary</option>
@@ -646,12 +752,12 @@
     <div class="form-row">
 
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" placeholder="Enter Email Address">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter Email address">
         </div>
 
         <div class="form-group">
-            <label for="phone">Mobile Number</label>
+            <label for="phone">Phone Numbers</label>
             <input type="text" class="form-control" name="phone" placeholder="Enter Mobile Number(s)">
             <small class="form-text text-muted">Separate multiple numbers with comma (,)</small>
         </div>
@@ -721,11 +827,12 @@
     </div>
 
     <!-- Bank Details -->
-    <div class="card">
+    <div class="card bank-details-card">
         <div class="card-header bg-green text-white">
             <h5 class="card-title mb-0">Bank Details</h5>
         </div>
         <div class="card-body">
+            <div class="form-row">
             <div class="form-group">
                 <label for="bank_name">Bank Name</label>
                 <input type="text" class="form-control" name="bank_name" placeholder="Enter Bank Name" required>
@@ -737,6 +844,7 @@
             <div class="form-group">
                 <label for="account_number">Account Number</label>
                 <input type="text" class="form-control" name="account_number" placeholder="Enter Account Number" required>
+                </div>
             </div>
         </div>
     </div>
@@ -749,7 +857,7 @@
             <input type="text" class="form-control" name="head_of_householder_name" placeholder="Enter Head of Householder Name" required>
         </div>
         <div class="form-group">
-            <label for="householder_number">Householder Number</label>
+            <label for="householder_number">Number of Householder in Common Area</label>
             <input type="text" class="form-control" name="householder_number" placeholder="Enter Householder Number" required>
         </div>
     </div>
@@ -889,7 +997,7 @@ $(document).ready(function () {
             // Clear and reset the DS Division dropdown
             $('#dsDivisionDropdown').empty().append($('<option>', {
                 value: '',
-                text: 'Select DS Division'
+                text: 'Select DSD'
             }));
 
             // Fetch DS Divisions from the selected district
@@ -920,7 +1028,7 @@ $(document).ready(function () {
             // Clear and reset the GN Division dropdown
             $('#gndDropdown').empty().append($('<option>', {
                 value: '',
-                text: 'Select GN Division'
+                text: 'Select GND'
             }));
 
             // Fetch GN Divisions from the selected DS Division

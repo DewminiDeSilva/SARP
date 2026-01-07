@@ -122,10 +122,203 @@
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
 
+/* Family Member Modal Styling */
+.family-modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.family-modal-header {
+    background: linear-gradient(135deg, #198754 0%, #145c32 100%);
+    color: white;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.family-modal-header .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.family-modal-header .btn-close-white {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+}
+
+.family-modal-header .btn-close-white:hover {
+    opacity: 1;
+}
+
+.family-modal-body {
+    padding: 30px;
+    background: #f8f9fa;
+}
+
+.family-modal-body .form-group {
+    margin-bottom: 20px;
+}
+
+.family-modal-body label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.family-modal-body label i {
+    color: #198754;
+    width: 20px;
+}
+
+.family-modal-body .form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.family-modal-body .form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    outline: none;
+}
+
+.family-modal-body .form-check-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.family-modal-body .form-check {
+    margin: 0;
+}
+
+.family-modal-body .form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+
+.family-modal-body .form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.family-modal-body .form-check-label {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.family-modal-footer {
+    border-top: 2px solid #e0e0e0;
+    padding: 20px 25px;
+    background: white;
+}
+
+.family-modal-footer .btn {
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.family-modal-footer .btn-success {
+    background: linear-gradient(135deg, #198754 0%, #145c32 100%);
+    border: none;
+    color: white;
+}
+
+.family-modal-footer .btn-success:hover {
+    background: linear-gradient(135deg, #145c32 0%, #0d3d1f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+}
+
+.family-modal-footer .btn-secondary {
+    background: #6c757d;
+    border: none;
+    color: white;
+}
+
+.family-modal-footer .btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Trigger Button Styling */
+.btn-primary.btn-lg {
+    background: linear-gradient(135deg, #198754 0%, #145c32 100%);
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary.btn-lg:hover {
+    background: linear-gradient(135deg, #145c32 0%, #0d3d1f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4);
+}
+
+.btn-primary.btn-lg i {
+    font-size: 18px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .family-modal-body {
+        padding: 20px;
+    }
+    
+    .family-modal-body .row {
+        margin: 0;
+    }
+    
+    .family-modal-body .col-md-6 {
+        padding: 0 10px;
+        margin-bottom: 15px;
+    }
+    
+    .family-modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .family-modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 </style>
 
     <script>
         $(function() {
+            // Initialize datepicker when modal is shown
+            $('#familyMemberModal').on('shown.bs.modal', function () {
             // Initialize datepicker
             $("#dob").datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -135,6 +328,7 @@
                 onSelect: function(selectedDate) {
                     calculateAge(selectedDate); // Calculate age when date is selected
                 }
+                });
             });
 
             function calculateAge(selectedDate) {
@@ -151,6 +345,12 @@
                     $("#youth").val("Not Youth");
                 }
             }
+
+            // Reset form when modal is closed
+            $('#familyMemberModal').on('hidden.bs.modal', function () {
+                $('#familyMemberForm')[0].reset();
+                $("#youth").val('');
+            });
         });
     </script>
 </head>
@@ -177,57 +377,93 @@
 
     </div>
 
-        <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
-            <form class="form-horizontal" action="/family" method="POST">
-                <div class="col-md-12">
-                    <h2 class="mb-4">Family Member Registration</h2>
-                </div>
+    <!-- Button to trigger modal -->
+    <div class="text-center mb-4">
+        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#familyMemberModal">
+            <i class="fas fa-user-plus"></i> Add Family Member
+        </button>
+    </div>
 
+    <!-- Family Member Registration Modal -->
+    <div class="modal fade" id="familyMemberModal" tabindex="-1" aria-labelledby="familyMemberModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content family-modal-content">
+                <div class="modal-header family-modal-header">
+                    <h5 class="modal-title" id="familyMemberModalLabel">
+                        <i class="fas fa-users"></i> Family Member Registration
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body family-modal-body">
+                    <form class="form-horizontal" id="familyMemberForm" action="/family" method="POST">
                 @csrf
+                        <input type="hidden" name="beneficiary_id" value="{{ $beneficiaryId }}">
 
+                        <div class="row">
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="name_with_initials">Name with Initials</label>
+                                    <label for="name_with_initials"><i class="fas fa-user"></i> Name with Initials</label>
                     <input type="text" name="name_with_initials" id="name_with_initials" class="form-control" required>
+                                </div>
                 </div>
 
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="nic">Family Member NIC</label>
+                                    <label for="nic"><i class="fas fa-id-card"></i> Family Member NIC</label>
                     <input type="text" name="nic" id="nic" class="form-control" required>
+                                </div>
+                            </div>
                 </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="phone">Phone</label>
+                                    <label for="phone"><i class="fas fa-phone"></i> Phone</label>
                     <input type="text" name="phone" id="phone" class="form-control" required>
+                                </div>
                 </div>
 
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label>Gender</label>
-                    <div class="form-check">
+                                    <label><i class="fas fa-venus-mars"></i> Gender</label>
+                                    <div class="form-check-group">
+                                        <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
                         <label class="form-check-label" for="male">Male</label>
                     </div>
-                    <div class="form-check">
+                                        <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
                         <label class="form-check-label" for="female">Female</label>
                     </div>
-                    <div class="form-check">
+                                        <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="gender" id="other" value="other" required>
                         <label class="form-check-label" for="other">Other</label>
+                                        </div>
+                                    </div>
+                                </div>
                     </div>
                 </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="dob">Date Of Birth</label>
+                                    <label for="dob"><i class="fas fa-calendar"></i> Date Of Birth</label>
                     <input type="text" class="form-control" id="dob" name="dob" placeholder="Select Date of Birth" required>
+                                </div>
                 </div>
 
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="youth">Youth</label>
+                                    <label for="youth"><i class="fas fa-child"></i> Youth Status</label>
                     <input type="text" name="youth" id="youth" class="form-control" readonly>
+                                </div>
+                            </div>
                 </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="education">Education Level</label>
+                                    <label for="education"><i class="fas fa-graduation-cap"></i> Education Level</label>
                     <select class="form-control" id="education" name="education" required>
                         <option value="">Select Education Level</option>
                         <option value="Primary">Primary</option>
@@ -238,44 +474,71 @@
                         <option value="Others">Others</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label for="nic">Family Member NIC</label>
-                    <input type="text" name="nic" id="nic" class="form-control" required>
                 </div>
 
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="income_source">Income Source</label>
+                                    <label for="income_source"><i class="fas fa-briefcase"></i> Income Source</label>
                     <input type="text" name="income_source" id="income_source" class="form-control" required>
+                                </div>
+                            </div>
                 </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="income">Income</label>
+                                    <label for="income"><i class="fas fa-dollar-sign"></i> Income</label>
                     <input type="text" name="income" id="income" class="form-control" required>
+                                </div>
                 </div>
 
+                            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="nutrition_level">Nutrition Level</label>
+                                    <label for="nutrition_level"><i class="fas fa-apple-alt"></i> Nutrition Level</label>
                     <input type="text" name="nutrition_level" id="nutrition_level" class="form-control" required>
-                </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <div>
-                    <input type="hidden" name="beneficiary_id" value="{{ $beneficiaryId }}">
+                        <div class="modal-footer family-modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button type="submit" name="button" class="btn btn-success">
+                                <i class="fas fa-check"></i> Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="d-flex justify-content-center align-items-center">
-                    <button type="submit" name="button" class="btn btn-success mt-3">Submit</button>
-                </div>
-
-            </form>
+            </div>
         </div>
+                </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">
+                        <i class="fas fa-check-circle"></i> Success
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <p class="mb-0">Family member registered successfully!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 </div>
 
 <!-- Success message div -->
 <script>
     $(document).ready(function() {
-        $('form').submit(function(event) {
+        $('#familyMemberForm').submit(function(event) {
             event.preventDefault();
 
             $.ajax({
@@ -283,18 +546,23 @@
                 type: $(this).attr('method'),
                 data: $(this).serialize(),
                 success: function(response) {
+                    // Close the family member modal
+                    $('#familyMemberModal').modal('hide');
+                    
+                    // Show success modal
                     $('#successModal').modal('show');
 
-                    // Automatically close the modal after 2 seconds
+                    // Automatically close success modal and redirect after 2 seconds
                     setTimeout(function() {
                         $('#successModal').modal('hide');
                         // Redirect to the beneficiary show page after modal is closed
-                        window.location.href = '/beneficiary/' + $('input[name="beneficiary_id"]').val();
+                        var beneficiaryId = $('input[name="beneficiary_id"]').val();
+                        window.location.href = '/beneficiary/' + beneficiaryId;
                     }, 2000);
-                    $('form')[0].reset();
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
+                    alert('An error occurred. Please try again.');
                 }
             });
         });
