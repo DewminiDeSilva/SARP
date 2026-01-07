@@ -182,9 +182,9 @@ public function generateCsv()
     // Open a file in write mode
     $file = fopen($filename, 'w+');
 
-    // Define the header for the CSV file
+    // Define the header for the CSV file (export labels)
     $header = [
-        'NIC', 'Name with Initials', 'Gender', 'Date Of Birth', 'Age', 'Address', 'Email', 'Phone', 'Education',
+        'NIC Number', 'Name with Initials', 'Gender', 'Date Of Birth', 'Age', 'Address', 'Email address', 'Phone Numbers', 'Highest Education Level',
         'Bank Name', 'Bank Branch', 'Account Number', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area',
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'AI Division', 'Latitude', 'Longitude',
         'Number of Family Members', 'Head of Householder Name', 'Householder Number', 'Income Source', 'Average Income',
@@ -619,8 +619,8 @@ public function index(Request $request)
     $filename = 'beneficiary_report.csv';
     $fp = fopen($filename, 'w+'); // Corrected file path
     fputcsv($fp, [
-        'NIC', 'Name with Initials', 'Address', 'Date Of Birth', 'Gender', 'Age', 'Phone', 'Email', 'Income Source', 'Average Income', 
-        'Monthly Household Expenses', 'Number of Family Members', 'Education', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area', 
+        'NIC Number', 'Name with Initials', 'Address', 'Date Of Birth', 'Gender', 'Age', 'Phone Numbers', 'Email address', 'Income Source', 'Average Income', 
+        'Monthly Household Expenses', 'Number of Family Members', 'Highest Education Level', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area', 
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'Tank Name', 'AI Division', 'Account Number', 'Bank Name', 
         'Bank Branch', 'Latitude', 'Longitude', 'Head of Householder Name', 'Householder Number', 'Household Level Assets Description', 
         'Community-Based Organization', 'Type of Water Resource', 'Training Details Description','Input1', 'Input2', 'Input3','project_type'

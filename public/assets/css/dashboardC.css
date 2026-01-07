@@ -1,6 +1,10 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.sidebar {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .img {
@@ -10,24 +14,25 @@ body {
 
 .sidebar {
     position: fixed;
-    top: 65px;
+    top: 98px;
     left: 2px;
     bottom: 0;
-    height: calc(100vh - 65px);
+    height: calc(100vh - 98px);
     width: 20vw;
-    background-color: #e1e7ea;
-    border-radius: 10px;
-    overflow-y: scroll; /* Enable vertical scrolling */
+    background: linear-gradient(180deg, #1a2f4f 0%, #162842 100%); /* Elegant dark blue gradient */
+    border-radius: 12px;
+    overflow-y: scroll;
     overflow-x: hidden;
-    z-index: 1000;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    padding: 10px 0;
 
     /* Hide scrollbar across browsers */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 .sidebar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
 
@@ -49,39 +54,87 @@ body {
 .sidebar ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
+}
+
+.sidebar > ul {
+    padding: 5px 0;
 }
 
 .sidebar ul li {
-    padding: 10px;
+    padding: 14px 20px;
     text-align: left;
     position: relative;
-    background-color: #a1b1bdff;
-    border-radius: 5px;
-    margin: 10px 15px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Shadow for buttons */
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    background-color: transparent;
+    border-radius: 8px;
+    margin: 4px 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border-left: 3px solid transparent;
 }
 
 .sidebar ul li:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Elevate shadow on hover */
-    background-color: #68878dff;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-left-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(3px);
     cursor: pointer;
+}
+
+.sidebar ul li.active,
+.sidebar ul li.active:hover {
+    background: linear-gradient(90deg, #4a90e2 0%, #357abd 100%) !important;
+    border-left-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    transform: translateX(0);
 }
 
 
 .sidebar ul li a {
     text-decoration: none;
-    color: black; /* Black text color */
-    display: block;
-    font-weight: bold;
-    font-size: 18px;
-    padding-left: 30px; /* Add padding to align text */
+    color: #E8F0F8; /* Soft white/light blue text */
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 15px;
+    padding-left: 0;
+    gap: 14px;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+.sidebar ul li.active a {
+    color: #FFFFFF !important;
+    font-weight: 600;
+}
+
+.sidebar ul li ul li {
+    background-color: transparent;
+    margin: 2px 0;
+    padding: 10px 20px;
+    border-left: 2px solid transparent;
 }
 
 .sidebar ul li ul li a {
-    font-size: 16px; /* Smaller font size for submenu items */
-    font-weight: normal; /* Normal weight for submenu items */
-    padding-left: 30px; /* Indentation for submenu items */
+    font-size: 14px;
+    font-weight: 400;
+    padding-left: 35px;
+    color: #D0D8E0;
+    gap: 10px;
+}
+
+.sidebar ul li ul li:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar ul li ul li.active {
+    background: linear-gradient(90deg, rgba(74, 144, 226, 0.3) 0%, rgba(53, 122, 189, 0.2) 100%) !important;
+    border-left-color: #4a90e2;
+}
+
+.sidebar ul li ul li.active a {
+    color: #FFFFFF;
+    font-weight: 500;
 }
 
 .sidebar ul li ul {
@@ -89,32 +142,51 @@ body {
 }
 
 .sidebar ul li a:hover, .sidebar ul li ul li a:hover {
-    color: #094511; /* Hover color for all links */
+    color: #FFFFFF; /* Keep white on hover */
+}
+
+.submenu > a:after {
+    content: '\25B8';
+    position: absolute;
+    right: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: bold;
+}
+
+.submenu > a:hover:after {
+    color: #FFFFFF;
+}
+
+.submenu.active > a:after {
+    color: #FFFFFF;
 }
 
 .submenu > a:before {
-    content: '\25B6'; /* Right angle quotation mark */
-    position: absolute;
-    left: 10px;
-    transition: transform 0.3s;
+    content: ''; /* Remove left arrow, use icon instead */
 }
 
 .submenu ul.show {
     display: block; /* Show submenu on click */
 }
 
-.submenu > a.active:before {
-    transform: rotate(90deg); /* Rotate arrow when submenu is active */
+.submenu > a.active:after,
+.submenu.active > a:after {
+    transform: rotate(90deg);
+    color: #FFFFFF;
 }
 
-.submenu ul li.submenu > a:before {
-    content: '\25B6'; /* Right angle quotation mark for nested submenus */
+.submenu ul li.submenu > a:after {
+    content: '\25B8'; /* Right-pointing arrow for nested submenus */
     position: absolute;
-    left: 20px; /* Indent nested submenu arrow */
+    right: 15px;
+    color: #FFFFFF;
+    font-size: 12px;
     transition: transform 0.3s;
 }
 
-.submenu ul li.submenu > a.active:before {
+.submenu ul li.submenu > a.active:after {
     transform: rotate(90deg); /* Rotate arrow when nested submenu is active */
 }
 
@@ -135,40 +207,50 @@ body {
 ul.nested::before {
     position: absolute;
     content: "";
-    left: 20px;
-    top: 30px; /* Adjust as needed */
+    left: 25px;
+    top: 25px;
     width: 1px;
-    height: 70%;
-    background-color: #FFFFFF;
+    height: calc(100% - 50px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-radius: 1px;
 }
 ul.nested-n::before {
     position: absolute;
     content: "";
-    left: 20px;
-    top: 30px; /* Adjust as needed */
+    left: 25px;
+    top: 25px;
     width: 1px;
-    height: 70%;
-    background-color: #FFFFFF;
+    height: calc(100% - 50px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-radius: 1px;
 }
 
 ul.nested li {
     position: relative;
-    padding-left: 40px;
+    padding-left: 35px;
 }
 ul.nested li::before {
     position: absolute;
     content: "";
-    left: 20px;
+    left: 25px;
     top: 50%;
-    width: 20px;
+    width: 15px;
     height: 1px;
-    background-color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.25);
+    transition: background-color 0.3s ease;
+}
+
+ul.nested li:hover::before {
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .sidebar ul li .nested,
 .sidebar ul li .nested-n {
     display: none;
-    padding-left: 20px;
+    padding-left: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    animation: slideDown 0.3s ease-out;
 }
 
 .sidebar ul li .nested.show,
@@ -176,8 +258,20 @@ ul.nested li::before {
     display: block;
 }
 
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .sidebar ul li a.active {
-    font-weight: bold;
+    font-weight: 600;
+    color: #FFFFFF !important;
 }
 .sidebar ul li.submenu .nested-n li::after {
     display: none;

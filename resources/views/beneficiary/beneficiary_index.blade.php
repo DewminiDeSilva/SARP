@@ -116,6 +116,349 @@
 
     </style>
     <style>
+        /* Custom Alert Modal Styles */
+        .custom-alert-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .custom-alert-overlay.show {
+            display: flex;
+        }
+        
+        .custom-alert-modal {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+            overflow: hidden;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .custom-alert-header {
+            background: linear-gradient(135deg, #198754 0%, #145c32 100%);
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .custom-alert-body {
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .custom-alert-footer {
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .custom-alert-btn {
+            padding: 10px 30px;
+            border: 2px solid #212529;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .custom-alert-btn-yes {
+            background-color: #ffffff;
+            color: #212529;
+            border: 2px solid #212529;
+        }
+        
+        .custom-alert-btn-yes:hover {
+            background-color: #212529;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .custom-alert-btn-no {
+            background-color: #ffffff;
+            color: #212529;
+            border: 2px solid #212529;
+        }
+        
+        .custom-alert-btn-no:hover {
+            background-color: #212529;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .custom-alert-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Professional Management Information System Table Styling */
+        .table-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        
+        #beneficiariesTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        #beneficiariesTable thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        #beneficiariesTable thead th {
+            padding: 18px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ffffff;
+            border: none;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        #beneficiariesTable thead th:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 25%;
+            height: 50%;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        #beneficiariesTable tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        #beneficiariesTable tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+        
+        #beneficiariesTable tbody tr:nth-child(odd) {
+            background: #ffffff;
+        }
+        
+        #beneficiariesTable tbody tr:hover {
+            background: linear-gradient(90deg, #e8ecff 0%, #f5f7ff 100%) !important;
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            border-left: 4px solid #667eea;
+        }
+        
+        #beneficiariesTable tbody td {
+            padding: 16px;
+            color: #2d3748;
+            font-size: 14px;
+            line-height: 1.6;
+            vertical-align: middle;
+            border: none;
+        }
+        
+        #beneficiariesTable tbody td:first-child {
+            font-weight: 600;
+            color: #1a202c;
+        }
+        
+        /* Table wrapper styling */
+        .table-responsive {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        /* Professional Button Styling */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary, .btn-primary.btn-sm {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+        }
+        
+        .btn-primary:hover, .btn-primary.btn-sm:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a3d8f 100%);
+            color: #ffffff;
+        }
+        
+        .btn-info, .btn-info.btn-sm {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #ffffff;
+            border: none;
+        }
+        
+        .btn-info:hover, .btn-info.btn-sm:hover {
+            background: linear-gradient(135deg, #3d8bfe 0%, #00d9fe 100%);
+            color: #ffffff;
+        }
+        
+        .btn-danger, .btn-danger.btn-sm {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #ffffff;
+            border: none;
+        }
+        
+        .btn-danger:hover, .btn-danger.btn-sm:hover {
+            background: linear-gradient(135deg, #f85a8a 0%, #fed030 100%);
+            color: #ffffff;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            color: #ffffff;
+            border: none;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #20bfc0 0%, #2a0867 100%);
+            color: #ffffff;
+        }
+        
+        /* Edit and Delete buttons in table */
+        .edit-beneficiary-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 6px 10px !important;
+            border-radius: 6px !important;
+        }
+        
+        .edit-beneficiary-btn:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a3d8f 100%) !important;
+            color: #ffffff !important;
+        }
+        
+        .delete-beneficiary-btn {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 6px 10px !important;
+            border-radius: 6px !important;
+        }
+        
+        .delete-beneficiary-btn:hover {
+            background: linear-gradient(135deg, #f85a8a 0%, #fed030 100%) !important;
+            color: #ffffff !important;
+        }
+        
+        /* Button group styling */
+        .buttonline, .button-group {
+            white-space: nowrap;
+        }
+        
+        .buttonline .btn, .button-group .btn {
+            margin-right: 8px;
+        }
+        
+        .buttonline .btn:last-child, .button-group .btn:last-child {
+            margin-right: 0;
+        }
+        
+        /* Global styles - Standard 1x font sizes and smaller inputs */
+        body {
+            font-size: 14px !important;
+        }
+        
+        /* Make all inputs smaller */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="time"],
+        input[type="tel"],
+        input[type="url"],
+        textarea,
+        select,
+        .form-control {
+            font-size: 14px !important;
+            padding: 6px 10px !important;
+            height: auto !important;
+        }
+        
+        /* Standard font sizes */
+        h1 { font-size: 24px !important; }
+        h2 { font-size: 20px !important; }
+        h3 { font-size: 18px !important; }
+        h4 { font-size: 16px !important; }
+        h5 { font-size: 14px !important; }
+        h6 { font-size: 12px !important; }
+        p, div, span, td, th, label {
+            font-size: 14px !important;
+        }
+        
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -173,6 +516,258 @@
             color: #0d0e0d; /* Text color */
         }
 
+        /* Enhanced Page Header Styling */
+        .page-header-section {
+            position: relative;
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 50px 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            box-shadow: 0 10px 40px rgba(30, 60, 114, 0.4), 
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            animation: fadeInDown 0.6s ease-out;
+            position: relative;
+        }
+
+        .page-header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .page-header-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 20%, 
+                rgba(255, 255, 255, 0.5) 50%, 
+                rgba(255, 255, 255, 0.3) 80%, 
+                transparent 100%);
+        }
+
+        .header-background-overlay {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: backgroundMove 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes backgroundMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-icon-wrapper {
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .header-main-icon {
+            font-size: 64px;
+            color: #ffffff;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+                         0 0 30px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+        }
+
+        .header-title {
+            margin: 0;
+            padding: 0;
+        }
+
+        .title-text {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 42px;
+            font-weight: 800;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(255, 255, 255, 0.1);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 18px;
+            margin-top: 15px;
+            margin-bottom: 0;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-decoration {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .decoration-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                transparent 100%);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .decoration-dot {
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.6),
+                0 0 20px rgba(255, 255, 255, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Header */
+        @media (max-width: 768px) {
+            .page-header-section {
+                padding: 35px 20px;
+            }
+
+            .header-main-icon {
+                font-size: 48px;
+            }
+
+            .title-text {
+                font-size: 28px;
+            }
+
+            .header-subtitle {
+                font-size: 16px;
+            }
+        }
+
+        .summary-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .action-section {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Enhanced Input Focus */
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+            outline: none;
+        }
+
+        /* Smooth Transitions */
+        .btn, .summary-card, .action-section {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
 
         .pagination .page-item {
             margin: 0 0px; /* Adjust the margin to reduce space */
@@ -214,6 +809,241 @@
 }
 .form-select {
     width: auto; /* Ensure dropdown adjusts based on content */
+}
+
+/* Family Member Modal Styling - Reduced Size (Half of original) */
+.family-modal-xl {
+    max-width: 45% !important;
+    width: 45% !important;
+}
+
+.family-modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.family-modal-header {
+    background: linear-gradient(135deg, #198754 0%, #145c32 100%);
+    color: white;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.family-modal-header .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.family-modal-header .btn-close-white {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+}
+
+.family-modal-header .btn-close-white:hover {
+    opacity: 1;
+}
+
+.family-modal-body {
+    padding: 30px;
+    background: #f8f9fa;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.family-modal-body .form-group {
+    margin-bottom: 20px;
+}
+
+.family-modal-body label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.family-modal-body label i {
+    color: #198754;
+    width: 20px;
+}
+
+.family-modal-body .form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.family-modal-body .form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    outline: none;
+}
+
+.family-modal-body .form-check-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.family-modal-body .form-check {
+    margin: 0;
+}
+
+.family-modal-body .form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+
+.family-modal-body .form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.family-modal-body .form-check-label {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.family-modal-footer {
+    border-top: 2px solid #e0e0e0;
+    padding: 20px 25px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.family-modal-footer .btn {
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.family-modal-footer .btn-success {
+    background: linear-gradient(135deg, #198754 0%, #145c32 100%);
+    border: none;
+    color: white;
+}
+
+.family-modal-footer .btn-success:hover {
+    background: linear-gradient(135deg, #145c32 0%, #0d3d1f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+}
+
+.family-modal-footer .btn-secondary {
+    background: #6c757d;
+    border: none;
+    color: white;
+}
+
+.family-modal-footer .btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+@media (max-width: 768px) {
+    .family-modal-xl {
+        max-width: 50% !important;
+        width: 50% !important;
+    }
+    
+    .family-modal-body {
+        padding: 20px;
+        max-height: 60vh;
+    }
+    
+    .family-modal-body .row {
+        margin: 0;
+    }
+    
+    .family-modal-body .col-md-6 {
+        padding: 0 10px;
+        margin-bottom: 15px;
+    }
+    
+    .family-modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .family-modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Duplicate NIC Display Styling */
+.duplicate-nic {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+.duplicate-nic-new {
+    color: #dc3545 !important;
+    font-weight: bold;
+    display: block;
+    margin-top: 4px;
+}
+
+.old-nic-indicator {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* Show Only Duplicates Button Styling */
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background: #6c757d;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
     </style>
@@ -284,52 +1114,70 @@
 
 
     <div class="container-fluid">
-        <div class="center-heading" style="text-align: center;">
-            <h1>Beneficiary Details</h1>
+        <!-- Enhanced Page Header with Beautiful Design -->
+        <div class="page-header-section">
+            <div class="header-background-overlay"></div>
+            <div class="header-content">
+                <div class="header-icon-wrapper">
+                    <i class="fas fa-users header-main-icon"></i>
+                </div>
+                <h1 class="header-title">
+                    <span class="title-text">Beneficiary Details</span>
+                </h1>
+                <p class="header-subtitle">Manage and view all beneficiary information</p>
+                <div class="header-decoration">
+                    <div class="decoration-line"></div>
+                    <div class="decoration-dot"></div>
+                    <div class="decoration-line"></div>
+                </div>
+            </div>
         </div>
 
-
+        <!-- Enhanced Summary Cards -->
         <div class="container mt-4">
     <div class="row justify-content-center">
         <!-- Total Beneficiaries Card -->
-        <div class="col-md-4 mb-3">
-            <div class="card text-center">
-                <div class="card-header">
-                    Total Beneficiaries<br>
-                    Registration
+        <div class="col-md-4 mb-4">
+            <div class="summary-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(102, 126, 234, 0.3)';">
+                <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="fas fa-user-friends" style="margin-right: 8px; font-size: 24px;"></i>Total Beneficiaries
                 </div>
-                <div class="card-body">
-                    <h4 class="card-title">{{ $beneficiaries->total() }}</h4>
-                    <p class="card-text">Total Beneficiaries currently in the system.</p>
+                <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    {{ $beneficiaries->total() }}
                 </div>
+                <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin: 0;">Total Beneficiaries currently in the system</p>
             </div>
         </div>
 
         <!-- Crop Names Summary Card -->
-        <div class="col-md-4 mb-3">
-            <div class="card text-center">
-                <div class="card-header">
-                    View Crop Name/Production Focus
+        <div class="col-md-4 mb-4">
+            <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(79, 172, 254, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(79, 172, 254, 0.3)';">
+                <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="fas fa-seedling" style="margin-right: 8px; font-size: 24px;"></i>Crop/Production Focus
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ $input3Summary->count() ?? 0 }}</h5>
-                    <p class="card-text">Click below to view the Crop Name/Production Focus summary.</p>
-                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#input3SummaryModal">View</button>
+                <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    {{ $input3Summary->count() ?? 0 }}
                 </div>
+                <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin-bottom: 20px;">Click below to view the summary</p>
+                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#input3SummaryModal" style="border-radius: 25px; padding: 8px 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+                    <i class="fas fa-eye" style="margin-right: 5px;"></i>View Details
+                </button>
             </div>
         </div>
 
         <!-- Tank Names Summary Card -->
-        <div class="col-md-4 mb-3">
-            <div class="card text-center">
-                <div class="card-header">
-                    View Tank Name
+        <div class="col-md-4 mb-4">
+            <div class="summary-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(48, 207, 208, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(48, 207, 208, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(48, 207, 208, 0.3)';">
+                <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="fas fa-water" style="margin-right: 8px; font-size: 24px;"></i>Tank Names
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ $tankNameSummary->count() ?? 0 }}</h5>
-                    <p class="card-text">Click below to view the Tank Name summary.</p>
-                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#tankNameSummaryModal">View</button>
+                <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                    {{ $tankNameSummary->count() ?? 0 }}
                 </div>
+                <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin-bottom: 20px;">Click below to view the summary</p>
+                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#tankNameSummaryModal" style="border-radius: 25px; padding: 8px 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+                    <i class="fas fa-eye" style="margin-right: 5px;"></i>View Details
+                </button>
             </div>
         </div>
     </div>
@@ -477,12 +1325,17 @@
         </div>
     </div>
 </div>
-<form method="GET" action="{{ route('beneficiary.index') }}" class="mb-3">
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ route('beneficiary.index') }}" class="btn btn-outline-secondary me-2">Show All</a>
-        <a href="{{ route('beneficiary.index', ['duplicates' => '1']) }}" class="btn btn-danger">Show Only Duplicates</a>
-    </div>
-</form>
+        <!-- Enhanced Filter Buttons -->
+        <form method="GET" action="{{ route('beneficiary.index') }}" class="mb-3">
+            <div class="d-flex justify-content-end mb-3" style="gap: 10px;">
+                <a href="{{ route('beneficiary.index') }}" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 10px 20px; font-weight: 600; border: 2px solid #6c757d; transition: all 0.3s ease;" onmouseover="this.style.background='#6c757d'; this.style.color='#fff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='transparent'; this.style.color='#6c757d'; this.style.transform='translateY(0)';">
+                    <i class="fas fa-list" style="margin-right: 5px;"></i>Show All
+                </a>
+                <a href="{{ route('beneficiary.index', ['duplicates' => '1']) }}" class="btn btn-danger" style="border-radius: 8px; padding: 10px 20px; font-weight: 600; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(220, 53, 69, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.3)';">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 5px;"></i>Show Only Duplicates
+                </a>
+            </div>
+        </form>
 
 @php
     $convertedNicMap = [];
@@ -526,26 +1379,33 @@
 
 
 
-              <!-- CSV Upload Form -->
-              @if(auth()->user()->hasPermission('beneficiary', 'upload_csv'))
-
-            <form action="{{ route('beneficiary.uploadCsv') }}" method="POST" enctype="multipart/form-data" class="form-inline">
-             @csrf
-             <div class="form-group mr-2">
-             <input type="file" name="csv_file" class="form-control" required>
-             </div>
-            <button type="submit" class="btn btn-success">Upload CSV</button>
-             </form>
-             @endif
-                 </br>
-
+        <!-- Enhanced Action Section -->
+        <div class="action-section" style="background: #ffffff; border-radius: 15px; padding: 25px; margin: 30px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e0e0e0;">
+            <div class="row align-items-center">
+                <!-- CSV Upload Form -->
+                @if(auth()->user()->hasPermission('beneficiary', 'upload_csv'))
+                <div class="col-md-4 mb-3">
+                    <form action="{{ route('beneficiary.uploadCsv') }}" method="POST" enctype="multipart/form-data" class="csv-upload-form">
+                        @csrf
+                        <div class="input-group" style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">
+                            <input type="file" name="csv_file" class="form-control" required style="border: none; padding: 10px 15px;">
+                            <button type="submit" class="btn btn-success" style="border-radius: 0; padding: 10px 20px; font-weight: 600;">
+                                <i class="fas fa-upload" style="margin-right: 5px;"></i>Upload CSV
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                @endif
 
                 <!-- Search form -->
-                <form method="GET" action="{{ route('beneficiary.index') }}" class="form-inline">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search','') }}">
+                <div class="col-md-{{ auth()->user()->hasPermission('beneficiary', 'upload_csv') ? '5' : '8' }} mb-3">
+                    <form method="GET" action="{{ route('beneficiary.index') }}" class="search-form">
+                        <div class="input-group" style="box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">
+                            <input type="text" class="form-control" placeholder="Search beneficiaries..." name="search" value="{{ request('search','') }}" style="border: none; padding: 12px 20px; font-size: 14px;">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                <button class="btn btn-primary" type="submit" style="border-radius: 0; padding: 12px 25px; font-weight: 600;">
+                                    <i class="fas fa-search" style="margin-right: 5px;"></i>Search
+                                </button>
                             </div>
                         </div>
                         @if(request('duplicates'))
@@ -555,17 +1415,23 @@
                             <input type="hidden" name="entries" value="{{ request('entries') }}">
                         @endif
                     </form>
-    </br>
-
-                    <div class="form-group">
-                        <div class="d-flex justify-content-between">
-                        @if(auth()->user()->hasPermission('beneficiary', 'add'))
-                      <a href="{{ route('beneficiary.create') }}" class="btn submitbtton"> + Add New </button>
-                      @endif
-                       <a href="{{route('download.csv')}}"  class="btn submitbtton">Generate CSV Report</a>
                 </div>
 
+                <!-- Action Buttons -->
+                <div class="col-md-{{ auth()->user()->hasPermission('beneficiary', 'upload_csv') ? '3' : '4' }} mb-3">
+                    <div class="d-flex gap-2 justify-content-end flex-wrap">
+                        @if(auth()->user()->hasPermission('beneficiary', 'add'))
+                        <a href="{{ route('beneficiary.create') }}" class="btn submitbtton" style="border-radius: 8px; padding: 12px 25px; font-weight: 600; box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(25, 135, 84, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(25, 135, 84, 0.3)';">
+                            <i class="fas fa-plus-circle" style="margin-right: 5px;"></i>Add New
+                        </a>
+                        @endif
+                        <a href="{{route('download.csv')}}" class="btn submitbtton" style="border-radius: 8px; padding: 12px 25px; font-weight: 600; box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(25, 135, 84, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(25, 135, 84, 0.3)';">
+                            <i class="fas fa-file-csv" style="margin-right: 5px;"></i>Generate CSV
+                        </a>
+                    </div>
+                </div>
             </div>
+        </div>
 
 
 
@@ -580,16 +1446,17 @@
     </script>
 @endif
 
-<div class="entries-container">
-    <label for="entriesSelect">Show</label>
-    <select id="entriesSelect" class="form-select form-select-sm mx-2">
-        <option value="10" {{ $beneficiaries->perPage() == 10 ? 'selected' : '' }}>10</option>
-        <option value="25" {{ $beneficiaries->perPage() == 25 ? 'selected' : '' }}>25</option>
-        <option value="50" {{ $beneficiaries->perPage() == 50 ? 'selected' : '' }}>50</option>
-        <option value="100" {{ $beneficiaries->perPage() == 100 ? 'selected' : '' }}>100</option>
-    </select>
-    <span>entries</span>
-</div>
+        <!-- Enhanced Entries Selector -->
+        <div class="entries-container" style="background: #f8f9fa; padding: 15px 20px; border-radius: 10px; margin: 20px 0; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+            <label for="entriesSelect" style="font-weight: 600; color: #495057; margin: 0;">Show</label>
+            <select id="entriesSelect" class="form-select form-select-sm" style="width: auto; border-radius: 6px; border: 2px solid #dee2e6; padding: 6px 12px; font-weight: 500;">
+                <option value="10" {{ $beneficiaries->perPage() == 10 ? 'selected' : '' }}>10</option>
+                <option value="25" {{ $beneficiaries->perPage() == 25 ? 'selected' : '' }}>25</option>
+                <option value="50" {{ $beneficiaries->perPage() == 50 ? 'selected' : '' }}>50</option>
+                <option value="100" {{ $beneficiaries->perPage() == 100 ? 'selected' : '' }}>100</option>
+            </select>
+            <span style="font-weight: 600; color: #495057;">entries</span>
+        </div>
 
 
 <div class="row table-container">
@@ -607,17 +1474,17 @@
 
         <div class="row table-container">
             <div class="col">
-
-                <table id="beneficiariesTable" class="table table-bordered  table-sm">
-                    <thead class="thead-light">
+                <div class="table-responsive">
+                <table id="beneficiariesTable" class="table">
+                    <thead>
                         <tr>
-                            <th scope="col">NIC</th>
+                            <th scope="col">NIC Number</th>
                             <th scope="col">Name with Initials</th>
                             <th scope="col">Gender</th>
                             <!-- <th scope="col">Date Of Birth</th> -->
                             <!-- <th scope="col">Age</th> -->
                             <th scope="col">Address</th>
-                            <th scope="col">Phone</th>
+                            <th scope="col">Phone Numbers</th>
                             <th scope="col">Crop Name/Production Focus
                             </th>
                             <th scope="col">Tank Name</th>
@@ -657,13 +1524,22 @@
             $nic = $beneficiary->nic;
             $converted = $convertedNicMap[$beneficiary->id] ?? null;
             $isDuplicate = isset($duplicateNics[$nic]) || ($converted && isset($duplicateNics[$converted]));
+            $isOldNic = preg_match('/^(\d{2})(\d{3})(\d{4})[VXvx]?$/', $nic);
+            $showDuplicates = request('duplicates');
         @endphp
         <tr>
-            <td style="color: {{ $isDuplicate ? 'red' : 'inherit' }}">
-                {{ $beneficiary->nic }}
-                @if ($isDuplicate && $converted)
-                    <br>
-                    <span style="color: red;">→ {{ $converted }}</span>
+            <td>
+                @if ($isDuplicate || $showDuplicates)
+                    <div>
+                        <span class="duplicate-nic">Old NIC: {{ $beneficiary->nic }}</span>
+                        @if ($converted)
+                            <span class="duplicate-nic-new">→ New NIC: {{ $converted }}</span>
+                        @elseif ($isOldNic)
+                            <span class="old-nic-indicator">(Old NIC format - can be converted)</span>
+                        @endif
+                    </div>
+                @else
+                    <span>{{ $beneficiary->nic }}</span>
                 @endif
             </td>
 
@@ -704,22 +1580,24 @@
                             <td class="buttonline">
                                 <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-info btn-sm">View</a>
                                 @if(auth()->user()->hasPermission('family', 'add'))
-                                <a href="{{ route('family.create.by.beneficiary', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-primary btn-sm button-a">Add Members</a>
+                                <button type="button" class="btn btn-primary btn-sm button-a" data-bs-toggle="modal" data-bs-target="#familyMemberModal{{ $beneficiary->id }}">
+                                    <i class="fas fa-user-plus"></i> Add Members
+                                </button>
                                 @endif
 
                             </td>
                             <td class="button-group">
                             @if(auth()->user()->hasPermission('beneficiary', 'edit'))
-                                <a href="beneficiary/{{ $beneficiary->id }}/edit" class="btn btn-primary btn-sm" style="background-color: green;border: 2px solid green;">
+                                <a href="beneficiary/{{ $beneficiary->id }}/edit" class="btn btn-primary btn-sm edit-beneficiary-btn" data-beneficiary-id="{{ $beneficiary->id }}" data-action="edit">
                                     <img src="{{ asset('assets/images/edit4.png') }}" alt="Edit Icon" style="width: 20px; height: 20px;">
                                 </a>
                             @endif
 
                             @if(auth()->user()->hasPermission('beneficiary', 'delete'))
-                                <form action="beneficiary/{{ $beneficiary->id }}" method="POST" style="display: inline;">
+                                <form action="beneficiary/{{ $beneficiary->id }}" method="POST" style="display: inline;" class="delete-beneficiary-form" data-beneficiary-id="{{ $beneficiary->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
+                                    <button type="button" class="btn btn-danger btn-sm delete-beneficiary-btn">
                                         <img src="{{ asset('assets/images/delete1.png') }}" alt="Delete Icon" style="width: 20px; height: 20px;">
                                     </button>
                                 </form>
@@ -729,6 +1607,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
 
 
 
@@ -882,7 +1761,253 @@
 
 
 
+<!-- Family Member Registration Modals -->
+@foreach ($filteredBeneficiaries as $beneficiary)
+<div class="modal fade" id="familyMemberModal{{ $beneficiary->id }}" tabindex="-1" aria-labelledby="familyMemberModalLabel{{ $beneficiary->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl family-modal-xl">
+        <div class="modal-content family-modal-content">
+            <div class="modal-header family-modal-header">
+                <h5 class="modal-title" id="familyMemberModalLabel{{ $beneficiary->id }}">
+                    <i class="fas fa-users"></i> Family Member Registration - {{ $beneficiary->name_with_initials }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body family-modal-body">
+                <form class="form-horizontal familyMemberForm" action="/family" method="POST" data-beneficiary-id="{{ $beneficiary->id }}">
+                    @csrf
+                    <input type="hidden" name="beneficiary_id" value="{{ $beneficiary->id }}">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name_with_initials{{ $beneficiary->id }}"><i class="fas fa-user"></i> Name with Initials</label>
+                                <input type="text" name="name_with_initials" id="name_with_initials{{ $beneficiary->id }}" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nic{{ $beneficiary->id }}"><i class="fas fa-id-card"></i> Family Member NIC</label>
+                                <input type="text" name="nic" id="nic{{ $beneficiary->id }}" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone{{ $beneficiary->id }}"><i class="fas fa-phone"></i> Phone</label>
+                                <input type="text" name="phone" id="phone{{ $beneficiary->id }}" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><i class="fas fa-venus-mars"></i> Gender</label>
+                                <div class="form-check-group">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="male{{ $beneficiary->id }}" value="male" required>
+                                        <label class="form-check-label" for="male{{ $beneficiary->id }}">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="female{{ $beneficiary->id }}" value="female" required>
+                                        <label class="form-check-label" for="female{{ $beneficiary->id }}">Female</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="other{{ $beneficiary->id }}" value="other" required>
+                                        <label class="form-check-label" for="other{{ $beneficiary->id }}">Other</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dob{{ $beneficiary->id }}"><i class="fas fa-calendar"></i> Date Of Birth</label>
+                                <input type="text" class="form-control dob-input" id="dob{{ $beneficiary->id }}" name="dob" placeholder="Select Date of Birth" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="youth{{ $beneficiary->id }}"><i class="fas fa-child"></i> Youth Status</label>
+                                <input type="text" name="youth" id="youth{{ $beneficiary->id }}" class="form-control youth-input" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="education{{ $beneficiary->id }}"><i class="fas fa-graduation-cap"></i> Education Level</label>
+                                <select class="form-control" id="education{{ $beneficiary->id }}" name="education" required>
+                                    <option value="">Select Education Level</option>
+                                    <option value="Primary">Primary</option>
+                                    <option value="Secondary">Secondary</option>
+                                    <option value="Higher Secondary">Higher Secondary</option>
+                                    <option value="Graduate">Graduate</option>
+                                    <option value="Post Graduate">Post Graduate</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="income_source{{ $beneficiary->id }}"><i class="fas fa-briefcase"></i> Income Source</label>
+                                <input type="text" name="income_source" id="income_source{{ $beneficiary->id }}" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="income{{ $beneficiary->id }}"><i class="fas fa-dollar-sign"></i> Income</label>
+                                <input type="text" name="income" id="income{{ $beneficiary->id }}" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nutrition_level{{ $beneficiary->id }}"><i class="fas fa-apple-alt"></i> Nutrition Level</label>
+                                <input type="text" name="nutrition_level" id="nutrition_level{{ $beneficiary->id }}" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer family-modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" name="button" class="btn btn-success">
+                            <i class="fas fa-check"></i> Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+<!-- Success Modal -->
+<div class="modal fade" id="familySuccessModal" tabindex="-1" aria-labelledby="familySuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="familySuccessModalLabel">
+                    <i class="fas fa-check-circle"></i> Success
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                <p class="mb-0">Family member registered successfully!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Alert Modal -->
+<div id="customAlertOverlay" class="custom-alert-overlay">
+    <div class="custom-alert-modal">
+        <div class="custom-alert-header" id="alertHeader">Confirm Action</div>
+        <div class="custom-alert-body" id="alertMessage">Are you sure you want to perform this action?</div>
+        <div class="custom-alert-footer">
+            <button class="custom-alert-btn custom-alert-btn-yes" id="alertYesBtn">Yes</button>
+            <button class="custom-alert-btn custom-alert-btn-no" id="alertNoBtn">No</button>
+        </div>
+    </div>
+</div>
+
 <script>
+// Custom Alert Function
+let currentConfirmCallback = null;
+
+function showCustomAlert(message, title, onConfirm) {
+    const overlay = document.getElementById('customAlertOverlay');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertHeader = document.getElementById('alertHeader');
+    
+    alertMessage.textContent = message;
+    if (title) {
+        alertHeader.textContent = title;
+    }
+    
+    currentConfirmCallback = onConfirm;
+    overlay.classList.add('show');
+}
+
+// Set up event listeners once when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    const overlay = document.getElementById('customAlertOverlay');
+    const yesBtn = document.getElementById('alertYesBtn');
+    const noBtn = document.getElementById('alertNoBtn');
+    
+    // Set up alert modal button handlers
+    if (yesBtn) {
+        yesBtn.addEventListener('click', function() {
+            overlay.classList.remove('show');
+            if (currentConfirmCallback) {
+                currentConfirmCallback();
+                currentConfirmCallback = null;
+            }
+        });
+    }
+    
+    if (noBtn) {
+        noBtn.addEventListener('click', function() {
+            overlay.classList.remove('show');
+            currentConfirmCallback = null;
+        });
+    }
+    
+    if (overlay) {
+        // Close on overlay click
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                overlay.classList.remove('show');
+                currentConfirmCallback = null;
+            }
+        });
+    }
+    
+    // Handle Edit Button Clicks
+    document.querySelectorAll('.edit-beneficiary-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const editUrl = this.getAttribute('href');
+            
+            showCustomAlert(
+                'Are you sure you want to edit this beneficiary?',
+                'Confirm Edit',
+                function() {
+                    window.location.href = editUrl;
+                }
+            );
+        });
+    });
+    
+    // Handle Delete Button Clicks
+    document.querySelectorAll('.delete-beneficiary-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('.delete-beneficiary-form');
+            
+            showCustomAlert(
+                'Are you sure you want to delete this beneficiary? This action cannot be undone.',
+                'Confirm Delete',
+                function() {
+                    form.submit();
+                }
+            );
+        });
+    });
+});
+
 document.getElementById('entriesSelect').addEventListener('change', function () {
     const perPage = this.value;
     const urlParams = new URLSearchParams(window.location.search);
@@ -962,6 +2087,9 @@ document.getElementById('entriesSelect').addEventListener('change', function () 
             {{-- <a href="{{ route('beneficiary/create') }}" class="btn btn-primary">Add Beneficiary</a> --}}
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <!-- jQuery UI for datepicker -->
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
             </div>
             </div>
@@ -984,6 +2112,80 @@ document.getElementById('entriesSelect').addEventListener('change', function () 
                 content.style.flex = '0 0 80%'; // Default width
                 content.style.padding = '20px'; // Reset padding
             }
+        });
+
+        // Initialize datepicker for all family member modals
+        $('[id^="familyMemberModal"]').on('shown.bs.modal', function () {
+            var modalId = $(this).attr('id');
+            var beneficiaryId = modalId.replace('familyMemberModal', '');
+            var dobInput = $('#dob' + beneficiaryId);
+            var youthInput = $('#youth' + beneficiaryId);
+
+            // Initialize datepicker
+            dobInput.datepicker({
+                dateFormat: 'yy-mm-dd',
+                maxDate: '0',
+                changeYear: true,
+                yearRange: '-100:+0',
+                onSelect: function(selectedDate) {
+                    calculateAge(selectedDate, youthInput);
+                }
+            });
+        });
+
+        // Reset form when modal is closed
+        $('[id^="familyMemberModal"]').on('hidden.bs.modal', function () {
+            var modalId = $(this).attr('id');
+            var beneficiaryId = modalId.replace('familyMemberModal', '');
+            var form = $(this).find('form');
+            form[0].reset();
+            $('#youth' + beneficiaryId).val('');
+        });
+
+        function calculateAge(selectedDate, youthInput) {
+            var dob = new Date(selectedDate);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var month = today.getMonth() - dob.getMonth();
+            if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            if (age < 35) {
+                youthInput.val("Youth");
+            } else {
+                youthInput.val("Not Youth");
+            }
+        }
+
+        // Handle form submission
+        $('.familyMemberForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var beneficiaryId = form.data('beneficiary-id');
+            var modalId = '#familyMemberModal' + beneficiaryId;
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(response) {
+                    // Close the family member modal
+                    $(modalId).modal('hide');
+                    
+                    // Show success modal
+                    $('#familySuccessModal').modal('show');
+
+                    // Automatically close success modal and reload page after 2 seconds
+                    setTimeout(function() {
+                        $('#familySuccessModal').modal('hide');
+                        window.location.reload();
+                    }, 2000);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred. Please try again.');
+                }
+            });
         });
     });
 </script>

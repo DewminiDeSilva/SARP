@@ -8,28 +8,95 @@
   --success:#16a34a; --success-soft:#dcfce7; --warning:#d97706; --warning-soft:#fff7ed; --danger:#dc2626; --danger-soft:#fee2e2;
 }
 
-.logframe-nav{max-width:100%;margin:0 auto;padding:16px;background:linear-gradient(180deg, #f8fafc 0%, #f5f7fb 100%);}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);padding:20px;margin-bottom:16px;}
+.logframe-nav{max-width:90%;margin:0 auto;padding:12px;background:linear-gradient(180deg, #f8fafc 0%, #f5f7fb 100%);}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05);padding:12px;margin-bottom:12px;}
 
-.h1{font-size:28px;font-weight:800;color:var(--text);margin-bottom:20px;}
+.h1{font-size:24px;font-weight:800;color:var(--text);margin-bottom:12px;}
 
 /* Navigation Tree Styles */
 .nav-tree{list-style:none;padding:0;margin:0;}
 .nav-tree li{margin:0;padding:0;}
-.nav-item{display:block;padding:12px 16px;margin:4px 0;border-radius:8px;text-decoration:none;color:var(--text);transition:all 0.2s;border-left:4px solid transparent;}
+.nav-item{display:block;padding:8px 12px;margin:2px 0;border-radius:4px;text-decoration:none;color:var(--text);transition:all 0.2s;border-left:2px solid transparent;font-size:0.95em;}
 .nav-item:hover{background:#f3f4f6;border-left-color:var(--accent);}
 .nav-item.active{background:#eef2ff;border-left-color:var(--accent);color:var(--accent-2);font-weight:600;}
 
-.nav-level-1{font-weight:700;font-size:16px;color:var(--text);}
-.nav-level-2{font-weight:600;font-size:15px;color:var(--muted);margin-left:20px;}
-.nav-level-3{font-weight:500;font-size:14px;color:var(--muted);margin-left:40px;}
+.nav-level-1{font-weight:700;font-size:14px;color:var(--text);}
+.nav-level-2{font-weight:600;font-size:13px;color:var(--muted);margin-left:12px;}
+.nav-level-3{font-weight:500;font-size:12px;color:var(--muted);margin-left:24px;}
 
 .toggle-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:4px;margin-right:8px;}
 .toggle-btn:hover{background:#f3f4f6;color:var(--text);}
 
-.content-area{min-height:400px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;}
+.content-area{min-height:300px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:0.95em;}
+.content-area h3{font-size:1.2em;margin-bottom:8px;}
+.content-area table{font-size:0.9em;}
+.content-area th{font-size:0.95em;padding:8px;}
+.content-area td{font-size:0.9em;padding:8px;}
+.content-area p{font-size:0.95em;line-height:1.5;}
 
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:12px;border:1px solid var(--line);text-decoration:none;color:var(--text);background:#fff;font-size:15px;cursor:pointer;}
+/* Input Styles - Compact size */
+.content-area input[type="text"],
+.content-area input[type="number"],
+.content-area input[type="email"],
+.content-area input[type="password"],
+.content-area input[type="date"],
+.content-area input[type="time"],
+.content-area input[type="search"],
+.content-area input[type="tel"],
+.content-area input[type="url"],
+.content-area textarea,
+.content-area select{
+  font-size:0.9em;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  width:100%;
+  box-sizing:border-box;
+}
+.content-area input[type="checkbox"],
+.content-area input[type="radio"]{
+  width:16px;
+  height:16px;
+  cursor:pointer;
+}
+.content-area label{
+  font-size:0.9em;
+  font-weight:600;
+  margin-bottom:4px;
+  display:block;
+}
+
+/* Global Input Styles - Compact size */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea,
+select{
+  font-size:0.9em !important;
+  padding:8px 10px !important;
+  border:1px solid var(--line) !important;
+  border-radius:4px !important;
+  box-sizing:border-box !important;
+}
+input[type="checkbox"],
+input[type="radio"]{
+  width:16px !important;
+  height:16px !important;
+  cursor:pointer;
+}
+label{
+  font-size:0.9em !important;
+  font-weight:600 !important;
+  margin-bottom:4px !important;
+}
+
+.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:6px;border:1px solid var(--line);text-decoration:none;color:var(--text);background:#fff;font-size:13px;cursor:pointer;}
 .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
 .btn:hover{background:#f9fafb;}
 .btn-primary:hover{background:var(--accent-2);}
@@ -45,17 +112,17 @@
   <div class="h1">Smallholder Agribusiness and Resilience Project - Logical Framework</div>
   
   
-  <div style="display:grid;grid-template-columns:1fr 2fr;gap:20px;">
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">
     <!-- Navigation Tree -->
     <div class="card">
-      <h3 style="margin-top:0;color:var(--text);">Logframe Structure</h3>
+      <h3 style="margin-top:0;color:var(--text);font-size:16px;">Logframe Structure</h3>
       <ul class="nav-tree">
         <!-- Project Goal -->
         <li>
           <a href="#" class="nav-item nav-level-1" onclick="showContent('project-goal', this)">
             <span class="toggle-btn">▼</span>Project Goal
           </a>
-          <div style="font-size:12px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:8px;">
+          <div style="font-size:11px;color:var(--muted);margin-left:24px;margin-top:-6px;margin-bottom:6px;">
             Contribute to smallholder poverty reduction, food security and nutrition in target Dry Zone districts
           </div>
         </li>
@@ -65,7 +132,7 @@
           <a href="#" class="nav-item nav-level-1" onclick="showContent('dev-objective', this)">
             <span class="toggle-btn">▼</span>Development Objective
           </a>
-          <div style="font-size:12px;color:var(--muted);margin-left:32px;margin-top:-8px;margin-bottom:8px;">
+          <div style="font-size:11px;color:var(--muted);margin-left:24px;margin-top:-6px;margin-bottom:6px;">
             Build resilience and market participation of rural households in geographical areas affected by climate change
           </div>
         </li>
@@ -129,8 +196,8 @@
     <!-- Content Area -->
     <div class="card">
       <div id="content-area" class="content-area">
-        <div style="text-align:center;color:var(--muted);padding:40px;">
-          <h3>Select a logframe component from the navigation</h3>
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:0.95em;">
+          <h3 style="font-size:1.2em;">Select a logframe component from the navigation</h3>
           <p>Click on any item in the left panel to view its indicators and details</p>
         </div>
       </div>
@@ -160,7 +227,7 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Project Goal Indicators</h3>
         <p><strong>Goal:</strong> Contribute to smallholder poverty reduction, food security and nutrition in target Dry Zone districts</p>
-        <div style="margin-top:20px;">
+        <div style="margin-top:12px;">
           <a href="{{ route('logframe.tanks.index') }}" class="btn btn-primary">View Tank Indicators</a>
         </div>
       `;
@@ -170,7 +237,7 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Development Objective Indicators</h3>
         <p><strong>Objective:</strong> Build resilience and market participation of rural households in geographical areas affected by climate change</p>
-        <div style="margin-top:20px;">
+        <div style="margin-top:12px;">
           <a href="{{ route('logframe.tanks.index') }}" class="btn btn-primary">View Tank Indicators</a>
         </div>
       `;
@@ -179,8 +246,8 @@ function showContent(component, el) {
     case 'outcome-1':
       contentArea.innerHTML = `
         <h3>Outcome 1: Climate-resilient and value-chain capacity built</h3>
-        <div class="card" style="padding:12px;margin-top:12px;">
-          <div style="font-weight:700;margin-bottom:8px;">Indicators</div>
+        <div class="card" style="padding:10px;margin-top:10px;">
+          <div style="font-weight:700;margin-bottom:6px;font-size:0.95em;">Indicators</div>
           <table style="width:100%;border-collapse:separate;border-spacing:0;">
             <thead>
               <tr>
@@ -217,9 +284,9 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Output 1: Service providers and producers' groups created and capacitated for better land and water management</h3>
         <p><strong>Description:</strong> This output focuses on creating and building capacity of service providers and producer groups for improved land and water management practices.</p>
-        <div style="background:#f8fafc;padding:12px;border-radius:8px;margin:16px 0;">
-          <strong>Key Activities:</strong>
-          <ul style="margin:8px 0;padding-left:20px;">
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;margin:12px 0;">
+          <strong style="font-size:0.95em;">Key Activities:</strong>
+          <ul style="margin:6px 0;padding-left:18px;font-size:0.9em;">
             <li>Establish service provider groups</li>
             <li>Train producers' groups in land management</li>
             <li>Build capacity for water management</li>
@@ -237,9 +304,9 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Output 2: Farmers especially women and youth trained in business and marketing</h3>
         <p><strong>Description:</strong> This output focuses on training farmers, with special emphasis on women and youth, in business and marketing skills.</p>
-        <div style="background:#f8fafc;padding:12px;border-radius:8px;margin:16px 0;">
-          <strong>Key Activities:</strong>
-          <ul style="margin:8px 0;padding-left:20px;">
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;margin:12px 0;">
+          <strong style="font-size:0.95em;">Key Activities:</strong>
+          <ul style="margin:6px 0;padding-left:18px;font-size:0.9em;">
             <li>Business skills training for farmers</li>
             <li>Marketing training and support</li>
             <li>Women and youth focused programs</li>
@@ -257,9 +324,9 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Output 3: Advocacy and Policy meetings conducted</h3>
         <p><strong>Description:</strong> This output focuses on conducting advocacy and policy meetings to influence policy and decision-making.</p>
-        <div style="background:#f8fafc;padding:12px;border-radius:8px;margin:16px 0;">
-          <strong>Key Activities:</strong>
-          <ul style="margin:8px 0;padding-left:20px;">
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;margin:12px 0;">
+          <strong style="font-size:0.95em;">Key Activities:</strong>
+          <ul style="margin:6px 0;padding-left:18px;font-size:0.9em;">
             <li>Policy advocacy meetings</li>
             <li>Stakeholder consultations</li>
             <li>Policy brief development</li>
@@ -277,9 +344,9 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Output 4: Minor irrigation tanks and water harvesting infrastructure constructed or rehabilitated</h3>
         <p><strong>Description:</strong> This is the tank rehabilitation output that we've been working on. It focuses on constructing and rehabilitating minor irrigation tanks and water harvesting infrastructure.</p>
-        <div style="background:#eef2ff;padding:12px;border-radius:8px;margin:16px 0;border-left:4px solid var(--accent);">
-          <strong>Key Activities:</strong>
-          <ul style="margin:8px 0;padding-left:20px;">
+        <div style="background:#eef2ff;padding:10px;border-radius:6px;margin:12px 0;border-left:3px solid var(--accent);">
+          <strong style="font-size:0.95em;">Key Activities:</strong>
+          <ul style="margin:6px 0;padding-left:18px;font-size:0.9em;">
             <li>Construction of new irrigation tanks</li>
             <li>Rehabilitation of existing tanks</li>
             <li>Water harvesting infrastructure development</li>
@@ -297,9 +364,9 @@ function showContent(component, el) {
       contentArea.innerHTML = `
         <h3>Output 5: Beneficiaries with access to market infrastructure and business services</h3>
         <p><strong>Description:</strong> This output focuses on providing beneficiaries with access to market infrastructure and business services.</p>
-        <div style="background:#f8fafc;padding:12px;border-radius:8px;margin:16px 0;">
-          <strong>Key Activities:</strong>
-          <ul style="margin:8px 0;padding-left:20px;">
+        <div style="background:#f8fafc;padding:10px;border-radius:6px;margin:12px 0;">
+          <strong style="font-size:0.95em;">Key Activities:</strong>
+          <ul style="margin:6px 0;padding-left:18px;font-size:0.9em;">
             <li>Market infrastructure development</li>
             <li>Business service provision</li>
             <li>Market linkage facilitation</li>

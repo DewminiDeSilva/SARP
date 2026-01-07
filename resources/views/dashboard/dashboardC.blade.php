@@ -36,19 +36,25 @@ li {
     padding: 10px; /* Add padding for the frame */
     border-radius: 5px; /* Rounded corners */
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
-    background-color: #a1b1bdff; /* Background color */
+    background-color: #b3e5fc; /* Light blue background color */
 }
 
 li a {
-    color: #FFFFFF; /* Text color */
+    color: #000000; /* Black text color for better contrast */
     text-decoration: none; /* Remove underline from links */
     display: block; /* Make the link fill the list item */
 }
 
 li:hover {
     border-color: #1C6008; /* Change frame border color on hover */
-    background-color: #68878dff; /* Change background color on hover */
+    background-color: #81d4fa; /* Slightly darker light blue on hover */
     cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+li.active,
+li.active:hover {
+    background-color: transparent !important; /* Remove background when clicked/active */
+    border: 1px solid #b3e5fc; /* Optional: subtle border */
 }
 
 .container {
