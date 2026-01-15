@@ -20,6 +20,8 @@
 </head>
 
 <body>
+@include('dashboard.header')
+
 {{-- 2nd side bar code --}}
 <!-- component -->
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>

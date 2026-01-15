@@ -562,8 +562,8 @@
                             @elseif ($beneficiary->project_type === 'youth')
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label class="form-label">Youth Proposal Name</label>
-                                        <input type="text" class="form-control readonly-field" value="{{ $beneficiary->youthProposal->organization_name ?? 'N/A' }}" readonly>
+                                        <label class="form-label">Youth Enterprises Project Name</label>
+                                        <input type="text" class="form-control readonly-field" value="{{ $beneficiary->input3 ?? 'N/A' }}" readonly>
                                     </div>
                                 </div>
                             @elseif ($beneficiary->project_type === '4p')

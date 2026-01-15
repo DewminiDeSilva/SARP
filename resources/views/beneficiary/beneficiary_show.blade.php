@@ -854,8 +854,8 @@
                             @endif
                         @elseif ($beneficiary->project_type === 'youth')
                             <div class="info-item">
-                                <div class="info-label">Youth Proposal Name</div>
-                                <div class="info-value">{{ $beneficiary->youthProposal->organization_name ?? 'N/A' }}</div>
+                                <div class="info-label">Youth Enterprises Project Name</div>
+                                <div class="info-value">{{ $beneficiary->input3 ?? 'N/A' }}</div>
                             </div>
                         @elseif ($beneficiary->project_type === '4p')
                             <div class="info-item">
