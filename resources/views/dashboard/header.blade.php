@@ -99,8 +99,14 @@
         align-items: center;
         border-bottom: 3px solid rgba(255, 255, 255, 0.2);
         position: relative;
-        overflow: hidden;
+        overflow: visible;
+        z-index: 99999 !important;
+        
     }
+    
+
+
+
 
     /* Animated Background Pattern */
     .fixed-header::before {
@@ -132,7 +138,7 @@
             transparent 100%);
         z-index: 1;
     }
-
+.profile-dropdown { z-index: 100001; }
     /* Left Section - Logos */
     .fixed-header .left-section {
         display: flex;
@@ -212,6 +218,7 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         transition: all 0.3s ease;
         border: 1px solid rgba(255, 255, 255, 0.2);
+         position: relative; z-index: 100000;
     }
 
     .fixed-header .profile:hover {

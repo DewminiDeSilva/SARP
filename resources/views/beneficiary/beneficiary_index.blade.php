@@ -8,22 +8,13 @@
     {{-- @vite('resources/css/app.css') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
-    <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/pagination.css')}} ">    overrite navbar need to check        --}}
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- Datatables CSS --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
-    <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Font Awesome CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 
     <style>
@@ -1078,6 +1069,13 @@
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
 
+    /* Ensure Bootstrap modals appear above fixed header and center vertically */
+    .modal {
+        z-index: 20000 !important;
+    }
+    .modal-backdrop.show {
+        z-index: 19990 !important;
+    }
 </style>
 </head>
 <body>
@@ -1085,9 +1083,7 @@
     {{-- <body class="h-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;"> --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
 
@@ -1153,7 +1149,7 @@
         <div class="col-md-4 mb-4">
             <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(79, 172, 254, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(79, 172, 254, 0.3)';">
                 <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
-                    <i class="fas fa-seedling" style="margin-right: 8px; font-size: 24px;"></i>Crop/Production Focus
+                    <i class="fas fa-leaf" style="margin-right: 8px; font-size: 24px;"></i>Crop Name/Production Focus<br/>Youth Proposal
                 </div>
                 <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
                     {{ $input3Summary->count() ?? 0 }}
@@ -1185,10 +1181,10 @@
 
 <!-- Modal for Crop Name Summary -->
 <div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="input3SummaryModalLabel">Summary of Beneficiaries by Crop Name/Production Focus</h5>
+                <h5 class="modal-title" id="input3SummaryModalLabel">Summary of Beneficiaries by Crop Name/Production Focus/<br/>Youth Proposal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -1220,7 +1216,7 @@
 
 <!-- Modal for Tank Name Summary -->
 <div class="modal fade" id="tankNameSummaryModal" tabindex="-1" aria-labelledby="tankNameSummaryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="tankNameSummaryModalLabel">Summary of Beneficiaries by Tank Name</h5>
@@ -1254,77 +1250,7 @@
 </div>
 
 
-<!-- Modal for Input3 Summary (Crop Names) -->
-<div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="input3SummaryModalLabel">Summary of Beneficiaries by Crop Name/Production Focus</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Crop Name/Production Focus</th>
-                            <th>Count</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($input3Summary as $summary)
-                            <tr>
-                                <td>{{ $summary->input3 }}</td>
-                                <td>{{ $summary->count }}</td>
-                                <td><a href="" class="btn btn-info btn-sm">View</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="tankNameSummaryModal" tabindex="-1" aria-labelledby="tankNameSummaryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tankNameSummaryModalLabel">Summary of Beneficiaries by Tank Name</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Tank Name</th>
-                            <th>Count</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($tankNameSummary as $summary)
-                            <tr>
-                                <td>{{ $summary->tank_name }}</td>
-                                <td>{{ $summary->count }}</td>
-                                <td>
-                                    <a href="" class="btn btn-info btn-sm">View</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- (Duplicate modals removed) -->
         <!-- Enhanced Filter Buttons -->
         <form method="GET" action="{{ route('beneficiary.index') }}" class="mb-3">
             <div class="d-flex justify-content-end mb-3" style="gap: 10px;">
@@ -1485,8 +1411,7 @@
                             <!-- <th scope="col">Age</th> -->
                             <th scope="col">Address</th>
                             <th scope="col">Phone Numbers</th>
-                            <th scope="col">Crop Name/Production Focus
-                            </th>
+                            <th scope="col">Crop Name/<br/>Production Focus/<br/>Youth Proposal</th>
                             <th scope="col">Tank Name</th>
                             <!-- <th scope="col">Education</th>
                             <th scope="col">Bank Name</th>

@@ -20,7 +20,7 @@ class BeneficiaryController extends Controller
      */
     public function search(Request $request)
     {
-        // search function crop names 
+        // search function crop names/production focus/youth proposal names 
         $search = $request->get('search', ''); // Default value if not provided
         $beneficiaries = Beneficiary::where('nic', 'like', '%'.$search.'%')
             ->orWhere('name_with_initials', 'like', '%'.$search.'%')
@@ -112,63 +112,80 @@ class BeneficiaryController extends Controller
              $rows = array_map('str_getcsv', explode("\n", $csvData));
              $header = array_shift($rows); // Extract header row
      
+             $recordCount = 0;
+     
              // Process each row and insert into the database
              foreach ($rows as $row) {
-                 if (count($row) === count($header)) {
+                 if (count($row) === count($header) && !empty(array_filter($row))) {
                      $beneficiaryData = array_combine($header, $row);
      
+                     // Helper function to convert empty strings to null for numeric fields
+                     $getNumericValue = function($value) {
+                         $trimmed = trim($value ?? '');
+                         return (empty($trimmed) || !is_numeric($trimmed)) ? null : $trimmed;
+                     };
+     
+                     $getStringValue = function($value) {
+                         $trimmed = trim($value ?? '');
+                         return empty($trimmed) ? null : $trimmed;
+                     };
+     
                      // Handle invalid or empty DOB
-                     $dob = isset($beneficiaryData['Date Of Birth']) && !empty($beneficiaryData['Date Of Birth']) 
-                         ? $beneficiaryData['Date Of Birth'] // No format conversion
+                     $dob = isset($beneficiaryData['Date Of Birth']) && !empty(trim($beneficiaryData['Date Of Birth'] ?? '')) 
+                         ? $beneficiaryData['Date Of Birth']
                          : null;
      
                      // Insert into Beneficiary model
                      Beneficiary::create([
-                         'nic' => $beneficiaryData['NIC'] ?? null,
-                         'name_with_initials' => $beneficiaryData['Name with Initials'] ?? null,
-                         'dob' => $dob, // Store as null if invalid
-                         'gender' => $beneficiaryData['Gender'] ?? null,
-                         'age' => $beneficiaryData['Age'] ?? null,
-                         'address' => $beneficiaryData['Address'] ?? null,
-                         'email' => $beneficiaryData['Email'] ?? null,
-                         'phone' => $beneficiaryData['Phone'] ?? null,
-                         'education' => $beneficiaryData['Education'] ?? null,
-                         'bank_name' => $beneficiaryData['Bank Name'] ?? null,
-                         'bank_branch' => $beneficiaryData['Bank Branch'] ?? null,
-                         'account_number' => $beneficiaryData['Account Number'] ?? null,
-                         'land_ownership_total_extent' => $beneficiaryData['Land Ownership Total Extent'] ?? null,
-                         'land_ownership_proposed_cultivation_area' => $beneficiaryData['Land Ownership Proposed Cultivation Area'] ?? null,
-                         'province_name' => $beneficiaryData['Province'] ?? null,
-                         'district_name' => $beneficiaryData['District'] ?? null,
-                         'ds_division_name' => $beneficiaryData['DS Division'] ?? null,
-                         'gn_division_name' => $beneficiaryData['GN Division'] ?? null,
-                         'as_center' => $beneficiaryData['AS Center'] ?? null,
-                         'cascade_name' => $beneficiaryData['Cascade Name'] ?? null,
-                         'tank_name' => $beneficiaryData['Tank Name'] ?? null,
-                         'ai_division' => $beneficiaryData['AI Division'] ?? null,
-                         'latitude' => $beneficiaryData['Latitude'] ?? null,
-                         'longitude' => $beneficiaryData['Longitude'] ?? null,
-                         'number_of_family_members' => $beneficiaryData['Number of Family Members'] ?? null,
-                         'head_of_householder_name' => $beneficiaryData['Head of Householder Name'] ?? null,
-                         'householder_number' => $beneficiaryData['Householder Number'] ?? null,
-                         'income_source' => $beneficiaryData['Income Source'] ?? null,
-                         'average_income' => $beneficiaryData['Average Income'] ?? null,
-                         'monthly_household_expenses' => $beneficiaryData['Monthly Household Expenses'] ?? null,
-                         'household_level_assets_description' => $beneficiaryData['Household Level Assets Description'] ?? null,
-                         'community_based_organization' => $beneficiaryData['Community-Based Organization'] ?? null,
-                         'type_of_water_resource' => $beneficiaryData['Type of Water Resource'] ?? null,
-                         'training_details_description' => $beneficiaryData['Training Details Description'] ?? null,
-                         'input1' => $beneficiaryData['Input1'] ?? null, // New input
-                        'input2' => $beneficiaryData['Input2'] ?? null, // New input
-                        'input3' => $beneficiaryData['Input3'] ?? null, // New input
-                        'project_type' => $beneficiaryData['project_type'] ?? null, // New input
+                         'nic' => $getStringValue($beneficiaryData['NIC'] ?? null),
+                         'name_with_initials' => $getStringValue($beneficiaryData['Name with Initials'] ?? null),
+                         'dob' => $dob,
+                         'gender' => $getStringValue($beneficiaryData['Gender'] ?? null),
+                         'age' => $getNumericValue($beneficiaryData['Age'] ?? null),
+                         'address' => $getStringValue($beneficiaryData['Address'] ?? null),
+                         'email' => $getStringValue($beneficiaryData['Email'] ?? null),
+                         'phone' => $getStringValue($beneficiaryData['Phone'] ?? null),
+                         'education' => $getStringValue($beneficiaryData['Education'] ?? null),
+                         'bank_name' => $getStringValue($beneficiaryData['Bank Name'] ?? null),
+                         'bank_branch' => $getStringValue($beneficiaryData['Bank Branch'] ?? null),
+                         'account_number' => $getStringValue($beneficiaryData['Account Number'] ?? null),
+                         'land_ownership_total_extent' => $getNumericValue($beneficiaryData['Land Ownership Total Extent'] ?? null),
+                         'land_ownership_proposed_cultivation_area' => $getNumericValue($beneficiaryData['Land Ownership Proposed Cultivation Area'] ?? null),
+                         'province_name' => $getStringValue($beneficiaryData['Province'] ?? null),
+                         'district_name' => $getStringValue($beneficiaryData['District'] ?? null),
+                         'ds_division_name' => $getStringValue($beneficiaryData['DS Division'] ?? null),
+                         'gn_division_name' => $getStringValue($beneficiaryData['GN Division'] ?? null),
+                         'as_center' => $getStringValue($beneficiaryData['AS Center'] ?? null),
+                         'cascade_name' => $getStringValue($beneficiaryData['Cascade Name'] ?? null),
+                         'tank_name' => $getStringValue($beneficiaryData['Tank Name'] ?? null),
+                         'ai_division' => $getStringValue($beneficiaryData['AI Division'] ?? null),
+                         'latitude' => $getNumericValue($beneficiaryData['Latitude'] ?? null),
+                         'longitude' => $getNumericValue($beneficiaryData['Longitude'] ?? null),
+                         'number_of_family_members' => $getNumericValue($beneficiaryData['Number of Family Members'] ?? null),
+                         'head_of_householder_name' => $getStringValue($beneficiaryData['Head of Householder Name'] ?? null),
+                         'householder_number' => $getStringValue($beneficiaryData['Householder Number'] ?? null),
+                         'income_source' => $getStringValue($beneficiaryData['Income Source'] ?? null),
+                         'average_income' => $getNumericValue($beneficiaryData['Average Income'] ?? null),
+                         'monthly_household_expenses' => $getNumericValue($beneficiaryData['Monthly Household Expenses'] ?? null),
+                         'household_level_assets_description' => $getStringValue($beneficiaryData['Household Level Assets Description'] ?? null),
+                         'community_based_organization' => $getStringValue($beneficiaryData['Community-Based Organization'] ?? null),
+                         'type_of_water_resource' => $getStringValue($beneficiaryData['Type of Water Resource'] ?? null),
+                         'training_details_description' => $getStringValue($beneficiaryData['Training Details Description'] ?? null),
+                         'input1' => $getStringValue($beneficiaryData['Input1'] ?? null),
+                         'input2' => $getStringValue($beneficiaryData['Input2'] ?? null),
+                         'input3' => $getStringValue($beneficiaryData['Input3'] ?? null),
+                         'project_type' => $getStringValue($beneficiaryData['project_type'] ?? null),
                      ]);
+     
+                     $recordCount++;
                  }
              }
+     
+             // Redirect back with a success message
+             return redirect()->back()->with('success', "{$recordCount} CSV records uploaded and beneficiary records added successfully.");
          }
      
-         // Redirect back with a success message
-         return redirect()->back()->with('success', 'CSV uploaded and beneficiary records added successfully.');
+         return redirect()->back()->with('error', 'No CSV file provided.');
      }
      
 
@@ -189,7 +206,7 @@ public function generateCsv()
         'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'AI Division', 'Latitude', 'Longitude',
         'Number of Family Members', 'Head of Householder Name', 'Householder Number', 'Income Source', 'Average Income',
         'Monthly Household Expenses', 'Household Level Assets Description', 'Community-Based Organization', 'Type of Water Resource',
-        'Training Details Description','Input1', 'Input2', 'Input3','project_type'
+        'Training Details Description','Input1', 'Input2', 'Youth Enterprises Project Name','Type of Project'
     ];
 
     // Insert the header into the CSV file
@@ -446,6 +463,14 @@ public function index(Request $request)
     if ($request->project_type === '4p') {
         $beneficiary->eoi_business_title = $request->eoi_business_title;
         $beneficiary->eoi_category = $request->eoi_category;
+    }
+
+    // If youth enterprise is selected, populate input3 with organization name
+    if ($request->project_type === 'youth' && $request->youth_proposal_id) {
+        $youthProposal = \App\Models\YouthProposal::find($request->youth_proposal_id);
+        if ($youthProposal) {
+            $beneficiary->input3 = $youthProposal->organization_name;
+        }
     }
 
     $beneficiary->save();
