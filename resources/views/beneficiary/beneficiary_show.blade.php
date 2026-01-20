@@ -828,7 +828,7 @@
                             </div>
                         </div>
 
-                        @if ($beneficiary->project_type === 'resilience')
+                        @if ($beneficiary->project_type === 'Resilience Project' || $beneficiary->project_type === 'resilience')
                             <div class="info-item">
                                 <div class="info-label">Agriculture/Livestock</div>
                                 <div class="info-value">{{ ucfirst($beneficiary->input1 ?? 'N/A') }}</div>
@@ -852,24 +852,24 @@
                                     <div class="info-value">{{ $beneficiary->input3 ?? 'N/A' }}</div>
                                 </div>
                             @endif
-                        @elseif ($beneficiary->project_type === 'youth')
+                        @elseif ($beneficiary->project_type === 'Youth Enterprise' || $beneficiary->project_type === 'youth')
                             <div class="info-item">
                                 <div class="info-label">Youth Enterprises Project Name</div>
                                 <div class="info-value">{{ $beneficiary->input3 ?? 'N/A' }}</div>
                             </div>
-                        @elseif ($beneficiary->project_type === '4p')
+                        @elseif ($beneficiary->project_type === '4P Projects' || $beneficiary->project_type === '4p')
                             <div class="info-item">
                                 <div class="info-label">4P Project - Business Concept Title</div>
-                                <div class="info-value">{{ $beneficiary->eoi_business_title ?? 'N/A' }}</div>
+                                <div class="info-value">{{ $beneficiary->input2 ?? $beneficiary->eoi_business_title ?? 'N/A' }}</div>
                             </div>
                             <div class="info-item">
                                 <div class="info-label">4P Project Category</div>
-                                <div class="info-value">{{ $beneficiary->eoi_category ?? 'N/A' }}</div>
+                                <div class="info-value">{{ $beneficiary->input3 ?? $beneficiary->eoi_category ?? 'N/A' }}</div>
                             </div>
-                        @elseif ($beneficiary->project_type === 'nutrition')
+                        @elseif ($beneficiary->project_type === 'Nutrition Programs' || $beneficiary->project_type === 'nutrition')
                             <div class="info-item">
                                 <div class="info-label">Nutrition Program Name</div>
-                                <div class="info-value">{{ $beneficiary->input1 ?? 'N/A' }}</div>
+                                <div class="info-value">{{ $beneficiary->input3 ?? 'N/A' }}</div>
                             </div>
                         @endif
                     </div>

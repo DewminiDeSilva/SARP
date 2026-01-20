@@ -210,8 +210,9 @@
         @else
             @foreach ($eoiData as $data)
                 <div class="mb-3">
-                    <h5>EOI Category: <span class="text-success">{{$beneficiary->eoi_category}}</span></h5>
-                    <h5>EOI Business Concept Title: <span class="text-success">{{ $beneficiary->eoi_business_title  }}</span></h5>
+                    <h5>Type of Project: <span class="text-success">{{ ucfirst($beneficiary->project_type ?? 'N/A') }}</span></h5>
+                    <h5>4P Project - Business Concept Title: <span class="text-success">{{ $beneficiary->input2 ?? $beneficiary->eoi_business_title ?? 'N/A' }}</span></h5>
+                    <h5>4P Project Category: <span class="text-success">{{ $beneficiary->input3 ?? $beneficiary->eoi_category ?? 'N/A' }}</span></h5>
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">

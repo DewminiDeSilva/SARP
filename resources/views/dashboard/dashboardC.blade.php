@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+        .sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;   /* if not already */
+}
+
         .imgsize {
             height: 50%;
             width: 50%;
@@ -61,6 +67,13 @@ li.active:hover {
             margin-top: 80px; /* Adjust based on header height */
         }
 
+li.active {
+    background-color: #4fc3f7 !important;
+    border-left: 5px solid #1C6008;
+    font-weight: bold;
+
+    
+}
 
 
     </style>
@@ -88,224 +101,310 @@ li.active:hover {
 
 
 
-        <ul>
-        @if(auth()->user() && auth()->user()->role == 'admin')
-            <li><a href="/admin/users" style="color: #FFFFFF">User Management</a></li>
-        @endif
+        @php
+    // top level active checks
+    $isDashboard   = request()->is('dashboard');
+    $isLogframe    = request()->is('logframe*');
+    $isBeneForm    = request()->is('bene');
+    $isStaff       = request()->is('staff_profile*');
+    $isGallery     = request()->is('gallery*');
 
-            <li><a href="/dashboard" style="color: #FFFFFF">Dashboard</a></li>
-            <li><a href="/logframe/tanks" style="color: #FFFFFF">Log frame</a></li>
-            <li><a href="/bene" style="color: #FFFFFF">Beneficiary Application Form</a></li>
-            <li><a href="/staff_profile" style="color: #FFFFFF">Staff Profile</a></li>
-            <li><a href="/gallery" style="color: #FFFFFF">Gallery</a></li>
+    // group checks (submenu open)
+    $isBeneficiary = request()->is('beneficiary*');
+    $isTank        = request()->is('tank_rehabilitation*');
+    $isInfra       = request()->is('infrastructure*');
 
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Beneficiary</a>
-                <ul class="nested">
-                    <li href="/beneficiary/create"><a href="/beneficiary/create" style="color: #FFFFFF">Beneficiary Registration</a></li>
-                    <li href="/beneficiary"><a href="/beneficiary" style="color: #FFFFFF">Beneficiary Profile</a></li>
-                    <!-- <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Family Member</a>
-                        <ul class="nested-n">
-                            <li href="/family/create/12"><a href="/family/create/12" style="color: #FFFFFF">Family Member Registration</a></li>
-                            <li href="/family"><a href="/family" style="color: #FFFFFF">Family Member Details</a></li>
-                        </ul>
-                    </li> -->
-                </ul>
+    $isSocial      = request()->is('cdf*') || request()->is('asc_registration*') || request()->is('farmerorganization*') || request()->is('training*') || request()->is('grievances*');
+
+    $isResilience  = request()->is('agri*') || request()->is('agriculture*') || request()->is('lstock*') || request()->is('beneficiaries/list*') || request()->is('nutrient-home*') || request()->is('fingerling*');
+
+    $isYouth       = request()->is('youth-proposals*') || request()->is('youth-proposal*');
+
+    $is4P          = request()->is('expressions*');
+
+    $isAgroEnt     = request()->is('agro*');
+
+    $isNRM         = request()->is('nrmtraining*');
+    $isFFS         = request()->is('ffs-training*');
+    $isNutrition   = request()->is('nutrition*');
+
+    $isAgroForest  = request()->is('agro-forest*');
+
+    $isDocs        = request()->is('awpb*') || request()->is('costtab*') || request()->is('projectdesignreport*') || request()->is('progress*');
+@endphp
+
+<ul>
+    {{-- Admin --}}
+    @if(auth()->user() && auth()->user()->role == 'admin')
+        <li class="{{ request()->is('admin/users') ? 'active' : '' }}">
+            <a href="/admin/users" style="color:#FFFFFF">User Management</a>
+        </li>
+    @endif
+
+    {{-- Single links --}}
+    <li class="{{ $isDashboard ? 'active' : '' }}">
+        <a href="/dashboard" style="color:#FFFFFF">Dashboard</a>
+    </li>
+
+    <li class="{{ $isLogframe ? 'active' : '' }}">
+        <a href="/logframe/tanks" style="color:#FFFFFF">Log frame</a>
+    </li>
+
+    <li class="{{ $isBeneForm ? 'active' : '' }}">
+        <a href="/bene" style="color:#FFFFFF">Beneficiary Application Form</a>
+    </li>
+
+    <li class="{{ $isStaff ? 'active' : '' }}">
+        <a href="/staff_profile" style="color:#FFFFFF">Staff Profile</a>
+    </li>
+
+    <li class="{{ $isGallery ? 'active' : '' }}">
+        <a href="/gallery" style="color:#FFFFFF">Gallery</a>
+    </li>
+
+    {{-- Beneficiary --}}
+    <li class="submenu {{ $isBeneficiary ? 'open' : '' }}">
+        <a href="#" class="{{ $isBeneficiary ? 'active' : '' }}" style="color:#FFFFFF">Beneficiary</a>
+        <ul class="nested {{ $isBeneficiary ? 'show' : '' }}">
+            <li class="{{ request()->is('beneficiary/create') ? 'active' : '' }}">
+                <a href="/beneficiary/create" style="color:#FFFFFF">Beneficiary Registration</a>
             </li>
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Tank Rehabilitation</a>
-                <ul class="nested">
-                    <li href="/tank_rehabilitation/create"><a href="/tank_rehabilitation/create" style="color: #FFFFFF">Tank Rehabilitation Registation</a></li>
-                    <li href="/tank_rehabilitation"><a href="/tank_rehabilitation" style="color: #FFFFFF">Tank Rehabilitation Details</a></li>
-                </ul>
+            <li class="{{ request()->is('beneficiary') ? 'active' : '' }}">
+                <a href="/beneficiary" style="color:#FFFFFF">Beneficiary Profile</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Tank Rehabilitation --}}
+    <li class="submenu {{ $isTank ? 'open' : '' }}">
+        <a href="#" class="{{ $isTank ? 'active' : '' }}" style="color:#FFFFFF">Tank Rehabilitation</a>
+        <ul class="nested {{ $isTank ? 'show' : '' }}">
+            <li class="{{ request()->is('tank_rehabilitation/create') ? 'active' : '' }}">
+                <a href="/tank_rehabilitation/create" style="color:#FFFFFF">Tank Rehabilitation Registration</a>
+            </li>
+            <li class="{{ request()->is('tank_rehabilitation') ? 'active' : '' }}">
+                <a href="/tank_rehabilitation" style="color:#FFFFFF">Tank Rehabilitation Details</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Infrastructure Development --}}
+    <li class="submenu {{ $isInfra ? 'open' : '' }}">
+        <a href="#" class="{{ $isInfra ? 'active' : '' }}" style="color:#FFFFFF">Infrastructure Development</a>
+        <ul class="nested {{ $isInfra ? 'show' : '' }}">
+            <li class="{{ request()->is('infrastructure/create') ? 'active' : '' }}">
+                <a href="/infrastructure/create" style="color:#FFFFFF">Infrastructure Development</a>
+            </li>
+            <li class="{{ request()->is('infrastructure') ? 'active' : '' }}">
+                <a href="/infrastructure" style="color:#FFFFFF">Infrastructure Development Details</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Social Inclusion & Gender --}}
+    <li class="submenu {{ $isSocial ? 'open' : '' }}">
+        <a href="#" class="{{ $isSocial ? 'active' : '' }}" style="color:#FFFFFF">Social Inclusion and Gender</a>
+        <ul class="nested {{ $isSocial ? 'show' : '' }}">
+            <li class="{{ request()->is('cdf') ? 'active' : '' }}">
+                <a href="/cdf" style="color:#FFFFFF">Community Development Forum</a>
+            </li>
+            <li class="{{ request()->is('asc_registration') ? 'active' : '' }}">
+                <a href="/asc_registration" style="color:#FFFFFF">Agrarian Services Center</a>
+            </li>
+            <li class="{{ request()->is('farmerorganization') ? 'active' : '' }}">
+                <a href="/farmerorganization" style="color:#FFFFFF">Farmer Organization Information</a>
+            </li>
+            <li class="{{ request()->is('training') ? 'active' : '' }}">
+                <a href="/training" style="color:#FFFFFF">Training Program Details</a>
             </li>
 
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Infrastructure Development</a>
-                <ul class="nested">
-                    <li href="/infrastructure/create"><a href="/infrastructure/create" style="color: #FFFFFF">Infrastructure Development</a></li>
-                    <li href="/infrastructure"><a href="/infrastructure" style="color: #FFFFFF">Infrastructure Development Details</a></li>
-                </ul>
-            </li>
-
-
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Social Inclusion and Gender</a>
-                <ul class="nested">
-                    <li href="cdf"><a href="/cdf" style="color: #FFFFFF">Community Development Forum</a></li>
-                    <li href="/asc_registration"><a href="/asc_registration" style="color: #FFFFFF">Agrarian Services Center</a></li>
-                    <li href="/farmerorganization"><a href="/farmerorganization" style="color: #FFFFFF">Farmer Organization Information</a></li>
-                    <li href="/training"><a href="/training" style="color: #FFFFFF">Training Program Details</a></li>
-
-
-
-                    <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Grievances</a>
-                        <ul class="nested">
-                            <li href="/grievances/create"><a href="/grievances/create" style="color: #FFFFFF">Grievances Registration</a></li>
-                            <li href="/grievances"><a href="/grievances" style="color: #FFFFFF">Grievances Information</a></li>
-                        </ul>
+            {{-- Grievances inside Social --}}
+            @php $isGriev = request()->is('grievances*'); @endphp
+            <li class="submenu {{ $isGriev ? 'open' : '' }}">
+                <a href="#" class="{{ $isGriev ? 'active' : '' }}" style="color:#FFFFFF">Grievances</a>
+                <ul class="nested {{ $isGriev ? 'show' : '' }}">
+                    <li class="{{ request()->is('grievances/create') ? 'active' : '' }}">
+                        <a href="/grievances/create" style="color:#FFFFFF">Grievances Registration</a>
                     </li>
-
-
+                    <li class="{{ request()->is('grievances') ? 'active' : '' }}">
+                        <a href="/grievances" style="color:#FFFFFF">Grievances Information</a>
+                    </li>
                 </ul>
             </li>
+        </ul>
+    </li>
 
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Resilience Projects</a>
-                <ul class="nested">
-                <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Agriculture</a>
-                        <ul class="nested">
-                            <li href="/agri"><a href="/agri" style="color: #FFFFFF">Agriculture Registration</a></li>
-                            <li href="/agriculture"><a href="/agriculture" style="color: #FFFFFF">Agriculture List</a></li>
-                        </ul>
+    {{-- Resilience Projects --}}
+    <li class="submenu {{ $isResilience ? 'open' : '' }}">
+        <a href="#" class="{{ $isResilience ? 'active' : '' }}" style="color:#FFFFFF">Resilience Projects</a>
+        <ul class="nested {{ $isResilience ? 'show' : '' }}">
+
+            {{-- Agriculture --}}
+            @php $isAgri = request()->is('agri*') || request()->is('agriculture*'); @endphp
+            <li class="submenu {{ $isAgri ? 'open' : '' }}">
+                <a href="#" class="{{ $isAgri ? 'active' : '' }}" style="color:#FFFFFF">Agriculture</a>
+                <ul class="nested {{ $isAgri ? 'show' : '' }}">
+                    <li class="{{ request()->is('agri') ? 'active' : '' }}">
+                        <a href="/agri" style="color:#FFFFFF">Agriculture Registration</a>
                     </li>
-
-                        <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Livestock</a>
-                        <ul class="nested">
-                            <li href="/livestock"><a href="/lstock" style="color: #FFFFFF">Livestock Registration</a></li>
-                            <li href="/beneficiaries/list"><a href="/beneficiaries/list" style="color: #FFFFFF">Livestock List</a></li>
-
-                        </ul>
-                    </li>
-
-                    <li><a href="/nutrient-home" style="color: #FFFFFF">Nutrient Rich Home Garden</a></li> <!-- ✅ Your new module -->
-
-
-                    <li class="submenu">
-                        <a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a>
-                        <ul class="nested">
-
-                            <li href="/fingerling"><a href="/fingerling" style="color: #FFFFFF">Fingerlings Stocking Details</a></li>
-                        </ul>
+                    <li class="{{ request()->is('agriculture') ? 'active' : '' }}">
+                        <a href="/agriculture" style="color:#FFFFFF">Agriculture List</a>
                     </li>
                 </ul>
             </li>
 
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Youth Enterprises</a>
-                    <ul class="nested">
-                            <li><a href="/youth-proposals" style="color: #FFFFFF">Youth Proposals</a></li>
-                            <!-- <li><a href="/youth" style="color: #FFFFFF">Youth Projects</a></li> -->
-                            <li><a href="/youth-proposal/agreement-signed" style="color: #FFFFFF">Youth Projects</a></li>
-                    </ul>
-            </li>
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">4p Agri Business Development Projects</a>
-                <ul class="nested">
-                    <li href="/expressions"><a href="/expressions" style="color: #FFFFFF">Expression Of Interest (EOI)</a></li>
-
-                    <li class="submenu">
-                        <a href="#" style="color: #FFFFFF">Establish 4p Projects</a>
-                        <ul class="nested">
-                            <li href=""><a href="/expressions/evaluation-completed" style="color: #FFFFFF">Registration of 4P Project</a></li>
-
-                        </ul>
+            {{-- Livestock --}}
+            @php $isLive = request()->is('lstock*') || request()->is('beneficiaries/list*'); @endphp
+            <li class="submenu {{ $isLive ? 'open' : '' }}">
+                <a href="#" class="{{ $isLive ? 'active' : '' }}" style="color:#FFFFFF">Livestock</a>
+                <ul class="nested {{ $isLive ? 'show' : '' }}">
+                    <li class="{{ request()->is('lstock') ? 'active' : '' }}">
+                        <a href="/lstock" style="color:#FFFFFF">Livestock Registration</a>
                     </li>
-
-
-                </ul>
-
-            </li>
-
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Agro Enterprice</a>
-                <ul class="nested">
-                    <li href="/agro/create"><a href="/agro/create" style="color: #FFFFFF">Agro Enterprice Register</a></li>
-                    <li href="/agro"><a href="/agro" style="color: #FFFFFF">Agro Enterprice Details</a></li>
+                    <li class="{{ request()->is('beneficiaries/list') ? 'active' : '' }}">
+                        <a href="/beneficiaries/list" style="color:#FFFFFF">Livestock List</a>
+                    </li>
                 </ul>
             </li>
 
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Natural Resource Managment (NRM)</a>
-                <ul class="nested">
-                    <li href="/nrmtraining"><a href="/nrmtraining" style="color: #FFFFFF">Training Program Details</a></li>
-
-                </ul>
-            </li>
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Farmer Field Schools (FFS)</a>
-                <ul class="nested">
-                    <li href="/ffs-training"><a href="/ffs-training" style="color: #FFFFFF">FFS Training Program Details</a></li>
-
-                </ul>
+            <li class="{{ request()->is('nutrient-home') ? 'active' : '' }}">
+                <a href="/nutrient-home" style="color:#FFFFFF">Nutrient Rich Home Garden</a>
             </li>
 
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Nutrition Training Program</a>
-                <ul class="nested">
-                    <li href="/training"><a href="/nutrition" style="color: #FFFFFF">Nutrition Training Program Details</a></li>
-
-                </ul>
+            <li class="{{ request()->is('fingerling*') ? 'active' : '' }}">
+                <a href="/fingerling" style="color:#FFFFFF">Fingerlings Stocking Details</a>
             </li>
-            
-    <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Agro Forest</a>
-                <ul class="nested">
-                    <li href="/agro-forest"><a href="/agro-forest" style="color: #FFFFFF">Agro forest Details</a></li>
-                     <li href="/agro-forest/create"><a href="/agro-forest/create" style="color: #FFFFFF">Agro forest Registration</a></li>
-                </ul>
-            </li>
-
-
-            <li class="submenu">
-                <a href="#" style="color: #FFFFFF">Project Documents</a>
-                <ul class="nested">
-                    <li href="/awpb"><a href="/awpb" style="color: #FFFFFF">Annual Work Plan and Budget (AWPB)</a></li>
-                    <li href="/costtab"><a href="/costtab" style="color: #FFFFFF">Cost TAB</a></li>
-                    <li href="/projectdesignreport"><a href="/projectdesignreport" style="color: #FFFFFF">Project Design Report</a></li>
-                    <li href="/progress"><a href="/progress" style="color: #FFFFFF">Progress Report</a></li>
-                </ul>
-
-            </li>
-
 
         </ul>
+    </li>
+
+    {{-- Youth Enterprises --}}
+    <li class="submenu {{ $isYouth ? 'open' : '' }}">
+        <a href="#" class="{{ $isYouth ? 'active' : '' }}" style="color:#FFFFFF">Youth Enterprises</a>
+        <ul class="nested {{ $isYouth ? 'show' : '' }}">
+            <li class="{{ request()->is('youth-proposals') ? 'active' : '' }}">
+                <a href="/youth-proposals" style="color:#FFFFFF">Youth Proposals</a>
+            </li>
+            <li class="{{ request()->is('youth-proposal/agreement-signed') ? 'active' : '' }}">
+                <a href="/youth-proposal/agreement-signed" style="color:#FFFFFF">Youth Projects</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- 4P --}}
+    <li class="submenu {{ $is4P ? 'open' : '' }}">
+        <a href="#" class="{{ $is4P ? 'active' : '' }}" style="color:#FFFFFF">4p Agri Business Development Projects</a>
+        <ul class="nested {{ $is4P ? 'show' : '' }}">
+            <li class="{{ request()->is('expressions') ? 'active' : '' }}">
+                <a href="/expressions" style="color:#FFFFFF">Expression Of Interest (EOI)</a>
+            </li>
+            <li class="{{ request()->is('expressions/evaluation-completed') ? 'active' : '' }}">
+                <a href="/expressions/evaluation-completed" style="color:#FFFFFF">Registration of 4P Project</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Agro Enterprise --}}
+    <li class="submenu {{ $isAgroEnt ? 'open' : '' }}">
+        <a href="#" class="{{ $isAgroEnt ? 'active' : '' }}" style="color:#FFFFFF">Agro Enterprice</a>
+        <ul class="nested {{ $isAgroEnt ? 'show' : '' }}">
+            <li class="{{ request()->is('agro/create') ? 'active' : '' }}">
+                <a href="/agro/create" style="color:#FFFFFF">Agro Enterprice Register</a>
+            </li>
+            <li class="{{ request()->is('agro') ? 'active' : '' }}">
+                <a href="/agro" style="color:#FFFFFF">Agro Enterprice Details</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- NRM --}}
+    <li class="submenu {{ $isNRM ? 'open' : '' }}">
+        <a href="#" class="{{ $isNRM ? 'active' : '' }}" style="color:#FFFFFF">Natural Resource Management (NRM)</a>
+        <ul class="nested {{ $isNRM ? 'show' : '' }}">
+            <li class="{{ request()->is('nrmtraining') ? 'active' : '' }}">
+                <a href="/nrmtraining" style="color:#FFFFFF">Training Program Details</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- FFS --}}
+    <li class="submenu {{ $isFFS ? 'open' : '' }}">
+        <a href="#" class="{{ $isFFS ? 'active' : '' }}" style="color:#FFFFFF">Farmer Field Schools (FFS)</a>
+        <ul class="nested {{ $isFFS ? 'show' : '' }}">
+            <li class="{{ request()->is('ffs-training') ? 'active' : '' }}">
+                <a href="/ffs-training" style="color:#FFFFFF">FFS Training Program Details</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Nutrition --}}
+    <li class="submenu {{ $isNutrition ? 'open' : '' }}">
+        <a href="#" class="{{ $isNutrition ? 'active' : '' }}" style="color:#FFFFFF">Nutrition Training Program</a>
+        <ul class="nested {{ $isNutrition ? 'show' : '' }}">
+            <li class="{{ request()->is('nutrition') ? 'active' : '' }}">
+                <a href="/nutrition" style="color:#FFFFFF">Nutrition Training Program Details</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Agro Forest --}}
+    <li class="submenu {{ $isAgroForest ? 'open' : '' }}">
+        <a href="#" class="{{ $isAgroForest ? 'active' : '' }}" style="color:#FFFFFF">Agro Forest</a>
+        <ul class="nested {{ $isAgroForest ? 'show' : '' }}">
+            <li class="{{ request()->is('agro-forest') ? 'active' : '' }}">
+                <a href="/agro-forest" style="color:#FFFFFF">Agro forest Details</a>
+            </li>
+            <li class="{{ request()->is('agro-forest/create') ? 'active' : '' }}">
+                <a href="/agro-forest/create" style="color:#FFFFFF">Agro forest Registration</a>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Project Documents --}}
+    <li class="submenu {{ $isDocs ? 'open' : '' }}">
+        <a href="#" class="{{ $isDocs ? 'active' : '' }}" style="color:#FFFFFF">Project Documents</a>
+        <ul class="nested {{ $isDocs ? 'show' : '' }}">
+            <li class="{{ request()->is('awpb') ? 'active' : '' }}">
+                <a href="/awpb" style="color:#FFFFFF">Annual Work Plan and Budget (AWPB)</a>
+            </li>
+            <li class="{{ request()->is('costtab') ? 'active' : '' }}">
+                <a href="/costtab" style="color:#FFFFFF">Cost TAB</a>
+            </li>
+            <li class="{{ request()->is('projectdesignreport') ? 'active' : '' }}">
+                <a href="/projectdesignreport" style="color:#FFFFFF">Project Design Report</a>
+            </li>
+            <li class="{{ request()->is('progress') ? 'active' : '' }}">
+                <a href="/progress" style="color:#FFFFFF">Progress Report</a>
+            </li>
+        </ul>
+    </li>
+
+</ul>
+
     </div>
 </div>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var submenuLinks = document.querySelectorAll('.submenu > a');
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.submenu > a').forEach(function (link) {
+        link.addEventListener('click', function (e) {
 
-        submenuLinks.forEach(function (link) {
-            link.addEventListener('click', function (e) {
+            // Only prevent default if it is a toggle link
+            if (this.getAttribute('href') === '#') {
                 e.preventDefault();
-                var submenu = this.nextElementSibling;
-                if (submenu && submenu.tagName === 'UL') {
-                    if (submenu.classList.contains('show')) {
-                        submenu.classList.remove('show');
-                        this.classList.remove('active');
-                    } else {
-                        submenu.classList.add('show');
-                        this.classList.add('active');
-                    }
-                }
-            });
-        });
+            } else {
+                return;
+            }
 
-        // Function to handle nested submenus
-        var nestedSubmenuLinks = document.querySelectorAll('.submenu ul li.nested-n > a');
-
-        nestedSubmenuLinks.forEach(function (link) {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                var nestedSubmenu = this.nextElementSibling;
-                if (nestedSubmenu && nestedSubmenu.tagName === 'UL') {
-                    if (nestedSubmenu.classList.contains('show')) {
-                        nestedSubmenu.classList.remove('show');
-                        this.classList.remove('active');
-                    } else {
-                        nestedSubmenu.classList.add('show');
-                        this.classList.add('active');
-                    }
-                }
-            });
+            var submenu = this.nextElementSibling;
+            if (submenu && submenu.tagName === 'UL') {
+                submenu.classList.toggle('show');
+                this.classList.toggle('active');
+            }
         });
     });
+});
 </script>
+
+
 </body>
 </html>
