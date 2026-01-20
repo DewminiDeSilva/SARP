@@ -564,10 +564,10 @@ textarea:focus {
     <label for="project_type" class="form-label dropdown-label text-center">Type of Project</label>
     <select class="form-control btn btn-success" id="project_type" name="project_type" required>
         <option value="">Select Project Type</option>
-        <option value="resilience">Resilience Project</option>
-        <option value="youth">Youth Enterprise</option>
-        <option value="4p">4P Projects</option>
-        <option value="nutrition">Nutrition Programs</option>
+        <option value="Resilience Project">Resilience Project</option>
+        <option value="Youth Enterprise">Youth Enterprise</option>
+        <option value="4P Projects">4P Projects</option>
+        <option value="Nutrition Programs">Nutrition Programs</option>
     </select>
 </div>
 
@@ -1090,13 +1090,13 @@ $(document).ready(function () {
         $('#resilienceSection, #youthSection, #eoiSection, #nutritionSection').addClass('d-none');
 
         // Show based on selection
-        if (selected === 'resilience') {
+        if (selected === 'Resilience Project' || selected === 'resilience') {
             $('#resilienceSection').removeClass('d-none');
-        } else if (selected === 'youth') {
+        } else if (selected === 'Youth Enterprise' || selected === 'youth') {
             $('#youthSection').removeClass('d-none');
-        } else if (selected === '4p') {
+        } else if (selected === '4P Projects' || selected === '4p') {
             $('#eoiSection').removeClass('d-none');
-        } else if (selected === 'nutrition') {
+        } else if (selected === 'Nutrition Programs' || selected === 'nutrition') {
             $('#nutritionSection').removeClass('d-none');
         }
     });
@@ -1196,14 +1196,14 @@ $(document).ready(function () {
             $('#resilienceSection, #youthSection, #eoiSection, #nutritionSection').addClass('d-none');
             $('#youthEnterpriseProjectName').hide();
 
-            if (selected === 'resilience') {
+            if (selected === 'Resilience Project' || selected === 'resilience') {
                 $('#resilienceSection').removeClass('d-none');
-            } else if (selected === 'youth') {
+            } else if (selected === 'Youth Enterprise' || selected === 'youth') {
                 $('#youthSection').removeClass('d-none');
-                $('#youthEnterpriseProjectName').show(); // Show the dropdown when 'Youth Enterprises' is selected
-            } else if (selected === '4p') {
+                $('#youthEnterpriseProjectName').show(); // Show the dropdown when 'Youth Enterprise' is selected
+            } else if (selected === '4P Projects' || selected === '4p') {
                 $('#eoiSection').removeClass('d-none');
-            } else if (selected === 'nutrition') {
+            } else if (selected === 'Nutrition Programs' || selected === 'nutrition') {
                 $('#nutritionSection').removeClass('d-none');
             }
         });
