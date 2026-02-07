@@ -26,4 +26,5 @@ class LivestockData extends Model
     {
         return $this->belongsTo(Beneficiary::class);
     }
+
 }

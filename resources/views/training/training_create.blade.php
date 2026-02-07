@@ -199,7 +199,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="dropdown">
-                            <label for="province" class="form-label dropdown-label">Province</label>
+                            <label for="province" class="form-label dropdown-label">Province Name</label>
                             <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
                                 <option value="">Select Province</option>
                             </select>
@@ -208,7 +208,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="district" class="form-label dropdown-label">District</label>
+                            <label for="district" class="form-label dropdown-label">District Name</label>
                             <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
                                 <option value="">Select District</option>
                             </select>
@@ -217,27 +217,30 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="dsd" class="form-label dropdown-label">DSD</label>
-                            <select id="dsDivisionDropdown" name="ds_division" class="btn btn-success dropdown-toggle" required>
+                            <label for="dsd" class="form-label dropdown-label">Divisional Secretariat (DSD)</label>
+                            <select id="dsDivisionDropdown" class="btn btn-success dropdown-toggle">
                                 <option value="">Select DSD</option>
+                                <option value="N/A">N/A</option>
                             </select>
                             <input type="hidden" id="dsDivisionName" name="ds_division_name">
                         </div>
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="gnd" class="form-label dropdown-label">GND</label>
-                            <select id="gndDropdown" name="gn_division_name" class="btn btn-success dropdown-toggle" required>
+                            <label for="gnd" class="form-label dropdown-label">Grama Niladhari Division (GND)</label>
+                            <select id="gndDropdown" class="btn btn-success dropdown-toggle">
                                 <option value="">Select GND</option>
+                                <option value="N/A">N/A</option>
                             </select>
                             <input type="hidden" id="gndName" name="gn_division_name">
                         </div>
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="asc" class="form-label dropdown-label">ASC</label>
-                            <select id="ascDropdown" name="as_center" class="btn btn-success dropdown-toggle" required>
+                            <label for="asc" class="form-label dropdown-label">Agriculture Service Centre (ASC)</label>
+                            <select id="ascDropdown" name="as_center" class="btn btn-success dropdown-toggle">
                                 <option value="">Select ASC</option>
+                                <option value="N/A">N/A</option>
                             </select>
                         </div>
                     </div>
@@ -287,171 +290,55 @@
 </div>
 
 <script>
-  $(document).ready(function() {
-      // Fetch provinces
-      $.ajax({
-          url: '/provinces',
-          type: 'GET',
-          success: function(data) {
-              $.each(data, function(index, province) {
-                  $('#provinceDropdown').append($('<option>', {
-                      value: province.id,
-                      text: province.name
-                  }));
-              });
-          }
-      });
-
-      // Fetch districts based on selected province
-      $('#provinceDropdown').change(function() {
-          var provinceId = $(this).val();
-          if (provinceId !== '') {
-              $('#districtDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select District'
-              }));
-              $('#dsDivisionDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select DS Division'
-              }));
-              $('#gndDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select GND'
-              }));
-
-              $.ajax({
-                  url: '/provinces/' + provinceId + '/districts',
-                  type: 'GET',
-                  success: function(data) {
-                      $.each(data, function(index, district) {
-                          $('#districtDropdown').append($('<option>', {
-                              value: district.id,
-                              text: district.district
-                          }));
-                      });
-                  },
-                  error: function(xhr, status, error) {
-                      console.error(xhr.responseText);
-                  }
-              });
-          } else {
-              $('#districtDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select District'
-              }));
-              $('#dsDivisionDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select DS Division'
-              }));
-              $('#gndDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select GND'
-              }));
-          }
-          $('#provinceName').val('');
-          $('#districtName').val('');
-          $('#dsDivisionName').val('');
-          $('#gndName').val('');
-      });
-
-      // Fetch DS Divisions based on selected district
-      $('#districtDropdown').change(function() {
-          var districtId = $(this).val();
-          if (districtId !== '') {
-              $.ajax({
-                  url: '/districts/' + districtId + '/ds-divisions',
-                  type: 'GET',
-                  success: function(data) {
-                      $('#dsDivisionDropdown').empty().append($('<option>', {
-                          value: '',
-                          text: 'Select DS Division'
-                      }));
-                      $.each(data, function(index, dsDivision) {
-                          $('#dsDivisionDropdown').append($('<option>', {
-                              value: dsDivision.id,
-                              text: dsDivision.division
-                          }));
-                      });
-                  },
-                  error: function(xhr, status, error) {
-                      console.error(xhr.responseText);
-                  }
-              });
-          } else {
-              $('#dsDivisionDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select DS Division'
-              }));
-          }
-          $('#dsDivisionName').val('');
-      });
-
-      // Fetch GNDs based on selected DS Division
-      $('#dsDivisionDropdown').change(function() {
-          var dsDivisionId = $(this).val();
-          if (dsDivisionId !== '') {
-              $.ajax({
-                  url: '/ds-divisions/' + dsDivisionId + '/gn-divisions',
-                  type: 'GET',
-                  success: function(data) {
-                      console.log(data);
-                      $('#gndDropdown').empty().append($('<option>', {
-                          value: '',
-                          text: 'Select GND'
-                      }));
-                      $.each(data, function(index, gnd) {
-                          $('#gndDropdown').append($('<option>', {
-                              value: gnd.id,
-                              text: gnd.gn_division_name
-                          }));
-                      });
-                  },
-                  error: function(xhr, status, error) {
-                      console.error(xhr.responseText);
-                  }
-              });
-          } else {
-              $('#gndDropdown').empty().append($('<option>', {
-                  value: '',
-                  text: 'Select GND'
-              }));
-          }
-          $('#gndName').val('');
-      });
-
-      $('#provinceDropdown').change(function() {
-          $('#provinceName').val($(this).find('option:selected').text());
-      });
-
-      $('#districtDropdown').change(function() {
-          $('#districtName').val($(this).find('option:selected').text());
-      });
-
-      $('#dsDivisionDropdown').change(function() {
-          $('#dsDivisionName').val($(this).find('option:selected').text());
-      });
-
-      $('#gndDropdown').change(function() {
-          $('#gndName').val($(this).find('option:selected').text());
-      });
-  });
-</script>
-
-<script>
-    $("#startDate").datepicker({
-        dateFormat: 'yy-mm-dd'
+$(document).ready(function() {
+    function resetDsGndAsc() {
+        $('#dsDivisionDropdown').empty().append($('<option>', { value: '', text: 'Select DSD' })).append($('<option>', { value: 'N/A', text: 'N/A' }));
+        $('#gndDropdown').empty().append($('<option>', { value: '', text: 'Select GND' })).append($('<option>', { value: 'N/A', text: 'N/A' }));
+        $('#dsDivisionName').val(''); $('#gndName').val('');
+    }
+    $.ajax({ url: '/provinces', type: 'GET', success: function(data) {
+        if (data && data.length) { $.each(data, function(i, p) { $('#provinceDropdown').append($('<option>', { value: p.id, text: p.name || p.province_name || p.id })); }); }
+    }, error: function() { $('#provinceDropdown').append($('<option>', { value: 'N/A', text: 'N/A' })); }});
+    $('#provinceDropdown').change(function() {
+        var id = $(this).val();
+        $('#provinceName').val($(this).find('option:selected').text());
+        $('#districtDropdown').empty().append($('<option>', { value: '', text: 'Select District' }));
+        resetDsGndAsc();
+        $('#districtName').val('');
+        if (!id || id === '') return;
+        $.ajax({ url: '/provinces/' + id + '/districts', type: 'GET', success: function(data) {
+            $('#districtDropdown').find('option:not(:first)').remove();
+            if (data && data.length) $.each(data, function(i, d) { $('#districtDropdown').append($('<option>', { value: d.id, text: d.district || d.name || d.id })); });
+        }, error: function() { $('#districtDropdown').append($('<option>', { value: 'N/A', text: 'N/A' })); }});
     });
-
-    $(document).ready(function () {
-        $.get('/asc', function (data) {
-            $.each(data, function (index, asc) {
-                $('#ascDropdown').append($('<option>', {
-                    value: asc.asc_name,
-                    text: asc.asc_name
-                }));
-            });
-        });
+    $('#districtDropdown').change(function() {
+        var id = $(this).val();
+        $('#districtName').val($(this).find('option:selected').text());
+        resetDsGndAsc();
+        if (!id || id === '') return;
+        $.ajax({ url: '/districts/' + id + '/ds-divisions', type: 'GET', success: function(data) {
+            $('#dsDivisionDropdown').empty().append($('<option>', { value: '', text: 'Select DSD' })).append($('<option>', { value: 'N/A', text: 'N/A' }));
+            if (data && data.length) $.each(data, function(i, d) { $('#dsDivisionDropdown').append($('<option>', { value: d.id, text: d.division || d.name || d.id })); });
+        }, error: function() { $('#dsDivisionDropdown').append($('<option>', { value: 'N/A', text: 'N/A' })); }});
     });
+    $('#dsDivisionDropdown').change(function() {
+        var id = $(this).val();
+        var text = $(this).find('option:selected').text();
+        $('#dsDivisionName').val(text);
+        $('#gndDropdown').empty().append($('<option>', { value: '', text: 'Select GND' })).append($('<option>', { value: 'N/A', text: 'N/A' }));
+        $('#gndName').val('');
+        if (!id || id === '' || id === 'N/A') { $('#gndName').val(text); return; }
+        $.ajax({ url: '/ds-divisions/' + id + '/gn-divisions', type: 'GET', success: function(data) {
+            $('#gndDropdown').empty().append($('<option>', { value: '', text: 'Select GND' })).append($('<option>', { value: 'N/A', text: 'N/A' }));
+            if (data && data.length) $.each(data, function(i, g) { $('#gndDropdown').append($('<option>', { value: g.id, text: g.gn_division_name || g.name || g.id })); });
+        }, error: function() { $('#gndDropdown').append($('<option>', { value: 'N/A', text: 'N/A' })); }});
+    });
+    $('#gndDropdown').change(function() { $('#gndName').val($(this).find('option:selected').text()); });
+    $.get('/asc').done(function(data) {
+        if (data && data.length) { $.each(data, function(i, asc) { var v = asc.asc_name || asc.name; if (v) $('#ascDropdown').append($('<option>', { value: v, text: v })); }); }
+    }).fail(function() { $('#ascDropdown').append($('<option>', { value: 'N/A', text: 'N/A' })); });
+});
+$("#startDate").datepicker({ dateFormat: 'yy-mm-dd' });
 </script>
 </body>
 </html>

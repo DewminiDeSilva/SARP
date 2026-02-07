@@ -62,4 +62,9 @@ class Livestock extends Model
     {
         return $this->hasMany(LiveInstallmentPayment::class);
     }
+
+    public function livestockTrainings()
+    {
+        return $this->hasMany(LivestockTraining::class);
+    }
 }

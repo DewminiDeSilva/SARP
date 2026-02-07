@@ -116,7 +116,7 @@ li.active {
 
     $isSocial      = request()->is('cdf*') || request()->is('asc_registration*') || request()->is('farmerorganization*') || request()->is('training*') || request()->is('grievances*');
 
-    $isResilience  = request()->is('agri*') || request()->is('agriculture*') || request()->is('lstock*') || request()->is('beneficiaries/list*') || request()->is('nutrient-home*') || request()->is('fingerling*');
+    $isResilience  = request()->is('agri*') || request()->is('agriculture*') || request()->is('agriculture-training*') || request()->is('lstock*') || request()->is('livestocks*') || request()->is('livestock-training*') || request()->is('beneficiaries/list*') || request()->is('nutrient-home*') || request()->is('fingerling*');
 
     $isYouth       = request()->is('youth-proposals*') || request()->is('youth-proposal*');
 
@@ -240,21 +240,24 @@ li.active {
         <ul class="nested {{ $isResilience ? 'show' : '' }}">
 
             {{-- Agriculture --}}
-            @php $isAgri = request()->is('agri*') || request()->is('agriculture*'); @endphp
+            @php $isAgri = request()->is('agri*') || request()->is('agriculture*') || request()->is('agriculture-training*'); @endphp
             <li class="submenu {{ $isAgri ? 'open' : '' }}">
                 <a href="#" class="{{ $isAgri ? 'active' : '' }}" style="color:#FFFFFF">Agriculture</a>
                 <ul class="nested {{ $isAgri ? 'show' : '' }}">
                     <li class="{{ request()->is('agri') ? 'active' : '' }}">
                         <a href="/agri" style="color:#FFFFFF">Agriculture Registration</a>
                     </li>
-                    <li class="{{ request()->is('agriculture') ? 'active' : '' }}">
+                    <li class="{{ request()->is('agriculture') && !request()->is('agriculture-training*') ? 'active' : '' }}">
                         <a href="/agriculture" style="color:#FFFFFF">Agriculture List</a>
+                    </li>
+                    <li class="{{ request()->is('agriculture-training*') ? 'active' : '' }}">
+                        <a href="{{ route('agriculture-training.index') }}" style="color:#FFFFFF">Training Program</a>
                     </li>
                 </ul>
             </li>
 
             {{-- Livestock --}}
-            @php $isLive = request()->is('lstock*') || request()->is('beneficiaries/list*'); @endphp
+            @php $isLive = request()->is('lstock*') || request()->is('livestocks*') || request()->is('livestock-training*') || request()->is('beneficiaries/list*'); @endphp
             <li class="submenu {{ $isLive ? 'open' : '' }}">
                 <a href="#" class="{{ $isLive ? 'active' : '' }}" style="color:#FFFFFF">Livestock</a>
                 <ul class="nested {{ $isLive ? 'show' : '' }}">
@@ -263,6 +266,9 @@ li.active {
                     </li>
                     <li class="{{ request()->is('beneficiaries/list') ? 'active' : '' }}">
                         <a href="/beneficiaries/list" style="color:#FFFFFF">Livestock List</a>
+                    </li>
+                    <li class="{{ request()->is('livestock-training*') ? 'active' : '' }}">
+                        <a href="{{ route('livestock-training.index') }}" style="color:#FFFFFF">Training Program</a>
                     </li>
                 </ul>
             </li>

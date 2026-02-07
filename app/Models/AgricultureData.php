@@ -103,5 +103,8 @@ public function creditPayments()
     return $this->hasMany(CreditPayment::class);
 }
 
-
+    public function agricultureTrainings()
+    {
+        return $this->hasMany(AgricultureTraining::class);
+    }
 }

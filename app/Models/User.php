@@ -16,6 +16,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'profile_photo',
     ];
 
     protected $hidden = [
@@ -41,13 +42,17 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's profile image.
+     * Get the user's profile image (user profile_photo first, then staff profile photo, then default).
      */
     public function getProfileImageAttribute()
     {
-        return $this->staffProfile && $this->staffProfile->photo
-            ? asset('storage/' . $this->staffProfile->photo)
-            : asset('assets/images/default_profile.png');
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+        if ($this->staffProfile && $this->staffProfile->photo) {
+            return asset('storage/' . $this->staffProfile->photo);
+        }
+        return asset('assets/images/default_profile.png');
     }
 
     /**

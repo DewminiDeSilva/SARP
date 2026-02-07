@@ -3,147 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>FFS Training Programme Registration</title>
-    <!-- Include Bootstrap CSS -->
+    <title>Agriculture Training Programme Registration</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include jQuery UI library -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('assets/css/ffs_training_create.css') }}">
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-          background-color: #f8f9fa;
-        }
-        .container {
-          margin-top: 50px;
-        }
-        .dropdown {
-          margin-bottom: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        .dropdown-menu {
-          min-width: auto;
-        }
-        .dropdown-item {
-          padding: 10px;
-          font-size: 16px;
-        }
-        .dropdown-toggle {
-          min-width: 250px;
-        }
-        .dropdown-label {
-          text-align: center;
-          font-size: 20px;
-        }
-        .frame {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-        }
-        .left-column {
-            flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
-        }
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-        }
+        body { background-color: #f8f9fa; }
+        .frame { display: flex; flex-direction: row; width: 100%; }
+        .left-column { flex: 0 0 20%; border-right: 1px solid #dee2e6; }
+        .right-column { flex: 0 0 80%; padding: 20px; }
+        .dropdown { margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
+        .dropdown-toggle { min-width: 250px; }
+        .dropdown-label { text-align: center; font-size: 20px; }
+        .custom-border { border-color: darkgreen !important; }
+        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        .btn-back { display: inline-flex; align-items: center; color: #fff; padding: 10px 50px; text-decoration: none; }
+        .btn-back img { width: 45px; height: auto; margin-right: 5px; }
+        .sidebar.hidden { transform: translateX(-100%); }
+        .left-column.hidden { display: none; }
     </style>
-
-<style>
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            padding: 10px 50px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-back img {
-            width: 45px;
-            height: auto;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-            background: none;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 0;
-        }
-
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        .btn-back:hover img {
-            transform: translateX(-50px);
-        }
-    </style>
-
-<style>
-    .sidebar {
-        transition: transform 0.3s ease; /* Smooth toggle animation */
-    }
-
-    .sidebar.hidden {
-        transform: translateX(-100%); /* Move sidebar out of view */
-    }
-
-    #sidebarToggle {
-        background-color: #126926; /* Match the back button color */
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    #sidebarToggle:hover {
-        background-color: #0a4818; /* Darken the hover color */
-    }
-
-
-    .left-column.hidden {
-    display: none; /* Hide the sidebar */
-}
-.right-column {
-    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
-}
-
-</style>
 </head>
 <body>
 @include('dashboard.header')
@@ -153,31 +33,22 @@
         @csrf
     </div>
     <div class="right-column">
-
-    <div class="d-flex align-items-center mb-3">
-
-	<!-- Sidebar Toggle Button -->
-	<button id="sidebarToggle" class="btn btn-secondary mr-2">
-		<i class="fas fa-bars"></i>
-	</button>
-
-    <a href="{{ route('ffs-training.index') }}" class="btn-back">
-        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-    </a>
-
-</div>
-
-        <div class="container mt-5 border rounded border-primary p-4">
-            <form class="form-horizontal" method="POST" action="/ffs-training">
+        <div class="d-flex align-items-center mb-3">
+            <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
+            <a href="{{ route('agriculture-training.index') }}" class="btn-back">
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            </a>
+        </div>
+        <div class="col-md-12 text-center">
+            <h2 class="header-title" style="color: green;">Agriculture Training Programme Registration</h2>
+        </div>
+        <div class="container mt-1 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
+            <form method="POST" action="{{ route('agriculture-training.store') }}">
                 @csrf
-                <div class="col-md-12 text-center">
-                    <h2>FFS Training Programme Registration</h2>
-                </div>
-
                 <div class="row">
                     <div class="col">
                         <div class="dropdown">
-                            <label for="province" class="form-label dropdown-label">Province Name</label>
+                            <label class="form-label dropdown-label">Province Name</label>
                             <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
                                 <option value="">Select Province</option>
                             </select>
@@ -186,7 +57,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="district" class="form-label dropdown-label">District Name</label>
+                            <label class="form-label dropdown-label">District Name</label>
                             <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
                                 <option value="">Select District</option>
                             </select>
@@ -195,7 +66,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="dsd" class="form-label dropdown-label">Divisional Secretariat (DSD)</label>
+                            <label class="form-label dropdown-label">Divisional Secretariat (DSD)</label>
                             <select id="dsDivisionDropdown" class="btn btn-success dropdown-toggle">
                                 <option value="">Select DSD</option>
                                 <option value="N/A">N/A</option>
@@ -205,7 +76,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="gnd" class="form-label dropdown-label">Grama Niladhari Division (GND)</label>
+                            <label class="form-label dropdown-label">Grama Niladhari Division (GND)</label>
                             <select id="gndDropdown" class="btn btn-success dropdown-toggle">
                                 <option value="">Select GND</option>
                                 <option value="N/A">N/A</option>
@@ -215,7 +86,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="asc" class="form-label dropdown-label">Agriculture Service Centre (ASC)</label>
+                            <label class="form-label dropdown-label">Agriculture Service Centre (ASC)</label>
                             <select id="ascDropdown" name="as_center" class="btn btn-success dropdown-toggle">
                                 <option value="">Select ASC</option>
                                 <option value="N/A">N/A</option>
@@ -223,50 +94,32 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Rest of the Form Fields -->
-
                 <div class="container mt-5">
                     <div class="row g-3">
-                        <div class="col-md-6 mb-3">
-                            <label for="program_name">FFS Training Program Name</label>
-                            <input type="text" class="form-control" id="program_name" name="program_name" placeholder="Enter FFS Training Program Name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="program_number">Program Number</label>
-                            <input type="text" class="form-control" id="program_number" name="program_number" placeholder="Enter Program Number" required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="crop_name">Crop Name</label>
-                            <input type="text" class="form-control" id="crop_name" name="crop_name" placeholder="Enter Crop Name" required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="venue">Venue</label>
                             <input type="text" class="form-control" id="venue" name="venue" placeholder="Venue" required>
                         </div>
-
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label for="program_name">Training Program Name</label>
+                            <input type="text" class="form-control" id="program_name" name="program_name" placeholder="Enter Training Program Name" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="startDate">Date of Conducted</label>
                             <input type="text" class="form-control" id="startDate" name="date" placeholder="Select Date" required>
                         </div>
-
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="resource_person_name">Resource Person Name</label>
                             <input type="text" class="form-control" id="resource_person_name" name="resource_person_name" placeholder="Enter Resource Person Name" required>
                         </div>
-
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="resource_person_payment">Resource Person Payment</label>
                             <input type="text" class="form-control" id="resource_person_payment" name="resource_person_payment" placeholder="Enter Resource Person Payment" required>
                         </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="training_program_cost">FFS Training Program Cost</label>
-                            <input type="text" class="form-control" id="training_program_cost" name="training_program_cost" placeholder="Enter FFS Training Program Cost" required>
+                        <div class="col-md-4 mb-3">
+                            <label for="training_program_cost">Training Program Cost</label>
+                            <input type="text" class="form-control" id="training_program_cost" name="training_program_cost" placeholder="Enter Training Program Cost" required>
                         </div>
-
                         <div class="col-md-12 mb-3 text-center">
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
@@ -276,7 +129,6 @@
         </div>
     </div>
 </div>
-
 <script>
 $(document).ready(function() {
     function resetDsGndAsc() {
@@ -327,29 +179,7 @@ $(document).ready(function() {
     }).fail(function() { $('#ascDropdown').append($('<option>', { value: 'N/A', text: 'N/A' })); });
 });
 $("#startDate").datepicker({ dateFormat: 'yy-mm-dd' });
+document.getElementById('sidebarToggle')?.addEventListener('click', function() { document.querySelector('.left-column').classList.toggle('hidden'); });
 </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const sidebar = document.querySelector('.left-column');
-        const content = document.querySelector('.right-column');
-        const toggleButton = document.getElementById('sidebarToggle');
-
-        toggleButton.addEventListener('click', function () {
-            // Toggle the 'hidden' class on the sidebar
-            sidebar.classList.toggle('hidden');
-
-            // Adjust the width of the content
-            if (sidebar.classList.contains('hidden')) {
-                content.style.flex = '0 0 100%'; // Expand to full width
-                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
-            } else {
-                content.style.flex = '0 0 80%'; // Default width
-                content.style.padding = '20px'; // Reset padding
-            }
-        });
-    });
-</script>
-
 </body>
 </html>
