@@ -53,6 +53,8 @@ use App\Models\FarmerOrganization;
 use App\Models\Nutrition;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
+use App\Http\Controllers\AgricultureTrainingController;
+use App\Http\Controllers\LivestockTrainingController;
 use App\Http\Controllers\AWPBController;
 use App\Http\Controllers\CostTabController;
 use App\Http\Controllers\ProjectDesignReportController;
@@ -874,6 +876,19 @@ Route::prefix('cdfmembers')->middleware('auth')->group(function () {
         ->middleware('check.permission:agriculture,delete');
 });
 
+// Agriculture Training Program (linked to agriculture_data id)
+Route::prefix('agriculture-training')->middleware('auth')->name('agriculture-training.')->group(function () {
+    Route::get('/', [AgricultureTrainingController::class, 'index'])->name('index');
+    Route::get('/create', [AgricultureTrainingController::class, 'create'])->name('create');
+    Route::post('/', [AgricultureTrainingController::class, 'store'])->name('store');
+    Route::get('/search', [AgricultureTrainingController::class, 'search'])->name('search');
+    Route::get('/download-csv', [AgricultureTrainingController::class, 'downloadCsv'])->name('downloadCsv');
+    Route::post('/upload-csv', [AgricultureTrainingController::class, 'uploadCsv'])->name('upload_csv');
+    Route::get('/{agriculture_training}/edit', [AgricultureTrainingController::class, 'edit'])->name('edit');
+    Route::put('/{agriculture_training}', [AgricultureTrainingController::class, 'update'])->name('update');
+    Route::delete('/{agriculture_training}', [AgricultureTrainingController::class, 'destroy'])->name('destroy');
+});
+
 Route::middleware('auth')->group(function () {
 
     // Get GN Division name from beneficiary
@@ -993,6 +1008,18 @@ Route::middleware('auth')->group(function () {
         ->name('livestocks.getGnDivisionName');
 });
 
+// Livestock Training Program (linked to livestock_data id)
+Route::prefix('livestock-training')->middleware('auth')->name('livestock-training.')->group(function () {
+    Route::get('/', [LivestockTrainingController::class, 'index'])->name('index');
+    Route::get('/create', [LivestockTrainingController::class, 'create'])->name('create');
+    Route::post('/', [LivestockTrainingController::class, 'store'])->name('store');
+    Route::get('/search', [LivestockTrainingController::class, 'search'])->name('search');
+    Route::get('/download-csv', [LivestockTrainingController::class, 'downloadCsv'])->name('downloadCsv');
+    Route::post('/upload-csv', [LivestockTrainingController::class, 'uploadCsv'])->name('upload_csv');
+    Route::get('/{livestock_training}/edit', [LivestockTrainingController::class, 'edit'])->name('edit');
+    Route::put('/{livestock_training}', [LivestockTrainingController::class, 'update'])->name('update');
+    Route::delete('/{livestock_training}', [LivestockTrainingController::class, 'destroy'])->name('destroy');
+});
 
 Route::middleware('auth')->group(function () {
 

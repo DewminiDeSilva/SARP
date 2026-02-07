@@ -13,9 +13,27 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <div>
+            <x-input-label for="profile_photo" :value="__('Profile Picture')" />
+            <div class="mt-2 flex items-center gap-4">
+                @if($user->profile_image)
+                    <img src="{{ $user->profile_image }}" alt="Profile" class="h-20 w-20 rounded-full object-cover border-2 border-gray-200" id="profile-photo-preview">
+                    <div class="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 hidden" id="profile-photo-placeholder">No photo</div>
+                @else
+                    <div class="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500" id="profile-photo-placeholder">No photo</div>
+                    <img src="" alt="" class="h-20 w-20 rounded-full object-cover border-2 border-gray-200 hidden" id="profile-photo-preview">
+                @endif
+                <div>
+                    <input type="file" name="profile_photo" id="profile_photo" accept="image/jpeg,image/png,image/jpg,image/gif" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                    <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF up to 2MB. Used in header (e.g. admin1img).</p>
+                    <x-input-error class="mt-2" :messages="$errors->get('profile_photo')" />
+                </div>
+            </div>
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -61,4 +79,21 @@
             @endif
         </div>
     </form>
+    <script>
+        document.getElementById('profile_photo')?.addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+            var reader = new FileReader();
+            reader.onload = function() {
+                var preview = document.getElementById('profile-photo-preview');
+                var placeholder = document.getElementById('profile-photo-placeholder');
+                if (preview) {
+                    preview.src = reader.result;
+                    preview.classList.remove('hidden');
+                }
+                if (placeholder) placeholder.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
 </section>
