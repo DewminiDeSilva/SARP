@@ -97,119 +97,180 @@ class BeneficiaryController extends Controller
     
     
     /**
-     * Import data.
+     * Normalize NIC for comparison (e.g. 981771540v and 981771540V treated as same).
      */
-     public function uploadCsv(Request $request)
-     {
-         // Validate that the uploaded file is a CSV
-         $request->validate([
-             'csv_file' => 'required|mimes:csv,txt|max:2048',
-         ]);
-     
-         // Read the CSV file
-         if ($file = $request->file('csv_file')) {
-             $csvData = file_get_contents($file);
-             $rows = array_map('str_getcsv', explode("\n", $csvData));
-             $header = array_shift($rows); // Extract header row
-     
-             $recordCount = 0;
-     
-             // Process each row and insert into the database
-             foreach ($rows as $row) {
-                 if (count($row) === count($header) && !empty(array_filter($row))) {
-                     $beneficiaryData = array_combine($header, $row);
-     
-                     // Helper function to convert empty strings to null for numeric fields
-                     $getNumericValue = function($value) {
-                         $trimmed = trim($value ?? '');
-                         return (empty($trimmed) || !is_numeric($trimmed)) ? null : $trimmed;
-                     };
-     
-                     $getStringValue = function($value) {
-                         $trimmed = trim($value ?? '');
-                         return empty($trimmed) ? null : $trimmed;
-                     };
-     
-                     // Handle invalid or empty DOB
-                     $dob = isset($beneficiaryData['Date Of Birth']) && !empty(trim($beneficiaryData['Date Of Birth'] ?? '')) 
-                         ? $beneficiaryData['Date Of Birth']
-                         : null;
-     
-                    // Helper function to get value from CSV with flexible column name matching
-                    $getCsvValue = function($keys, $default = null) use ($beneficiaryData, $getStringValue) {
-                        foreach ($keys as $key) {
-                            if (isset($beneficiaryData[$key])) {
-                                return $getStringValue($beneficiaryData[$key]);
-                            }
-                        }
-                        return $default;
-                    };
+    private function normalizeNic(?string $nic): string
+    {
+        $s = trim($nic ?? '');
+        if ($s === '') {
+            return '';
+        }
+        $last = substr($s, -1);
+        if (strtolower($last) === 'v' || strtolower($last) === 'x') {
+            $s = substr($s, 0, -1) . strtoupper($last);
+        }
+        return $s;
+    }
 
-                    // Get input values with flexible column name matching
-                    $input1 = $getCsvValue(['Input1 (Agriculture/Livestock)', 'Input1'], null);
-                    $input2 = $getCsvValue(['Input2 (Crop Category/Livestock Type/4P Business Concept Title)', 'Input2'], null);
-                    $input3 = $getCsvValue(['Input3 (Crop Name/Production Focus/Youth Proposal/4P Category/Nutrition Program Name)', 'Input3'], null);
-                    $projectType = $getCsvValue(['Type of Project', 'project_type'], null);
+    /**
+     * Fix NIC stored in scientific notation by Excel (e.g. 1.96E+11 → 196000000000).
+     * Returns the full digit string so it uploads correctly.
+     */
+    private function fixScientificNic(?string $value): ?string
+    {
+        $s = trim($value ?? '');
+        if ($s === '') {
+            return null;
+        }
+        // Match scientific notation: optional minus, digits, optional decimal, E/e, optional +/-, digits
+        if (preg_match('/^-?\d+\.?\d*[eE][+-]?\d+$/', $s)) {
+            $num = (float) $s;
+            return sprintf('%0.0f', $num);
+        }
+        return $s;
+    }
 
-                    // Insert into Beneficiary model
-                    $beneficiary = Beneficiary::create([
-                        'nic' => $getStringValue($beneficiaryData['NIC Number'] ?? $beneficiaryData['NIC'] ?? null),
-                        'name_with_initials' => $getStringValue($beneficiaryData['Name with Initials'] ?? null),
-                        'dob' => $dob,
-                        'gender' => $getStringValue($beneficiaryData['Gender'] ?? null),
-                        'age' => $getNumericValue($beneficiaryData['Age'] ?? null),
-                        'address' => $getStringValue($beneficiaryData['Address'] ?? null),
-                        'email' => $getStringValue($beneficiaryData['Email address'] ?? $beneficiaryData['Email'] ?? null),
-                        'phone' => $getStringValue($beneficiaryData['Phone Numbers'] ?? $beneficiaryData['Phone'] ?? null),
-                        'education' => $getStringValue($beneficiaryData['Highest Education Level'] ?? $beneficiaryData['Education'] ?? null),
-                        'bank_name' => $getStringValue($beneficiaryData['Bank Name'] ?? null),
-                        'bank_branch' => $getStringValue($beneficiaryData['Bank Branch'] ?? null),
-                        'account_number' => $getStringValue($beneficiaryData['Account Number'] ?? null),
-                        'land_ownership_total_extent' => $getNumericValue($beneficiaryData['Land Ownership Total Extent'] ?? null),
-                        'land_ownership_proposed_cultivation_area' => $getNumericValue($beneficiaryData['Land Ownership Proposed Cultivation Area'] ?? null),
-                        'province_name' => $getStringValue($beneficiaryData['Province'] ?? null),
-                        'district_name' => $getStringValue($beneficiaryData['District'] ?? null),
-                        'ds_division_name' => $getStringValue($beneficiaryData['DS Division'] ?? null),
-                        'gn_division_name' => $getStringValue($beneficiaryData['GN Division'] ?? null),
-                        'as_center' => $getStringValue($beneficiaryData['ASC'] ?? $beneficiaryData['AS Center'] ?? null),
-                        'cascade_name' => $getStringValue($beneficiaryData['Cascade Name'] ?? null),
-                        'tank_name' => $getStringValue($beneficiaryData['Tank Name'] ?? null),
-                        'ai_division' => $getStringValue($beneficiaryData['AI Division'] ?? null),
-                        'latitude' => $getNumericValue($beneficiaryData['Latitude'] ?? null),
-                        'longitude' => $getNumericValue($beneficiaryData['Longitude'] ?? null),
-                        'number_of_family_members' => $getNumericValue($beneficiaryData['Number of Family Members'] ?? null),
-                        'head_of_householder_name' => $getStringValue($beneficiaryData['Head of Householder Name'] ?? null),
-                        'householder_number' => $getStringValue($beneficiaryData['Householder Number'] ?? null),
-                        'income_source' => $getStringValue($beneficiaryData['Income Source'] ?? null),
-                        'average_income' => $getNumericValue($beneficiaryData['Average Income'] ?? null),
-                        'monthly_household_expenses' => $getNumericValue($beneficiaryData['Monthly Household Expenses'] ?? null),
-                        'household_level_assets_description' => $getStringValue($beneficiaryData['Household Level Assets Description'] ?? null),
-                        'community_based_organization' => $getStringValue($beneficiaryData['Community-Based Organization'] ?? null),
-                        'type_of_water_resource' => $getStringValue($beneficiaryData['Type of Water Resource'] ?? null),
-                        'training_details_description' => $getStringValue($beneficiaryData['Training Details Description'] ?? null),
-                        'input1' => $input1,
-                        'input2' => $input2,
-                        'input3' => $input3,
-                        'project_type' => $projectType,
-                    ]);
+    /**
+     * Import data from CSV. Handles duplicate NICs: same NIC in CSV or already in system is skipped (first occurrence only added).
+     */
+    public function uploadCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,txt|max:10240',
+        ]);
 
-                    // If 4P project, also populate eoi_business_title and eoi_category for backward compatibility
-                    if ($projectType === '4P Projects' || $projectType === '4p') {
-                        $beneficiary->eoi_business_title = $input2;
-                        $beneficiary->eoi_category = $input3;
-                        $beneficiary->save();
+        $file = $request->file('csv_file');
+        if (!$file) {
+            return redirect()->back()->with('error', 'No CSV file provided.');
+        }
+
+        $csvData = file_get_contents($file->getRealPath());
+        $rows = array_map('str_getcsv', explode("\n", $csvData));
+        $header = array_shift($rows);
+        if (!$header || !is_array($header)) {
+            return redirect()->back()->with('error', 'CSV file has no header row.');
+        }
+
+        $getNumericValue = function ($value) {
+            $trimmed = trim($value ?? '');
+            return (empty($trimmed) || !is_numeric($trimmed)) ? null : $trimmed;
+        };
+        $getStringValue = function ($value) {
+            $trimmed = trim($value ?? '');
+            return empty($trimmed) ? null : $trimmed;
+        };
+
+        $added = 0;
+        $skippedInvalid = 0;
+
+        foreach ($rows as $row) {
+            if (count($row) !== count($header) || empty(array_filter($row))) {
+                $skippedInvalid++;
+                continue;
+            }
+
+            $beneficiaryData = array_combine($header, $row);
+            $rawNic = $getStringValue($beneficiaryData['NIC Number'] ?? $beneficiaryData['NIC'] ?? null);
+            if ($rawNic !== null) {
+                $rawNic = $this->fixScientificNic($rawNic) ?? $rawNic;
+            }
+            if ($rawNic === null || $rawNic === '') {
+                $skippedInvalid++;
+                continue;
+            }
+
+            $normalizedNic = $this->normalizeNic($rawNic);
+            if ($normalizedNic === '') {
+                $skippedInvalid++;
+                continue;
+            }
+
+            $getCsvValue = function ($keys, $default = null) use ($beneficiaryData, $getStringValue) {
+                foreach ($keys as $key) {
+                    if (isset($beneficiaryData[$key])) {
+                        return $getStringValue($beneficiaryData[$key]);
                     }
-     
-                     $recordCount++;
-                 }
-             }
-     
-             // Redirect back with a success message
-             return redirect()->back()->with('success', "{$recordCount} CSV records uploaded and beneficiary records added successfully.");
-         }
-     
-         return redirect()->back()->with('error', 'No CSV file provided.');
-     }
+                }
+                return $default;
+            };
+
+            $dob = isset($beneficiaryData['Date Of Birth']) && !empty(trim($beneficiaryData['Date Of Birth'] ?? ''))
+                ? trim($beneficiaryData['Date Of Birth'])
+                : null;
+
+            $input1 = $getCsvValue(['Input1 (Agriculture/Livestock)', 'Input1'], null);
+            $input2 = $getCsvValue(['Input2 (Crop Category/Livestock Type/4P Business Concept Title)', 'Input2', 'Cereals/Legumes'], null);
+            if (strtolower(trim($input2 ?? '')) === 'others') {
+                $input2 = 'Cereals/Legumes';
+            }
+            $input3 = $getCsvValue(['Input3 (Crop Name/Production Focus/Youth Proposal/4P Category/Nutrition Program Name)', 'Input3'], null);
+            $projectType = $getCsvValue(['Type of Project', 'project_type'], null);
+
+            try {
+                $beneficiary = Beneficiary::create([
+                    'nic' => $rawNic,
+                    'name_with_initials' => $getStringValue($beneficiaryData['Name with Initials'] ?? null),
+                    'dob' => $dob,
+                    'gender' => $getStringValue($beneficiaryData['Gender'] ?? null),
+                    'age' => $getNumericValue($beneficiaryData['Age'] ?? null),
+                    'address' => $getStringValue($beneficiaryData['Address'] ?? null),
+                    'email' => $getStringValue($beneficiaryData['Email address'] ?? $beneficiaryData['Email'] ?? null),
+                    'phone' => $getStringValue($beneficiaryData['Phone Numbers'] ?? $beneficiaryData['Phone'] ?? null),
+                    'education' => $getStringValue($beneficiaryData['Highest Education Level'] ?? $beneficiaryData['Education'] ?? null),
+                    'bank_name' => $getStringValue($beneficiaryData['Bank Name'] ?? null),
+                    'bank_branch' => $getStringValue($beneficiaryData['Bank Branch'] ?? null),
+                    'account_number' => $getStringValue($beneficiaryData['Account Number'] ?? null),
+                    'land_ownership_total_extent' => $getNumericValue($beneficiaryData['Land Ownership Total Extent'] ?? null),
+                    'land_ownership_proposed_cultivation_area' => $getNumericValue($beneficiaryData['Land Ownership Proposed Cultivation Area'] ?? null),
+                    'province_name' => $getStringValue($beneficiaryData['Province'] ?? null),
+                    'district_name' => $getStringValue($beneficiaryData['District'] ?? null),
+                    'ds_division_name' => $getStringValue($beneficiaryData['DS Division'] ?? null),
+                    'gn_division_name' => $getStringValue($beneficiaryData['GN Division'] ?? null),
+                    'as_center' => $getStringValue($beneficiaryData['ASC'] ?? $beneficiaryData['AS Center'] ?? null),
+                    'cascade_name' => $getStringValue($beneficiaryData['Cascade Name'] ?? null),
+                    'tank_name' => $getStringValue($beneficiaryData['Tank Name'] ?? null),
+                    'ai_division' => $getStringValue($beneficiaryData['AI Division'] ?? null),
+                    'latitude' => $getNumericValue($beneficiaryData['Latitude'] ?? null),
+                    'longitude' => $getNumericValue($beneficiaryData['Longitude'] ?? null),
+                    'number_of_family_members' => $getNumericValue($beneficiaryData['Number of Family Members'] ?? null),
+                    'head_of_householder_name' => $getStringValue($beneficiaryData['Head of Householder Name'] ?? null),
+                    'householder_number' => $getStringValue($beneficiaryData['Householder Number'] ?? null),
+                    'income_source' => $getStringValue($beneficiaryData['Income Source'] ?? null),
+                    'average_income' => $getNumericValue($beneficiaryData['Average Income'] ?? null),
+                    'monthly_household_expenses' => $getNumericValue($beneficiaryData['Monthly Household Expenses'] ?? null),
+                    'household_level_assets_description' => $getStringValue($beneficiaryData['Household Level Assets Description'] ?? null),
+                    'community_based_organization' => $getStringValue($beneficiaryData['Community-Based Organization'] ?? null),
+                    'type_of_water_resource' => $getStringValue($beneficiaryData['Type of Water Resource'] ?? null),
+                    'training_details_description' => $getStringValue($beneficiaryData['Training Details Description'] ?? null),
+                    'input1' => $input1,
+                    'input2' => $input2,
+                    'input3' => $input3,
+                    'project_type' => $projectType,
+                ]);
+
+                if (property_exists($beneficiary, 'eoi_business_title') && ($projectType === '4P Projects' || $projectType === '4p')) {
+                    $beneficiary->eoi_business_title = $input2;
+                    $beneficiary->eoi_category = $input3;
+                    $beneficiary->save();
+                }
+
+                $added++;
+            } catch (\Throwable $e) {
+                $skippedInvalid++;
+            }
+        }
+
+        $parts = [];
+        if ($added > 0) {
+            $parts[] = "{$added} beneficiary(ies) added";
+        }
+        if ($skippedInvalid > 0) {
+            $parts[] = "{$skippedInvalid} row(s) skipped (invalid or error)";
+        }
+
+        $message = empty($parts) ? 'No valid rows to import.' : implode('. ', $parts);
+        return redirect()->back()->with('success', $message);
+    }
      
 
 public function generateCsv()
@@ -272,7 +333,7 @@ public function generateCsv()
             $beneficiary->type_of_water_resource,
             $beneficiary->training_details_description,
             $beneficiary->input1, // New input
-            $beneficiary->input2, // New input
+            (strtolower(trim($beneficiary->input2 ?? '')) === 'others' ? 'Cereals/Legumes' : $beneficiary->input2), // Crop Category: others → Cereals/Legumes
             $beneficiary->input3, // New input
             $beneficiary->project_type,
         ];
@@ -434,7 +495,7 @@ public function index(Request $request)
         
     // Validate the request data
     $request->validate([
-        'nic' => 'required|string|max:12|unique:beneficiaries,nic', // Not nullable
+        'nic' => 'required|string|max:12', // Duplicate NICs allowed (same NIC can have multiple records)
         'name_with_initials' => 'required|string|max:255', // Not nullable
         'gender' => 'required|string|in:male,female,other', // Not nullable
         'dob' => 'required|date', // Not nullable
@@ -591,7 +652,7 @@ public function index(Request $request)
 {
     // Validate incoming request data
     $validatedData = $request->validate([
-        'nic' => 'nullable|string|max:20|unique:beneficiaries,nic,' . $id,
+        'nic' => 'nullable|string|max:20', // Duplicate NICs allowed
         'name_with_initials' => 'nullable|string|max:255',
         'gender' => 'nullable|string',
         'dob' => 'nullable|date',
@@ -703,7 +764,7 @@ public function index(Request $request)
             $row->as_center, $row->cascade_name, $row->tank_name, $row->ai_division, $row->account_number, $row->bank_name, $row->bank_branch, 
             $row->latitude, $row->longitude, $row->head_of_householder_name, $row->householder_number, $row->household_level_assets_description, 
             $row->community_based_organization, $row->type_of_water_resource, $row->training_details_description,$row->input1, // Added field
-            $row->input2, // Added field
+            (strtolower(trim($row->input2 ?? '')) === 'others' ? 'Cereals/Legumes' : $row->input2), // Crop Category: others → Cereals/Legumes
             $row->input3,
             $row->project_type,
             

@@ -30,4 +30,9 @@ class LivestockTraining extends Model
     {
         return $this->belongsTo(Livestock::class);
     }
+
+    public function livestockTrainingParticipants()
+    {
+        return $this->hasMany(LivestockTrainingParticipant::class, 'livestock_training_id');
+    }
 }

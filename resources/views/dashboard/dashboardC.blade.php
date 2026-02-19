@@ -111,16 +111,16 @@ li.active {
 
     // group checks (submenu open)
     $isBeneficiary = request()->is('beneficiary*');
-    $isTank        = request()->is('tank_rehabilitation*');
+    $isTank        = request()->is('tank_rehabilitation*') || request()->is('tank-training*');
     $isInfra       = request()->is('infrastructure*');
 
     $isSocial      = request()->is('cdf*') || request()->is('asc_registration*') || request()->is('farmerorganization*') || request()->is('training*') || request()->is('grievances*');
 
     $isResilience  = request()->is('agri*') || request()->is('agriculture*') || request()->is('agriculture-training*') || request()->is('lstock*') || request()->is('livestocks*') || request()->is('livestock-training*') || request()->is('beneficiaries/list*') || request()->is('nutrient-home*') || request()->is('fingerling*');
 
-    $isYouth       = request()->is('youth-proposals*') || request()->is('youth-proposal*');
+    $isYouth       = request()->is('youth-proposals*') || request()->is('youth-proposal*') || request()->is('youth-training*');
 
-    $is4P          = request()->is('expressions*');
+    $is4P          = request()->is('expressions*') || request()->is('4p-training*');
 
     $isAgroEnt     = request()->is('agro*');
 
@@ -184,6 +184,9 @@ li.active {
             </li>
             <li class="{{ request()->is('tank_rehabilitation') ? 'active' : '' }}">
                 <a href="/tank_rehabilitation" style="color:#FFFFFF">Tank Rehabilitation Details</a>
+            </li>
+            <li class="{{ request()->is('tank-training*') ? 'active' : '' }}">
+                <a href="/tank-training" style="color:#FFFFFF">Tank Training Program</a>
             </li>
         </ul>
     </li>
@@ -294,6 +297,9 @@ li.active {
             <li class="{{ request()->is('youth-proposal/agreement-signed') ? 'active' : '' }}">
                 <a href="/youth-proposal/agreement-signed" style="color:#FFFFFF">Youth Projects</a>
             </li>
+            <li class="{{ request()->is('youth-training*') ? 'active' : '' }}">
+                <a href="{{ route('youth-training.index') }}" style="color:#FFFFFF">Youth Training Program</a>
+            </li>
         </ul>
     </li>
 
@@ -306,6 +312,9 @@ li.active {
             </li>
             <li class="{{ request()->is('expressions/evaluation-completed') ? 'active' : '' }}">
                 <a href="/expressions/evaluation-completed" style="color:#FFFFFF">Registration of 4P Project</a>
+            </li>
+            <li class="{{ request()->is('4p-training*') ? 'active' : '' }}">
+                <a href="{{ route('4p-training.index') }}" style="color:#FFFFFF">4P Training Program</a>
             </li>
         </ul>
     </li>

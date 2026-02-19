@@ -185,6 +185,9 @@
             background-color: #126926;
             border-color: #126926;
         }
+        .highlight-row {
+            background-color: #fff8dc !important;
+        }
     </style>
     <style>
 /* Badge style for EOI status */
@@ -222,6 +225,9 @@
 .status-select:hover {
     background-color: #f1f1f1;
     border-color: #28a745;
+}
+.status-badge.locked-status {
+    cursor: default !important;
 }
 </style>
 <style>
@@ -400,7 +406,7 @@ td {
 </thead>
                     <tbody>
                         @foreach($expressions as $expression)
-                        <tr>
+                        <tr @if($expression->status === 'Agreement Signed') class="highlight-row" @endif>
     <!-- <td>{{ $expression->id }}</td> -->
     <td>{{ $expression->eoi_code}}</td>
     <td>{{ $expression->organization_name }}</td>
@@ -445,9 +451,14 @@ td {
         };
     @endphp
 
-    <div id="status-{{ $expression->id }}">
-        <span class="badge {{ $badgeClass }} status-badge" style="cursor:pointer;" onclick="toggleDropdown({{ $expression->id }})">
+    <div id="status-{{ $expression->id }}" data-current-status="{{ $status ?? '' }}">
+        <span class="badge {{ $badgeClass }} status-badge {{ $status === 'Agreement Signed' ? 'locked-status' : '' }}"
+            style="cursor:{{ $status === 'Agreement Signed' ? 'default' : 'pointer' }};"
+            onclick="toggleDropdown({{ $expression->id }})">
             {{ $status ?? 'Select Status' }}
+            @if($status === 'Agreement Signed')
+                <i class="fas fa-lock ml-2"></i>
+            @endif
         </span>
     </div>
 
@@ -474,10 +485,10 @@ td {
             </a>
             @endif
             @if(auth()->user()->hasPermission('expressions', 'delete'))
-            <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" style="display:inline;">
+            <form action="{{ route('expressions.destroy', $expression->id) }}" method="POST" class="eoi-delete-form" style="display:inline;" data-status="{{ $expression->status }}">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-sm custom-button" title="Delete" onclick="return confirm('Are you sure?')">
+                <button type="button" class="btn btn-sm custom-button eoi-delete-btn" title="Delete" data-id="{{ $expression->id }}">
                     <img src="{{ asset('assets/images/delete.png') }}" alt="Delete Icon" style="width: 16px; height: 16px;">
                 </button>
             </form>
@@ -571,52 +582,101 @@ td {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-function toggleDropdown(eoiId) {
+window.toggleDropdown = function(eoiId) {
     const statusDiv = document.getElementById('status-' + eoiId);
+    if (!statusDiv) return;
 
-    statusDiv.innerHTML = `
-        <select class="form-control form-control-sm" onchange="submitStatus(this, ${eoiId})">
-            <option value="">-- Select Status --</option>
-            <option value="Rejected">Rejected</option>
-            <option value="Internal Review Committee Approved">Internal Review Committee Approved</option>
-            <option value="Business Proposal Submitted">Business Proposal Submitted</option>
-            <option value="BPEC Evaluation">BPEC Evaluation</option>
-            <option value="BPEC Approved">BPEC Approved</option>
-            <option value="NSC Approved">NSC Approved</option>
-            <option value="IFAD Approved">IFAD Approved</option>
-            <option value="Agreement Signed">Agreement Signed</option>
-            <option value="Not working Status">Not working Status</option>
-        </select>
-    `;
-}
+    const currentStatus = (statusDiv.getAttribute('data-current-status') || '').trim();
+    if (currentStatus === 'Agreement Signed') {
+        Swal.fire({
+            icon: 'info',
+            title: 'Status Locked',
+            text: 'This EOI has already been marked as "Agreement Signed" and cannot be modified.',
+            confirmButtonColor: '#126926'
+        });
+        return;
+    }
 
-function submitStatus(select, eoiId) {
+    const options = [
+        { value: '', text: '-- Select Status --' },
+        { value: 'Rejected', text: 'Rejected' },
+        { value: 'Internal Review Committee Approved', text: 'Internal Review Committee Approved' },
+        { value: 'Business Proposal Submitted', text: 'Business Proposal Submitted' },
+        { value: 'BPEC Evaluation', text: 'BPEC Evaluation' },
+        { value: 'BPEC Approved', text: 'BPEC Approved' },
+        { value: 'NSC Approved', text: 'NSC Approved' },
+        { value: 'IFAD Approved', text: 'IFAD Approved' },
+        { value: 'Agreement Signed', text: 'Agreement Signed' },
+        { value: 'Not working Status', text: 'Not working Status' },
+        { value: 'Clear', text: 'Clear Status' }
+    ];
+    const optsHtml = options.map(function(o) {
+        var sel = (o.value === currentStatus) ? ' selected' : '';
+        return '<option value="' + o.value + '"' + sel + '>' + o.text + '</option>';
+    }).join('');
+
+    statusDiv.innerHTML = '<select class="form-control form-control-sm status-select" onchange="submitStatus(this, ' + eoiId + ')" style="width: 180px;">' + optsHtml + '</select>';
+};
+
+window.submitStatus = function(select, eoiId) {
     const value = select.value;
+    if (!value) return;
+
     const form = document.getElementById('status-form-' + eoiId);
     const input = document.getElementById('status-input-' + eoiId);
+    if (!form || !input) return;
+
+    if (value === 'Agreement Signed') {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Once marked as "Agreement Signed", the status cannot be changed later.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, mark as signed',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#126926',
+            cancelButtonColor: '#d33'
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                input.value = value;
+                form.submit();
+            } else {
+                window.revertToOriginalBadge(eoiId);
+            }
+        });
+        return;
+    }
 
     if (value === 'Clear') {
         input.value = '';
     } else {
         input.value = value;
     }
- // Add a fade-out effect BEFORE submitting
- const badgeContainer = document.getElementById('status-' + eoiId);
-        badgeContainer.style.transition = "opacity 0.5s ease";
-        badgeContainer.style.opacity = 0; 
-    // Optional visual feedback
-    // Swal.fire({
-    //     icon: 'info',
-    //     title: 'Updating...',
-    //     text: `Setting status to "${value}"`,
-    //     timer: 1000,
-    //     showConfirmButton: false
-    // });
+    form.submit();
+};
 
-    setTimeout(() => {
-        form.submit();
-    }, 800); // short delay for visual feedback
-}
+window.revertToOriginalBadge = function(eoiId) {
+    const container = document.getElementById('status-' + eoiId);
+    if (!container) return;
+
+    const currentStatus = container.getAttribute('data-current-status') || '';
+    var badgeClass = 'badge-secondary';
+    switch (currentStatus) {
+        case 'Rejected': badgeClass = 'badge-danger'; break;
+        case 'Internal Review Committee Approved': badgeClass = 'badge-warning'; break;
+        case 'Business Proposal Submitted': badgeClass = 'badge-info'; break;
+        case 'BPEC Evaluation': badgeClass = 'badge-secondary'; break;
+        case 'BPEC Approved': badgeClass = 'badge-primary'; break;
+        case 'NSC Approved': badgeClass = 'badge-dark'; break;
+        case 'IFAD Approved': badgeClass = 'badge-light text-dark'; break;
+        case 'Agreement Signed': badgeClass = 'badge-success'; break;
+        case 'Not working Status': badgeClass = 'badge-light text-dark'; break;
+    }
+    var lockIcon = currentStatus === 'Agreement Signed' ? ' <i class="fas fa-lock ml-2"></i>' : '';
+    var cursor = currentStatus === 'Agreement Signed' ? 'default' : 'pointer';
+    var lockedClass = currentStatus === 'Agreement Signed' ? ' locked-status' : '';
+    container.innerHTML = '<span class="badge ' + badgeClass + ' status-badge' + lockedClass + '" style="cursor:' + cursor + ';" onclick="toggleDropdown(' + eoiId + ')">' + (currentStatus || 'Select Status') + lockIcon + '</span>';
+};
 document.addEventListener('DOMContentLoaded', function () {
         @if(session('success'))
             Swal.fire({
@@ -638,13 +698,32 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         @endif
 
-        // When page loads after update, fade-in effect
-        document.querySelectorAll('[id^=status-]').forEach(function(div) {
-            div.style.opacity = 0;
-            div.style.transition = "opacity 0.5s ease";
-            setTimeout(() => {
-                div.style.opacity = 1;
-            }, 100);
+        // Delete button: block if status is Agreement Signed (like youth_index)
+        document.querySelectorAll('.eoi-delete-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var form = this.closest('.eoi-delete-form');
+                var status = form ? form.getAttribute('data-status') : '';
+                if (status === 'Agreement Signed') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cannot Delete',
+                        text: 'This EOI is marked as "Agreement Signed" and cannot be deleted.',
+                        confirmButtonColor: '#126926'
+                    });
+                    return;
+                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it'
+                }).then(function(result) {
+                    if (result.isConfirmed && form) form.submit();
+                });
+            });
         });
     });
 </script>

@@ -1363,11 +1363,27 @@
 
         </div>
 
-        <!-- Success Message Popup -->
-@if(session('success'))
+        <!-- Upload CSV success / error messages -->
+@if(session('success') || session('error'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            alert('{{ session('success') }}');
+            @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'CSV Upload',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#126926'
+            });
+            @endif
+            @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Upload failed',
+                text: '{{ session('error') }}',
+                confirmButtonColor: '#126926'
+            });
+            @endif
         });
     </script>
 @endif

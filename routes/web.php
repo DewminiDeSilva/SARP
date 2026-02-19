@@ -42,6 +42,12 @@ use App\Http\Controllers\FFSParticipantController;
 use App\Http\Controllers\BeneFormController;
 use App\Http\Controllers\NrmController;
 use App\Http\Controllers\NrmParticipantController;
+use App\Http\Controllers\YouthTrainingController;
+use App\Http\Controllers\YouthTrainingParticipantController;
+use App\Http\Controllers\FourpTrainingController;
+use App\Http\Controllers\FourpTrainingParticipantController;
+use App\Http\Controllers\TankTrainingController;
+use App\Http\Controllers\TankTrainingParticipantController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\FingerlingController;
@@ -54,7 +60,9 @@ use App\Models\Nutrition;
 use App\Http\Controllers\AgricultureDataController;
 use App\Http\Controllers\LivestockDataController;
 use App\Http\Controllers\AgricultureTrainingController;
+use App\Http\Controllers\AgricultureTrainingParticipantController;
 use App\Http\Controllers\LivestockTrainingController;
+use App\Http\Controllers\LivestockTrainingParticipantController;
 use App\Http\Controllers\AWPBController;
 use App\Http\Controllers\CostTabController;
 use App\Http\Controllers\ProjectDesignReportController;
@@ -889,6 +897,16 @@ Route::prefix('agriculture-training')->middleware('auth')->name('agriculture-tra
     Route::delete('/{agriculture_training}', [AgricultureTrainingController::class, 'destroy'])->name('destroy');
 });
 
+Route::prefix('agriculture-training/agriculture-training-participants')->middleware('auth')->group(function () {
+    Route::get('/{agriculture_training_id}', [AgricultureTrainingParticipantController::class, 'listParticipants'])->name('agriculture-training-participants.list');
+    Route::get('/{agriculture_training_id}/create', [AgricultureTrainingParticipantController::class, 'create'])->name('agriculture-training-participants.create');
+    Route::post('/{agriculture_training_id}', [AgricultureTrainingParticipantController::class, 'store'])->name('agriculture-training-participants.store');
+    Route::delete('/{agriculture_training_id}/{participant_id}', [AgricultureTrainingParticipantController::class, 'destroy'])->name('agriculture-training-participants.destroy');
+    Route::post('/{agriculture_training_id}/upload-csv', [AgricultureTrainingParticipantController::class, 'uploadCsv'])->name('agriculture-training-participants.upload_csv');
+    Route::get('/{agriculture_training_id}/download-csv', [AgricultureTrainingParticipantController::class, 'downloadCsv'])->name('agriculture-training-participants.download_csv');
+    Route::get('/{agriculture_training_id}/search', [AgricultureTrainingParticipantController::class, 'search'])->name('agriculture-training-participants.search');
+});
+
 Route::middleware('auth')->group(function () {
 
     // Get GN Division name from beneficiary
@@ -1019,6 +1037,16 @@ Route::prefix('livestock-training')->middleware('auth')->name('livestock-trainin
     Route::get('/{livestock_training}/edit', [LivestockTrainingController::class, 'edit'])->name('edit');
     Route::put('/{livestock_training}', [LivestockTrainingController::class, 'update'])->name('update');
     Route::delete('/{livestock_training}', [LivestockTrainingController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('livestock-training/livestock-training-participants')->middleware('auth')->group(function () {
+    Route::get('/{livestock_training_id}', [LivestockTrainingParticipantController::class, 'listParticipants'])->name('livestock-training-participants.list');
+    Route::get('/{livestock_training_id}/create', [LivestockTrainingParticipantController::class, 'create'])->name('livestock-training-participants.create');
+    Route::post('/{livestock_training_id}', [LivestockTrainingParticipantController::class, 'store'])->name('livestock-training-participants.store');
+    Route::delete('/{livestock_training_id}/{participant_id}', [LivestockTrainingParticipantController::class, 'destroy'])->name('livestock-training-participants.destroy');
+    Route::post('/{livestock_training_id}/upload-csv', [LivestockTrainingParticipantController::class, 'uploadCsv'])->name('livestock-training-participants.upload_csv');
+    Route::get('/{livestock_training_id}/download-csv', [LivestockTrainingParticipantController::class, 'downloadCsv'])->name('livestock-training-participants.download_csv');
+    Route::get('/{livestock_training_id}/search', [LivestockTrainingParticipantController::class, 'search'])->name('livestock-training-participants.search');
 });
 
 Route::middleware('auth')->group(function () {
@@ -1919,6 +1947,214 @@ Route::middleware('auth')->group(function () {
         ->name('nrm-participants.search')
         ->middleware('check.permission:nrm_participants,view');
 });
+
+    // Youth Training Program Routes (same structure as NRM)
+    Route::prefix('youth-training')->middleware('auth')->group(function () {
+        Route::get('/', [YouthTrainingController::class, 'index'])
+            ->name('youth-training.index')
+            ->middleware('check.permission:youth_training,view');
+
+        Route::get('/create', [YouthTrainingController::class, 'create'])
+            ->name('youth-training.create')
+            ->middleware('check.permission:youth_training,add');
+
+        Route::post('/', [YouthTrainingController::class, 'store'])
+            ->name('youth-training.store')
+            ->middleware('check.permission:youth_training,add');
+
+        Route::get('/{youthtraining}/edit', [YouthTrainingController::class, 'edit'])
+            ->name('youth-training.edit')
+            ->middleware('check.permission:youth_training,edit');
+
+        Route::put('/{youthtraining}', [YouthTrainingController::class, 'update'])
+            ->name('youth-training.update')
+            ->middleware('check.permission:youth_training,edit');
+
+        Route::delete('/{youthtraining}', [YouthTrainingController::class, 'destroy'])
+            ->name('youth-training.destroy')
+            ->middleware('check.permission:youth_training,delete');
+
+        Route::post('/upload-csv', [YouthTrainingController::class, 'uploadCsv'])
+            ->name('youth-training.upload_csv')
+            ->middleware('check.permission:youth_training,upload_csv');
+
+        Route::get('/download.csv', [YouthTrainingController::class, 'downloadCsv'])
+            ->name('youth-training.download.csv')
+            ->middleware('check.permission:youth_training,view');
+
+        Route::get('/search', [YouthTrainingController::class, 'search'])
+            ->name('youth-training.search')
+            ->middleware('check.permission:youth_training,view');
+
+        // Youth Training Participants Routes
+        Route::prefix('youth-training-participants')->middleware('auth')->group(function () {
+            Route::get('/{youth_training_id}', [YouthTrainingParticipantController::class, 'listParticipants'])
+                ->name('youth-training-participants.list')
+                ->middleware('check.permission:youth_training_participants,view');
+
+            Route::get('/{youth_training_id}/create', [YouthTrainingParticipantController::class, 'create'])
+                ->name('youth-training-participants.create')
+                ->middleware('check.permission:youth_training_participants,add');
+
+            Route::post('/{youth_training_id}', [YouthTrainingParticipantController::class, 'store'])
+                ->name('youth-training-participants.store')
+                ->middleware('check.permission:youth_training_participants,add');
+
+            Route::delete('/{youth_training_id}/{participant_id}', [YouthTrainingParticipantController::class, 'destroy'])
+                ->name('youth-training-participants.destroy')
+                ->middleware('check.permission:youth_training_participants,delete');
+
+            Route::post('/{youth_training_id}/upload-csv', [YouthTrainingParticipantController::class, 'uploadCsv'])
+                ->name('youth-training-participants.upload_csv')
+                ->middleware('check.permission:youth_training_participants,upload_csv');
+
+            Route::get('/{youth_training_id}/download-csv', [YouthTrainingParticipantController::class, 'downloadCsv'])
+                ->name('youth-training-participants.download_csv')
+                ->middleware('check.permission:youth_training_participants,view');
+
+            Route::get('/{youth_training_id}/search', [YouthTrainingParticipantController::class, 'search'])
+                ->name('youth-training-participants.search')
+                ->middleware('check.permission:youth_training_participants,view');
+        });
+    });
+
+    // 4P Training Program Routes (same structure as Youth Training)
+    Route::prefix('4p-training')->middleware('auth')->group(function () {
+        Route::get('/', [FourpTrainingController::class, 'index'])
+            ->name('4p-training.index')
+            ->middleware('check.permission:fourp_training,view');
+
+        Route::get('/create', [FourpTrainingController::class, 'create'])
+            ->name('4p-training.create')
+            ->middleware('check.permission:fourp_training,add');
+
+        Route::post('/', [FourpTrainingController::class, 'store'])
+            ->name('4p-training.store')
+            ->middleware('check.permission:fourp_training,add');
+
+        Route::get('/{fourptraining}/edit', [FourpTrainingController::class, 'edit'])
+            ->name('4p-training.edit')
+            ->middleware('check.permission:fourp_training,edit');
+
+        Route::put('/{fourptraining}', [FourpTrainingController::class, 'update'])
+            ->name('4p-training.update')
+            ->middleware('check.permission:fourp_training,edit');
+
+        Route::delete('/{fourptraining}', [FourpTrainingController::class, 'destroy'])
+            ->name('4p-training.destroy')
+            ->middleware('check.permission:fourp_training,delete');
+
+        Route::post('/upload-csv', [FourpTrainingController::class, 'uploadCsv'])
+            ->name('4p-training.upload_csv')
+            ->middleware('check.permission:fourp_training,upload_csv');
+
+        Route::get('/download.csv', [FourpTrainingController::class, 'downloadCsv'])
+            ->name('4p-training.download.csv')
+            ->middleware('check.permission:fourp_training,view');
+
+        Route::get('/search', [FourpTrainingController::class, 'search'])
+            ->name('4p-training.search')
+            ->middleware('check.permission:fourp_training,view');
+
+        Route::prefix('4p-training-participants')->middleware('auth')->group(function () {
+            Route::get('/{fourp_training_id}', [FourpTrainingParticipantController::class, 'listParticipants'])
+                ->name('4p-training-participants.list')
+                ->middleware('check.permission:fourp_training_participants,view');
+
+            Route::get('/{fourp_training_id}/create', [FourpTrainingParticipantController::class, 'create'])
+                ->name('4p-training-participants.create')
+                ->middleware('check.permission:fourp_training_participants,add');
+
+            Route::post('/{fourp_training_id}', [FourpTrainingParticipantController::class, 'store'])
+                ->name('4p-training-participants.store')
+                ->middleware('check.permission:fourp_training_participants,add');
+
+            Route::delete('/{fourp_training_id}/{participant_id}', [FourpTrainingParticipantController::class, 'destroy'])
+                ->name('4p-training-participants.destroy')
+                ->middleware('check.permission:fourp_training_participants,delete');
+
+            Route::post('/{fourp_training_id}/upload-csv', [FourpTrainingParticipantController::class, 'uploadCsv'])
+                ->name('4p-training-participants.upload_csv')
+                ->middleware('check.permission:fourp_training_participants,upload_csv');
+
+            Route::get('/{fourp_training_id}/download-csv', [FourpTrainingParticipantController::class, 'downloadCsv'])
+                ->name('4p-training-participants.download_csv')
+                ->middleware('check.permission:fourp_training_participants,view');
+
+            Route::get('/{fourp_training_id}/search', [FourpTrainingParticipantController::class, 'search'])
+                ->name('4p-training-participants.search')
+                ->middleware('check.permission:fourp_training_participants,view');
+        });
+    });
+
+    // Tank Training Program Routes (same structure as 4P Training)
+    Route::prefix('tank-training')->middleware('auth')->group(function () {
+        Route::get('/', [TankTrainingController::class, 'index'])
+            ->name('tank-training.index')
+            ->middleware('check.permission:tank_training,view');
+
+        Route::get('/create', [TankTrainingController::class, 'create'])
+            ->name('tank-training.create')
+            ->middleware('check.permission:tank_training,add');
+
+        Route::post('/', [TankTrainingController::class, 'store'])
+            ->name('tank-training.store')
+            ->middleware('check.permission:tank_training,add');
+
+        Route::get('/{tanktraining}/edit', [TankTrainingController::class, 'edit'])
+            ->name('tank-training.edit')
+            ->middleware('check.permission:tank_training,edit');
+
+        Route::put('/{tanktraining}', [TankTrainingController::class, 'update'])
+            ->name('tank-training.update')
+            ->middleware('check.permission:tank_training,edit');
+
+        Route::delete('/{tanktraining}', [TankTrainingController::class, 'destroy'])
+            ->name('tank-training.destroy')
+            ->middleware('check.permission:tank_training,delete');
+
+        Route::post('/upload-csv', [TankTrainingController::class, 'uploadCsv'])
+            ->name('tank-training.upload_csv')
+            ->middleware('check.permission:tank_training,upload_csv');
+
+        Route::get('/download.csv', [TankTrainingController::class, 'downloadCsv'])
+            ->name('tank-training.download.csv')
+            ->middleware('check.permission:tank_training,view');
+
+        Route::get('/search', [TankTrainingController::class, 'search'])
+            ->name('tank-training.search')
+            ->middleware('check.permission:tank_training,view');
+
+        Route::prefix('tank-training-participants')->middleware('auth')->group(function () {
+            Route::get('/{tank_training_id}', [TankTrainingParticipantController::class, 'listParticipants'])
+                ->name('tank-training-participants.list')
+                ->middleware('check.permission:tank_training_participants,view');
+
+            Route::get('/{tank_training_id}/create', [TankTrainingParticipantController::class, 'create'])
+                ->name('tank-training-participants.create')
+                ->middleware('check.permission:tank_training_participants,add');
+
+            Route::post('/{tank_training_id}', [TankTrainingParticipantController::class, 'store'])
+                ->name('tank-training-participants.store')
+                ->middleware('check.permission:tank_training_participants,add');
+
+            Route::delete('/{tank_training_id}/{participant_id}', [TankTrainingParticipantController::class, 'destroy'])
+                ->name('tank-training-participants.destroy')
+                ->middleware('check.permission:tank_training_participants,delete');
+
+            Route::post('/{tank_training_id}/upload-csv', [TankTrainingParticipantController::class, 'uploadCsv'])
+                ->name('tank-training-participants.upload_csv')
+                ->middleware('check.permission:tank_training_participants,upload_csv');
+
+            Route::get('/{tank_training_id}/download-csv', [TankTrainingParticipantController::class, 'downloadCsv'])
+                ->name('tank-training-participants.download_csv')
+                ->middleware('check.permission:tank_training_participants,view');
+
+            Route::get('/{tank_training_id}/search', [TankTrainingParticipantController::class, 'search'])
+                ->name('tank-training-participants.search')
+                ->middleware('check.permission:tank_training_participants,view');
+        });
+    });
 
 
 
