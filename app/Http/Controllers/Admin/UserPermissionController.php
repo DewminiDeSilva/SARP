@@ -24,9 +24,9 @@ class UserPermissionController extends Controller
             'staff_profile', 'beneficiary', 'family', 'training', 'livestock', 'agri', 'nutrition', 'nutrition_trainee',
             'ffs-training', 'ffs-participants', 'cdf', 'cdfmembers', 'farmerorganization', 'farmermember',
             'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'fingerling', 'infrastructure',
-            'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'awpb',
+            'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'youth_training', 'youth_training_participants', 'awpb',
             'costtab', 'projectdesignreport', 'vegitable', 'fruit', 'goat', 'dairy', 'poultary',
-            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks', 'expressions', 'nutrient_rich_home_garden'
+            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks',             'expressions', 'nutrient_rich_home_garden', 'fourp_training', 'fourp_training_participants', 'tank_training', 'tank_training_participants', 'agriculture_training_participants', 'livestock_training_participants'
         ];
 
         $moduleLabels = [
@@ -56,6 +56,8 @@ class UserPermissionController extends Controller
     'bene_form' => 'Beneficiary Form',
     'nrm' => 'Natural Resource Management',
     'nrm_participants' => 'NRM Participants',
+    'youth_training' => 'Youth Training Program',
+    'youth_training_participants' => 'Youth Training Participants',
     'awpb' => 'Annual Work Plan & Budget (AWPB)',
     'costtab' => 'Cost Tab',
     'projectdesignreport' => 'Project Design Report',
@@ -70,7 +72,13 @@ class UserPermissionController extends Controller
     'agriculture' => 'Agriculture List',
     'livestocks' => 'Livestock List',
     'expressions' => 'Expression of Interest (EOI)',
-    'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden'
+    'nutrient_rich_home_garden' => 'Nutrient Rich Home Garden',
+    'fourp_training' => '4P Training Program',
+    'fourp_training_participants' => '4P Training Participants',
+    'tank_training' => 'Tank Training Program',
+    'tank_training_participants' => 'Tank Training Participants',
+    'agriculture_training_participants' => 'Agriculture Training Participants (Members)',
+    'livestock_training_participants' => 'Livestock Training Participants (Members)'
 ];
 
 

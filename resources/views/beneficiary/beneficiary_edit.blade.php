@@ -540,7 +540,7 @@
                                     <div class="form-row">
                                         <div class="form-group">
                                             <label class="form-label">Crop Category</label>
-                                            <input type="text" class="form-control readonly-field" value="{{ $beneficiary->input2 ?? 'N/A' }}" readonly>
+                                            <input type="text" class="form-control readonly-field" value="{{ (strtolower(trim($beneficiary->input2 ?? '')) === 'others') ? 'Cereals/Legumes' : ($beneficiary->input2 ?? 'N/A') }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">Crop Name</label>
@@ -551,7 +551,7 @@
                                     <div class="form-row">
                                         <div class="form-group">
                                             <label class="form-label">Livestock Type</label>
-                                            <input type="text" class="form-control readonly-field" value="{{ $beneficiary->input2 ?? 'N/A' }}" readonly>
+                                            <input type="text" class="form-control readonly-field" value="{{ (strtolower(trim($beneficiary->input2 ?? '')) === 'others') ? 'Cereals/Legumes' : ($beneficiary->input2 ?? 'N/A') }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">Production Focus</label>
@@ -570,7 +570,7 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label class="form-label">4P Project - Business Concept Title</label>
-                                        <input type="text" class="form-control readonly-field" value="{{ $beneficiary->input2 ?? $beneficiary->eoi_business_title ?? 'N/A' }}" readonly>
+                                        <input type="text" class="form-control readonly-field" value="{{ (strtolower(trim($beneficiary->input2 ?? '')) === 'others') ? 'Cereals/Legumes' : ($beneficiary->input2 ?? $beneficiary->eoi_business_title ?? 'N/A') }}" readonly>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">4P Project Category</label>

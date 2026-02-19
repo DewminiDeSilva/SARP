@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('tank_training_program', function (Blueprint $table) {
+            $table->id();
+            $table->string('program_name');
+            $table->string('program_number');
+            $table->string('crop_name');
+            $table->string('date');
+            $table->string('venue');
+            $table->string('resource_person_name');
+            $table->string('training_program_cost');
+            $table->string('resource_person_payment');
+            $table->string('province_name');
+            $table->string('district');
+            $table->string('ds_division_name');
+            $table->string('gn_division_name');
+            $table->string('as_center');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('tank_training_program');
+    }
+};

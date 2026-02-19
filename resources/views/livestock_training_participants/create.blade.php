@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add Livestock Training Participant</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .frame { display: flex; flex-direction: row; justify-content: space-between; width: 100%; }
+        .left-column { flex: 0 0 20%; border-right: 1px solid #dee2e6; }
+        .right-column { flex: 0 0 80%; padding: 20px; }
+        .section-header { background-color: #28a745; color: white; padding: 8px; margin-top: 20px; font-weight: bold; border-radius: 4px; }
+        .btn-back { display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none; padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px; cursor: pointer; position: relative; overflow: hidden; }
+        .btn-back img { width: 45px; height: auto; margin-right: 5px; z-index: 1; }
+        .btn-back .btn-text { opacity: 0; visibility: hidden; position: absolute; right: 25px; background-color: #1e8e1e; color: #fff; padding: 4px 8px; border-radius: 4px; z-index: 0; }
+        .btn-back:hover .btn-text { opacity: 1; visibility: visible; transform: translateX(-5px); padding: 10px 20px; border-radius: 20px; }
+        .btn-back:hover img { transform: translateX(-50px); }
+        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        #sidebarToggle:hover { background-color: #0a4818; }
+        .left-column.hidden { display: none; }
+        .right-column { transition: flex 0.3s ease, padding 0.3s ease; }
+    </style>
+</head>
+<body>
+@include('dashboard.header')
+<div class="frame" style="padding-top: 70px;">
+    <div class="left-column">
+        @include('dashboard.dashboardC')
+        @csrf
+    </div>
+    <div class="right-column">
+    <div class="d-flex align-items-center mb-3">
+        <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
+        <a href="{{ route('livestock-training.index') }}" class="btn-back">
+            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+        </a>
+    </div>
+
+        <div class="col-md-12 text-center">
+            <h2 class="header-title" style="color: green;">Add Member to {{ $livestockTraining->program_name }}</h2>
+        </div>
+
+        <br>
+
+        <div class="container mt-1 border rounded p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
+            <form class="form-horizontal" action="{{ route('livestock-training-participants.store', $livestockTraining->id) }}" method="POST">
+                @csrf
+                <div class="section-header">Participant Information</div>
+                <div class="row">
+                    <div class="col-6 form-group">
+                        <label for="name">Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="nic">NIC <span class="text-danger">*</span></label>
+                        <input type="text" name="nic" id="nic" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address_institution">Address/Institution <span class="text-danger">*</span></label>
+                    <input type="text" name="address_institution" id="address_institution" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-6 form-group">
+                        <label for="contact_number">Contact Number <span class="text-danger">*</span></label>
+                        <input type="text" name="contact_number" id="contact_number" class="form-control" required>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="gender">Gender <span class="text-danger">*</span></label>
+                        <select name="gender" id="gender" class="form-control" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 form-group">
+                        <label for="designation">Designation <span class="text-danger">*</span></label>
+                        <input type="text" name="designation" id="designation" class="form-control" required>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="age">Age <span class="text-danger">*</span></label>
+                        <input type="number" name="age" id="age" class="form-control" min="1" max="120" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" name="button" class="btn btn-success mt-3">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.querySelector('.left-column');
+    const content = document.querySelector('.right-column');
+    const toggleButton = document.getElementById('sidebarToggle');
+    if (toggleButton) toggleButton.addEventListener('click', function () {
+        sidebar.classList.toggle('hidden');
+        content.style.flex = sidebar.classList.contains('hidden') ? '0 0 100%' : '0 0 80%';
+        content.style.padding = '20px';
+    });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: '{{ session('success') }}',
+        timer: 2500,
+        showConfirmButton: false
+    });
+</script>
+@endif
+</body>
+</html>

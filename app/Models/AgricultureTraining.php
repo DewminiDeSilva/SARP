@@ -30,4 +30,9 @@ class AgricultureTraining extends Model
     {
         return $this->belongsTo(AgricultureData::class);
     }
+
+    public function agricultureTrainingParticipants()
+    {
+        return $this->hasMany(AgricultureTrainingParticipant::class, 'agriculture_training_id');
+    }
 }

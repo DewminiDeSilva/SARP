@@ -153,6 +153,8 @@
                                     <td>{{ $training->gn_division_name }}</td>
                                     <td>{{ $training->as_center }}</td>
                                     <td class="button-container">
+                                        <a href="{{ route('agriculture-training-participants.create', $training->id) }}" class="btn btn-success" title="Add Participants" style="height: 40px; padding: 8px 12px;">Add Participants</a>
+                                        <a href="{{ route('agriculture-training-participants.list', $training->id) }}" class="btn btn-success" title="View Members" style="height: 40px; padding: 8px 12px;">View Members</a>
                                         <a href="{{ route('agriculture-training.edit', $training) }}" class="btn edit-button" title="Edit">
                                             <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit" style="width: 16px; height: 16px;">
                                         </a>
