@@ -14,7 +14,12 @@
         .right-column { flex: 0 0 80%; padding: 20px; }
         .table th, .table td { text-align: center; }
         .card-header { font-weight: bold; text-align: center; background-color: #c7eef1; color: #0d0e0d; }
+        /* Pagination - same as beneficiary index and other modules */
+        .pagination .page-item { margin: 0; }
         .pagination .page-link { padding: 5px 10px; }
+        .page-item { background-color: white; padding: 0; }
+        .pagination:hover { border-color: #fff; background-color: #fff; }
+        .page-item:hover { border-color: #fff; background-color: #fff; cursor: pointer; }
         .page-link { color: #28a745; }
         .page-item.active .page-link { z-index: 3; color: #fff; background-color: #126926; border-color: #126926; }
         .btn-back { display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none; padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px; cursor: pointer; position: relative; overflow: hidden; }
@@ -151,12 +156,21 @@
                 </table>
             </div>
 
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
+            @php
+                $currentPage = $participants->currentPage();
+                $lastPage = $participants->lastPage();
+                $startPage = max($currentPage - 2, 1);
+                $endPage = min($currentPage + 2, $lastPage);
+                $perPage = $participants->perPage();
+                $total = $participants->total();
+                $startingNumber = ($currentPage - 1) * $perPage + 1;
+                $endingNumber = min($total, $currentPage * $perPage);
+            @endphp
+            <nav aria-label="Page navigation" class="mt-3">
+                <ul class="pagination justify-content-center flex-wrap">
                     <li class="page-item {{ $participants->onFirstPage() ? 'disabled' : '' }}">
                         <a class="page-link" href="{{ $participants->previousPageUrl() }}">Previous</a>
                     </li>
-                    @php $currentPage = $participants->currentPage(); $lastPage = $participants->lastPage(); $startPage = max($currentPage - 2, 1); $endPage = min($currentPage + 2, $lastPage); @endphp
                     @if ($startPage > 1)
                         <li class="page-item"><a class="page-link" href="{{ $participants->url(1) }}">1</a></li>
                         @if ($startPage > 2)<li class="page-item disabled"><span class="page-link">...</span></li>@endif
@@ -175,19 +189,7 @@
                     </li>
                 </ul>
             </nav>
-
-            @php
-                $currentPage = $participants->currentPage();
-                $perPage = $participants->perPage();
-                $total = $participants->total();
-                $startingNumber = ($currentPage - 1) * $perPage + 1;
-                $endingNumber = min($total, $currentPage * $perPage);
-            @endphp
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="text-right">
-                    <p>Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
-                </div>
-            </div>
+            <p class="text-muted small mb-0 mt-2">Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
         </div>
     </div>
 </div>

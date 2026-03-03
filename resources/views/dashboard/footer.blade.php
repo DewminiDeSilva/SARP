@@ -81,6 +81,15 @@
         </div>
 
         <p style="margin-left: 50px;">Copyright @ 2025 SARP - All Right Reserved. Concept, Design & Development by SARP Development Team</p>
+        @php
+            $sarpVersion = config('sarp.version') ?? '1.1.0';
+            $sarpBranch = config('sarp.github_branch') ?? 'develop';
+            $sarpGithubUrl = config('sarp.github_url') ?? '#';
+            $sarpVersionHref = ($sarpGithubUrl !== '#' ? rtrim($sarpGithubUrl, '/') . '/tree/' . $sarpBranch : '#');
+        @endphp
+        <p class="footer-version">
+            <a href="{{ $sarpVersionHref }}" target="_blank" rel="noopener" title="View on GitHub ({{ $sarpBranch }})">SARP MIS v{{ $sarpVersion }}</a>
+        </p>
 
     </div>
 
@@ -220,6 +229,17 @@ body {
     text-align: center;
     padding-top: 5px;
     width: 100%;
+}
+.footer-version {
+    margin: 6px 0 0;
+    font-size: 12px;
+}
+.footer-version a {
+    color: #1C6008;
+    text-decoration: none;
+}
+.footer-version a:hover {
+    text-decoration: underline;
 }
 
 .bottom-images {

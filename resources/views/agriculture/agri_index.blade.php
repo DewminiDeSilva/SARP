@@ -1,392 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Agriculture Dashboard</title>
-    {{-- @vite('resources/css/app.css') --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
-    <!-- Bootstrap CSS -->
+    <title>Agriculture Beneficiary List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+/* Pagination - same as beneficiary index and other modules */
+        .pagination .page-item { margin: 0; }
+        .pagination .page-link { padding: 5px 10px; }
+        .page-item { background-color: white; padding: 0; }
+        .pagination:hover { border-color: #fff; background-color: #fff; }
+        .page-item:hover { border-color: #fff; background-color: #fff; cursor: pointer; }
+        .page-link { color: #28a745; }
+        .page-item.active .page-link { z-index: 3; color: #fff; background-color: #126926; border-color: #126926; }
 
-
-
-<style>
-    .entries-container {
-        display: flex;
-        align-items: center;
-    }
-    .entries-container label {
-        margin-bottom: 0;
-    }
-    .entries-container select {
-        display: inline-block;
-        width: auto;
-        appearance: auto; /* Ensures the dropdown uses the default arrow */
-    -webkit-appearance: auto; /* Vendor prefix for better browser support */
-    -moz-appearance: auto; /* Vendor prefix for Firefox */
-    }
-
-
-    .frame {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    .left-column {
-        flex: 0 0 20%;
-        /*padding: 20px;*/
-        border-right: 1px solid #dee2e6;
-    }
-
-    .right-column {
-        flex: 0 0 80%;
-        padding: 20px;
-    }
-
-    .icon-action {
-        display: inline-block;
-        margin-right: 5px;
-    }
-
-    .icon-action .fas {
-        font-size: 1.2rem;
-    }
-
-    .icon-action .fas.fa-edit {
-        color: green;
-    }
-
-    .icon-action .fas.fa-eye {
-        color: blue;
-    }
-
-    .button-container {
-        display: flex;
-        gap: 10px; /* Adjust the gap between buttons as needed */
-    }
-
-    .custom-button {
-            background-color: white;
-            color: red;
-            border: 2px solid transparent; /* Initially no border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            transition: border 0.3s ease; /* Smooth transition for border */
-            width: 60px; /* Set a fixed width */
-            height: 40px; /* Set a fixed height */
-            box-sizing: border-box; /* Ensures padding is included in width and height */
-            background-color: #f5c6cb;
+        :root { --primary-green: #126926; --border-color: #dee2e6; }
+        .frame { display: flex; flex-direction: row; justify-content: space-between; width: 100%; }
+        .left-column { flex: 0 0 20%; border-right: 1px solid var(--border-color); }
+        .right-column { flex: 0 0 80%; padding: 20px; transition: flex 0.3s ease, padding 0.3s ease; }
+        .left-column.hidden { display: none; }
+        .sidebar { transition: transform 0.3s ease; }
+        .sidebar.hidden { transform: translateX(-100%); }
+        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        #sidebarToggle:hover { background-color: #0a4818; }
+        .button-group { display: inline-flex; gap: 8px; flex-wrap: wrap; }
+        .fixed-header h1, .fixed-header .header-mis-title { font-size: 2.85rem !important; }
+        @media (max-width: 1200px) { .fixed-header h1, .fixed-header .header-mis-title { font-size: 2.2rem !important; } }
+        @media (max-width: 768px) { .fixed-header h1, .fixed-header .header-mis-title { font-size: 1.6rem !important; } }
+        .btn-back {
+            display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none;
+            padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px;
+            transition: background-color 0.3s ease; cursor: pointer; position: relative; overflow: hidden;
         }
-
-        .custom-button:hover {
-            border-color: red; /* Border appears on hover */
-            background-color: #f5c6cb;
+        .btn-back img { width: 45px; height: auto; margin-right: 5px; transition: transform 0.3s ease; z-index: 1; }
+        .btn-back .btn-text { opacity: 0; visibility: hidden; position: absolute; right: 25px; background-color: #1e8e1e; color: #fff; padding: 4px 8px; border-radius: 4px; transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; z-index: 0; }
+        .btn-back:hover .btn-text { opacity: 1; visibility: visible; transform: translateX(-5px); padding: 10px 20px; border-radius: 20px; }
+        .btn-back:hover img { transform: translateX(-50px); }
+        .page-header-section {
+            position: relative; text-align: center; margin-bottom: 40px; padding: 50px 30px; border-radius: 20px; overflow: hidden;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            box-shadow: 0 10px 40px rgba(30, 60, 114, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
         }
-
-        .edit-button {
-            background-color: white; /* White background */
-            color: orange;
-            border: 2px solid transparent; /* Initially no border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px; /* Set a fixed width */
-            height: 40px; /* Set a fixed height */
-            box-sizing: border-box; /* Ensures padding is included in width and height */
-            /*padding: 10px;*/
-            transition: border 0.3s ease, background-color 0.3s ease; /* Smooth transition for border and background color */
-            background-color: #ffeeba; /* Slightly darker light yellow on hover */
+        .page-header-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
         }
-
-        .edit-button:hover {
-            border-color: orange; /* Border appears on hover */
-            background-color: #ffeeba; /* Slightly darker light yellow on hover */
+        .page-header-section::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 20%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 80%, transparent 100%);
         }
-
-        .view-button {
-            background-color: white; /* White background */
-            color: orange;
-            border: 2px solid transparent; /* Initially no border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px; /* Set a fixed width */
-            height: 40px; /* Set a fixed height */
-            box-sizing: border-box; /* Ensures padding is included in width and height */
-            /*padding: 10px;*/
-            transition: border 0.3s ease, background-color 0.3s ease; /* Smooth transition for border and background color */
-            background-color: #60C267; /* Slightly darker light yellow on hover */
+        .header-content { position: relative; z-index: 2; }
+        .header-icon-wrapper { margin-bottom: 20px; display: inline-block; }
+        .header-main-icon {
+            font-size: 64px; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-
-        .view-button:hover {
-            border-color: green; /* Border appears on hover */
-            background-color: #60C267; /* Slightly darker light yellow on hover */
+        .header-title { margin: 0; padding: 0; }
+        .title-text {
+            display: inline-block; color: #fff; font-size: 42px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #ffffff 100%); background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-
-        .card-header {
-            font-weight: bold;
-            text-align: center;
-            background-color: #c7eef1; /* Blue color example */
-            color: #0d0e0d; /* Text color */
-            /* width: 18; */
-        }
-
-
-        .pagination .page-item {
-            margin: 0 0px; /* Adjust the margin to reduce space */
-        }
-        .pagination .page-link {
-            padding: 5px 10px; /* Adjust padding to control button size */
-        }
-
-        .page-item {
-            background-color: white;
-            padding: 0px;
-        }
-
-        .pagination:hover {
-            border-color: #fff;
-            background-color: #fff;
-        }
-
-        .page-item:hover {
-            border-color: #fff;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .page-link {
-            color : #28a745;
-        }
-
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff;
-            background-color: #126926;
-            border-color: #126926;
-        }
-
-</style>
-
-<style>
-    .btn-back {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center; /* Center content horizontally */
-        /*background-color: #26CF23; /* Button background color */
-        color: #fff; /* Text color */
-        border: none; /* Remove default border */
-        padding: 10px 50px; /* Adjust padding */
-        border-radius: 4px; /* Rounded corners */
-        text-decoration: none; /* Remove underline */
-        font-size: 14px; /* Font size */
-        transition: background-color 0.3s ease; /* Smooth transition */
-        cursor: pointer; /* Pointer cursor on hover */
-        position: relative; /* Position relative for text positioning */
-        overflow: hidden; /* Hide overflow to create a smooth effect */
-    }
-
-    .btn-back img {
-        width: 45px; /* Adjust the size of the arrow image */
-        height: auto;
-        margin-right: 5px; /* Space between the image and text */
-        transition: transform 0.3s ease; /* Smooth transition for image */
-        background: none; /* Ensure no background on the image */
-        position: relative; /* Position relative for smooth animation */
-        z-index: 1; /* Ensure image is on top */
-    }
-
-    .btn-back .btn-text {
-        opacity: 0; /* Hide text initially */
-        visibility: hidden; /* Hide text initially */
-        position: absolute; /* Position absolutely within the button */
-        right: 25px; /* Adjust right position to fit the button */
-        background-color: #1e8e1e; /* Background color for text on hover */
-        color: #fff; /* Text color */
-        padding: 4px 8px; /* Padding around text */
-        border-radius: 4px; /* Rounded corners for text background */
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Smooth transition */
-        z-index: 0; /* Ensure text is beneath the image */
-    }
-
-    .btn-back:hover .btn-text {
-        opacity: 1; /* Show text on hover */
-        visibility: visible; /* Show text on hover */
-        transform: translateX(-5px); /* Move text to the right on hover */
-        padding: 10px 20px; /* Adjust padding */
-        border-radius: 20px; /* Rounded corners */
-    }
-
-    .btn-back:hover img {
-        transform: translateX(-50px); /* Move image to the left on hover */
-    }
-
-    .btn-back:hover {
-        /*background-color: #1e8e1e; /* Dark green on hover */
-
-    }
-</style>
-
-<style>
-    .sidebar {
-        transition: transform 0.3s ease; /* Smooth toggle animation */
-    }
-
-    .sidebar.hidden {
-        transform: translateX(-100%); /* Move sidebar out of view */
-    }
-
-    #sidebarToggle {
-        background-color: #126926; /* Match the back button color */
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    #sidebarToggle:hover {
-        background-color: #0a4818; /* Darken the hover color */
-    }
-
-
-    .left-column.hidden {
-    display: none; /* Hide the sidebar */
-}
-.right-column {
-    transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
-}
-
-</style>
-
-
+        .header-subtitle { color: rgba(255,255,255,0.95); font-size: 18px; margin-top: 15px; margin-bottom: 0; font-weight: 400; }
+        .header-decoration { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 25px; }
+        .decoration-line { width: 60px; height: 2px; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%); }
+        .decoration-dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; }
+        @media (max-width: 768px) { .header-main-icon { font-size: 48px; } .title-text { font-size: 28px; } .header-subtitle { font-size: 16px; } }
+        .summary-card { animation: fadeInUp 0.6s ease-out; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .table-container { background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 20px; margin-top: 20px; overflow-x: auto; }
+        .table-module { width: 100%; border-collapse: separate; border-spacing: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .table-module thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; position: sticky; top: 0; z-index: 10; }
+        .table-module thead th { padding: 18px 16px; text-align: left; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border: none; }
+        .table-module tbody tr { transition: all 0.3s ease; border-bottom: 1px solid #f0f0f0; }
+        .table-module tbody tr:nth-child(even) { background: #fafbfc; }
+        .table-module tbody tr:nth-child(odd) { background: #fff; }
+        .table-module tbody tr:hover { background: linear-gradient(90deg, #e8ecff 0%, #f5f7ff 100%) !important; box-shadow: 0 4px 12px rgba(102,126,234,0.15); border-left: 4px solid #667eea; }
+        .table-module tbody td { padding: 16px; color: #2d3748; font-size: 14px; vertical-align: middle; border: none; }
+        .table-responsive { border-radius: 12px; overflow: hidden; }
+        .btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .btn-info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border: none; }
+        .btn-info:hover { background: linear-gradient(135deg, #5568d3 0%, #6a3d8f 100%); color: #fff; }
+        @media (max-width: 768px) { .frame { flex-direction: column; } .left-column, .right-column { flex: 0 0 100%; } }
+    </style>
 </head>
 <body>
 @include('dashboard.header')
-<div class="frame" style="padding-top: 70px;">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<div class="frame" style="padding-top: 110px;">
     <div class="left-column">
         @include('dashboard.dashboardC')
-        @csrf
     </div>
     <div class="right-column">
-
-    <div class="d-flex align-items-center mb-3">
-
-    <!-- Sidebar Toggle Button -->
-    <button id="sidebarToggle" class="btn btn-secondary mr-2">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <a href="{{ route('agriculture.index') }}" class="btn-back">
-        <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-    </a>
-
-
-    </div>
-        <div class="container-fluid">
-
-            <div class="center-heading text-center">
-                <h1 style="font-size: 2.5rem; color: green;">Agriculture</h1>
-            </div>
-
-
-        <div class="container">
-        <div class="justify-content-center">
-
-        <div class="container mt-4">
-    <div class="d-flex justify-content-center">
-
-        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
-                Total Crops Registered
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ $totalCrops }}</h5>
-            </div>
+        <div class="d-flex align-items-center mb-3">
+            <button id="sidebarToggle" class="btn btn-secondary me-2"><i class="fas fa-bars"></i></button>
+            <a href="{{ route('beneficiary.index') }}" class="btn-back">
+                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
+            </a>
         </div>
-
-        <div class="card text-center" style="width: 18rem; margin-right: 20px;">
-            <div class="card-header">
-                Total Beneficiaries Doing Crops
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ $totalBeneficiaries }}</h5>
-            </div>
-        </div>
-
-        <!-- Remove margin-right from the last card to avoid extra spacing on the right -->
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-header">
-                Total GN Divisions Involved
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ $totalGnDivisions }}</h5>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-        </div>
-    </div>
-    </br>
 
         <div class="container-fluid">
-
-
-
-           
-
-            <!-- Entries Selector and Summary Cards -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="entries-container">
-                    <label for="entriesSelect">Show</label>
-                    <select id="entriesSelect" class=" custom-select-sm form-control form-control-sm mx-2" onchange="updateEntries()">
-                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
-                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
-                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
-                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
-                    </select>
-                    <label for="entriesSelect">entries</label>
+            <div class="page-header-section">
+                <div class="header-content">
+                    <div class="header-icon-wrapper">
+                        <i class="fas fa-leaf header-main-icon"></i>
+                    </div>
+                    <h1 class="header-title"><span class="title-text">Agriculture List</span></h1>
+                    <p class="header-subtitle">Beneficiaries with agriculture – view and manage</p>
+                    <div class="header-decoration">
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dot"></div>
+                        <div class="decoration-line"></div>
+                    </div>
                 </div>
-
             </div>
 
-            <form method="GET" action="{{ route('agriculture.index') }}" class="form-inline">
-            <input type="text" name="search" class="form-control form-control-sm"
-            value="{{ request('search') }}" style="width: 250px;">
-           <button type="submit" class="btn btn-success btn-sm ml-2">Search</button>
-           @if(request('search'))
-               <a href="{{ route('agriculture.index') }}" class="btn btn-secondary btn-sm ml-2">Clear</a>
-            @endif
-             </form>
-            <br>
-            <!-- Beneficiaries Table -->
-            <div class="row table-container">
-                <div class="col">
-                    <table id="beneficiariesTable" class="table table-bordered">
-                        <thead class="thead-light">
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-4 mb-4">
+                    <div class="summary-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(102,126,234,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="fas fa-seedling" style="margin-right: 8px; font-size: 24px;"></i>Total Crops Registered
+                        </div>
+                        <div style="color: #fff; font-size: 48px; font-weight: 700; margin: 20px 0;">{{ $totalCrops }}</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;">Total Crops Registered</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(79,172,254,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="fas fa-user-friends" style="margin-right: 8px; font-size: 24px;"></i>Beneficiary Statistics
+                        </div>
+                        <div style="color: #fff; font-size: 48px; font-weight: 700; margin: 20px 0;">{{ $totalBeneficiaries }}</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;">Total Beneficiaries Doing Crops</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="summary-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(48,207,208,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="fas fa-map-marked-alt" style="margin-right: 8px; font-size: 24px;"></i>Division Statistics
+                        </div>
+                        <div style="color: #fff; font-size: 48px; font-weight: 700; margin: 20px 0;">{{ $totalGnDivisions }}</div>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;">Total GN Divisions Involved</p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="GET" action="{{ route('agriculture.index') }}" class="mb-4">
+                <div class="input-group" style="max-width: 400px;">
+                    <input type="text" class="form-control" name="search" placeholder="Search beneficiaries..." value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-search me-1"></i>Search</button>
+                    @if(request('search'))
+                        <a href="{{ route('agriculture.index') }}" class="btn btn-secondary">Clear</a>
+                    @endif
+                </div>
+            </form>
+
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-module">
+                        <thead>
                             <tr>
-                                <th scope="col">NIC</th>
-                                <th scope="col">Beneficiary Name With Initials</th>
-                                <th scope="col">GN Division</th>
-                                <th scope="col">Crop Name</th>
-                                <th scope="col">Actions</th>
+                                <th>NIC</th>
+                                <th>Beneficiary Name With Initials</th>
+                                <th>GN Division</th>
+                                <th>Crop Name</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -395,149 +179,89 @@
                                     <td>{{ $beneficiary->nic }}</td>
                                     <td>{{ $beneficiary->name_with_initials }}</td>
                                     <td>{{ $beneficiary->gn_division_name }}</td>
-                                    <td>{{ $beneficiary->input3 }}</td>
-                                    <td class="buttonline">
+                                    <td>{{ $beneficiary->input3 ?? 'N/A' }}</td>
+                                    <td>
                                         <div class="button-group">
                                             @if(auth()->user()->hasPermission('agriculture', 'view'))
-                                            <a href="{{ route('agriculture.showByBeneficiary', $beneficiary->id) }}" class="btn btn-info btn-sm">View Details</a>
+                                                <a href="{{ route('agriculture.showByBeneficiary', $beneficiary->id) }}" class="btn btn-info btn-sm">View Details</a>
                                             @endif
                                             @if(auth()->user()->hasPermission('agriculture', 'add'))
-                                            <a href="{{ route('agriculture.create', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-info btn-sm">Add Agriculture Data</a>
+                                                <a href="{{ route('agriculture.create', ['beneficiaryId' => $beneficiary->id]) }}" class="btn btn-info btn-sm">Add Agriculture Data</a>
                                             @endif
-<!-- 
-                                            @if(auth()->user()->hasPermission('agriculture', 'view'))
-                                            <a href="{{ route('crops.by.gn.division', ['gn_division_id' => $beneficiary->gn_division_name]) }}" class="btn btn-info btn-sm">View Crops</a>
-                                            @endif -->
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    @php $beneficiaries->appends(request()->query()); @endphp
+                    <nav aria-label="Page navigation" class="mt-3">
+                        <ul class="pagination justify-content-center flex-wrap">
+                            <li class="page-item {{ $beneficiaries->onFirstPage() ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ $beneficiaries->previousPageUrl() }}">Previous</a>
+                            </li>
+                            @php
+                                $currentPage = $beneficiaries->currentPage();
+                                $lastPage = $beneficiaries->lastPage();
+                                $startPage = max($currentPage - 2, 1);
+                                $endPage = min($currentPage + 2, $lastPage);
+                            @endphp
+                            @if ($startPage > 1)
+                                <li class="page-item"><a class="page-link" href="{{ $beneficiaries->url(1) }}">1</a></li>
+                                @if ($startPage > 2) <li class="page-item disabled"><span class="page-link">...</span></li> @endif
+                            @endif
+                            @for ($i = $startPage; $i <= $endPage; $i++)
+                                <li class="page-item {{ $i == $currentPage ? 'active' : '' }}"><a class="page-link" href="{{ $beneficiaries->url($i) }}">{{ $i }}</a></li>
+                            @endfor
+                            @if ($endPage < $lastPage)
+                                @if ($endPage < $lastPage - 1) <li class="page-item disabled"><span class="page-link">...</span></li> @endif
+                                <li class="page-item"><a class="page-link" href="{{ $beneficiaries->url($lastPage) }}">{{ $lastPage }}</a></li>
+                            @endif
+                            <li class="page-item {{ $beneficiaries->hasMorePages() ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    @php
+                        $perPage = $beneficiaries->perPage();
+                        $total = $beneficiaries->total();
+                        $startingNumber = ($currentPage - 1) * $perPage + 1;
+                        $endingNumber = min($total, $currentPage * $perPage);
+                    @endphp
+                    <p class="text-muted small mb-0 mt-2">Showing {{ $startingNumber }} to {{ $endingNumber }} of {{ $total }} entries</p>
                 </div>
             </div>
-          </br>
-
-         <div id="tableInfo" class="text-left"></div>
-
-            <!-- Pagination Section for Beneficiaries -->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item {{ $beneficiaries->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $beneficiaries->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-
-                    @php
-                        $currentPage = $beneficiaries->currentPage();
-                        $lastPage = $beneficiaries->lastPage();
-                        $startPage = max($currentPage - 2, 1);
-                        $endPage = min($currentPage + 2, $lastPage);
-                    @endphp
-
-                    @if ($startPage > 1)
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $beneficiaries->url(1) }}">1</a>
-                        </li>
-                        @if ($startPage > 2)
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        @endif
-                    @endif
-
-                    @for ($i = $startPage; $i <= $endPage; $i++)
-                        <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $beneficiaries->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-
-                    @if ($endPage < $lastPage)
-                        @if ($endPage < $lastPage - 1)
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        @endif
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $beneficiaries->url($lastPage) }}">{{ $lastPage }}</a>
-                        </li>
-                    @endif
-
-                    <li class="page-item {{ $beneficiaries->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $beneficiaries->nextPageUrl() }}">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
         </div>
     </div>
 </div>
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script>
-    function updateEntries() {
-        const entries = document.getElementById('entriesSelect').value;
-        const url = new URL(window.location.href);
-        url.searchParams.set('entries', entries);
-        window.location.href = url.href;
-    }
-
-    $(document).ready(function() {
-    const totalBeneficiaries = {{ $beneficiaries->total() }}; // Laravel total
-    const perPage = {{ $beneficiaries->perPage() }}; // Laravel items per page
-    const currentPage = {{ $beneficiaries->currentPage() }}; // Laravel current page
-
-    $('#beneficiariesTable').DataTable({
-        "paging": false,
-        "searching": false,
-        "info": false
-    });
-
-    const tableInfo = document.getElementById('tableInfo');
-
-    // Calculate starting and ending entries
-    const startEntry = (currentPage - 1) * perPage + 1;
-    const endEntry = Math.min(currentPage * perPage, totalBeneficiaries);
-
-    // Update the table info dynamically
-    tableInfo.innerHTML = `Showing ${startEntry} to ${endEntry} of ${totalBeneficiaries} entries`;
-});
-
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const sidebar = document.querySelector('.left-column');
-        const content = document.querySelector('.right-column');
-        const toggleButton = document.getElementById('sidebarToggle');
-
-        toggleButton.addEventListener('click', function () {
-            // Toggle the 'hidden' class on the sidebar
-            sidebar.classList.toggle('hidden');
-
-            // Adjust the width of the content
-            if (sidebar.classList.contains('hidden')) {
-                content.style.flex = '0 0 100%'; // Expand to full width
-                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
-            } else {
-                content.style.flex = '0 0 80%'; // Default width
-                content.style.padding = '20px'; // Reset padding
-            }
-        });
-    });
-</script>
-<!-- SweetAlert2 -->
+@if(session('success') || session('error'))
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-@if(session('success'))
 <script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: '{{ session('success') }}',
-        timer: 2500,
-        showConfirmButton: false
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+        Swal.fire({ icon: 'success', title: 'Success', text: '{{ session('success') }}', confirmButtonColor: '#126926' });
+        @endif
+        @if(session('error'))
+        Swal.fire({ icon: 'error', title: 'Error', text: '{{ session('error') }}', confirmButtonColor: '#126926' });
+        @endif
     });
 </script>
 @endif
 
-
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.querySelector('.left-column');
+    const content = document.querySelector('.right-column');
+    const toggleButton = document.getElementById('sidebarToggle');
+    if (toggleButton && sidebar && content) {
+        toggleButton.addEventListener('click', function () {
+            sidebar.classList.toggle('hidden');
+            content.style.flex = sidebar.classList.contains('hidden') ? '0 0 100%' : '0 0 80%';
+            content.style.padding = '20px';
+        });
+    }
+});
+</script>
 </body>
 </html>
