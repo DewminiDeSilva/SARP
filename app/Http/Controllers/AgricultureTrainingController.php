@@ -6,6 +6,7 @@ use App\Models\AgricultureTraining;
 use App\Models\AgricultureData;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use League\Csv\Reader;
 
 class AgricultureTrainingController extends Controller
 {
@@ -135,9 +136,16 @@ class AgricultureTrainingController extends Controller
         $ext = strtolower($file->getClientOriginalExtension());
 
         if (in_array($ext, ['csv', 'txt'])) {
-            $csv = Reader::createFromPath($file->getRealPath(), 'r');
-            $csv->setHeaderOffset(0);
-            $rows = $csv;
+            try {
+                $csv = Reader::createFromPath($file->getRealPath(), 'r');
+                $csv->setHeaderOffset(0);
+                $rows = iterator_to_array($csv->getRecords());
+            } catch (\Throwable $e) {
+                return redirect()->route('agriculture-training.index')->with('error', 'The CSV file could not be read. Please check the format and encoding.');
+            }
+            if (empty($rows)) {
+                return redirect()->route('agriculture-training.index')->with('error', 'The CSV file is empty or has no data rows.');
+            }
         } else {
             $collection = Excel::toCollection(null, $file)->first();
             if ($collection->isEmpty()) {
@@ -146,7 +154,7 @@ class AgricultureTrainingController extends Controller
             $headers = $collection->shift();
             $rows = $collection->map(function ($row) use ($headers) {
                 return array_combine($headers->toArray(), $row->toArray());
-            });
+            })->toArray();
         }
 
         foreach ($rows as $row) {
