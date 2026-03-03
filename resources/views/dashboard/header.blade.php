@@ -53,8 +53,17 @@
         <img src="{{ asset('assets/images/ifad.png') }}" alt="IFAD Logo" class="ifad-logo">
         <img src="{{ asset('assets/images/sarp2.png') }}" alt="SHARP Logo" class="sharp-logo">
     </div>
-    <div>
-        <h1>Monitoring Information System</h1>
+    <div class="header-title-block">
+        <h1 class="header-mis-title">Monitoring Information System</h1>
+        @php
+            $sarpVersion = config('sarp.version') ?? '1.1.0';
+            $sarpBranch = config('sarp.github_branch') ?? 'develop';
+            $sarpGithubUrl = config('sarp.github_url') ?? '#';
+            $sarpVersionHref = ($sarpGithubUrl !== '#' ? rtrim($sarpGithubUrl, '/') . '/tree/' . $sarpBranch : '#');
+        @endphp
+        <a href="{{ $sarpVersionHref }}" target="_blank" rel="noopener" class="system-version" title="SARP MIS · {{ $sarpBranch }} branch">
+            SARP MIS v{{ $sarpVersion }}
+        </a>
     </div>
     <div class="profile">
         <img src="{{ Auth::user()->profile_image }}" alt="Profile Image" class="profile-img">
@@ -80,7 +89,7 @@
 
 
 <style>
-    /* Enhanced Fixed Header with Beautiful Design */
+    /* Enhanced Fixed Header - clean layout and nice header line */
     .fixed-header {
         position: fixed;
         top: 0;
@@ -90,54 +99,49 @@
         color: #ffffff;
         z-index: 1000;
         padding: 18px 40px;
-        box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.2),
-            0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-            0 2px 0 rgba(255, 255, 255, 0.1) inset;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 3px solid rgba(255, 255, 255, 0.2);
         position: relative;
         overflow: visible;
         z-index: 99999 !important;
-        
+        /* Header line: soft shadow + clear bottom edge */
+        box-shadow: 
+            0 4px 20px rgba(0, 0, 0, 0.15),
+            0 1px 0 rgba(255, 255, 255, 0.08) inset;
+        border-bottom: 4px solid rgba(255, 255, 255, 0.25);
     }
-    
 
-
-
-
-    /* Animated Background Pattern */
+    /* Thin top highlight line */
     .fixed-header::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        background: 
-            radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
         pointer-events: none;
-        z-index: 0;
+        z-index: 2;
     }
 
+    /* Main header bottom line - gradient accent */
     .fixed-header::after {
         content: '';
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 2px;
+        height: 4px;
         background: linear-gradient(90deg, 
             transparent 0%, 
-            rgba(255, 255, 255, 0.4) 20%, 
-            rgba(255, 255, 255, 0.6) 50%, 
-            rgba(255, 255, 255, 0.4) 80%, 
+            rgba(255, 255, 255, 0.2) 15%,
+            rgba(255, 255, 255, 0.55) 50%, 
+            rgba(255, 255, 255, 0.2) 85%,
             transparent 100%);
         z-index: 1;
     }
+
 .profile-dropdown { z-index: 100001; }
     /* Left Section - Logos */
     .fixed-header .left-section {
@@ -183,25 +187,47 @@
         letter-spacing: 1px;
     }
 
+    .header-title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+    .system-version {
+        display: inline-block;
+        margin-top: 4px;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .system-version:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+    /* Monitoring Information System - large, clear title */
+    .header-mis-title,
     .fixed-header h1 {
-        font-size: 2.4rem;
+        font-size: 2.85rem;
+        font-weight: 700;
         margin: 0;
         color: #ffffff;
-        background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #ffffff 100%);
-        background-size: 200% auto;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+        text-align: center;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(180deg, #ffffff 0%, #e8ecf7 50%, #ffffff 100%);
+        background-size: 100% 200%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: textShimmer 4s linear infinite;
+        animation: textShimmer 5s ease-in-out infinite;
     }
 
     @keyframes textShimmer {
-        0% {
-            background-position: 0% center;
-        }
-        100% {
-            background-position: 200% center;
-        }
+        0%, 100% { background-position: 0% 0%; }
+        50% { background-position: 0% 100%; }
     }
 
     /* Profile Section */
@@ -264,8 +290,9 @@
             padding: 15px 25px;
         }
 
+        .header-mis-title,
         .fixed-header h1 {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
         }
 
         .fixed-header .left-section img {
@@ -286,8 +313,10 @@
             margin-top: 10px;
         }
 
+        .header-mis-title,
         .fixed-header h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            letter-spacing: 0.02em;
         }
 
         .fixed-header .left-section {

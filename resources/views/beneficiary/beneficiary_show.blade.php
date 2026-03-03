@@ -817,10 +817,18 @@
                     </div>
                                     </div>
 
-                <!-- Project Information: only Crop Category and Crop Name -->
+                <!-- Project Information: Type of Project, Agriculture/Livestock, Crop Category, Crop Name -->
                 <div class="project-info-section">
                     <h5><i class="fas fa-project-diagram"></i>Project Information</h5>
                     <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Type of Project</div>
+                            <div class="info-value">{{ ucfirst($beneficiary->project_type ?? 'N/A') }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Agriculture/Livestock</div>
+                            <div class="info-value">{{ ucfirst($beneficiary->input1 ?? 'N/A') }}</div>
+                        </div>
                         <div class="info-item">
                             <div class="info-label">Crop Category</div>
                             <div class="info-value">{{ (strtolower(trim($beneficiary->input2 ?? '')) === 'others') ? 'Cereals/Legumes' : ($beneficiary->input2 ?? $beneficiary->eoi_business_title ?? 'N/A') }}</div>

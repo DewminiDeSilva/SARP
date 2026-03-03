@@ -441,6 +441,17 @@
         
         /* Standard font sizes */
         h1 { font-size: 24px !important; }
+        /* Page header title "Beneficiary Details" - same size as Agriculture List / Livestock List */
+        .page-header-section .header-title,
+        .page-header-section .title-text {
+            font-size: 42px !important;
+        }
+        @media (max-width: 768px) {
+            .page-header-section .header-title,
+            .page-header-section .title-text {
+                font-size: 28px !important;
+            }
+        }
         h2 { font-size: 20px !important; }
         h3 { font-size: 18px !important; }
         h4 { font-size: 16px !important; }
@@ -615,18 +626,9 @@
             color: #ffffff;
             font-size: 42px;
             font-weight: 800;
-            text-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.3),
-                0 4px 8px rgba(0, 0, 0, 0.2),
-                0 0 20px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
             letter-spacing: 2px;
             text-transform: uppercase;
-            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #ffffff 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s linear infinite;
         }
 
         @keyframes shimmer {
