@@ -30,8 +30,10 @@ class YouthTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
+        $maleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'male')->count();
+        $femaleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'female')->count();
 
-        return view('youth_training_participants.index', compact('youthTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        return view('youth_training_participants.index', compact('youthTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 
     public function create($youth_training_id)
@@ -155,6 +157,8 @@ class YouthTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
-        return view('youth_training_participants.index', compact('youthTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        $maleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'male')->count();
+        $femaleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'female')->count();
+        return view('youth_training_participants.index', compact('youthTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 }

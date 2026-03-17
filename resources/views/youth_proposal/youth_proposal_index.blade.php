@@ -182,6 +182,9 @@
             background-color: #126926;
             border-color: #126926;
         }
+        /* Frame same as tanks-index (logframe-wrap style) */
+        .yp-frame-wrap { max-width: 100%; margin: 0 auto; padding: 16px; background: linear-gradient(180deg, #f8fafc 0%, #f5f7fb 100%); border-radius: 16px; }
+        .yp-center-heading { text-align: center; font-size: 2rem; font-weight: 800; color: #126926; margin-bottom: 1.5rem; }
     </style>
     
     <style>
@@ -311,10 +314,11 @@
             </button>
         </div>
 
+        <div class="yp-frame-wrap">
         <div class="container-fluid">
 
-            <div class="center-heading text-center">
-                <h2 style="font-size: 2.4rem; color: green;">Youth Proposals</h2>
+            <div class="yp-center-heading">
+                <h2>Youth Proposals</h2>
             </div>
             
             <!-- Summary Cards -->
@@ -522,6 +526,7 @@
             </div>
 
             </div>
+        </div>
         </div>
     </div>
 </div>

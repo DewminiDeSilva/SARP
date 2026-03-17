@@ -161,12 +161,6 @@
             margin-right: 10px;
         }
 
-        .fixed-header h1 {
-            font-size: 1.5rem;
-            margin: 0;
-            color: black; /* Header text color */
-        }
-
         /* Profile Section */
         .fixed-header .profile {
             display: flex;

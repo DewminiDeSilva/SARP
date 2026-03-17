@@ -70,6 +70,7 @@ use App\Http\Controllers\EOIController;
 use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\YouthController;
 use App\Http\Controllers\YouthProposalController;
+use App\Http\Controllers\YouthFormController;
 use App\Http\Controllers\EOIBeneficiaryController;
 use App\Http\Controllers\NutrientRichHomeGardenController;
 
@@ -2527,7 +2528,13 @@ Route::resource('youth-proposals', YouthProposalController::class);
 Route::patch('/youth-proposals/update-status/{id}', [YouthProposalController::class, 'updateStatus'])->name('youth-proposals.updateStatus');
 Route::get('/youth-proposal/agreement-signed', [YouthProposalController::class, 'agreementSigned'])->name('youth-proposal.agreementSigned');
 
+Route::get('/youth-proposals/{id}/add-beneficiary', [YouthProposalController::class, 'addBeneficiaryForm'])->name('youth-proposals.addBeneficiary');
+Route::post('/youth-proposals/{id}/link-beneficiary', [YouthProposalController::class, 'linkBeneficiary'])->name('youth-proposals.linkBeneficiary');
 Route::get('/youth-proposals/{id}/beneficiaries', [YouthProposalController::class, 'showBeneficiaries'])->name('youth-proposals.beneficiaries');
+
+Route::get('/youth-form/create/{beneficiary_id}', [YouthFormController::class, 'create'])->name('youth_form.create');
+Route::post('/youth-form/store', [YouthFormController::class, 'store'])->name('youth_form.store');
+Route::get('/youth-form/show/{beneficiary_id}', [YouthFormController::class, 'show'])->name('youth_form.show');
 
 Route::resource('agro-forest', AgroForestController::class);
 

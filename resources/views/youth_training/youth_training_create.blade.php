@@ -13,25 +13,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body { background-color: #f8f9fa; }
-        .container { margin-top: 50px; }
-        .section-header { background-color: #28a745; color: white; padding: 8px; margin-top: 20px; font-weight: bold; border-radius: 4px; }
-        .dropdown { margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
-        .dropdown-toggle { min-width: 250px; }
-        .dropdown-label { text-align: center; font-size: 20px; }
-        .frame { display: flex; flex-direction: row; justify-content: space-between; width: 100%; }
-        .left-column { flex: 0 0 20%; border-right: 1px solid #dee2e6; }
-        .right-column { flex: 0 0 80%; padding: 20px; }
-        .btn-back { display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none; padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px; cursor: pointer; position: relative; overflow: hidden; }
-        .btn-back img { width: 45px; height: auto; margin-right: 5px; z-index: 1; }
-        .btn-back .btn-text { opacity: 0; visibility: hidden; position: absolute; right: 25px; background-color: #1e8e1e; color: #fff; padding: 4px 8px; border-radius: 4px; z-index: 0; }
-        .btn-back:hover .btn-text { opacity: 1; visibility: visible; transform: translateX(-5px); padding: 10px 20px; border-radius: 20px; }
-        .btn-back:hover img { transform: translateX(-50px); }
-        .sidebar.hidden { transform: translateX(-100%); }
-        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
-        #sidebarToggle:hover { background-color: #0a4818; }
+        /* EOI-style CSS structure (same as youth/EOI module) */
+        :root { --ytoa-primary: #126926; --ytoa-primary-dark: #0d4d1f; --ytoa-border: #e2e8f0; --ytoa-text: #1e293b; }
+        body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        .frame { display: flex; width: 100%; }
+        .left-column { flex: 0 0 20%; border-right: 1px solid var(--ytoa-border); background: #fafbfa; }
         .left-column.hidden { display: none; }
-        .right-column { transition: flex 0.3s ease, padding 0.3s ease; }
+        .right-column { flex: 0 0 80%; padding: 24px; transition: flex 0.3s ease; }
+        .ytoa-frame-wrap { max-width: 100%; margin: 0 auto; padding: 20px; background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; }
+        .ytoa-form-card { background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 6px 24px rgba(18,105,38,0.06); border: 1px solid rgba(18,105,38,0.1); padding: 32px 40px; }
+        .ytoa-title { font-size: 1.75rem; font-weight: 700; color: var(--ytoa-text); margin-bottom: 28px; padding-bottom: 14px; border-bottom: 3px solid var(--ytoa-primary); text-align: center; letter-spacing: -0.02em; }
+        .ytoa-label { font-weight: 600; color: var(--ytoa-text); font-size: 1.125rem; margin-bottom: 8px; display: block; padding-left: 12px; border-left: 4px solid var(--ytoa-primary); line-height: 1.4; }
+        .ytoa-form-card .form-control { border-radius: 10px; border: 1px solid var(--ytoa-border); padding: 10px 14px; transition: border-color .2s, box-shadow .2s; }
+        .ytoa-form-card .form-control:focus { border-color: var(--ytoa-primary); box-shadow: 0 0 0 3px rgba(18,105,38,0.15); outline: none; }
+        .section-header { background: linear-gradient(180deg, var(--ytoa-primary) 0%, var(--ytoa-primary-dark) 100%); color: white; padding: 12px 16px; margin-top: 24px; margin-bottom: 16px; font-weight: 700; border-radius: 10px; font-size: 1.1rem; }
+        .dropdown { margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
+        .dropdown-toggle { min-width: 250px; border-radius: 10px; }
+        .dropdown-label { text-align: center; font-size: 1rem; font-weight: 600; padding-left: 12px; border-left: 4px solid var(--ytoa-primary); margin-bottom: 8px; }
+        .btn-back { display: inline-flex; align-items: center; color: #fff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; background: var(--ytoa-primary); }
+        .btn-back:hover { background: var(--ytoa-primary-dark); color: #fff; }
+        .btn-back img { width: 45px; height: auto; margin-right: 5px; }
+        #sidebarToggle { background: var(--ytoa-primary); color: #fff; border: none; padding: 10px; border-radius: 8px; }
+        #sidebarToggle:hover { background: var(--ytoa-primary-dark); }
+        .ytoa-submit-wrap { margin-top: 2rem; display: flex; justify-content: center; align-items: center; }
+        .btn-success { background: var(--ytoa-primary); border-color: var(--ytoa-primary); border-radius: 12px; padding: 12px 32px; font-weight: 600; }
+        .btn-success:hover { background: var(--ytoa-primary-dark); border-color: var(--ytoa-primary-dark); }
     </style>
 </head>
 <body>
@@ -42,25 +48,23 @@
         @csrf
     </div>
     <div class="right-column">
-    <div class="d-flex align-items-center mb-3">
-        <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
-        <a href="{{ route('youth-training.index') }}" class="btn-back">
-            <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
-    </div>
+        <div class="d-flex align-items-center mb-3 gap-2">
+            <button id="sidebarToggle" class="btn btn-secondary"><i class="fas fa-bars"></i></button>
+            <a href="{{ route('youth-training.index') }}" class="btn-back"><i class="fas fa-arrow-left me-2"></i>Back</a>
+        </div>
 
-        <div class="container mt-5 border rounded border-primary p-4">
+        <div class="ytoa-frame-wrap">
+        <div class="ytoa-form-card">
+            <h2 class="ytoa-title">Youth Training Programme Registration</h2>
+
             <form class="form-horizontal" method="POST" action="{{ route('youth-training.store') }}">
                 @csrf
-                <div class="col-md-12 text-center">
-                    <h2 class="mb-4">Youth Training Programme Registration</h2>
-                </div>
 
                 <div class="section-header">Location</div>
                 <div class="row">
                     <div class="col">
                         <div class="dropdown">
-                            <label for="province" class="form-label dropdown-label">Province Name</label>
+                            <label for="province" class="dropdown-label">Province Name</label>
                             <select id="provinceDropdown" name="province" class="btn btn-success dropdown-toggle" required>
                                 <option value="">Select Province</option>
                             </select>
@@ -69,7 +73,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="district" class="form-label dropdown-label">District Name</label>
+                            <label for="district" class="dropdown-label">District Name</label>
                             <select id="districtDropdown" name="district" class="btn btn-success dropdown-toggle" required>
                                 <option value="">Select District</option>
                             </select>
@@ -78,7 +82,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="dsd" class="form-label dropdown-label">Divisional Secretariat (DSD)</label>
+                            <label for="dsd" class="dropdown-label">Divisional Secretariat (DSD)</label>
                             <select id="dsDivisionDropdown" class="btn btn-success dropdown-toggle">
                                 <option value="">Select DSD</option>
                                 <option value="N/A">N/A</option>
@@ -88,7 +92,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="gnd" class="form-label dropdown-label">Grama Niladhari Division (GND)</label>
+                            <label for="gnd" class="dropdown-label">Grama Niladhari Division (GND)</label>
                             <select id="gndDropdown" class="btn btn-success dropdown-toggle">
                                 <option value="">Select GND</option>
                                 <option value="N/A">N/A</option>
@@ -98,7 +102,7 @@
                     </div>
                     <div class="col">
                         <div class="dropdown">
-                            <label for="asc" class="form-label dropdown-label">Agriculture Service Centre (ASC)</label>
+                            <label for="asc" class="dropdown-label">Agriculture Service Centre (ASC)</label>
                             <select id="ascDropdown" name="as_center" class="btn btn-success dropdown-toggle">
                                 <option value="">Select ASC</option>
                                 <option value="N/A">N/A</option>
@@ -111,43 +115,46 @@
                 <div class="container mt-3">
                     <div class="row g-3">
                         <div class="col-md-4 mb-3">
-                            <label for="venue">Venue</label>
+                            <label for="venue" class="ytoa-label">Venue</label>
                             <input type="text" class="form-control" id="venue" name="venue" placeholder="Venue" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="program_name">Training Program Name</label>
+                            <label for="program_name" class="ytoa-label">Training Program Name</label>
                             <input type="text" class="form-control" id="program_name" name="program_name" placeholder="Enter Training Program Name" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="program_number">Program Number</label>
+                            <label for="program_number" class="ytoa-label">Program Number</label>
                             <input type="text" class="form-control" id="program_number" name="program_number" placeholder="Enter Training Program Number" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="crop_name">Crop Name</label>
+                            <label for="crop_name" class="ytoa-label">Crop Name</label>
                             <input type="text" class="form-control" id="crop_name" name="crop_name" placeholder="Enter Crop Name" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="startDate">Date of Conducted</label>
+                            <label for="startDate" class="ytoa-label">Date of Conducted</label>
                             <input type="text" class="form-control" id="startDate" name="date" placeholder="Select Date" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="resource_person_name">Resource Person Name</label>
+                            <label for="resource_person_name" class="ytoa-label">Resource Person Name</label>
                             <input type="text" class="form-control" id="resource_person_name" name="resource_person_name" placeholder="Enter Resource Person Name" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="resource_person_payment">Resource Person Payment</label>
+                            <label for="resource_person_payment" class="ytoa-label">Resource Person Payment</label>
                             <input type="text" class="form-control" id="resource_person_payment" name="resource_person_payment" placeholder="Enter Resource Person Payment" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="training_program_cost">Training Program Cost</label>
+                            <label for="training_program_cost" class="ytoa-label">Training Program Cost</label>
                             <input type="text" class="form-control" id="training_program_cost" name="training_program_cost" placeholder="Enter Training Program Cost" required>
                         </div>
-                        <div class="col-md-12 mb-3 text-center">
-                            <button type="submit" class="btn btn-success">Submit</button>
+                        <div class="col-md-12 mb-3">
+                            <div class="ytoa-submit-wrap">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </form>
+        </div>
         </div>
     </div>
 </div>

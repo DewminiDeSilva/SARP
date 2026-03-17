@@ -212,7 +212,7 @@
                             <td>{{ $proposal->business_title }}</td>
                             <td>{{ $proposal->status }}</td>
                             <td style="text-align: center; vertical-align: middle;">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap;">
         <a href="{{ route('youth-proposals.show', $proposal->id) }}" class="btn btn-sm view-button" title="View Proposal">
             <i class="fas fa-eye"></i>
         </a>

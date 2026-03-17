@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Family;
+use App\Models\YouthBeneficiaryForm;
 
 class Beneficiary extends Model
 {
@@ -81,6 +82,11 @@ class Beneficiary extends Model
    public function youthProposal()
     {
         return $this->belongsTo(YouthProposal::class, 'youth_proposal_id');
+    }
+
+    public function youthForm()
+    {
+        return $this->hasOne(YouthBeneficiaryForm::class);
     }
 
 }

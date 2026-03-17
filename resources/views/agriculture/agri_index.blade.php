@@ -27,9 +27,6 @@
         #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
         #sidebarToggle:hover { background-color: #0a4818; }
         .button-group { display: inline-flex; gap: 8px; flex-wrap: wrap; }
-        .fixed-header h1, .fixed-header .header-mis-title { font-size: 2.85rem !important; }
-        @media (max-width: 1200px) { .fixed-header h1, .fixed-header .header-mis-title { font-size: 2.2rem !important; } }
-        @media (max-width: 768px) { .fixed-header h1, .fixed-header .header-mis-title { font-size: 1.6rem !important; } }
         .btn-back {
             display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none;
             padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px;

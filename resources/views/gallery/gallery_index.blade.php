@@ -17,60 +17,69 @@
         }
         .left-column {
             flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
+            border-right: 1px solid rgba(18, 105, 38, 0.12);
+            background: #fafbfa;
         }
 
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-        }
+        .right-column { flex: 0 0 80%; padding: 20px; }
+        body { background-color: #f0f4f2; }
         /* Gallery Container */
-        .gallery-container {
-            margin-top: 30px;
-        }
+        .gallery-container { margin-top: 30px; }
 
-        /* Title Styling */
+        /* Title - theme green */
         .gallery-title {
             text-align: center;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            color: #1a3d1a;
+            letter-spacing: 0.02em;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            border-bottom: 4px solid #126926;
+            display: inline-block;
+            line-height: 1.2;
+        }
+        @media (min-width: 768px) {
+            .gallery-title { font-size: 3rem; }
         }
 
-        /* Card Styling */
+        /* District cards - theme colours */
         .gallery-card {
             position: relative;
             overflow: hidden;
             width: 100%;
             height: 400px;
-            border-radius: 15px;
+            border-radius: 12px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background-size: cover;
             background-position: center;
+            box-shadow: 0 4px 16px rgba(18, 105, 38, 0.1);
+            border: 1px solid rgba(18, 105, 38, 0.08);
         }
 
         .gallery-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.02);
+            box-shadow: 0 12px 32px rgba(18, 105, 38, 0.22);
+            border-color: rgba(18, 105, 38, 0.2);
         }
 
-        /* Overlay Effect */
+        /* Overlay - green tint on hover */
         .gallery-card-body {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 15px;
+            padding: 18px;
             text-align: center;
-            background: rgba(0, 0, 0, 0.6);
+            background: linear-gradient(to top, rgba(26, 61, 26, 0.85), transparent);
             color: white;
-            font-weight: bold;
-            transition: background 0.3s ease, transform 0.3s ease;
+            font-weight: 600;
+            transition: background 0.3s ease;
         }
 
         .gallery-card:hover .gallery-card-body {
-            background: rgba(0, 0, 0, 0.8);
+            background: linear-gradient(to top, rgba(18, 105, 38, 0.95), rgba(0, 0, 0, 0.4));
         }
 
         .gallery-card-title {
@@ -148,7 +157,7 @@
     <div class="container gallery-container">
 
     <div class="col-md-12 text-center">
-            <h2 class="header-title" style="color: green;">Gallery</h2>
+            <h2 class="gallery-title">Gallery</h2>
         </div>
         <div class="row g-4">
             @foreach($albums as $name => $album)

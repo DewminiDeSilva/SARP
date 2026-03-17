@@ -300,6 +300,30 @@
             </div>
     <br>
 
+            <!-- Enrollees summary: Total, Male, Female -->
+            <div class="container mt-4">
+                <div class="d-flex justify-content-center flex-wrap">
+                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
+                        <div class="card-header" style="background-color: #c7eef1;">Total Participants</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $totalParticipants ?? 0 }}</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
+                        <div class="card-header" style="background-color: #c7eef1;">Male</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $maleCount ?? 0 }}</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
+                        <div class="card-header" style="background-color: #c7eef1;">Female</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $femaleCount ?? 0 }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Success Message -->
             @if (session('success'))
                 <div class="alert alert-success">

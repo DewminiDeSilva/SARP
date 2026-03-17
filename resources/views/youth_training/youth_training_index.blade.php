@@ -11,40 +11,37 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .frame { display: flex; flex-direction: row; justify-content: space-between; width: 100%; }
-        .left-column { flex: 0 0 20%; border-right: 1px solid #dee2e6; }
-        .right-column { flex: 0 0 80%; padding: 20px; }
+        /* EOI-style CSS structure (same as youth/EOI module) */
+        :root { --ytoa-primary: #126926; --ytoa-primary-dark: #0d4d1f; --ytoa-border: #e2e8f0; --ytoa-text: #1e293b; }
+        body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        .frame { display: flex; width: 100%; }
+        .left-column { flex: 0 0 20%; border-right: 1px solid var(--ytoa-border); background: #fafbfa; }
+        .left-column.hidden { display: none; }
+        .right-column { flex: 0 0 80%; padding: 24px; transition: flex 0.3s ease; }
+        .ytoa-frame-wrap { max-width: 100%; margin: 0 auto; padding: 20px; background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; }
+        .ytoa-center-heading { text-align: center; font-size: 1.75rem; font-weight: 700; color: var(--ytoa-primary); margin-bottom: 1.5rem; }
         .entries-container { display: flex; align-items: center; }
         .entries-container label { margin-bottom: 0; }
         .entries-container select { display: inline-block; width: auto; }
-        .button-container { display: flex; gap: 10px; }
-        .custom-button { background-color: #f5c6cb; color: red; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; padding: 10px; width: 60px; height: 40px; box-sizing: border-box; }
-        .custom-button:hover { border-color: red; background-color: #f5c6cb; }
-        .edit-button { background-color: #ffeeba; color: orange; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; width: 60px; height: 40px; box-sizing: border-box; }
-        .edit-button:hover { border-color: orange; background-color: #ffeeba; }
-        .view-button { background-color: #c3e6cb; color: green; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; width: 60px; height: 40px; box-sizing: border-box; }
-        .view-button:hover { border-color: green; background-color: #c3e6cb; }
-        .section-header { background-color: #28a745; color: white; padding: 8px; margin-top: 20px; font-weight: bold; border-radius: 4px; }
-        .green-header { background-color: #28a745; color: white; padding: 10px; margin-bottom: 20px; font-weight: bold; border-radius: 5px; }
-        .thead-green th { background-color: #28a745 !important; color: white !important; text-align: center; }
-        .card-header { font-weight: bold; text-align: center; background-color: #c7eef1; color: #0d0e0d; }
+        .custom-button { background-color: #f5c6cb; color: red; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; padding: 10px; width: 60px; height: 40px; box-sizing: border-box; border-radius: 8px; }
+        .custom-button:hover { border-color: red; }
+        .edit-button { background-color: #ffeeba; color: orange; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; width: 60px; height: 40px; box-sizing: border-box; border-radius: 8px; }
+        .edit-button:hover { border-color: orange; }
+        .view-button { background-color: #c3e6cb; color: green; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; width: 60px; height: 40px; box-sizing: border-box; border-radius: 8px; }
+        .view-button:hover { border-color: green; }
+        .green-header { background: linear-gradient(180deg, var(--ytoa-primary) 0%, var(--ytoa-primary-dark) 100%); color: white; padding: 10px; margin-bottom: 20px; font-weight: bold; border-radius: 10px; }
+        .thead-green th { background: linear-gradient(180deg, var(--ytoa-primary) 0%, var(--ytoa-primary-dark) 100%) !important; color: white !important; text-align: center; }
+        .card-header { font-weight: bold; text-align: center; background: rgba(18,105,38,0.12); color: var(--ytoa-text); border-radius: 10px 10px 0 0; }
         .pagination .page-item { margin: 0 2px; }
         .pagination .page-link { padding: 5px 10px; }
-        .page-item { background-color: white; padding: 0px; }
-        .page-link { color: #28a745; }
-        .page-item.active .page-link { z-index: 3; color: #fff; background-color: #126926; border-color: #126926; }
+        .page-link { color: var(--ytoa-primary); }
+        .page-item.active .page-link { z-index: 3; color: #fff; background-color: var(--ytoa-primary); border-color: var(--ytoa-primary); }
         .program-name { max-width: 300px; }
-        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .btn-back { display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none; padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px; cursor: pointer; position: relative; overflow: hidden; }
-        .btn-back img { width: 45px; height: auto; margin-right: 5px; position: relative; z-index: 1; }
-        .btn-back .btn-text { opacity: 0; visibility: hidden; position: absolute; right: 25px; background-color: #1e8e1e; color: #fff; padding: 4px 8px; border-radius: 4px; z-index: 0; }
-        .btn-back:hover .btn-text { opacity: 1; visibility: visible; transform: translateX(-5px); padding: 10px 20px; border-radius: 20px; }
-        .btn-back:hover img { transform: translateX(-50px); }
-        .sidebar.hidden { transform: translateX(-100%); }
-        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
-        #sidebarToggle:hover { background-color: #0a4818; }
-        .left-column.hidden { display: none; }
-        .right-column { transition: flex 0.3s ease, padding 0.3s ease; }
+        .table th, .table td { border: 1px solid var(--ytoa-border); padding: 8px; text-align: left; }
+        .btn-back { display: inline-flex; align-items: center; color: #fff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; background: var(--ytoa-primary); }
+        .btn-back:hover { background: var(--ytoa-primary-dark); color: #fff; }
+        #sidebarToggle { background: var(--ytoa-primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+        #sidebarToggle:hover { background: var(--ytoa-primary-dark); }
     </style>
 </head>
 <body>
@@ -55,16 +52,15 @@
             @csrf
         </div>
         <div class="right-column">
-        <div class="d-flex align-items-center mb-3">
-            <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
-            <a href="{{ route('youth-training.index') }}" class="btn-back">
-                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-            </a>
+        <div class="d-flex align-items-center mb-3 gap-2">
+            <button id="sidebarToggle" class="btn btn-secondary"><i class="fas fa-bars"></i></button>
+            <a href="{{ route('youth-training.index') }}" class="btn-back"><i class="fas fa-arrow-left me-2"></i>Back</a>
         </div>
 
+        <div class="ytoa-frame-wrap">
             <div class="container-fluid">
-                <div class="center-heading text-center">
-                    <h1 style="font-size: 2.5rem; color: green;">Youth Training Program Details</h1>
+                <div class="ytoa-center-heading">
+                    <h1>Youth Training Program Details</h1>
                 </div>
 
                 <div class="container">

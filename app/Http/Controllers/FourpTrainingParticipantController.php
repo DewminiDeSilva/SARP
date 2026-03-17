@@ -30,8 +30,10 @@ class FourpTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
+        $maleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'male')->count();
+        $femaleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'female')->count();
 
-        return view('fourp_training_participants.index', compact('fourpTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        return view('fourp_training_participants.index', compact('fourpTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 
     public function create($fourp_training_id)
@@ -155,6 +157,8 @@ class FourpTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
-        return view('fourp_training_participants.index', compact('fourpTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        $maleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'male')->count();
+        $femaleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'female')->count();
+        return view('fourp_training_participants.index', compact('fourpTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 }
