@@ -26,8 +26,8 @@ class GalleryController extends Controller
 
 public function showAlbum($album)
 {
-    $model = $this->getModel($album); // Get the appropriate model for the album
-    $folders = $model::all(); // Fetch all records as objects
+    $model = $this->getModel($album);
+    $folders = $model::whereNull('parent_id')->get(); // Only root-level folders
     return view('gallery.gallery_album', compact('album', 'folders'));
 }
 
@@ -140,54 +140,69 @@ public function uploadImage(Request $request, $album, $folderId)
     
     public function showFolder($album, $folderId)
 {
-    $model = $this->getModel($album); // Dynamically get the model based on the album
-    $folder = $model::findOrFail($folderId); // Retrieve the folder by ID
+    $model = $this->getModel($album);
+    $folder = $model::findOrFail($folderId);
+
+    $subfolders = $folder->children()->get();
 
     $images = \App\Models\Image::where('folder_id', $folderId)
                                 ->where('album_name', $album)
-                                ->get(); // Fetch images specific to the album and folder
+                                ->get();
 
-    return view('gallery.gallery_folder', compact('album', 'folder', 'images'));
+    return view('gallery.gallery_folder', compact('album', 'folder', 'subfolders', 'images'));
 }
 
 
     public function storeFolder(Request $request, $album)
     {
-        // Validate the request inputs
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
+            'parent_id' => 'nullable|integer',
         ]);
-    
-        // Get the appropriate model for the album
+
         $model = $this->getModel($album);
-    
-        // Ensure that the 'folder_name' and other fields are mapped correctly
+
         $model::create([
-            'folder_name' => $request->input('name'), // Ensure correct input mapping
+            'folder_name' => $request->input('name'),
             'description' => $request->input('description'),
-            'image_path' => null, // Add this explicitly if image_path is nullable
+            'image_path' => null,
+            'parent_id' => $request->input('parent_id'),
         ]);
-    
-        // Return success message
+
         return back()->with('success', 'Folder created successfully!');
     }
     
     public function destroyFolder($album, $folderId)
 {
-    $model = $this->getModel($album); // Get the model dynamically
-    $folder = $model::findOrFail($folderId); // Find the folder by ID
+    $model = $this->getModel($album);
+    $folder = $model::findOrFail($folderId);
 
-    // Delete all images in the folder
-    foreach ($folder->images as $image) {
-        Storage::delete($image->image_path); // Delete image file
-        $image->delete(); // Delete image record from database
+    // Recursively delete child folders and their images
+    foreach ($folder->children as $child) {
+        $this->destroyFolderRecursive($child);
     }
 
-    // Delete the folder itself
+    foreach ($folder->images as $image) {
+        Storage::delete('public/' . $image->image_path);
+        $image->delete();
+    }
+
     $folder->delete();
 
-    return back()->with('success', 'Folder and its images deleted successfully!');
+    return back()->with('success', 'Folder and its contents deleted successfully!');
+}
+
+    private function destroyFolderRecursive($folder)
+{
+    foreach ($folder->children as $child) {
+        $this->destroyFolderRecursive($child);
+    }
+    foreach ($folder->images as $image) {
+        Storage::delete('public/' . $image->image_path);
+        $image->delete();
+    }
+    $folder->delete();
 }
 
 

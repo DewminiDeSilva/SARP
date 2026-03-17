@@ -34,7 +34,10 @@ class FFSParticipantController extends Controller
                              ->orWhere('youth', 'like', "%{$search}%");
             })
             ->get();
-            return view('ffs_participants.index', compact('ffsTraining', 'ffsParticipants', 'search'));
+        $totalParticipants = FFSParticipant::where('ffs_training_id', $ffsTrainingId)->count();
+        $maleCount = FFSParticipant::where('ffs_training_id', $ffsTrainingId)->where('gender', 'male')->count();
+        $femaleCount = FFSParticipant::where('ffs_training_id', $ffsTrainingId)->where('gender', 'female')->count();
+        return view('ffs_participants.index', compact('ffsTraining', 'ffsParticipants', 'totalParticipants', 'maleCount', 'femaleCount', 'search'));
 
         // return view('ffs_participant.index', compact('ffsTraining', 'ffsParticipants', 'search'));
     }

@@ -15,6 +15,9 @@ class YouthProposal extends Model
         'organization_name',
         'registration_details',
         'contact_person',
+        'nic_number',
+        'birth_date',
+        'business_type',
         'address',
         'office_phone',
         'mobile_phone',
@@ -23,7 +26,7 @@ class YouthProposal extends Model
         'business_title',
         'business_objectives',
         'category',
-        'status', // ✅ add this line
+        'status',
         'risks',
         'mitigations',
         'investment_breakdown',
@@ -35,11 +38,13 @@ class YouthProposal extends Model
         'expected_outcomes',
         'funding_source',
         'implementation_plan',
+        'implementation_plans',
         'assistance_required',
     ];
 
     // Cast JSON columns
     protected $casts = [
+        'birth_date' => 'date',
         'risks' => 'array',
         'mitigations' => 'array',
         'investment_breakdown' => 'array',
@@ -47,6 +52,7 @@ class YouthProposal extends Model
         'expected_outputs' => 'array',
         'expected_outcomes' => 'array',
         'funding_source' => 'array',
+        'implementation_plans' => 'array',
         'assistance_required' => 'array',
     ];
 

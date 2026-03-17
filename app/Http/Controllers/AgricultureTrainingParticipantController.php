@@ -30,8 +30,12 @@ class AgricultureTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
+        $maleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
+            ->whereRaw('LOWER(gender) = ?', ['male'])->count();
+        $femaleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
+            ->whereRaw('LOWER(gender) = ?', ['female'])->count();
 
-        return view('agriculture_training_participants.index', compact('agricultureTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        return view('agriculture_training_participants.index', compact('agricultureTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 
     public function create($agriculture_training_id)
@@ -155,6 +159,10 @@ class AgricultureTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
-        return view('agriculture_training_participants.index', compact('agricultureTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        $maleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
+            ->whereRaw('LOWER(gender) = ?', ['male'])->count();
+        $femaleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
+            ->whereRaw('LOWER(gender) = ?', ['female'])->count();
+        return view('agriculture_training_participants.index', compact('agricultureTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 }

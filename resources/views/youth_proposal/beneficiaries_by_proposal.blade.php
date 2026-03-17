@@ -166,9 +166,12 @@
             </a>
         </div>
 
-        <div class="text-center mb-5">
+        <div class="text-center mb-3">
             <h2 style="font-size: 2.3rem; color: green;">Beneficiaries Linked to: <strong>{{ $proposal->organization_name }}</strong></h2>
         </div>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
         @if($proposal->beneficiaries->isEmpty())
             <p class="text-center">No beneficiaries are linked to this proposal.</p>
@@ -199,6 +202,15 @@
                                     <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-sm btn-success view-button">
                                         <i class="fas fa-eye"></i> View Beneficiary Details
                                     </a>
+                                    @if($beneficiary->youthForm)
+                                        <a href="{{ route('youth_form.show', $beneficiary->id) }}" class="btn btn-sm btn-info ml-1">
+                                            <i class="fas fa-file-alt"></i> View youth data
+                                        </a>
+                                    @else
+                                        <a href="{{ route('youth_form.create', $beneficiary->id) }}" class="btn btn-sm btn-success ml-1">
+                                            <i class="fas fa-plus-circle"></i> Add youth data
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

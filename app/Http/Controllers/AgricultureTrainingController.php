@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AgricultureTraining;
 use App\Models\AgricultureData;
 use Illuminate\Http\Request;
-use League\Csv\Reader;
 use Maatwebsite\Excel\Facades\Excel;
+use League\Csv\Reader;
 
 class AgricultureTrainingController extends Controller
 {
@@ -135,66 +135,51 @@ class AgricultureTrainingController extends Controller
         $file = $request->file('csv_file');
         $ext = strtolower($file->getClientOriginalExtension());
 
-        try {
-            if (in_array($ext, ['csv', 'txt'])) {
+        if (in_array($ext, ['csv', 'txt'])) {
+            try {
                 $csv = Reader::createFromPath($file->getRealPath(), 'r');
                 $csv->setHeaderOffset(0);
-                $rows = $csv->getRecords();
-            } else {
-                $collection = Excel::toCollection(null, $file)->first();
-                if (!$collection || $collection->isEmpty()) {
-                    return redirect()->route('agriculture-training.index')->with('error', 'The Excel file is empty or invalid.');
-                }
-                $headers = $collection->shift();
-                $headerArr = $headers->toArray();
-                $rows = collect();
-                foreach ($collection as $row) {
-                    $rowArr = $row->toArray();
-                    $len = min(count($headerArr), count($rowArr));
-                    if ($len > 0) {
-                        $combined = array_combine(
-                            array_slice($headerArr, 0, $len),
-                            array_slice($rowArr, 0, $len)
-                        );
-                        if ($combined !== false) {
-                            $rows->push($combined);
-                        }
-                    }
-                }
+                $rows = iterator_to_array($csv->getRecords());
+            } catch (\Throwable $e) {
+                return redirect()->route('agriculture-training.index')->with('error', 'The CSV file could not be read. Please check the format and encoding.');
             }
-
-            $imported = 0;
-            foreach ($rows as $row) {
-                $row = is_array($row) ? $row : iterator_to_array($row);
-                if (empty($row) || (empty($row['Program Name'] ?? $row['program_name'] ?? null) && empty($row['Date'] ?? $row['date'] ?? null))) {
-                    continue;
-                }
-                $agId = $row['Agriculture ID'] ?? $row['agriculture_data_id'] ?? null;
-                $agId = (is_numeric($agId) && (int) $agId > 0) ? (int) $agId : null;
-                if ($agId && !AgricultureData::whereKey($agId)->exists()) {
-                    $agId = null;
-                }
-
-                $training = new AgricultureTraining();
-                $training->agriculture_data_id = $agId;
-                $training->program_name = $row['Program Name'] ?? $row['program_name'] ?? '';
-                $training->date = $row['Date'] ?? $row['date'] ?? '';
-                $training->venue = $row['Venue'] ?? $row['venue'] ?? '';
-                $training->resource_person_name = $row['Resource Person Name'] ?? $row['resource_person_name'] ?? '';
-                $training->training_program_cost = $row['Training Program Cost'] ?? $row['training_program_cost'] ?? '';
-                $training->resource_person_payment = $row['Resource Person Payment'] ?? $row['resource_person_payment'] ?? '';
-                $training->province_name = $row['Province'] ?? $row['province_name'] ?? '';
-                $training->district = $row['District'] ?? $row['district'] ?? '';
-                $training->ds_division_name = $row['DS Division'] ?? $row['ds_division_name'] ?? '';
-                $training->gn_division_name = $row['GN Division'] ?? $row['gn_division_name'] ?? '';
-                $training->as_center = $row['ASC'] ?? $row['as_center'] ?? '';
-                $training->save();
-                $imported++;
+            if (empty($rows)) {
+                return redirect()->route('agriculture-training.index')->with('error', 'The CSV file is empty or has no data rows.');
             }
-
-            return redirect()->route('agriculture-training.index')->with('success', $imported > 0 ? "{$imported} record(s) imported successfully." : 'No valid rows to import.');
-        } catch (\Throwable $e) {
-            return redirect()->route('agriculture-training.index')->with('error', 'Upload failed: ' . $e->getMessage());
+        } else {
+            $collection = Excel::toCollection(null, $file)->first();
+            if ($collection->isEmpty()) {
+                return redirect()->route('agriculture-training.index')->with('error', 'The Excel file is empty or invalid.');
+            }
+            $headers = $collection->shift();
+            $rows = $collection->map(function ($row) use ($headers) {
+                return array_combine($headers->toArray(), $row->toArray());
+            })->toArray();
         }
+
+        foreach ($rows as $row) {
+            $agId = $row['Agriculture ID'] ?? $row['agriculture_data_id'] ?? null;
+            $agId = (is_numeric($agId) && (int) $agId > 0) ? (int) $agId : null;
+            if ($agId && !AgricultureData::whereKey($agId)->exists()) {
+                $agId = null;
+            }
+
+            $training = new AgricultureTraining();
+            $training->agriculture_data_id = $agId;
+            $training->program_name = $row['Program Name'] ?? $row['program_name'] ?? '';
+            $training->date = $row['Date'] ?? $row['date'] ?? '';
+            $training->venue = $row['Venue'] ?? $row['venue'] ?? '';
+            $training->resource_person_name = $row['Resource Person Name'] ?? $row['resource_person_name'] ?? '';
+            $training->training_program_cost = $row['Training Program Cost'] ?? $row['training_program_cost'] ?? '';
+            $training->resource_person_payment = $row['Resource Person Payment'] ?? $row['resource_person_payment'] ?? '';
+            $training->province_name = $row['Province'] ?? $row['province_name'] ?? '';
+            $training->district = $row['District'] ?? $row['district'] ?? '';
+            $training->ds_division_name = $row['DS Division'] ?? $row['ds_division_name'] ?? '';
+            $training->gn_division_name = $row['GN Division'] ?? $row['gn_division_name'] ?? '';
+            $training->as_center = $row['ASC'] ?? $row['as_center'] ?? '';
+            $training->save();
+        }
+
+        return redirect()->route('agriculture-training.index')->with('success', 'Data imported successfully.');
     }
 }

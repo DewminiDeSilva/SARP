@@ -30,8 +30,10 @@ class TankTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
+        $maleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'male')->count();
+        $femaleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'female')->count();
 
-        return view('tank_training_participants.index', compact('tankTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        return view('tank_training_participants.index', compact('tankTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 
     public function create($tank_training_id)
@@ -155,6 +157,8 @@ class TankTrainingParticipantController extends Controller
             ->appends(['search' => $search, 'entries' => $entries]);
 
         $totalParticipants = $participants->total();
-        return view('tank_training_participants.index', compact('tankTraining', 'participants', 'totalParticipants', 'search', 'entries'));
+        $maleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'male')->count();
+        $femaleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'female')->count();
+        return view('tank_training_participants.index', compact('tankTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 }

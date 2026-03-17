@@ -476,17 +476,18 @@ public function index(Request $request)
     /**
      * Show the form for creating a new resource.
      */
-   public function create()
+   public function create(Request $request)
 {
-     $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')->get(['id', 'organization_name']);
+     $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')->get(['id', 'organization_name', 'business_title']);
 
      $businessTitles = EOI::where('status', 'Agreement Signed')
         ->whereNotNull('business_title')
         ->distinct()
         ->pluck('business_title');
 
+    $preselectedYouthProposalId = $request->query('youth_proposal_id');
 
-    return view('beneficiary.beneficiary_create', compact('agreementSignedYouth', 'businessTitles'));
+    return view('beneficiary.beneficiary_create', compact('agreementSignedYouth', 'businessTitles', 'preselectedYouthProposalId'));
 }
 
 
@@ -554,11 +555,11 @@ public function index(Request $request)
         $beneficiary->eoi_category = $request->eoi_category;
     }
 
-    // If youth enterprise is selected, populate input3 with organization name
-    if ($request->project_type === 'Youth Enterprice' && $request->youth_proposal_id) {
+    // If youth enterprise is selected, populate input3 with business title (fallback to organization name)
+    if ($request->project_type === 'Youth Enterprise' && $request->youth_proposal_id) {
         $youthProposal = \App\Models\YouthProposal::find($request->youth_proposal_id);
         if ($youthProposal) {
-            $beneficiary->input3 = $youthProposal->organization_name;
+            $beneficiary->input3 = $youthProposal->business_title ?? $youthProposal->organization_name;
         }
     }
 

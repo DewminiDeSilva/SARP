@@ -8,10 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class SpecialEvents extends Model
 {
     protected $table = 'special_events'; // Specify the table name
-    protected $fillable = ['folder_name', 'image_path', 'description'];
+    protected $fillable = ['folder_name', 'image_path', 'description', 'parent_id'];
 
     public function images()
-{
-    return $this->hasMany(\App\Models\Image::class, 'folder_id');
-}
+    {
+        return $this->hasMany(\App\Models\Image::class, 'folder_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(SpecialEvents::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(SpecialEvents::class, 'parent_id');
+    }
 }

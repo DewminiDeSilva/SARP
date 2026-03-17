@@ -16,46 +16,59 @@
         }
         .left-column {
             flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
+            border-right: 1px solid rgba(18, 105, 38, 0.12);
+            background: #fafbfa;
         }
 
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-        }
-        .album-container {
-            margin-top: 30px;
-        }
+        .right-column { flex: 0 0 80%; padding: 20px; }
+        body { background-color: #f0f4f2; }
+        .album-container { margin-top: 30px; }
 
+        /* Album/District name - big letter size, line colour, nice font */
         .album-title {
             text-align: left;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            color: #2c3e50;
-
+            font-size: 2.35rem;
+            font-weight: 800;
+            margin-bottom: 0;
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+            color: #1a3d1a;
+            letter-spacing: 0.02em;
+            line-height: 1.25;
+            border-bottom: 4px solid #126926;
+            border-left: 5px solid #126926;
+            padding-left: 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        @media (min-width: 768px) {
+            .album-title { font-size: 2.85rem; }
+        }
+        @media (min-width: 992px) {
+            .album-title { font-size: 3rem; }
         }
 
         .folder-card {
             position: relative;
             height: 150px;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            background-color: #f8f9fa;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, #f8faf8 0%, #eef5ee 100%);
+            box-shadow: 0 2px 12px rgba(18, 105, 38, 0.08);
+            border: 1px solid rgba(18, 105, 38, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
 
         .folder-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(18, 105, 38, 0.18);
+            border-color: rgba(18, 105, 38, 0.25);
         }
 
         .folder-card-title {
             font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
+            font-weight: 600;
+            color: #1a3d1a;
             margin: 0;
             position: absolute;
             top: 50%;
@@ -68,38 +81,54 @@
             position: absolute;
             bottom: 10px;
             right: 10px;
-            background-color: #dc3545;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: #fff;
             border: none;
-            border-radius: 5px; /* Change to rectangle */
-            padding: 5px 10px; /* Add padding for text */
-            font-size: 14px;
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: box-shadow 0.2s ease;
             z-index: 10;
         }
 
-        .delete-button:hover {
-            background-color: #b02a37;
-        }
+        .delete-button:hover { box-shadow: 0 2px 10px rgba(220, 53, 69, 0.4); }
 
         .new-folder-card {
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
+            border: 2px dashed rgba(18, 105, 38, 0.4);
+            border-radius: 12px;
             height: 150px;
-            color: #007bff;
+            color: #126926;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: border-color 0.3s ease;
+            background: linear-gradient(145deg, #f5f9f5 0%, #e8f0e8 100%);
+            transition: all 0.3s ease;
         }
-
         .new-folder-card:hover {
-            border-color: #007bff;
+            border-color: #126926;
+            background: linear-gradient(145deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #0d4d1f;
+            box-shadow: 0 4px 16px rgba(18, 105, 38, 0.2);
         }
+        .new-folder-card i { font-size: 32px; margin-bottom: 8px; opacity: 0.9; }
+        /* Create Folder Modal - nice popup */
+        #createFolderModal .modal-content { border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border: none; }
+        #createFolderModal .modal-header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: #fff; border-radius: 12px 12px 0 0; padding: 16px 20px; }
+        #createFolderModal .modal-header .btn-close { filter: brightness(0) invert(1); }
+        #createFolderModal .modal-title { font-weight: 600; }
+        #createFolderModal .modal-body { padding: 24px; }
+        #createFolderModal .form-label { font-weight: 600; color: #1a3d1a; display: block; text-align: center; }
+        #createFolderModal .form-control { border-radius: 8px; border: 1px solid #dee2e6; text-align: center; }
+        #createFolderModal .form-control:focus { border-color: #126926; box-shadow: 0 0 0 0.2rem rgba(18, 105, 38, 0.25); }
+        #createFolderModal .description-field .form-label { color: #126926; font-size: 0.9rem; }
+        #createFolderModal .modal-footer { padding: 16px 24px; border-top: 1px solid #eee; }
+        #createFolderModal .btn-primary { background: linear-gradient(135deg, #126926 0%, #0d4d1f 100%); border: none; border-radius: 8px; padding: 10px 24px; font-weight: 600; }
+        #createFolderModal .btn-primary:hover { background: linear-gradient(135deg, #0d4d1f 0%, #083d18 100%); }
     </style>
     <style>
         .btn-back {
@@ -133,10 +162,10 @@
             visibility: hidden;
             position: absolute;
             right: 25px;
-            background-color: #1e8e1e;
+            background: linear-gradient(135deg, #126926 0%, #0d4d1f 100%);
             color: #fff;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 8px;
             transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
             z-index: 0;
         }
@@ -224,7 +253,7 @@
             @if(auth()->user()->hasPermission('gallery', 'add'))
             <div class="col-md-3 mb-4">
                 <div class="new-folder-card" data-bs-toggle="modal" data-bs-target="#createFolderModal">
-                    + New Folder
+                    <i class="fas fa-folder-plus"></i><br>New Folder
                 </div>
             </div>
             @endif
@@ -239,45 +268,25 @@
                         </a>
                         @endif
 
-                        <!-- Delete Button -->
-                         @if(auth()->user()->hasPermission('gallery', 'delete'))
-                        <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteFolderModal-{{ $folder->id }}">Delete</button>
+                        @if(auth()->user()->hasPermission('gallery', 'delete'))
+                        <form id="deleteFolderForm-{{ $folder->id }}" action="{{ route('folder.destroy', [$album, $folder->id]) }}" method="POST" class="d-none">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                        <button type="button" class="delete-button btn-delete-folder" data-form-id="deleteFolderForm-{{ $folder->id }}" data-folder-name="{{ $folder->folder_name }}">Delete</button>
                         @endif
-                    </div>
-
-                    <!-- Delete Confirmation Modal -->
-                    <div class="modal fade" id="deleteFolderModal-{{ $folder->id }}" tabindex="-1" aria-labelledby="deleteFolderModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteFolderModalLabel">Delete Folder</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to delete the folder "{{ $folder->folder_name }}"? This action cannot be undone.
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <form action="{{ route('folder.destroy', [$album, $folder->id]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
 
-    <!-- Create Folder Modal -->
+    <!-- Create Folder Modal - popup form -->
     <div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createFolderModalLabel">Create New Folder</h5>
+                    <h5 class="modal-title" id="createFolderModalLabel"><i class="fas fa-folder-plus me-2"></i>Create New Folder</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('folder.store', $album) }}" method="POST">
@@ -285,16 +294,16 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="folderName" class="form-label">Folder Name</label>
-                            <input type="text" class="form-control" id="folderName" name="name" placeholder="Folder Name" required>
+                            <input type="text" class="form-control" id="folderName" name="name" placeholder="Enter folder name" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="folderDescription" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="folderDescription" name="description" placeholder="Folder Description">
+                        <div class="mb-3 description-field">
+                            <label for="folderDescription" class="form-label">Description (optional)</label>
+                            <input type="text" class="form-control" id="folderDescription" name="description" placeholder="Short description">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check me-1"></i>Create Folder</button>
                     </div>
                 </form>
             </div>
@@ -304,9 +313,33 @@
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-delete-folder').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var formId = this.getAttribute('data-form-id');
+                var folderName = this.getAttribute('data-folder-name') || 'this folder';
+                Swal.fire({
+                    title: 'Delete folder?',
+                    html: 'Delete <strong>' + folderName + '</strong> and all its contents?<br>This cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete'
+                }).then(function(result) {
+                    if (result.isConfirmed && formId) {
+                        var form = document.getElementById(formId);
+                        if (form) form.submit();
+                    }
+                });
+            });
+        });
+    });
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar = document.querySelector('.left-column');
         const content = document.querySelector('.right-column');

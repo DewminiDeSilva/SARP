@@ -8,11 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Vawniya extends Model
 {
     protected $table = 'vawniya'; // Specify the table name
-    protected $fillable = ['folder_name', 'image_path', 'description']; // Allow mass assignment
+    protected $fillable = ['folder_name', 'image_path', 'description', 'parent_id'];
 
     public function images()
-{
-    return $this->hasMany(\App\Models\Image::class, 'folder_id');
-}
+    {
+        return $this->hasMany(\App\Models\Image::class, 'folder_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Vawniya::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Vawniya::class, 'parent_id');
+    }
 }
 

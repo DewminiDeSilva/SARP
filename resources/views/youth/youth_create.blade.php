@@ -9,11 +9,17 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-    <!-- CSS -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { primary: { DEFAULT: '#126926', dark: '#0d4d1f' } } } }
+        }
+    </script>
+    <!-- CSS (for dashboard include) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -142,6 +148,18 @@
             font-weight: bold;
             border-left: 5px solid #28a745;
         }
+
+        /* Youth form: input heading/label with green line */
+        .youth-label {
+            display: block;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            padding-left: 12px;
+            border-left: 4px solid #126926;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -159,166 +177,155 @@
                 </div>
             </div>
      
-    <div class="container mt-5 border rounded custom-border p-4" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
-            
-
+    <div class="max-w-5xl mx-auto mt-8 p-6 rounded-2xl border border-gray-200 bg-white shadow-lg">
     <form action="{{ route('youth.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="beneficiary_id" value="{{ $beneficiary->id }}">
 
-        <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded border bg-light shadow-sm">
-    <!-- Left side: Beneficiary Name -->
-    <div style="font-size: 1.3rem; font-weight: 700; color:rgb(14, 99, 48);">
-        <i class="fas fa-user me-2"></i> Beneficiary: {{ $beneficiary->name_with_initials ?? 'N/A' }}
-    </div>
-
-    
-</div>
-
-        <!-- Enterprise Information -->
-<div class="card mb-4">
-    <div class="card-header bg-success text-white">Enterprise Information</div>
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-md-4"><label>Enterprise Name</label><input type="text" name="enterprise_name" class="form-control"></div>
-            <div class="col-md-4"><label>Registration Number</label><input type="text" name="registration_number" class="form-control"></div>
-            <div class="col-md-4"><label>Institute of Registration</label><input type="text" name="institute_of_registration" class="form-control"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6"><label>Address</label><input type="text" name="address" class="form-control"></div>
-            <div class="col-md-3"><label>Email</label><input type="email" name="email" class="form-control"></div>
-            <div class="col-md-3"><label>Phone Number</label><input type="text" name="phone_number" class="form-control"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6"><label>Website</label><input type="text" name="website_name" class="form-control"></div>
-            <div class="col-md-6"><label>Certificates Description</label><textarea name="description_of_certificates" class="form-control"></textarea></div>
-        </div>
-    </div>
-</div>
-
-<!-- Business Information -->
-<div class="card mb-4">
-    <div class="card-header bg-success text-white">Business Information</div>
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-md-6"><label>Nature of Business</label><input type="text" name="nature_of_business" class="form-control"></div>
-            <div class="col-md-6"><label>Products Available</label><textarea name="products_available" class="form-control"></textarea></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6"><label>Yield Collection Details</label><textarea name="yield_collection_details" class="form-control"></textarea></div>
-            <div class="col-md-6"><label>Marketing Information</label><textarea name="marketing_information" class="form-control"></textarea></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6"><label>List of Distributors</label><textarea name="list_of_distributors" class="form-control"></textarea></div>
-            <div class="col-md-6">
-                <label>Business Plan (PDF)</label>
-                <input type="file" name="business_plan" class="form-control">
+        <div class="flex justify-between items-center mb-6 p-4 rounded-xl border border-gray-200 bg-gray-50">
+            <div class="text-xl font-bold text-primary">
+                <i class="fas fa-user mr-2"></i> Beneficiary: {{ $beneficiary->name_with_initials ?? 'N/A' }}
             </div>
         </div>
-    </div>
-</div>
 
+        <!-- Enterprise Information -->
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Enterprise Information</div>
+            <div class="p-5 bg-white space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="youth-label">Enterprise Name</label><input type="text" name="enterprise_name" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Registration Number</label><input type="text" name="registration_number" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Institute of Registration</label><input type="text" name="institute_of_registration" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2"><label class="youth-label">Address</label><input type="text" name="address" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Email</label><input type="email" name="email" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Phone Number</label><input type="text" name="phone_number" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="youth-label">Website</label><input type="text" name="website_name" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Certificates Description</label><textarea name="description_of_certificates" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary" rows="2"></textarea></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Information -->
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Business Information</div>
+            <div class="p-5 bg-white space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="youth-label">Nature of Business</label><input type="text" name="nature_of_business" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Products Available</label><textarea name="products_available" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary" rows="2"></textarea></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="youth-label">Yield Collection Details</label><textarea name="yield_collection_details" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary" rows="2"></textarea></div>
+                    <div><label class="youth-label">Marketing Information</label><textarea name="marketing_information" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary" rows="2"></textarea></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="youth-label">List of Distributors</label><textarea name="list_of_distributors" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary" rows="2"></textarea></div>
+                    <div><label class="youth-label">Business Plan (PDF)</label><input type="file" name="business_plan" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                </div>
+            </div>
+        </div>
 
         <!-- Asset Details -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Asset Details</div>
-            <div class="card-body">
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Asset Details</div>
+            <div class="p-5 bg-white">
                 <div id="assetDetails"></div>
-                <button type="button" class="btn btn-outline-success mt-2" onclick="addAssetRow()">Add Asset</button>
+                <button type="button" class="mt-3 px-4 py-2 rounded-lg border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition" onclick="addAssetRow()">Add Asset</button>
             </div>
         </div>
 
         <!-- Youth Contributions -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Youth Contributions</div>
-            <div class="card-body">
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Youth Contributions</div>
+            <div class="p-5 bg-white">
                 <div id="youthContributions"></div>
-                <button type="button" class="btn btn-outline-success mt-2" onclick="addYouthRow()">Add Contribution</button>
+                <button type="button" class="mt-3 px-4 py-2 rounded-lg border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition" onclick="addYouthRow()">Add Contribution</button>
             </div>
         </div>
 
         <!-- Promoter Contributions -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Promoter Contributions</div>
-            <div class="card-body">
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Promoter Contributions</div>
+            <div class="p-5 bg-white">
                 <div id="promoterContributions"></div>
-                <button type="button" class="btn btn-outline-success mt-2" onclick="addPromoterRow()">Add Contribution</button>
+                <button type="button" class="mt-3 px-4 py-2 rounded-lg border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition" onclick="addPromoterRow()">Add Contribution</button>
             </div>
         </div>
 
         <!-- Grant Details -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Grant Details</div>
-            <div class="card-body">
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Grant Details</div>
+            <div class="p-5 bg-white">
                 <div id="grantDetails"></div>
-                <button type="button" class="btn btn-outline-success mt-2" onclick="addGrantRow()">Add Grant</button>
+                <button type="button" class="mt-3 px-4 py-2 rounded-lg border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition" onclick="addGrantRow()">Add Grant</button>
             </div>
         </div>
 
         <!-- Credit Details -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Credit Details</div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-4"><label>Bank Name</label><input type="text" name="bank_name" class="form-control"></div>
-                    <div class="col-md-4"><label>Branch</label><input type="text" name="branch" class="form-control"></div>
-                    <div class="col-md-4"><label>Account Number</label><input type="text" name="account_number" class="form-control"></div>
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Credit Details</div>
+            <div class="p-5 bg-white space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="youth-label">Bank Name</label><input type="text" name="bank_name" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Branch</label><input type="text" name="branch" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Account Number</label><input type="text" name="account_number" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-3"><label>Interest Rate (%)</label><input type="number" step="0.01" name="interest_rate" class="form-control"></div>
-                    <div class="col-md-3"><label>Credit Issue Date</label><input type="date" name="credit_issue_date" class="form-control"></div>
-                    <div class="col-md-3"><label>Loan Installment Date</label><input type="date" name="loan_installment_date" class="form-control"></div>
-                    <div class="col-md-3"><label>Credit Amount</label><input type="number" step="0.01" name="credit_amount" class="form-control"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div><label class="youth-label">Interest Rate (%)</label><input type="number" step="0.01" name="interest_rate" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Credit Issue Date</label><input type="date" name="credit_issue_date" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Loan Installment Date</label><input type="date" name="loan_installment_date" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Credit Amount</label><input type="number" step="0.01" name="credit_amount" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6"><label>Number of Installments</label><input type="number" name="number_of_installments" class="form-control"></div>
-                    <div class="col-md-6"><label>Installment Due Date</label><input type="date" name="installment_due_date" class="form-control"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="youth-label">Number of Installments</label><input type="number" name="number_of_installments" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Installment Due Date</label><input type="date" name="installment_due_date" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
                 </div>
             </div>
         </div>
 
         <!-- Installment Payments -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Installment Payments</div>
-            <div class="card-body">
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Installment Payments</div>
+            <div class="p-5 bg-white">
                 <div id="installmentPayments"></div>
-                <button type="button" class="btn btn-outline-success mt-2" onclick="addInstallmentRow()">Add Installment</button>
+                <button type="button" class="mt-3 px-4 py-2 rounded-lg border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition" onclick="addInstallmentRow()">Add Installment</button>
             </div>
         </div>
 
         <!-- Credit Balance -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Credit Balance Information</div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6"><label>Credit Balance Date</label><input type="date" name="credit_balance_date" class="form-control"></div>
-                    <div class="col-md-6"><label>Credit Balance Value</label><input type="number" step="0.01" name="credit_balance_value" class="form-control"></div>
+        <div class="mb-6 rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="bg-primary text-white px-5 py-3 font-semibold">Credit Balance Information</div>
+            <div class="p-5 bg-white">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="youth-label">Credit Balance Date</label><input type="date" name="credit_balance_date" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
+                    <div><label class="youth-label">Credit Balance Value</label><input type="number" step="0.01" name="credit_balance_value" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary"></div>
                 </div>
             </div>
         </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-success mt-4 px-4">Submit</button>
+        <div class="text-center pt-4">
+            <button type="submit" class="px-8 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition">Submit</button>
         </div>
     </form>
-    
-    
     </div> 
 </div>
 
 <script>
+    var twInput = 'w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary';
+    var twBtnDanger = 'px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium';
+
     function addRow(containerId, namePrefix, fields) {
         const container = document.getElementById(containerId);
         const row = document.createElement('div');
-        row.className = "row mb-2";
-        let html = "";
+        row.className = 'grid grid-cols-1 md:grid-cols-12 gap-2 mb-3 items-end';
+        let html = '';
         fields.forEach(field => {
-            html += `
-                <div class="col-md-3">
-                    <input type="${field.type}" name="${namePrefix}[${field.name}][]" class="form-control" placeholder="${field.placeholder}" />
-                </div>`;
+            html += `<div class="md:col-span-3"><input type="${field.type}" name="${namePrefix}[${field.name}][]" class="${twInput}" placeholder="${field.placeholder}" /></div>`;
         });
-        html += `<div class='col-md-1'><button type='button' class='btn btn-danger' onclick='this.parentElement.parentElement.remove()'>X</button></div>`;
+        html += `<div class="md:col-span-1"><button type="button" class="${twBtnDanger}" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
         row.innerHTML = html;
         container.appendChild(row);
     }
@@ -347,28 +354,18 @@
     }
 
     function addGrantRow() {
-    const container = document.getElementById('grantDetails');
-    const row = document.createElement('div');
-    row.className = "row mb-2 align-items-end";
-    row.innerHTML = `
-        <div class="col-md-2">
-            <input type="date" name="grant_details[date][]" class="form-control" placeholder="Date">
-        </div>
-        <div class="col-md-3">
-            <input type="text" name="grant_details[description][]" class="form-control" placeholder="Description">
-        </div>
-        <div class="col-md-2">
-            <input type="number" name="grant_details[value][]" class="form-control" placeholder="Value">
-        </div>
-        <div class="col-md-3">
-            <input type="text" name="grant_details[grant_issued_by][]" class="form-control" placeholder="Issued By">
-        </div>
-        <div class="col-md-1 d-flex align-items-center">
-            <button type="button" class="btn btn-danger" onclick="this.closest('.row').remove()">X</button>
-        </div>
-    `;
-    container.appendChild(row);
-}
+        const container = document.getElementById('grantDetails');
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-1 md:grid-cols-12 gap-2 mb-3 items-end';
+        row.innerHTML = `
+            <div class="md:col-span-2"><input type="date" name="grant_details[date][]" class="${twInput}" placeholder="Date"></div>
+            <div class="md:col-span-3"><input type="text" name="grant_details[description][]" class="${twInput}" placeholder="Description"></div>
+            <div class="md:col-span-2"><input type="number" name="grant_details[value][]" class="${twInput}" placeholder="Value"></div>
+            <div class="md:col-span-3"><input type="text" name="grant_details[grant_issued_by][]" class="${twInput}" placeholder="Issued By"></div>
+            <div class="md:col-span-1"><button type="button" class="${twBtnDanger}" onclick="this.closest('.grid').remove()">X</button></div>
+        `;
+        container.appendChild(row);
+    }
 
     function addInstallmentRow() {
         addRow('installmentPayments', 'installment_payments', [

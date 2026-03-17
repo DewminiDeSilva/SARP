@@ -636,11 +636,11 @@ textarea:focus {
 
 <!-- ✅ YOUTH ENTERPRISE SECTION -->
 <div class="form-group mt-3" id="youthEnterpriseProjectName" style="display: none;">
-    <label for="youth_proposal_id">Youth Enterprises Project Name</label>
+    <label for="youth_proposal_id">Business Title</label>
     <select name="youth_proposal_id" id="youth_proposal_id" class="form-control">
         <option value="">-- Select Youth Enterprise --</option>
         @foreach($agreementSignedYouth as $proposal)
-            <option value="{{ $proposal->id }}">{{ $proposal->organization_name }}</option>
+            <option value="{{ $proposal->id }}">{{ $proposal->business_title ?? $proposal->organization_name }}</option>
         @endforeach
     </select>
 </div>
@@ -1290,9 +1290,11 @@ document.getElementById("agriculture_livestock").addEventListener("change", func
     document.addEventListener('DOMContentLoaded', function () {
         const projectType = document.getElementById('project_type');
         const youthField = document.getElementById('youthEnterpriseProjectName');
+        const youthProposalSelect = document.getElementById('youth_proposal_id');
+        const preselectedYouthProposalId = @json($preselectedYouthProposalId ?? null);
 
         function toggleFields() {
-            if (projectType.value === 'Youth Enterprises') {
+            if (projectType.value === 'Youth Enterprise') {
                 youthField.style.display = 'block';
             } else {
                 youthField.style.display = 'none';
@@ -1301,6 +1303,15 @@ document.getElementById("agriculture_livestock").addEventListener("change", func
 
         projectType.addEventListener('change', toggleFields);
         toggleFields(); // Run on page load
+
+        // Pre-select Youth Enterprise and proposal when coming from "Add youth data"
+        if (preselectedYouthProposalId && youthProposalSelect) {
+            projectType.value = 'Youth Enterprise';
+            $('#youthSection').removeClass('d-none');
+            $('#youthEnterpriseProjectName').show();
+            youthField.style.display = 'block';
+            youthProposalSelect.value = preselectedYouthProposalId;
+        }
     });
 </script>
 

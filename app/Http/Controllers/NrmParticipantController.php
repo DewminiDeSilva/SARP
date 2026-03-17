@@ -40,9 +40,11 @@ class NrmParticipantController extends Controller
 
         // Calculate total participants
         $totalParticipants = $nrmParticipants->total();
+        $maleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'male')->count();
+        $femaleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'female')->count();
 
         // Pass variables to the view
-        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'search', 'entries'));
+        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 
 
@@ -205,8 +207,10 @@ class NrmParticipantController extends Controller
 
         // Calculate total participants (after filtering)
         $totalParticipants = $nrmParticipants->total();
+        $maleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'male')->count();
+        $femaleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'female')->count();
 
-        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'search', 'entries'));
+        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
     }
 
 }

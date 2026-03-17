@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\YouthProposal;
+use App\Models\Beneficiary;
 
 class YouthProposalController extends Controller
 {
@@ -51,6 +52,9 @@ class YouthProposalController extends Controller
             'organization_name' => 'nullable|string|max:255',
             'registration_details' => 'nullable|string|max:255',
             'contact_person' => 'nullable|string|max:255',
+            'nic_number' => 'nullable|string|max:20',
+            'birth_date' => 'nullable|date',
+            'business_type' => 'nullable|string|in:New Business,Existing Business',
             'address' => 'nullable|string',
             'office_phone' => 'nullable|string|max:20',
             'mobile_phone' => 'nullable|string|max:20',
@@ -71,13 +75,19 @@ class YouthProposalController extends Controller
             'expected_outcomes' => 'nullable|array',
             'funding_source' => 'nullable|array',
             'assistance_required' => 'nullable|array',
-            'implementation_plan' => 'nullable|file|mimes:pdf|max:10240',
+            'implementation_plan_names' => 'nullable|array',
+            'implementation_plan_names.*' => 'nullable|string|max:255',
+            'implementation_plan_files' => 'nullable|array',
+            'implementation_plan_files.*' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $proposal = new YouthProposal();
         $proposal->organization_name = $request->organization_name;
         $proposal->registration_details = $request->registration_details;
         $proposal->contact_person = $request->contact_person;
+        $proposal->nic_number = $request->nic_number;
+        $proposal->birth_date = $request->birth_date;
+        $proposal->business_type = $request->business_type;
         $proposal->address = $request->address;
         $proposal->office_phone = $request->office_phone;
         $proposal->mobile_phone = $request->mobile_phone;
@@ -89,7 +99,7 @@ class YouthProposalController extends Controller
         $proposal->project_justification = $request->project_justification;
         $proposal->project_benefits = $request->project_benefits;
         $proposal->category = $request->category;
-        $proposal->status = $request->status; // ✅ Add this below $proposal->category
+        $proposal->status = $request->status;
         $proposal->risk_factors = json_encode([
             'risks' => $request->risks,
             'mitigations' => $request->mitigations
@@ -101,9 +111,18 @@ class YouthProposalController extends Controller
         $proposal->funding_source = json_encode($request->funding_source);
         $proposal->assistance_required = json_encode($request->assistance_required);
 
-        if ($request->hasFile('implementation_plan')) {
-            $path = $request->file('implementation_plan')->store('youth_proposals', 'public');
-            $proposal->implementation_plan = $path;
+        $planFiles = $request->file('implementation_plan_files') ?? [];
+        $planNames = $request->implementation_plan_names ?? [];
+        $plans = [];
+        foreach ($planFiles as $i => $file) {
+            if ($file && $file->isValid()) {
+                $path = $file->store('youth_proposals', 'public');
+                $plans[] = ['name' => $planNames[$i] ?? 'Plan ' . ($i + 1), 'path' => $path];
+            }
+        }
+        if (!empty($plans)) {
+            $proposal->implementation_plans = $plans;
+            $proposal->implementation_plan = $plans[0]['path'];
         }
 
 
@@ -154,6 +173,9 @@ class YouthProposalController extends Controller
             'organization_name' => 'nullable|string|max:255',
             'registration_details' => 'nullable|string|max:255',
             'contact_person' => 'nullable|string|max:255',
+            'nic_number' => 'nullable|string|max:20',
+            'birth_date' => 'nullable|date',
+            'business_type' => 'nullable|string|in:New Business,Existing Business',
             'address' => 'nullable|string',
             'office_phone' => 'nullable|string|max:20',
             'mobile_phone' => 'nullable|string|max:20',
@@ -173,13 +195,19 @@ class YouthProposalController extends Controller
             'expected_outcomes' => 'nullable|array',
             'funding_source' => 'nullable|array',
             'assistance_required' => 'nullable|array',
-            'implementation_plan' => 'nullable|file|mimes:pdf|max:10240',
+            'implementation_plan_names' => 'nullable|array',
+            'implementation_plan_names.*' => 'nullable|string|max:255',
+            'implementation_plan_files' => 'nullable|array',
+            'implementation_plan_files.*' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $proposal = YouthProposal::findOrFail($id);
         $proposal->organization_name = $request->organization_name;
         $proposal->registration_details = $request->registration_details;
         $proposal->contact_person = $request->contact_person;
+        $proposal->nic_number = $request->nic_number;
+        $proposal->birth_date = $request->birth_date;
+        $proposal->business_type = $request->business_type;
         $proposal->address = $request->address;
         $proposal->office_phone = $request->office_phone;
         $proposal->mobile_phone = $request->mobile_phone;
@@ -205,9 +233,18 @@ class YouthProposalController extends Controller
         $proposal->funding_source = json_encode($request->funding_source);
         $proposal->assistance_required = json_encode($request->assistance_required);
 
-        if ($request->hasFile('implementation_plan')) {
-            $path = $request->file('implementation_plan')->store('youth_proposals', 'public'); // same as store()
-            $proposal->implementation_plan = $path; // DO NOT prefix with "storage/"
+        $planFiles = $request->file('implementation_plan_files') ?? [];
+        $planNames = $request->implementation_plan_names ?? [];
+        $existingPlans = is_array($proposal->implementation_plans) ? $proposal->implementation_plans : (json_decode($proposal->implementation_plans ?? '[]', true) ?? []);
+        foreach ($planFiles as $i => $file) {
+            if ($file && $file->isValid()) {
+                $path = $file->store('youth_proposals', 'public');
+                $existingPlans[] = ['name' => $planNames[$i] ?? 'Plan ' . (count($existingPlans) + 1), 'path' => $path];
+            }
+        }
+        if (!empty($existingPlans)) {
+            $proposal->implementation_plans = $existingPlans;
+            $proposal->implementation_plan = $existingPlans[0]['path'] ?? $existingPlans[0];
         }
 
         $proposal->save();
@@ -248,9 +285,38 @@ class YouthProposalController extends Controller
 
     public function showBeneficiaries($id)
     {
-        $proposal = YouthProposal::with('beneficiaries')->findOrFail($id);
+        $proposal = YouthProposal::with(['beneficiaries' => function ($q) {
+            $q->with('youthForm');
+        }])->findOrFail($id);
 
         return view('youth_proposal.beneficiaries_by_proposal', compact('proposal'));
     }
-    
+
+    /**
+     * Show form to add youth data (register new beneficiary linked to this proposal).
+     */
+    public function addBeneficiaryForm($id)
+    {
+        $proposal = YouthProposal::findOrFail($id);
+        return view('youth_proposal.add_beneficiary', compact('proposal'));
+    }
+
+    /**
+     * Link an existing beneficiary to this youth proposal.
+     */
+    public function linkBeneficiary(Request $request, $id)
+    {
+        $proposal = YouthProposal::findOrFail($id);
+        $request->validate(['beneficiary_id' => 'required|exists:beneficiaries,id']);
+        $beneficiary = Beneficiary::findOrFail($request->beneficiary_id);
+        if ($beneficiary->youth_proposal_id) {
+            return redirect()->back()->with('error', 'This beneficiary is already linked to another youth proposal.');
+        }
+        $beneficiary->youth_proposal_id = $proposal->id;
+        $beneficiary->project_type = 'Youth Enterprise';
+        $youthProposal = YouthProposal::find($proposal->id);
+        $beneficiary->input3 = $youthProposal ? ($youthProposal->business_title ?? $youthProposal->organization_name) : null;
+        $beneficiary->save();
+        return redirect()->route('youth-proposals.beneficiaries', $proposal->id)->with('success', 'Beneficiary linked successfully.');
+    }
 }

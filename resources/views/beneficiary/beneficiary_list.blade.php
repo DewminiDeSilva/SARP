@@ -32,10 +32,6 @@
         }
         #sidebarToggle:hover { background-color: #0a4818; }
         .btninline { display: inline-flex; gap: 5px; }
-        /* Keep header title large (same as other modules) */
-        .fixed-header h1, .fixed-header .header-mis-title { font-size: 2.85rem !important; }
-        @media (max-width: 1200px) { .fixed-header h1, .fixed-header .header-mis-title { font-size: 2.2rem !important; } }
-        @media (max-width: 768px) { .fixed-header h1, .fixed-header .header-mis-title { font-size: 1.6rem !important; } }
         /* Back button - same as other modules */
         .btn-back {
             display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none;

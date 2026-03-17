@@ -1081,7 +1081,7 @@
 </style>
 </head>
 <body>
-@include('dashboard.header')
+@include('dashboard.header', ['headerTitleSmall' => true])
     {{-- <body class="h-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;"> --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
