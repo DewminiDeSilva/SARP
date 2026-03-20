@@ -14,7 +14,20 @@
         .right-column { flex: 0 0 80%; padding: 20px; }
         .table th, .table td { text-align: center; }
         .card-header { font-weight: bold; text-align: center; background-color: #c7eef1; color: #0d0e0d; }
-        .pagination .page-link { padding: 5px 10px; }
+         .pagination .page-item {
+            margin: 0 2px;
+        }
+        .pagination .page-link {
+            padding: 5px 10px;
+        }
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
         .page-link { color: #28a745; }
         .page-item.active .page-link { z-index: 3; color: #fff; background-color: #126926; border-color: #126926; }
         .btn-back { display: inline-flex; align-items: center; justify-content: center; color: #fff; border: none; padding: 10px 50px; border-radius: 4px; text-decoration: none; font-size: 14px; cursor: pointer; position: relative; overflow: hidden; }

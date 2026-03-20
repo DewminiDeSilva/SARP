@@ -1181,6 +1181,41 @@
     </div>
 </div>
 
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-md-2 mb-3">
+            <div class="summary-card" style="background: linear-gradient(135deg, #5b86e5 0%, #36d1dc 100%); border-radius: 12px; padding: 20px; text-align: center;">
+                <div style="color: #fff; font-size: 13px; font-weight: 600;">Tank Beneficiaries</div>
+                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $tankBeneficiaryCount ?? 0 }}</div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="summary-card" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); border-radius: 12px; padding: 20px; text-align: center;">
+                <div style="color: #fff; font-size: 13px; font-weight: 600;">Youth</div>
+                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $youthBeneficiaryCount ?? 0 }}</div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="summary-card" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); border-radius: 12px; padding: 20px; text-align: center;">
+                <div style="color: #fff; font-size: 13px; font-weight: 600;">4P</div>
+                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $fourpBeneficiaryCount ?? 0 }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="summary-card" style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); border-radius: 12px; padding: 20px; text-align: center;">
+                <div style="color: #fff; font-size: 13px; font-weight: 600;">Resilience - Agriculture</div>
+                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $resilienceAgricultureCount ?? 0 }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="summary-card" style="background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%); border-radius: 12px; padding: 20px; text-align: center;">
+                <div style="color: #fff; font-size: 13px; font-weight: 600;">Resilience - Livestock</div>
+                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $resilienceLivestockCount ?? 0 }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal for Crop Name Summary -->
 <div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
