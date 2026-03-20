@@ -32,8 +32,20 @@
         .green-header { background: linear-gradient(180deg, var(--ytoa-primary) 0%, var(--ytoa-primary-dark) 100%); color: white; padding: 10px; margin-bottom: 20px; font-weight: bold; border-radius: 10px; }
         .thead-green th { background: linear-gradient(180deg, var(--ytoa-primary) 0%, var(--ytoa-primary-dark) 100%) !important; color: white !important; text-align: center; }
         .card-header { font-weight: bold; text-align: center; background: rgba(18,105,38,0.12); color: var(--ytoa-text); border-radius: 10px 10px 0 0; }
-        .pagination .page-item { margin: 0 2px; }
-        .pagination .page-link { padding: 5px 10px; }
+         .pagination .page-item {
+            margin: 0 2px;
+        }
+        .pagination .page-link {
+            padding: 5px 10px;
+        }
+        .page-item {
+            background-color: white;
+            padding: 0px;
+        }
+        .pagination:hover {
+            border-color: #fff;
+            background-color: #fff;
+        }
         .page-link { color: var(--ytoa-primary); }
         .page-item.active .page-link { z-index: 3; color: #fff; background-color: var(--ytoa-primary); border-color: var(--ytoa-primary); }
         .program-name { max-width: 300px; }

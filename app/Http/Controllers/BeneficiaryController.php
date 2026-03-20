@@ -77,6 +77,21 @@ class BeneficiaryController extends Controller
         ->groupBy('input3')
         ->get();
 
+    $tankBeneficiarySummary = Beneficiary::where('project_type', 'Tank Beneficiary')
+        ->where('input3', 'like', '%'.$search.'%')
+        ->select('input3', DB::raw('COUNT(*) as count'))
+        ->groupBy('input3')
+        ->get();
+    $tankBeneficiaryCount = Beneficiary::where('project_type', 'Tank Beneficiary')->count();
+    $youthBeneficiaryCount = Beneficiary::where('project_type', 'Youth Enterprise')->count();
+    $fourpBeneficiaryCount = Beneficiary::whereIn('project_type', ['4P Projects', '4p'])->count();
+    $resilienceAgricultureCount = Beneficiary::where('project_type', 'Resilience Project')
+        ->where('input1', 'agriculture')
+        ->count();
+    $resilienceLivestockCount = Beneficiary::where('project_type', 'Resilience Project')
+        ->where('input1', 'livestock')
+        ->count();
+
     $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
         ->groupBy('tank_name')
         ->get();
@@ -85,6 +100,12 @@ class BeneficiaryController extends Controller
         'beneficiaries',
         'search',
         'input3Summary',
+        'tankBeneficiarySummary',
+        'tankBeneficiaryCount',
+        'youthBeneficiaryCount',
+        'fourpBeneficiaryCount',
+        'resilienceAgricultureCount',
+        'resilienceLivestockCount',
         'tankNameSummary',
         'allBeneficiaries',
         'convertedMap'
@@ -228,7 +249,7 @@ class BeneficiaryController extends Controller
                     'gn_division_name' => $getStringValue($beneficiaryData['GN Division'] ?? null),
                     'as_center' => $getStringValue($beneficiaryData['ASC'] ?? $beneficiaryData['AS Center'] ?? null),
                     'cascade_name' => $getStringValue($beneficiaryData['Cascade Name'] ?? null),
-                    'tank_name' => $getStringValue($beneficiaryData['Tank Name'] ?? null),
+                    'tank_name' => $getStringValue($beneficiaryData['Tank Name'] ?? $beneficiaryData['tank_name'] ?? $beneficiaryData['Tank'] ?? null),
                     'ai_division' => $getStringValue($beneficiaryData['AI Division'] ?? null),
                     'latitude' => $getNumericValue($beneficiaryData['Latitude'] ?? null),
                     'longitude' => $getNumericValue($beneficiaryData['Longitude'] ?? null),
@@ -287,7 +308,7 @@ public function generateCsv()
     $header = [
         'NIC Number', 'Name with Initials', 'Gender', 'Date Of Birth', 'Age', 'Address', 'Email address', 'Phone Numbers', 'Highest Education Level',
         'Bank Name', 'Bank Branch', 'Account Number', 'Land Ownership Total Extent', 'Land Ownership Proposed Cultivation Area',
-        'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'AI Division', 'Latitude', 'Longitude',
+        'Province', 'District', 'DS Division', 'GN Division', 'ASC', 'Cascade Name', 'Tank Name', 'AI Division', 'Latitude', 'Longitude',
         'Number of Family Members', 'Head of Householder Name', 'Householder Number', 'Income Source', 'Average Income',
         'Monthly Household Expenses', 'Household Level Assets Description', 'Community-Based Organization', 'Type of Water Resource',
         'Training Details Description','Input1 (Agriculture/Livestock)', 'Input2 (Crop Category/Livestock Type/4P Business Concept Title)', 'Input3 (Crop Name/Production Focus/Youth Proposal/4P Category/Nutrition Program Name)','Type of Project'
@@ -319,6 +340,7 @@ public function generateCsv()
             $beneficiary->gn_division_name,
             $beneficiary->as_center,
             $beneficiary->cascade_name,
+            $beneficiary->tank_name,
             $beneficiary->ai_division,
             $beneficiary->latitude,
             $beneficiary->longitude,
@@ -446,6 +468,18 @@ public function index(Request $request)
 
         $input3Summary = Beneficiary::select('input3', DB::raw('COUNT(*) as count'))
                                     ->groupBy('input3')->get();
+        $tankBeneficiarySummary = Beneficiary::where('project_type', 'Tank Beneficiary')
+                                    ->select('input3', DB::raw('COUNT(*) as count'))
+                                    ->groupBy('input3')->get();
+        $tankBeneficiaryCount = Beneficiary::where('project_type', 'Tank Beneficiary')->count();
+        $youthBeneficiaryCount = Beneficiary::where('project_type', 'Youth Enterprise')->count();
+        $fourpBeneficiaryCount = Beneficiary::whereIn('project_type', ['4P Projects', '4p'])->count();
+        $resilienceAgricultureCount = Beneficiary::where('project_type', 'Resilience Project')
+            ->where('input1', 'agriculture')
+            ->count();
+        $resilienceLivestockCount = Beneficiary::where('project_type', 'Resilience Project')
+            ->where('input1', 'livestock')
+            ->count();
 
         $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
                                     ->groupBy('tank_name')->get();
@@ -454,6 +488,12 @@ public function index(Request $request)
             'beneficiaries',
             'allBeneficiaries',
             'input3Summary',
+            'tankBeneficiarySummary',
+            'tankBeneficiaryCount',
+            'youthBeneficiaryCount',
+            'fourpBeneficiaryCount',
+            'resilienceAgricultureCount',
+            'resilienceLivestockCount',
             'tankNameSummary',
             'convertedMap',
             'duplicateNICs'
