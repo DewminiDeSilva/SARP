@@ -69,7 +69,12 @@ class NutritionController extends Controller
         $nutrition = Nutrition::findOrFail($id);
         // Retrieve the trainees associated with this nutrition program
         $trainees = NutritionTrainee::where('nutrition_id', $nutrition->id)->get();
-        return view('nutrition.nutrition_show', compact('nutrition', 'trainees'));
+
+        $totalParticipants = $trainees->count();
+        $maleCount = NutritionTrainee::where('nutrition_id', $nutrition->id)->whereRaw('LOWER(gender) = ?', ['male'])->count();
+        $femaleCount = NutritionTrainee::where('nutrition_id', $nutrition->id)->whereRaw('LOWER(gender) = ?', ['female'])->count();
+
+        return view('nutrition.nutrition_show', compact('nutrition', 'trainees', 'totalParticipants', 'maleCount', 'femaleCount'));
     }
 
     /**

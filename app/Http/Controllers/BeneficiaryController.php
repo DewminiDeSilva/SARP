@@ -152,6 +152,19 @@ class BeneficiaryController extends Controller
     }
 
     /**
+     * Whether CSV / stored project_type value represents a 4P beneficiary (same linkage as the manual form).
+     */
+    private function isCsvFourPProjectType(?string $projectType): bool
+    {
+        $t = strtolower(trim($projectType ?? ''));
+        if ($t === '') {
+            return false;
+        }
+
+        return in_array($t, ['4p projects', '4p project', '4p'], true);
+    }
+
+    /**
      * Import data from CSV. Handles duplicate NICs: same NIC in CSV or already in system is skipped (first occurrence only added).
      */
     public function uploadCsv(Request $request)
@@ -171,6 +184,9 @@ class BeneficiaryController extends Controller
         if (!$header || !is_array($header)) {
             return redirect()->back()->with('error', 'CSV file has no header row.');
         }
+        $header = array_map(function ($h) {
+            return preg_replace('/^\xEF\xBB\xBF/', '', trim((string) $h));
+        }, $header);
 
         $getNumericValue = function ($value) {
             $trimmed = trim($value ?? '');
@@ -226,6 +242,7 @@ class BeneficiaryController extends Controller
             }
             $input3 = $getCsvValue(['Input3 (Crop Name/Production Focus/Youth Proposal/4P Category/Nutrition Program Name)', 'Input3'], null);
             $projectType = $getCsvValue(['Type of Project', 'project_type'], null);
+            $storedProjectType = $this->isCsvFourPProjectType($projectType) ? '4P Projects' : $projectType;
 
             try {
                 $beneficiary = Beneficiary::create([
@@ -266,10 +283,12 @@ class BeneficiaryController extends Controller
                     'input1' => $input1,
                     'input2' => $input2,
                     'input3' => $input3,
-                    'project_type' => $projectType,
+                    'project_type' => $storedProjectType,
                 ]);
 
-                if (property_exists($beneficiary, 'eoi_business_title') && ($projectType === '4P Projects' || $projectType === '4p')) {
+                // View EOI beneficiaries matches on eoi_business_title + eoi_category (not input2/input3 alone).
+                // property_exists() is always false for Eloquent attributes, so this block never ran for CSV imports before.
+                if ($this->isCsvFourPProjectType($projectType)) {
                     $beneficiary->eoi_business_title = $input2;
                     $beneficiary->eoi_category = $input3;
                     $beneficiary->save();
