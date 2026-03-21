@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Models\NutritionTrainee;
 use App\Models\Nutrition;
 use League\Csv\Writer;
@@ -18,16 +19,44 @@ class NutritionTraineeController extends Controller
      */
     public function index($nutrition_id = null)
 {
+    $nutrition = null;
+    $baseQuery = NutritionTrainee::query();
+
     // If $nutrition_id is provided, filter by nutrition_id, otherwise show all trainees
     if ($nutrition_id) {
-        $nutrition = Nutrition::findOrFail($nutrition_id); // Retrieve the Nutrition model
-        $trainees = NutritionTrainee::where('nutrition_id', $nutrition_id)->paginate(10);
-    } else {
-        $trainees = NutritionTrainee::paginate(10);
+        $nutrition = Nutrition::findOrFail($nutrition_id);
+        $baseQuery->where('nutrition_id', $nutrition_id);
     }
 
-    // Pass $nutrition to the view
-    return view('nutrition_trainee.trainee_index', compact('trainees', 'nutrition'));
+    $trainees = (clone $baseQuery)->orderByDesc('id')->paginate(10);
+
+    $totalParticipants = (clone $baseQuery)->count();
+    $maleCount = (clone $baseQuery)
+        ->whereRaw("LOWER(TRIM(gender)) = 'male'")
+        ->count();
+    $femaleCount = (clone $baseQuery)
+        ->whereRaw("LOWER(TRIM(gender)) = 'female'")
+        ->count();
+    $otherCount = (clone $baseQuery)
+        ->whereNotIn(DB::raw('LOWER(TRIM(gender))'), ['male', 'female'])
+        ->count();
+
+    $trainingTypeSummary = (clone $baseQuery)
+        ->join('nutrient_details', 'nutrition_trainees.nutrition_id', '=', 'nutrient_details.id')
+        ->select('nutrient_details.program_type', DB::raw('COUNT(*) as total'))
+        ->groupBy('nutrient_details.program_type')
+        ->orderByDesc('total')
+        ->get();
+
+    return view('nutrition_trainee.trainee_index', compact(
+        'trainees',
+        'nutrition',
+        'totalParticipants',
+        'maleCount',
+        'femaleCount',
+        'otherCount',
+        'trainingTypeSummary'
+    ));
 }
 
 
@@ -195,7 +224,11 @@ class NutritionTraineeController extends Controller
     // Redirect to the nutrition.show view and pass the nutrition program, trainees, and search term
     $nutrition = Nutrition::findOrFail($nutrition_id);
 
-    return view('nutrition.nutrition_show', compact('nutrition', 'trainees', 'searchTerm'));
+    $totalParticipants = $trainees->total();
+    $maleCount = NutritionTrainee::where('nutrition_id', $nutrition_id)->whereRaw('LOWER(gender) = ?', ['male'])->count();
+    $femaleCount = NutritionTrainee::where('nutrition_id', $nutrition_id)->whereRaw('LOWER(gender) = ?', ['female'])->count();
+
+    return view('nutrition.nutrition_show', compact('nutrition', 'trainees', 'searchTerm', 'totalParticipants', 'maleCount', 'femaleCount'));
 }
 
 

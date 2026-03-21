@@ -128,6 +128,12 @@
         .header-row {
             background-color: #129310;
         }
+        .participant-summary .card-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #c7eef1;
+            color: #0d0e0d;
+        }
     </style>
 
 <style>
@@ -363,6 +369,29 @@
 
     <h2 style="color: green;">Nutrition Program Participants</h2>
 
+            <div class="container mt-4 participant-summary">
+                <div class="d-flex justify-content-center flex-wrap">
+                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
+                        <div class="card-header">Total Participants</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $totalParticipants ?? 0 }}</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
+                        <div class="card-header">Male</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $maleCount ?? 0 }}</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
+                        <div class="card-header">Female</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $femaleCount ?? 0 }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Actions and Search Section -->
             <div class="d-flex justify-content-between mb-3">
             @if(auth()->user()->hasPermission('nutrition_trainee', 'add'))
@@ -437,7 +466,7 @@
                     <td>{{ $trainee->address }}</td>
                     <td>{{ $trainee->dob }}</td>
                     <td>{{ $trainee->gender }}</td>
-                    <td>{{ $trainee->mobile }}</td>
+                    <td>{{ $trainee->mobile_number }}</td>
                     <td>{{ $trainee->education_level }}</td>
                     <td>{{ $trainee->income_level }}</td>
                     <td>{{ $trainee->special_remark }}</td>

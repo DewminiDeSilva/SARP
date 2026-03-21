@@ -112,6 +112,13 @@
 }
 
 </style>
+<style>
+    .summary-card .card-header {
+        font-weight: 600;
+        text-align: center;
+        background-color: #c7eef1;
+    }
+</style>
 
 </head>
 <body>
@@ -143,6 +150,68 @@
 <div class="container mt-5">
     <h1>Nutrition Trainees List</h1>
 
+    <div class="row mt-4 mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center summary-card">
+                <div class="card-header">Total Participants</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $totalParticipants ?? 0 }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center summary-card">
+                <div class="card-header">Male Participants</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $maleCount ?? 0 }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center summary-card">
+                <div class="card-header">Female Participants</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $femaleCount ?? 0 }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center summary-card">
+                <div class="card-header">Other Participants</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $otherCount ?? 0 }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4 summary-card">
+        <div class="card-header">Training Module Type Summary</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>Program Type</th>
+                            <th>Participants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($trainingTypeSummary as $item)
+                            <tr>
+                                <td>{{ $item->program_type }}</td>
+                                <td>{{ $item->total }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" class="text-center">No participant summary available.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <table class="table table-bordered">
         <thead>
@@ -166,7 +235,7 @@
                     <td>{{ $trainee->address }}</td>
                     <td>{{ $trainee->dob }}</td>
                     <td>{{ $trainee->gender }}</td>
-                    <td>{{ $trainee->mobile }}</td>
+                    <td>{{ $trainee->mobile_number }}</td>
                     <td>{{ $trainee->education_level }}</td>
                     <td>{{ $trainee->income_level }}</td>
                     <td>
