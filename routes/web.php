@@ -2530,7 +2530,6 @@ Route::get('/youth-proposal/agreement-signed', [YouthProposalController::class, 
 
 Route::get('/youth-proposals/{id}/add-beneficiary', [YouthProposalController::class, 'addBeneficiaryForm'])->name('youth-proposals.addBeneficiary');
 Route::post('/youth-proposals/{id}/link-beneficiary', [YouthProposalController::class, 'linkBeneficiary'])->name('youth-proposals.linkBeneficiary');
-Route::get('/youth-proposals/{id}/beneficiaries', [YouthProposalController::class, 'showBeneficiaries'])->name('youth-proposals.beneficiaries');
 
 Route::get('/youth-form/create/{beneficiary_id}', [YouthFormController::class, 'create'])->name('youth_form.create');
 Route::post('/youth-form/store', [YouthFormController::class, 'store'])->name('youth_form.store');

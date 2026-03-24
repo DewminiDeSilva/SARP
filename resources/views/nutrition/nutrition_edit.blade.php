@@ -795,20 +795,6 @@
 
 <script>
         $(document).ready(function () {
-            // Fetch tank names from the API endpoint
-            $.get('/tanks', function (data) {
-              // console.log(data);
-                // Populate the dropdown menu with tank names
-                $.each(data, function (index, tank) {
-                    $('#tankDropdown').append($('<option>', {
-                        value: tank.tank_name,
-                        text: tank.tank_name
-                    }));
-                });
-            });
-        });
-
-        $(document).ready(function () {
             // Fetch ASC names from the API endpoint
             $.get('/asc', function (data) {
                 // Populate the dropdown menu with ASC names

@@ -326,7 +326,7 @@
                 <div class="col-md-4">
                     <div class="card border-success shadow-sm">
                         <div class="card-header bg-success text-white font-weight-bold">
-                            Total Organizations
+                            Total Youth Proposals
                         </div>
                         <div class="card-body">
                             <h2 class="card-title font-weight-bold">{{ $totalOrganizations }}</h2>
@@ -378,11 +378,11 @@
                     <thead class="thead-light">
                         <tr>
                             <th>ID</th>
-                            <th style="width:280px;">Organization Name</th>
+                            <th style="width:280px;">Name of the Youth</th>
                             <th>Contact Person</th>
-                            <th>Mobile Phone</th>
-                            <th>Market Problem</th>
-                            <th style="width:300px;">Business Title</th>
+                            <th>Mobile Phone Number</th>
+                            <th>Market Analysis</th>
+                            <th style="width:300px;">Nature of the Business</th>
                             <th style="width:308px;" >Status</th> 
                             <th>Actions</th>                           
                         </tr>

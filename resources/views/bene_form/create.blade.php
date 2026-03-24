@@ -343,7 +343,9 @@
                                 </div>
                                 <div class="col-6 form-group">
                                     <label for="tank_name">Tank Name</label>
-                                    <input type="text" class="form-control" id="tank_name" name="tank_name" required>
+                                    <select class="form-control sarp-tank-select" id="tank_name" name="tank_name" required>
+                                        <option value="">Select tank name</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -586,6 +588,8 @@
         });
     });
 </script>
+
+@include('partials.sarp_tank_select2')
 
 </body>
 </html>

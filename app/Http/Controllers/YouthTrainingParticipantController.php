@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\YouthTraining;
 use App\Models\YouthTrainingParticipant;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -29,11 +30,16 @@ class YouthTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'male')->count();
-        $femaleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'female')->count();
+        $stats = TrainingParticipantStats::forProgram(
+            YouthTrainingParticipant::class,
+            'youth_training_id',
+            $youthTrainingId
+        );
 
-        return view('youth_training_participants.index', compact('youthTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('youth_training_participants.index', array_merge(
+            compact('youthTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 
     public function create($youth_training_id)
@@ -55,7 +61,7 @@ class YouthTrainingParticipantController extends Controller
         ]);
 
         $youthTraining = YouthTraining::findOrFail($youthTrainingId);
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         $youthTraining->youthTrainingParticipants()->create([
             'name' => $request->name,
@@ -93,7 +99,7 @@ class YouthTrainingParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = $row['Age'];
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
             $youthTraining->youthTrainingParticipants()->create([
                 'name' => $row['Name'],
                 'nic' => $row['NIC'],
@@ -156,9 +162,15 @@ class YouthTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'male')->count();
-        $femaleCount = YouthTrainingParticipant::where('youth_training_id', $youthTrainingId)->where('gender', 'female')->count();
-        return view('youth_training_participants.index', compact('youthTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        $stats = TrainingParticipantStats::forProgram(
+            YouthTrainingParticipant::class,
+            'youth_training_id',
+            $youthTrainingId
+        );
+
+        return view('youth_training_participants.index', array_merge(
+            compact('youthTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 }

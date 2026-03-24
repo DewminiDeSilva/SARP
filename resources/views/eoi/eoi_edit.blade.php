@@ -10,6 +10,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    @include('partials.sarp_green_theme')
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -21,25 +23,11 @@
             padding-top: 70px;
         }
 
-        .left-column {
-            flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
-        }
-
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-            transition: flex 0.3s ease;
-        }
-
-        .left-column.hidden {
-            display: none;
-        }
-
         .card {
-            background-color: #f0fdf0;
+            background-color: #f4fff7;
+            border: 1px solid var(--sarp-green-border);
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(18, 105, 38, 0.1);
         }
 
         .card-body {
@@ -47,9 +35,10 @@
         }
 
         h2 {
-            color: green;
+            color: var(--sarp-green-primary);
             text-align: center;
             margin-bottom: 30px;
+            font-weight: 700;
         }
 
         .form-label {
@@ -62,70 +51,17 @@
         }
 
         .btn-primary {
-            background-color: #1e8e1e;
-            border: none;
+            background-color: var(--sarp-green-primary) !important;
+            border-color: var(--sarp-green-primary) !important;
         }
 
         .btn-primary:hover {
-            background-color: #166d16;
-        }
-
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            font-size: 14px;
-            padding: 10px 50px;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            color: #fff;
-        }
-
-        .btn-back img {
-            width: 45px;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-            z-index: 1;
-        }
-
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 0;
-        }
-
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        .btn-back:hover img {
-            transform: translateX(-50px);
+            background-color: var(--sarp-green-dark) !important;
+            border-color: var(--sarp-green-dark) !important;
         }
 
         #sidebarToggle {
-            background-color: #126926;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
             margin-right: 15px;
-        }
-
-        #sidebarToggle:hover {
-            background-color: #0a4818;
         }
     </style>
 </head>
@@ -139,7 +75,7 @@
 
     <div class="right-column" id="mainContent">
         <div class="d-flex align-items-center mb-3">
-            <button id="sidebarToggle" class="btn btn-secondary">
+            <button type="button" id="sidebarToggle" class="btn">
                 <i class="fas fa-bars"></i>
             </button>
 

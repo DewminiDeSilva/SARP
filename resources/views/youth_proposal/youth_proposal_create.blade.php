@@ -8,64 +8,238 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        :root { --yp-primary: #126926; --yp-primary-dark: #0d4d1f; --yp-border: #e2e8f0; --yp-text: #1e293b; --yp-muted: #64748b; }
-        body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        :root {
+            --yp-primary: #126926;
+            --yp-primary-dark: #0d4d1f;
+            --yp-border: #e2e8f0;
+            --yp-text: #1e293b;
+            --yp-muted: #64748b;
+            --yp-surface: #ffffff;
+            --yp-radius: 12px;
+            --yp-radius-sm: 8px;
+            --yp-shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 28px rgba(18,105,38,.07);
+            --yp-space: 1.5rem;
+        }
+        body { background-color: #eef2f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
         .frame { display: flex; width: 100%; }
         .left-column { flex: 0 0 20%; border-right: 1px solid var(--yp-border); background: #fafbfa; }
         .left-column.hidden { display: none; }
-        .right-column { flex: 0 0 80%; padding: 24px; transition: flex 0.3s ease; }
-        .yp-frame-wrap { max-width: 100%; margin: 0 auto; padding: 20px; background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; }
-        .yp-form-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 6px 24px rgba(18,105,38,0.06);
-            border: 1px solid rgba(18,105,38,0.1);
-            padding: 32px 40px;
+        .right-column { flex: 0 0 80%; padding: 20px 16px 28px; transition: flex 0.3s ease; }
+
+        /* Page shell: wider card, uses more of the content column */
+        .yp-frame-wrap {
+            max-width: min(1240px, 100%);
+            margin: 0 auto;
+            padding: 8px 0 40px;
         }
-        .yp-title { font-size: 1.75rem; font-weight: 700; color: var(--yp-text); margin-bottom: 28px; padding-bottom: 14px; border-bottom: 3px solid var(--yp-primary); text-align: center; letter-spacing: -0.02em; }
-        .yp-label { font-weight: 600; color: var(--yp-text); font-size: 1.125rem; margin-bottom: 8px; display: block; }
-        .yp-input { border-radius: 10px; border: 1px solid var(--yp-border); font-size: 0.9375rem; padding: 10px 14px; transition: border-color .2s, box-shadow .2s; }
-        .yp-input:focus { border-color: var(--yp-primary); box-shadow: 0 0 0 3px rgba(18,105,38,0.15); outline: none; }
-        .yp-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-        .yp-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        @media (max-width: 992px) { .yp-row-3 { grid-template-columns: 1fr 1fr; } .yp-row-2 { grid-template-columns: 1fr; } }
-        @media (max-width: 576px) { .yp-row-3 { grid-template-columns: 1fr; } }
-        .yp-field { margin-bottom: 18px; }
-        .yp-radio-group { display: flex; gap: 12px; flex-wrap: wrap; }
+        .yp-form-shell {
+            background: var(--yp-surface);
+            border-radius: 18px;
+            box-shadow: var(--yp-shadow);
+            border: 1px solid rgba(18,105,38,0.12);
+            padding: 40px 44px 48px;
+        }
+        @media (max-width: 768px) {
+            .yp-form-shell { padding: 26px 20px 36px; }
+            .right-column { padding: 16px 12px 24px; }
+        }
+
+        .yp-title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--yp-text);
+            margin: 0 0 32px;
+            padding-bottom: 20px;
+            text-align: center;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid var(--yp-border);
+            position: relative;
+        }
+        .yp-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -2px;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--yp-primary), var(--yp-primary-dark));
+            border-radius: 3px;
+        }
+
+        /* Section cards — one per logical group */
+        .yp-section-card {
+            background: #fafcfb;
+            border: 1px solid var(--yp-border);
+            border-radius: var(--yp-radius);
+            margin-bottom: var(--yp-space);
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,.04);
+        }
+        .yp-section-card:last-of-type { margin-bottom: 0; }
+        .yp-section-card__header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            min-height: 52px;
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, var(--yp-primary) 0%, var(--yp-primary-dark) 100%);
+            letter-spacing: 0.02em;
+        }
+        .yp-section-card__header i { opacity: 0.95; font-size: 1.05rem; }
+        .yp-section-card__body {
+            padding: 28px 28px 16px;
+            background: var(--yp-surface);
+        }
+        @media (max-width: 576px) {
+            .yp-section-card__body { padding: 20px 16px 12px; }
+            .yp-section-card__header { padding: 14px 18px; min-height: 48px; }
+        }
+
+        /* Labels & inputs — consistent vertical rhythm */
+        .yp-label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.8125rem;
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .yp-input,
+        .yp-section-card .form-control {
+            border-radius: var(--yp-radius-sm);
+            border: 1px solid #cbd5e1;
+            font-size: 0.9375rem;
+            padding: 12px 16px;
+            min-height: 46px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        textarea.yp-input,
+        .yp-section-card textarea.form-control { min-height: 96px; padding-top: 12px; }
+        .yp-input:focus,
+        .yp-section-card .form-control:focus {
+            border-color: var(--yp-primary);
+            box-shadow: 0 0 0 3px rgba(18,105,38,0.12);
+            outline: none;
+        }
+        .yp-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 24px; align-items: start; }
+        .yp-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 24px; align-items: start; }
+        @media (max-width: 992px) { .yp-row-3 { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 576px) { .yp-row-3, .yp-row-2 { grid-template-columns: 1fr; } }
+        .yp-field { margin-bottom: 20px; }
+        .yp-section-card__body > .yp-field:last-child { margin-bottom: 16px; }
+
+        .yp-radio-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-start; }
         .yp-radio-group .yp-radio-option {
             position: relative; display: flex; align-items: center; justify-content: center;
-            min-width: 140px; padding: 12px 20px; border: 2px solid #e2e8f0; border-radius: 10px;
+            min-width: 140px; padding: 12px 20px; border: 2px solid #e2e8f0; border-radius: var(--yp-radius-sm);
             background: #fff; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s;
-            font-weight: 600; color: #475569;
+            font-weight: 600; color: #475569; font-size: 0.9375rem;
         }
         .yp-radio-group .yp-radio-option:hover { border-color: #cbd5e1; background: #f8fafc; }
         .yp-radio-group input { position: absolute; opacity: 0; width: 0; height: 0; }
         .yp-radio-group .yp-radio-wrap { margin: 0; cursor: pointer; }
-        .yp-radio-group input:checked + .yp-radio-option { border-color: #126926; background: rgba(18,105,38,0.08); color: #126926; box-shadow: 0 0 0 1px #126926; }
-        .yp-section-title { font-size: 1.25rem; font-weight: 700; color: #126926; margin: 24px 0 14px; padding-bottom: 6px; }
-        .yp-table { font-size: 0.9rem; }
-        .yp-table .form-control { border-radius: 6px; }
-        .yp-btn-add { background: #126926; color: #fff; border: none; border-radius: 8px; padding: 6px 14px; font-weight: 600; }
-        .yp-btn-add:hover { background: #0d4d1f; color: #fff; }
-        .yp-btn-remove { background: #dc3545; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; }
-        .yp-pdf-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; margin-bottom: 12px; }
-        .yp-pdf-row .form-control { border-radius: 8px; }
-        .yp-age-display { font-weight: 600; color: #126926; padding: 8px 12px; background: rgba(18,105,38,0.08); border-radius: 8px; }
-        #sidebarToggle { background: #126926; color: #fff; border: none; padding: 10px; border-radius: 8px; }
-        #sidebarToggle:hover { background: #0d4d1f; }
-        .btn-back { display: inline-flex; align-items: center; color: #fff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; background: #126926; }
-        .btn-back:hover { background: #0d4d1f; color: #fff; }
-        .btn-submit-yp { background: linear-gradient(135deg, #126926 0%, #0d4d1f 100%); color: #fff; border: none; padding: 12px 32px; border-radius: 12px; font-weight: 600; }
-        .btn-submit-yp:hover { background: linear-gradient(135deg, #0d4d1f 0%, #083d18 100%); color: #fff; }
-        .yp-submit-wrap { margin-top: 2rem; display: flex; justify-content: center; align-items: center; }
-        .yp-radio-group-wrap { display: flex; justify-content: center; align-items: center; }
+        .yp-radio-group input:checked + .yp-radio-option { border-color: var(--yp-primary); background: rgba(18,105,38,0.08); color: var(--yp-primary); box-shadow: 0 0 0 1px var(--yp-primary); }
+        .yp-radio-group-wrap { display: flex; justify-content: flex-start; align-items: center; padding: 4px 0; }
+
+        /* Inline subsection title inside a card (tables) */
+        .yp-section-title {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--yp-primary);
+            margin: 0 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .yp-subheading {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--yp-primary-dark);
+            margin: 0 0 8px;
+            letter-spacing: 0.02em;
+        }
+
+        .yp-table {
+            font-size: 0.875rem;
+            margin-bottom: 0;
+            border-radius: var(--yp-radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--yp-border);
+        }
+        .yp-table thead th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--yp-border);
+            vertical-align: middle;
+        }
+        .yp-table tbody td { padding: 12px 16px; vertical-align: middle; background: #fff; }
+        .yp-table tbody tr:not(:last-child) td { border-bottom: 1px solid #f1f5f9; }
+        .yp-table .form-control { min-height: 38px; }
+
+        .yp-btn-add { background: var(--yp-primary); color: #fff; border: none; border-radius: var(--yp-radius-sm); padding: 6px 14px; font-weight: 600; font-size: 0.875rem; }
+        .yp-btn-add:hover { background: var(--yp-primary-dark); color: #fff; }
+        .yp-btn-remove { background: #dc3545; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.875rem; }
+        .yp-pdf-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 18px;
+            align-items: end;
+            margin-bottom: 16px;
+            padding: 18px 20px;
+            background: #f8fafc;
+            border-radius: var(--yp-radius-sm);
+            border: 1px dashed #cbd5e1;
+        }
+        @media (max-width: 768px) { .yp-pdf-row { grid-template-columns: 1fr; } }
+        .yp-age-display {
+            font-weight: 700;
+            color: var(--yp-primary);
+            padding: 12px 16px;
+            background: rgba(18,105,38,0.1);
+            border-radius: var(--yp-radius-sm);
+            border: 1px solid rgba(18,105,38,0.2);
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+        }
+
+        #sidebarToggle { background: var(--yp-primary); color: #fff; border: none; padding: 10px 14px; border-radius: var(--yp-radius-sm); }
+        #sidebarToggle:hover { background: var(--yp-primary-dark); }
+        .btn-back { display: inline-flex; align-items: center; color: #fff; padding: 10px 22px; border-radius: var(--yp-radius-sm); text-decoration: none; font-weight: 600; background: var(--yp-primary); }
+        .btn-back:hover { background: var(--yp-primary-dark); color: #fff; }
+
+        .yp-submit-wrap {
+            margin-top: 36px;
+            padding-top: 32px;
+            border-top: 1px solid var(--yp-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-submit-yp {
+            background: linear-gradient(135deg, var(--yp-primary) 0%, var(--yp-primary-dark) 100%);
+            color: #fff; border: none; padding: 16px 48px; border-radius: var(--yp-radius);
+            font-weight: 700; font-size: 1.05rem;
+            box-shadow: 0 4px 14px rgba(18,105,38,0.35);
+        }
+        .btn-submit-yp:hover { background: linear-gradient(135deg, var(--yp-primary-dark) 0%, #083d18 100%); color: #fff; transform: translateY(-1px); }
+
         .yp-required::after { content: ' *'; color: #dc2626; }
-        .yp-error { font-size: 0.8125rem; color: #dc2626; margin-top: 4px; }
-        .yp-input.is-invalid { border-color: #dc2626; }
-        .yp-compact .yp-form-card { padding: 20px 28px; }
-        .yp-compact .yp-field { margin-bottom: 12px; }
-        .yp-compact .yp-section-title { margin: 16px 0 10px; }
-        .yp-compact textarea.yp-input { min-height: 60px; rows: 2; }
+        .yp-error { font-size: 0.8125rem; color: #dc2626; margin-top: 4px; display: block; }
+        .yp-input.is-invalid, .form-control.is-invalid { border-color: #dc2626; }
+
+        /* Expected outputs / outcomes */
+        .yp-section-card .input-group .form-control { border-radius: var(--yp-radius-sm) 0 0 var(--yp-radius-sm); }
+        .yp-section-card .input-group .btn { border-radius: 0 var(--yp-radius-sm) var(--yp-radius-sm) 0; }
     </style>
 </head>
 <body>
@@ -81,13 +255,13 @@
             <a href="{{ route('youth-proposals.index') }}" class="btn-back"><i class="fas fa-arrow-left me-2"></i>Back</a>
         </div>
 
-        <div class="yp-frame-wrap yp-compact">
-        <div class="yp-form-card">
+        <div class="yp-frame-wrap">
+        <div class="yp-form-shell">
             <h3 class="yp-title">Youth Proposal</h3>
             <form action="{{ route('youth-proposals.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @if($errors->any())
-                    <div class="alert alert-danger py-2 px-3 mb-3" role="alert" style="border-radius:10px;font-size:0.9rem;">
+                    <div class="alert alert-danger py-2 px-3 mb-4" role="alert" style="border-radius:10px;font-size:0.9rem;">
                         <strong>Please correct the errors below.</strong>
                         <ul class="mb-0 mt-1 ps-3">
                             @foreach($errors->all() as $err) <li>{{ $err }}</li> @endforeach
@@ -95,6 +269,9 @@
                     </div>
                 @endif
 
+                <div class="yp-section-card">
+                    <div class="yp-section-card__header"><i class="fas fa-user-tie"></i> Youth &amp; business details</div>
+                    <div class="yp-section-card__body">
                 <div class="yp-row-2">
                     <div class="yp-field">
                         <label class="yp-label yp-required">Name of the Youth</label>
@@ -178,10 +355,14 @@
                         @error('category') <span class="yp-error">{{ $message }}</span> @enderror
                     </div>
                 </div>
+                    </div>
+                </div>
 
-                <div class="yp-section-title">Project Risks & Mitigation</div>
-                <div class="yp-field">
-                    <table class="table yp-table">
+                <div class="yp-section-card">
+                    <div class="yp-section-card__header"><i class="fas fa-shield-alt"></i> Project risks &amp; mitigation</div>
+                    <div class="yp-section-card__body">
+                <div class="yp-field mb-0">
+                    <table class="table yp-table mb-0">
                         <thead>
                             <tr>
                                 <th>Risk</th>
@@ -198,9 +379,13 @@
                         </tbody>
                     </table>
                 </div>
+                    </div>
+                </div>
 
-                <div class="yp-section-title">Upload Implementation Plan (Gantt Chart PDF)</div>
-                <div class="yp-field">
+                <div class="yp-section-card">
+                    <div class="yp-section-card__header"><i class="fas fa-file-pdf"></i> Implementation plan (Gantt chart PDF)</div>
+                    <div class="yp-section-card__body">
+                <div class="yp-field mb-0">
                     <div id="pdf-rows">
                         <div class="yp-pdf-row">
                             <div>
@@ -215,8 +400,13 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
 
-                <div class="yp-section-title">Total Investment and Breakdown</div>
+                <div class="yp-section-card">
+                    <div class="yp-section-card__header"><i class="fas fa-coins"></i> Investment &amp; project narrative</div>
+                    <div class="yp-section-card__body">
+                <div class="yp-section-title mb-3">Total investment breakdown</div>
                 <div class="yp-field">
                     <table class="table yp-table">
                         <thead>
@@ -257,8 +447,13 @@
                     <label class="yp-label">Project Benefits</label>
                     <textarea class="form-control yp-input" name="project_benefits" rows="3"></textarea>
                 </div>
+                    </div>
+                </div>
 
-                <div class="yp-section-title">Project Coverage</div>
+                <div class="yp-section-card">
+                    <div class="yp-section-card__header"><i class="fas fa-map-marked-alt"></i> Project coverage &amp; expected results</div>
+                    <div class="yp-section-card__body">
+                <div class="yp-section-title mb-3">Project coverage</div>
                 <div class="yp-field">
                     <table class="table yp-table">
                         <thead>
@@ -280,9 +475,10 @@
                     </table>
                 </div>
 
+                <div class="yp-section-title mt-4 mb-3">Expected outputs &amp; outcomes</div>
                 <div class="yp-row-2">
                     <div class="yp-field">
-                        <div class="yp-section-title">Expected Outputs</div>
+                        <div class="yp-subheading">Expected outputs</div>
                         <div id="outputs-wrapper">
                             <div class="input-group mb-2">
                                 <input type="text" name="expected_outputs[]" class="form-control yp-input" placeholder="Expected output">
@@ -291,7 +487,7 @@
                         </div>
                     </div>
                     <div class="yp-field">
-                        <div class="yp-section-title">Expected Outcomes</div>
+                        <div class="yp-subheading">Expected outcomes</div>
                         <div id="outcomes-wrapper">
                             <div class="input-group mb-2">
                                 <input type="text" name="expected_outcomes[]" class="form-control yp-input" placeholder="Expected outcome">
@@ -300,8 +496,13 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
 
-                <div class="yp-section-title">Funding Source</div>
+                <div class="yp-section-card">
+                    <div class="yp-section-card__header"><i class="fas fa-hand-holding-usd"></i> Funding &amp; assistance</div>
+                    <div class="yp-section-card__body">
+                <div class="yp-section-title mb-3">Funding source</div>
                 <div class="yp-field">
                     <table class="table yp-table">
                         <thead>
@@ -323,9 +524,9 @@
                     </table>
                 </div>
 
-                <div class="yp-section-title">Assistance Required</div>
-                <div class="yp-field">
-                    <table class="table yp-table">
+                <div class="yp-section-title mt-4 mb-3">Assistance required</div>
+                <div class="yp-field mb-0">
+                    <table class="table yp-table mb-0">
                         <thead>
                             <tr>
                                 <th>Type of Assistance</th>
@@ -344,9 +545,11 @@
                         </tbody>
                     </table>
                 </div>
+                    </div>
+                </div>
 
                 <div class="yp-submit-wrap">
-                    <button type="submit" class="btn btn-submit-yp">Submit</button>
+                    <button type="submit" class="btn btn-submit-yp">Submit proposal</button>
                 </div>
             </form>
         </div>

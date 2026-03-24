@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Participant;
 use App\Models\Training;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -32,7 +33,12 @@ class ParticipantController extends Controller
             })
             ->get();
 
-        return view('participant.index', compact('training', 'participants', 'search'));
+        $stats = TrainingParticipantStats::forProgram(Participant::class, 'training_id', $trainingId);
+
+        return view('participant.index', array_merge(
+            compact('training', 'participants', 'search'),
+            $stats
+        ));
     }
 
     /**
@@ -62,7 +68,7 @@ class ParticipantController extends Controller
         $training = Training::findOrFail($trainingId);
 
         // Calculate the youth status
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         // Create a new participant
         $training->participants()->create([
@@ -113,7 +119,7 @@ class ParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = $row['Age'];
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
 
             // Create a new participant
             $training->participants()->create([

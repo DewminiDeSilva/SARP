@@ -135,9 +135,7 @@ class YouthFormController extends Controller
             }
         }
 
-        $beneficiary = Beneficiary::findOrFail($request->beneficiary_id);
-        $proposalId = $beneficiary->youth_proposal_id;
-        return redirect()->route('youth-proposals.beneficiaries', $proposalId)->with('success', 'Youth data saved successfully.');
+        return redirect()->route('youth-proposal.agreementSigned')->with('success', 'Youth data saved successfully.');
     }
 
     public function show($beneficiary_id)

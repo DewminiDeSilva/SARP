@@ -339,16 +339,16 @@
             <div class="yp-section-title">Youth Proposal Details</div>
             <div class="info"><label>Name of the Youth:</label> <p>{{ $youth_proposal->organization_name }}</p></div>
             <div class="info"><label>Nature of the Business:</label> <p>{{ $youth_proposal->business_title ?? 'N/A' }}</p></div>
-            <div class="yp-show-center"><label>Business Type:</label> <strong>{{ $youth_proposal->business_type ?? 'N/A' }}</strong></div>
+            <div class="yp-show-center"><label>New Business / Existing Business:</label> <strong>{{ $youth_proposal->business_type ?? 'N/A' }}</strong></div>
             <div class="yp-show-row-3">
                 <div class="info"><label>NIC Number:</label> <p>{{ $youth_proposal->nic_number ?? 'N/A' }}</p></div>
-                <div class="info"><label>Birth Date:</label> <p>{{ $youth_proposal->birth_date ? $youth_proposal->birth_date->format('m/d/Y') : 'N/A' }}</p></div>
+                <div class="info"><label>Birth date:</label> <p>{{ $youth_proposal->birth_date ? $youth_proposal->birth_date->format('m/d/Y') : 'N/A' }}</p></div>
                 <div class="info"><label>Age:</label> <p>@if($youth_proposal->birth_date) {{ $youth_proposal->birth_date->age }} years @else N/A @endif</p></div>
             </div>
             <div class="info"><label>Address:</label> <p>{{ $youth_proposal->address ?? 'N/A' }}</p></div>
             <div class="yp-show-row-3">
                 <div class="info"><label>Telephone (Office):</label> <p>{{ $youth_proposal->office_phone ?? 'N/A' }}</p></div>
-                <div class="info"><label>Mobile Phone:</label> <p>{{ $youth_proposal->mobile_phone ?? 'N/A' }}</p></div>
+                <div class="info"><label>Mobile Phone Number:</label> <p>{{ $youth_proposal->mobile_phone ?? 'N/A' }}</p></div>
                 <div class="info"><label>Email:</label> <p>{{ $youth_proposal->email ?? 'N/A' }}</p></div>
             </div>
             <div class="yp-show-row-3">

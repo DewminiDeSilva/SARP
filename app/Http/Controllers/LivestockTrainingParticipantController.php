@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LivestockTraining;
 use App\Models\LivestockTrainingParticipant;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -29,11 +30,16 @@ class LivestockTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = LivestockTrainingParticipant::where('livestock_training_id', $livestockTrainingId)->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $femaleCount = LivestockTrainingParticipant::where('livestock_training_id', $livestockTrainingId)->whereRaw('LOWER(gender) = ?', ['female'])->count();
+        $stats = TrainingParticipantStats::forProgram(
+            LivestockTrainingParticipant::class,
+            'livestock_training_id',
+            $livestockTrainingId
+        );
 
-        return view('livestock_training_participants.index', compact('livestockTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('livestock_training_participants.index', array_merge(
+            compact('livestockTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 
     public function create($livestock_training_id)
@@ -55,7 +61,7 @@ class LivestockTrainingParticipantController extends Controller
         ]);
 
         $livestockTraining = LivestockTraining::findOrFail($livestockTrainingId);
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         $livestockTraining->livestockTrainingParticipants()->create([
             'name' => $request->name,
@@ -93,7 +99,7 @@ class LivestockTrainingParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = (int) ($row['Age'] ?? 0);
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
             $livestockTraining->livestockTrainingParticipants()->create([
                 'name' => $row['Name'] ?? '',
                 'nic' => $row['NIC'] ?? '',
@@ -156,9 +162,15 @@ class LivestockTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = LivestockTrainingParticipant::where('livestock_training_id', $livestockTrainingId)->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $femaleCount = LivestockTrainingParticipant::where('livestock_training_id', $livestockTrainingId)->whereRaw('LOWER(gender) = ?', ['female'])->count();
-        return view('livestock_training_participants.index', compact('livestockTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        $stats = TrainingParticipantStats::forProgram(
+            LivestockTrainingParticipant::class,
+            'livestock_training_id',
+            $livestockTrainingId
+        );
+
+        return view('livestock_training_participants.index', array_merge(
+            compact('livestockTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 }

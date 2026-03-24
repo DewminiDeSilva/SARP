@@ -2315,7 +2315,7 @@
               </div>
             </div>
             <p class="card-value">{{ $nutritionStats['demographics_summary']['youth_trainees'] ?? 0 }}</p>
-            <p class="card-subtitle">Young participants (18-29)</p>
+            <p class="card-subtitle">Young participants (18-40)</p>
           </div>
 
           <div class="card">

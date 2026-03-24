@@ -10,104 +10,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    @include('partials.sarp_green_theme')
+
     <style>
-        .frame {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .left-column {
-            flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
-        }
-
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-            transition: flex 0.3s ease, padding 0.3s ease;
-        }
-
-        .sidebar {
-            transition: transform 0.3s ease;
-        }
-
-        .left-column.hidden {
-            display: none;
-        }
-
-        #sidebarToggle {
-            background-color: #126926;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #sidebarToggle:hover {
-            background-color: #0a4818;
-        }
-
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            padding: 10px 50px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-back img {
-            width: 45px;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-        }
-
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 0;
-        }
-
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        .btn-back:hover img {
-            transform: translateX(-50px);
-        }
-
-        .submitbtton {
-            color: #fff;
-            background-color: #198754;
-            border-color: #198754;
-        }
-
-        .submitbtton:active,
-        .submitbtton:hover {
-            background-color: #145c32;
-            border-color: #145c32;
-            color: #fff;
-        }
-
         .custom-button, .edit-button, .view-button {
             width: 60px;
             height: 40px;
@@ -136,15 +41,6 @@
             border-color: orange;
         }
 
-        .view-button {
-            color: white;
-            background-color: #60C267;
-        }
-
-        .view-button:hover {
-            border-color: green;
-        }
-
         .action-buttons {
             display: flex;
             gap: 10px;
@@ -155,38 +51,8 @@
             white-space: nowrap;
         }
 
-        .pagination .page-link {
-            padding: 5px 10px; /* Adjust padding to control button size */
-        }
-
-        .page-item {
-            background-color: white;
-            padding: 0px;
-        }
-
-        .pagination:hover {
-            border-color: #fff;
-            background-color: #fff;
-        }
-
-        .page-item:hover {
-            border-color: #fff;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .page-link {
-            color : #28a745;
-        }
-
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff;
-            background-color: #126926;
-            border-color: #126926;
-        }
         .highlight-row {
-            background-color: #fff8dc !important;
+            background-color: #f4fff6 !important;
         }
     </style>
     <style>
@@ -314,7 +180,7 @@ td {
     </div>
     <div class="right-column">
         <div class="d-flex align-items-center mb-3">
-            <button id="sidebarToggle" class="btn btn-secondary mr-2">
+            <button type="button" id="sidebarToggle" class="btn mr-2">
                 <i class="fas fa-bars"></i>
             </button>
 
@@ -323,7 +189,7 @@ td {
 
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb-3">
-                <h2 style="color: green;">Expressions of Interest</h2>
+                <h2 class="sarp-page-title" style="font-size: 2rem;">Expressions of Interest</h2>
                 <a href="{{ route('expressions.evaluation-completed') }}" class="btn btn-success">View Agreement Sign EOI</a>
             </div>
             
@@ -390,8 +256,8 @@ td {
 </div>
 </form>
             <div class="table-responsive">
-                <table class="table table-bordered">
-                <thead class="thead-light">
+                <table class="table table-bordered table-sarp-green">
+                <thead>
         <tr>
         <th>EOI ID</th>
         <th>Organization Name</th>

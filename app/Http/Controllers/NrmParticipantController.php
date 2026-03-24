@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\NrmParticipant;
 use App\Models\NrmTraining;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -38,13 +39,12 @@ class NrmParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]); // Append search and entries to pagination links
 
-        // Calculate total participants
-        $totalParticipants = $nrmParticipants->total();
-        $maleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'male')->count();
-        $femaleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'female')->count();
+        $stats = TrainingParticipantStats::forProgram(NrmParticipant::class, 'nrm_training_id', $nrmTrainingId);
 
-        // Pass variables to the view
-        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('nrm_participants.index', array_merge(
+            compact('nrmTraining', 'nrmParticipants', 'search', 'entries'),
+            $stats
+        ));
     }
 
 
@@ -76,7 +76,7 @@ class NrmParticipantController extends Controller
         $nrmTraining = NrmTraining::findOrFail($nrmTrainingId);
 
         // Calculate the youth status
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         // Create a new NRM participant
         $nrmTraining->nrmParticipants()->create([
@@ -127,7 +127,7 @@ class NrmParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = $row['Age'];
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
 
             // Create a new NRM participant
             $nrmTraining->nrmParticipants()->create([
@@ -205,12 +205,12 @@ class NrmParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        // Calculate total participants (after filtering)
-        $totalParticipants = $nrmParticipants->total();
-        $maleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'male')->count();
-        $femaleCount = NrmParticipant::where('nrm_training_id', $nrmTrainingId)->where('gender', 'female')->count();
+        $stats = TrainingParticipantStats::forProgram(NrmParticipant::class, 'nrm_training_id', $nrmTrainingId);
 
-        return view('nrm_participants.index', compact('nrmTraining', 'nrmParticipants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('nrm_participants.index', array_merge(
+            compact('nrmTraining', 'nrmParticipants', 'search', 'entries'),
+            $stats
+        ));
     }
 
 }

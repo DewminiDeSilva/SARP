@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FourpTraining;
 use App\Models\FourpTrainingParticipant;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -29,11 +30,16 @@ class FourpTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'male')->count();
-        $femaleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'female')->count();
+        $stats = TrainingParticipantStats::forProgram(
+            FourpTrainingParticipant::class,
+            'fourp_training_id',
+            $fourpTrainingId
+        );
 
-        return view('fourp_training_participants.index', compact('fourpTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('fourp_training_participants.index', array_merge(
+            compact('fourpTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 
     public function create($fourp_training_id)
@@ -55,7 +61,7 @@ class FourpTrainingParticipantController extends Controller
         ]);
 
         $fourpTraining = FourpTraining::findOrFail($fourpTrainingId);
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         $fourpTraining->fourpTrainingParticipants()->create([
             'name' => $request->name,
@@ -93,7 +99,7 @@ class FourpTrainingParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = $row['Age'];
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
             $fourpTraining->fourpTrainingParticipants()->create([
                 'name' => $row['Name'],
                 'nic' => $row['NIC'],
@@ -156,9 +162,15 @@ class FourpTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'male')->count();
-        $femaleCount = FourpTrainingParticipant::where('fourp_training_id', $fourpTrainingId)->where('gender', 'female')->count();
-        return view('fourp_training_participants.index', compact('fourpTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        $stats = TrainingParticipantStats::forProgram(
+            FourpTrainingParticipant::class,
+            'fourp_training_id',
+            $fourpTrainingId
+        );
+
+        return view('fourp_training_participants.index', array_merge(
+            compact('fourpTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 }

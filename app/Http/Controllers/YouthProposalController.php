@@ -278,18 +278,14 @@ class YouthProposalController extends Controller
 
     public function agreementSigned()
     {
-        $signedProposals = YouthProposal::where('status', 'Agreement Signed')->paginate(10);
+        $signedProposals = YouthProposal::where('status', 'Agreement Signed')
+            ->with(['beneficiaries' => function ($q) {
+                $q->with('youthForm');
+            }])
+            ->orderByDesc('id')
+            ->paginate(10);
+
         return view('youth_proposal.agreement_signed_index', compact('signedProposals'));
-    }
-
-
-    public function showBeneficiaries($id)
-    {
-        $proposal = YouthProposal::with(['beneficiaries' => function ($q) {
-            $q->with('youthForm');
-        }])->findOrFail($id);
-
-        return view('youth_proposal.beneficiaries_by_proposal', compact('proposal'));
     }
 
     /**
@@ -317,6 +313,6 @@ class YouthProposalController extends Controller
         $youthProposal = YouthProposal::find($proposal->id);
         $beneficiary->input3 = $youthProposal ? ($youthProposal->business_title ?? $youthProposal->organization_name) : null;
         $beneficiary->save();
-        return redirect()->route('youth-proposals.beneficiaries', $proposal->id)->with('success', 'Beneficiary linked successfully.');
+        return redirect()->route('youth-proposal.agreementSigned')->with('success', 'Beneficiary linked successfully.');
     }
 }

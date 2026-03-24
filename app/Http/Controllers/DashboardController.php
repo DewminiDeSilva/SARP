@@ -871,8 +871,14 @@ private function calculateProjectTypeStats()
         $participantGender = $participants->groupBy('gender')->map->count();
         
         // Age group analysis
-        $youthParticipants = $participants->where('youth', 'yes')->count();
-        $adultParticipants = $participants->where('youth', 'no')->count();
+        $youthParticipants = $participants->filter(function ($participant) {
+            $age = is_numeric($participant->age) ? (int) $participant->age : 0;
+            return $age >= 18 && $age <= 40;
+        })->count();
+        $adultParticipants = $participants->filter(function ($participant) {
+            $age = is_numeric($participant->age) ? (int) $participant->age : 0;
+            return $age > 40;
+        })->count();
         
         // Average age
         $avgAge = $participants->whereNotNull('age')->avg('age');
@@ -1034,8 +1040,14 @@ private function calculateProjectTypeStats()
         $participantGender = $participants->groupBy('gender')->map->count();
         
         // Age group analysis
-        $youthParticipants = $participants->where('youth', 'yes')->count();
-        $adultParticipants = $participants->where('youth', 'no')->count();
+        $youthParticipants = $participants->filter(function ($participant) {
+            $age = is_numeric($participant->age) ? (int) $participant->age : 0;
+            return $age >= 18 && $age <= 40;
+        })->count();
+        $adultParticipants = $participants->filter(function ($participant) {
+            $age = is_numeric($participant->age) ? (int) $participant->age : 0;
+            return $age > 40;
+        })->count();
         
         // Average age
         $avgAge = $participants->whereNotNull('age')->avg('age');
@@ -1196,11 +1208,11 @@ private function calculateProjectTypeStats()
         $ageGroups = [
             'youth' => $trainees->filter(function($trainee) {
                 $age = is_numeric($trainee->age) ? (int) $trainee->age : 0;
-                return $age >= 18 && $age < 30;
+                return $age >= 18 && $age <= 40;
             })->count(),
             'adult' => $trainees->filter(function($trainee) {
                 $age = is_numeric($trainee->age) ? (int) $trainee->age : 0;
-                return $age >= 30 && $age < 60;
+                return $age > 40 && $age < 60;
             })->count(),
             'senior' => $trainees->filter(function($trainee) {
                 $age = is_numeric($trainee->age) ? (int) $trainee->age : 0;

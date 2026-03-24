@@ -9,22 +9,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- <style>
-        /* Reuse your styles here (same as original EOI index) */
-        .frame { display: flex; flex-direction: row; justify-content: space-between; width: 100%; }
-        .left-column { flex: 0 0 20%; border-right: 1px solid #dee2e6; }
-        .right-column { flex: 0 0 80%; padding: 20px; transition: flex 0.3s ease, padding 0.3s ease; }
-        .left-column.hidden { display: none; }
-        #sidebarToggle { background-color: #126926; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
-        #sidebarToggle:hover { background-color: #0a4818; }
-        .view-button { color: white; background-color: #60C267; }
-        .view-button:hover { border-color: green; }
-        td { vertical-align: middle; white-space: nowrap; }
-        .pagination .page-link { padding: 5px 10px; }
-        .page-link { color: #28a745; }
-        .page-item.active .page-link { color: #fff; background-color: #126926; border-color: #126926; }
-    </style> -->
+
+    @include('partials.sarp_green_theme')
 
     <style>
     .entries-container {
@@ -38,129 +24,7 @@
         display: inline-block;
         width: auto;
     }
-    .frame {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-    }
-    .left-column {
-        flex: 0 0 20%;
-        border-right: 1px solid #dee2e6;
-    }
-    .right-column {
-        flex: 0 0 80%;
-        padding: 20px;
-    }
-    .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            padding: 10px 50px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-back img {
-            width: 45px;
-            height: auto;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-            background: none;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 0;
-        }
-
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        .btn-back:hover img {
-            transform: translateX(-50px);
-        }
-        .pagination .page-item {
-            margin: 0 0px;
-        }
-        .pagination .page-link {
-            padding: 5px 10px;
-        }
-        .page-item {
-            background-color: white;
-            padding: 0px;
-        }
-        .pagination:hover {
-            border-color: #fff;
-            background-color: #fff;
-        }
-        .page-item:hover {
-            border-color: #fff;
-            background-color: #fff;
-            cursor: pointer;
-        }
-        .page-link {
-            color : #28a745;
-        }
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff;
-            background-color: #126926;
-            border-color: #126926;
-        }
-        .sidebar {
-        transition: transform 0.3s ease; /* Smooth toggle animation */
-    }
-
-    .sidebar.hidden {
-        transform: translateX(-100%); /* Move sidebar out of view */
-    }
-
-    #sidebarToggle {
-        background-color: #126926; /* Match the back button color */
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    #sidebarToggle:hover {
-        background-color: #0a4818; /* Darken the hover color */
-    }
-
-
-    .left-column.hidden {
-    display: none; /* Hide the sidebar */
-    }
-    .right-column {
-        transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
-    }
-    .view-button { color: white; background-color: #60C267; }
-        .view-button:hover { border-color: green; }
-</style>
+    </style>
 </head>
 <body>
 
@@ -175,7 +39,7 @@
     <div class="right-column">
         <div class="d-flex align-items-center mb-3">
 
-            <button id="sidebarToggle" class="btn btn-secondary mr-2">
+            <button type="button" id="sidebarToggle" class="btn mr-2">
                 <i class="fas fa-bars"></i>
             </button>
 
@@ -186,12 +50,12 @@
 
 
             <div class="center-heading text-center">
-                <h1 style="font-size: 2.5rem; color: green;">Agreement Sign EOIs</h1>
+                <h1 class="sarp-page-title">Agreement Sign EOIs</h1>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
+                <table class="table table-bordered table-sarp-green sarp-table-nowrap">
+                    <thead>
                         <tr>
                             <th>EOI ID</th>
                             <th>Organization Name</th>
@@ -215,7 +79,7 @@
                                 <a href="{{ route('expressions.show', $expression->id) }}" class="btn btn-sm view-button" title="View">
                                     <img src="{{ asset('assets/images/view.png') }}" alt="View Icon" style="width: 16px; height: 16px;">
                                 </a>
-                                <a href="{{ route('eoi.beneficiaries', $expression->id) }}" class="btn btn-sm btn-success ml-1" title="View Beneficiaries">
+                                <a href="{{ route('eoi.beneficiaries', $expression->id) }}" class="btn btn-sm btn-sarp-primary ml-1" title="View Beneficiaries">
                                 View Beneficiaries
                                 </a>
                             </td>

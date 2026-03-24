@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FFSParticipant;
 use App\Models\FFSTraining;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -34,10 +35,13 @@ class FFSParticipantController extends Controller
                              ->orWhere('youth', 'like', "%{$search}%");
             })
             ->get();
-        $totalParticipants = FFSParticipant::where('ffs_training_id', $ffsTrainingId)->count();
-        $maleCount = FFSParticipant::where('ffs_training_id', $ffsTrainingId)->where('gender', 'male')->count();
-        $femaleCount = FFSParticipant::where('ffs_training_id', $ffsTrainingId)->where('gender', 'female')->count();
-        return view('ffs_participants.index', compact('ffsTraining', 'ffsParticipants', 'totalParticipants', 'maleCount', 'femaleCount', 'search'));
+
+        $stats = TrainingParticipantStats::forProgram(FFSParticipant::class, 'ffs_training_id', $ffsTrainingId);
+
+        return view('ffs_participants.index', array_merge(
+            compact('ffsTraining', 'ffsParticipants', 'search'),
+            $stats
+        ));
 
         // return view('ffs_participant.index', compact('ffsTraining', 'ffsParticipants', 'search'));
     }
@@ -70,7 +74,7 @@ class FFSParticipantController extends Controller
         $ffsTraining = FFSTraining::findOrFail($ffsTrainingId);
 
         // Calculate the youth status
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         // Create a new FFS participant
         $ffsTraining->ffsParticipants()->create([
@@ -121,7 +125,7 @@ class FFSParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = $row['Age'];
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
 
             // Create a new FFS participant
             $ffsTraining->ffsParticipants()->create([

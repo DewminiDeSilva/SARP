@@ -319,7 +319,7 @@
     <div id="tankRows" class="d-flex flex-column gap-2">
       @foreach($initialTanks as $i => $tVal)
         <div class="input-group tank-row">
-          <select name="tank_names[]" class="form-control tankDropdown" data-selected="{{ $tVal }}">
+          <select name="tank_names[]" class="form-control tankDropdown sarp-tank-select" data-selected="{{ $tVal }}">
             <option value="">Select Tank</option>
             {{-- options inserted by JS --}}
           </select>
@@ -338,7 +338,7 @@
     {{-- Template (cloned by JS) --}}
     <template id="tankRowTemplate">
       <div class="input-group tank-row">
-        <select name="tank_names[]" class="form-control tankDropdown">
+        <select name="tank_names[]" class="form-control tankDropdown sarp-tank-select">
           <option value="">Select Tank</option>
         </select>
         <button type="button" class="btn btn-outline-success addTankRow">
@@ -510,27 +510,6 @@ $('#nurseryTable').on('click', '.addNursery', function () {
                 $(this).closest('tr').remove();
             });
 
-            // Tanks
-            // $.get('/tanks', function (data) {
-            //     $('#tankDropdown').empty().append('<option value="">Select Tank</option>');
-            //     $.each(data, function (index, tank) {
-            //         $('#tankDropdown').append(
-            //             $('<option>', { value: tank.tank_name, text: tank.tank_name })
-            //         );
-            //     });
-            // });
-$.get('/tanks', function (data) {
-    // Loop through each dropdown
-    $('.tankDropdown').each(function () {
-        const dropdown = $(this);
-        dropdown.empty().append('<option value="">Select Tank</option>');
-        $.each(data, function (index, tank) {
-            dropdown.append(
-                $('<option>', { value: tank.tank_name, text: tank.tank_name })
-            );
-        });
-    });
-});
     </script>
     <script>
     
@@ -663,57 +642,34 @@ $.get('/tanks', function (data) {
 </script>
 <script>
 (function () {
-  let tankList = []; // will hold [{tank_name: "..."}] or strings
-  // Load tanks once
-  $.get('/tanks', function (data) {
-    // Normalize to array of strings: tank_name
-    tankList = (data || []).map(function (t) {
-      return (typeof t === 'string') ? t : (t.tank_name || '');
-    }).filter(Boolean);
-
-    // Populate existing rows
-    $('#tankRows .tankDropdown').each(function () {
-      const selected = $(this).data('selected') || '';
-      populateTankSelect(this, selected);
-    });
-  });
-
-  function populateTankSelect(selectEl, selectedVal) {
-    const $sel = $(selectEl);
-    $sel.find('option:not(:first)').remove();
-    tankList.forEach(function (name) {
-      const $opt = $('<option>', { value: name, text: name });
-      if (selectedVal && selectedVal === name) $opt.prop('selected', true);
-      $sel.append($opt);
-    });
-  }
-
-  // Add new row
   $(document).on('click', '.addTankRow', function () {
-    const $template = $($('#tankRowTemplate').html());
-    // Populate options
-    populateTankSelect($template.find('.tankDropdown')[0], '');
-    // Append row
-    $('#tankRows').append($template);
-
-    // Update buttons: only last row shows the + button
+    var $wrap = $($('#tankRowTemplate').html());
+    $('#tankRows').append($wrap);
+    if (window.SarpInitTankSelects) {
+      window.SarpInitTankSelects($wrap.find('select.sarp-tank-select'));
+    }
     refreshTankRowButtons();
   });
 
-  // Remove row (keep at least 1)
   $(document).on('click', '.removeTankRow', function () {
-    const $rows = $('#tankRows .tank-row');
-    if ($rows.length <= 1) return; // don't remove the last one
-    $(this).closest('.tank-row').remove();
+    var $rows = $('#tankRows .tank-row');
+    if ($rows.length <= 1) {
+      return;
+    }
+    var $row = $(this).closest('.tank-row');
+    $row.find('select.sarp-tank-select').each(function () {
+      if (window.SarpDestroyTankSelect) {
+        window.SarpDestroyTankSelect($(this));
+      }
+    });
+    $row.remove();
     refreshTankRowButtons();
   });
 
-  // Ensure only the last row shows the add button; show remove on all if >1
   function refreshTankRowButtons() {
-    const $rows = $('#tankRows .tank-row');
+    var $rows = $('#tankRows .tank-row');
     $rows.find('.addTankRow').addClass('d-none');
     $rows.last().find('.addTankRow').removeClass('d-none');
-
     if ($rows.length === 1) {
       $rows.find('.removeTankRow').addClass('d-none');
     } else {
@@ -723,6 +679,7 @@ $.get('/tanks', function (data) {
 })();
 </script>
 
+@include('partials.sarp_tank_select2')
 
 </body>
 </html>

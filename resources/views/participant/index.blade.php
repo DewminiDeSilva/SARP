@@ -292,6 +292,8 @@
             </div>
     </br>
 
+            @include('partials.training_participant_summary_cards')
+
             <!-- Success Message -->
             @if (session('success'))
                 <div class="alert alert-success">
@@ -322,7 +324,7 @@
                 <!-- Search form -->
                 <form method="GET" action="{{ route('participants.search', $training->id) }}" class="form-inline">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Participants" name="search">
+                        <input type="text" class="form-control" placeholder="Search Participants" name="search" value="{{ $search ?? '' }}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit">Search</button>
                         </div>

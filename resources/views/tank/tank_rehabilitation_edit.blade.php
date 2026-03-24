@@ -432,7 +432,9 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="tank_name" class="form-label">Tank Name</label>
-                        <input type="text" class="form-control" id="tank_name" name="tank_name" value="{{ $tankRehabilitation->tank_name }}" required>
+                        <select class="form-control sarp-tank-select" id="tank_name" name="tank_name" required data-selected="{{ old('tank_name', $tankRehabilitation->tank_name ?? '') }}" data-placeholder="Search tank (registry + rehabilitation)…">
+                            <option value="">Select tank name</option>
+                        </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="no_of_family" class="form-label">Number of Household</label>
@@ -614,5 +616,8 @@ $(document).ready(function () {
         });
     });
 </script>
+
+@include('partials.sarp_tank_select2')
+
 </body>
 </html>

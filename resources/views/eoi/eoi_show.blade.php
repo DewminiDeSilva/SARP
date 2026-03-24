@@ -6,6 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+    @include('partials.sarp_green_theme')
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -17,33 +19,19 @@
             padding-top: 70px;
         }
 
-        .left-column {
-            flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
-        }
-
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-            transition: flex 0.3s ease;
-        }
-
-        .left-column.hidden {
-            display: none;
-        }
-
         .custom-frame {
-            background-color: rgba(0, 128, 0, 0.05);
-            border: 2px solid rgba(0, 128, 0, 0.2);
+            background-color: rgba(18, 105, 38, 0.06);
+            border: 2px solid var(--sarp-green-border);
             border-radius: 10px;
             padding: 30px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(18, 105, 38, 0.12);
         }
 
         .header-title {
-            color: green;
+            color: var(--sarp-green-primary);
             text-align: center;
             margin-bottom: 30px;
+            font-weight: 700;
         }
 
         .info {
@@ -55,6 +43,7 @@
         .info label {
             font-weight: bold;
             width: 35%;
+            color: var(--sarp-green-dark);
         }
 
         .info p {
@@ -66,88 +55,22 @@
             vertical-align: middle;
         }
 
-        .btn-secondary {
-            background-color: #1e8e1e;
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #166d16;
-        }
-
-        /* Back button with animation */
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-            padding: 10px 50px;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .btn-back img {
-            width: 45px;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-            z-index: 1;
-        }
-
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 0;
-        }
-
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        .btn-back:hover img {
-            transform: translateX(-50px);
-        }
-
         #sidebarToggle {
-            background-color: #126926;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
             margin-right: 15px;
         }
 
-        #sidebarToggle:hover {
-            background-color: #0a4818;
-
-            
-        }
         .clean-list {
-    background-color: transparent !important;
-    padding-left: 20px;
-    list-style-type: disc;
-    margin: 0;
-}
+            background-color: transparent !important;
+            padding-left: 20px;
+            list-style-type: disc;
+            margin: 0;
+        }
 
-.clean-item {
-    background-color: transparent !important;
-    color: #212529; /* or customize */
-    font-size: 1rem;
-}
-
+        .clean-item {
+            background-color: transparent !important;
+            color: #212529;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -160,7 +83,7 @@
 
     <div class="right-column" id="mainContent">
         <div class="d-flex align-items-center mb-3">
-            <button id="sidebarToggle" class="btn btn-secondary">
+            <button type="button" id="sidebarToggle" class="btn">
                 <i class="fas fa-bars"></i>
             </button>
 
@@ -174,7 +97,7 @@
 
         @if($expression->status === 'Agreement Signed')
         <div class="mb-3">
-            <a href="{{ route('eoi.beneficiaries', $expression->id) }}" class="btn btn-success">
+            <a href="{{ route('eoi.beneficiaries', $expression->id) }}" class="btn btn-sarp-primary">
                 <i class="fas fa-users"></i> View Registered Beneficiaries
             </a>
         </div>

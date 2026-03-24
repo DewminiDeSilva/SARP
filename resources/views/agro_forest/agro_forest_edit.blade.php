@@ -154,9 +154,8 @@
 <div class="row g-3 mt-2">
   <div class="col-12 col-md-4 offset-md-4">
     <label for="tankDropdown" class="form-label dropdown-label">Select Tank Name</label>
-    <select name="tank_name" class="form-control tankDropdown">
+    <select name="tank_name" class="form-control tankDropdown sarp-tank-select" data-selected="{{ old('tank_name', $agro_forest->tank_name ?? '') }}">
       <option value="">Select Tank</option>
-      <option selected>{{ $agro_forest->tank_name ?? 'N/A' }}</option>
     </select>
   </div>
 </div>
@@ -164,9 +163,8 @@
 <div class="row g-3 mt-2">
   <div class="col-12 col-md-4 offset-md-4">
     <label class="form-label dropdown-label">Select Tank Name 2</label>
-    <select name="tank_name_2" class="form-control tankDropdown">
+    <select name="tank_name_2" class="form-control tankDropdown sarp-tank-select" data-selected="{{ old('tank_name_2', $agro_forest->tank_name_2 ?? '') }}">
       <option value="">Select Tank 2</option>
-        <option selected>{{ $agro_forest->tank_name_2 ?? 'N/A' }}</option>
     </select>
   </div>
 </div>
@@ -174,9 +172,8 @@
 <div class="row g-3 mt-2">
   <div class="col-12 col-md-4 offset-md-4">
     <label class="form-label dropdown-label">Select Tank Name 3</label>
-    <select name="tank_name_3" class="form-control tankDropdown">
+    <select name="tank_name_3" class="form-control tankDropdown sarp-tank-select" data-selected="{{ old('tank_name_3', $agro_forest->tank_name_3 ?? '') }}">
       <option value="">Select Tank 3</option>
-        <option selected>{{ $agro_forest->tank_name_3 ?? 'N/A' }}</option>
     </select>
   </div>
 </div>
@@ -531,18 +528,7 @@ $(function () {
     }
 
 });
-$.get('/tanks', function (data) {
-    // Loop through each dropdown
-    $('.tankDropdown').each(function () {
-        const dropdown = $(this);
-        dropdown.empty().append('<option value="">Select Tank</option>');
-        $.each(data, function (index, tank) {
-            dropdown.append(
-                $('<option>', { value: tank.tank_name, text: tank.tank_name })
-            );
-        });
-    });
-});
 </script>
+@include('partials.sarp_tank_select2')
 </body>
 </html>
