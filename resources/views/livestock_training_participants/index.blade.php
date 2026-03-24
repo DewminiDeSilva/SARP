@@ -83,28 +83,7 @@
                 </div>
             </div>
 
-            <div class="container mt-4">
-                <div class="d-flex justify-content-center flex-wrap">
-                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
-                        <div class="card-header">Total Participants</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $totalParticipants }}</h5>
-                        </div>
-                    </div>
-                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
-                        <div class="card-header">Male</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $maleCount ?? 0 }}</h5>
-                        </div>
-                    </div>
-                    <div class="card text-center" style="width: 14rem; margin: 0 10px 10px 0;">
-                        <div class="card-header">Female</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $femaleCount ?? 0 }}</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @include('partials.training_participant_summary_cards')
 
             <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('livestock-training-participants.create', $livestockTraining->id) }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Participant</a>

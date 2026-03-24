@@ -417,6 +417,13 @@
                 <h2><i class="fas fa-user-edit me-2"></i>Edit Beneficiary Information</h2>
             </div>
 
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <form action="{{ route('beneficiary.update', $beneficiary->id) }}" method="POST" enctype="multipart/form-data" id="beneficiaryForm">
                 @csrf
                 @method('PUT')
@@ -564,6 +571,71 @@
                                     <div class="form-group">
                                         <label class="form-label">Youth Enterprises Project Name</label>
                                         <input type="text" class="form-control readonly-field" value="{{ $beneficiary->input3 ?? 'N/A' }}" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="card border-success mt-3">
+                                    <div class="card-header bg-success text-white font-weight-bold">
+                                        <i class="fas fa-file-signature mr-2"></i>Youth agreement signing — Youth Proposal details
+                                    </div>
+                                    <div class="card-body">
+                                        @if($beneficiary->youthProposal)
+                                            <dl class="row small mb-3">
+                                                <dt class="col-sm-3">Name of the Youth</dt>
+                                                <dd class="col-sm-9">{{ $beneficiary->youthProposal->organization_name ?? '—' }}</dd>
+                                                <dt class="col-sm-3">Nature of the Business</dt>
+                                                <dd class="col-sm-9">{{ $beneficiary->youthProposal->business_title ?? '—' }}</dd>
+                                                <dt class="col-sm-3">Contact person</dt>
+                                                <dd class="col-sm-9">{{ $beneficiary->youthProposal->contact_person ?? '—' }}</dd>
+                                                <dt class="col-sm-3">Mobile phone</dt>
+                                                <dd class="col-sm-9">{{ $beneficiary->youthProposal->mobile_phone ?? '—' }}</dd>
+                                                <dt class="col-sm-3">Category</dt>
+                                                <dd class="col-sm-9">{{ $beneficiary->youthProposal->category ?? '—' }}</dd>
+                                                <dt class="col-sm-3">Proposal status</dt>
+                                                <dd class="col-sm-9">{{ $beneficiary->youthProposal->status ?? '—' }}</dd>
+                                            </dl>
+                                            <p class="small text-muted mb-2">
+                                                <a href="{{ route('youth-proposals.show', $beneficiary->youthProposal->id) }}" class="text-success font-weight-bold">View full Youth Proposal</a>
+                                            </p>
+                                        @else
+                                            <p class="text-muted small mb-0">No Youth Proposal record is linked to this beneficiary (<code>youth_proposal_id</code> is empty). The project name above is stored on the beneficiary record only.</p>
+                                        @endif
+
+                                        <h6 class="font-weight-bold text-secondary mt-3 mb-2">Beneficiary &amp; proposal summary</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm mb-0">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>Beneficiary name</th>
+                                                        <th>Type of project</th>
+                                                        <th>Nature of the business</th>
+                                                        <th>Contact person</th>
+                                                        <th>Mobile phone</th>
+                                                        <th style="min-width: 180px;">Youth data</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{ $beneficiary->name_with_initials ?? '—' }}</td>
+                                                        <td>{{ $beneficiary->project_type ?? '—' }}</td>
+                                                        <td>{{ optional($beneficiary->youthProposal)->business_title ?? $beneficiary->input3 ?? '—' }}</td>
+                                                        <td>{{ optional($beneficiary->youthProposal)->contact_person ?? '—' }}</td>
+                                                        <td>{{ optional($beneficiary->youthProposal)->mobile_phone ?? '—' }}</td>
+                                                        <td>
+                                                            @if($beneficiary->youthForm)
+                                                                <a href="{{ route('youth_form.show', $beneficiary->id) }}" class="btn btn-sm btn-info mb-1">
+                                                                    <i class="fas fa-file-alt"></i> View youth data
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('youth_form.create', $beneficiary->id) }}" class="btn btn-sm btn-success mb-1">
+                                                                    <i class="fas fa-plus-circle"></i> Add youth data
+                                                                </a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             @elseif ($beneficiary->project_type === '4P Projects' || $beneficiary->project_type === '4p')
@@ -833,15 +905,6 @@
 
         // Dynamic dropdowns (if needed)
         $(document).ready(function() {
-            $.get('/tanks', function(data) {
-                $.each(data, function(index, tank) {
-                    $('#tankDropdown').append($('<option>', {
-                        value: tank.tank_name,
-                        text: tank.tank_name
-                    }));
-                });
-            });
-
             $.get('/asc', function(data) {
                 $.each(data, function(index, asc) {
                     $('#ascDropdown').append($('<option>', {

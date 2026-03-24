@@ -537,7 +537,9 @@ public function index(Request $request)
      */
    public function create(Request $request)
 {
-     $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')->get(['id', 'organization_name', 'business_title']);
+     $agreementSignedYouth = YouthProposal::where('status', 'Agreement Signed')
+        ->orderBy('organization_name')
+        ->get(['id', 'organization_name', 'business_title', 'contact_person', 'mobile_phone', 'category', 'status']);
 
      $businessTitles = EOI::where('status', 'Agreement Signed')
         ->whereNotNull('business_title')
@@ -629,6 +631,11 @@ public function index(Request $request)
 
     $beneficiary->save();
 
+    if ($request->project_type === 'Youth Enterprise') {
+        return redirect()->route('beneficiary.edit', $beneficiary->id)
+            ->with('success', 'Beneficiary registered successfully. You can add youth data below.');
+    }
+
     return redirect('/beneficiary')->with('success', 'Beneficiary registered successfully.');
     }
 
@@ -638,7 +645,7 @@ public function index(Request $request)
      */
     public function show(Beneficiary $beneficiary)
     {
-
+        $beneficiary->loadMissing('youthProposal');
 
         return view('beneficiary.beneficiary_show', compact('beneficiary'));
     }
@@ -648,11 +655,9 @@ public function index(Request $request)
      */
     public function edit(Beneficiary $beneficiary)
     {
-        // Fetch all Youth Proposals with 'Agreement Signed' status
-        $agreementSignedYouth = \App\Models\YouthProposal::where('status', 'Agreement Signed')
-            ->get(['id', 'organization_name']);
-    
-        return view('beneficiary.beneficiary_edit', compact('beneficiary', 'agreementSignedYouth'));
+        $beneficiary->loadMissing(['youthProposal', 'youthForm']);
+
+        return view('beneficiary.beneficiary_edit', compact('beneficiary'));
     }
 
     /**

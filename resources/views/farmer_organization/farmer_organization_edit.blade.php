@@ -738,7 +738,7 @@
                 <div class="col">
                     <div class="dropdown">
                         <label for="tank" class="form-label dropdown-label">Select Tank Name</label>
-                        <select class="form-control btn btn-success" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required>
+                        <select class="form-control btn btn-success sarp-tank-select" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required data-selected="{{ old('tank_name', $farmerorganization->tank_name ?? '') }}">
                             <option value="">Select Tank</option>
                         </select>
                     </div>
@@ -798,30 +798,6 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        var selectedTank = "{{ $farmerorganization->tank_name }}";
-
-        // Fetch tank names from the API endpoint
-        $.get('/tanks', function (data) {
-            // Populate the dropdown menu with tank names
-            $.each(data, function (index, tank) {
-                var option = $('<option>', {
-                    value: tank.tank_name,
-                    text: tank.tank_name
-                });
-
-                // Check if the current tank is the selected one
-                if (tank.tank_name === selectedTank) {
-                    option.prop('selected', true);
-                }
-
-                $('#tankDropdown').append(option);
-            });
-        });
-    });
-</script>
-
-<script>
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar = document.querySelector('.left-column');
         const content = document.querySelector('.right-column');
@@ -843,6 +819,6 @@
     });
 </script>
 
-
+@include('partials.sarp_tank_select2')
 
 </body>

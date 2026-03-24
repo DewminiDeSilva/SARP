@@ -24,7 +24,7 @@
     <div class="right-column">
         <div class="d-flex align-items-center mb-3">
             <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
-            <a href="{{ route('youth-proposals.beneficiaries', $beneficiary->youth_proposal_id) }}" class="btn-back">
+            <a href="{{ route('youth-proposal.agreementSigned') }}" class="btn-back">
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
         </div>

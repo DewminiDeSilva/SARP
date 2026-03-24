@@ -540,7 +540,7 @@ textarea:focus {
         <div class="col">
             <div class="dropdown">
                 <label for="tankDropdown" class="form-label dropdown-label">Tank Name</label>
-                <select id="tankDropdown" class="btn btn-success dropdown-toggle" name="tank_name" required>
+                <select id="tankDropdown" class="btn btn-success dropdown-toggle sarp-tank-select" name="tank_name" required>
                     <option value="" class="greenbackground">Select Tank</option>
                 </select>
             </div>
@@ -635,16 +635,72 @@ textarea:focus {
     </div>
 </div>
 
-<!-- ✅ YOUTH ENTERPRISE SECTION -->
-<div class="form-group mt-3" id="youthEnterpriseProjectName" style="display: none;">
-    <label for="youth_proposal_id">Business Title</label>
-    <select name="youth_proposal_id" id="youth_proposal_id" class="form-control">
-        <option value="">-- Select Youth Enterprise --</option>
-        @foreach($agreementSignedYouth as $proposal)
-            <option value="{{ $proposal->id }}">{{ $proposal->business_title ?? $proposal->organization_name }}</option>
-        @endforeach
-    </select>
+<!-- ✅ YOUTH ENTERPRISE / AGREEMENT SIGNING SECTION -->
+<div class="mt-3" id="youthEnterpriseProjectName" style="display: none;">
+    <div class="card border-success">
+        <div class="card-header bg-success text-white font-weight-bold">
+            <i class="fas fa-file-signature mr-2"></i>Youth agreement signing — link to Youth Proposal
+        </div>
+        <div class="card-body">
+            <div class="form-group mb-3">
+                <label for="youth_proposal_id" class="font-weight-bold">Youth Proposal (agreement signed)</label>
+                <select name="youth_proposal_id" id="youth_proposal_id" class="form-control">
+                    <option value="">-- Select Youth Proposal --</option>
+                    @foreach($agreementSignedYouth as $proposal)
+                        <option value="{{ $proposal->id }}">{{ $proposal->organization_name }} @if($proposal->business_title) — {{ $proposal->business_title }} @endif</option>
+                    @endforeach
+                </select>
+                <small class="form-text text-muted">Only proposals with status &quot;Agreement Signed&quot; are listed.</small>
+            </div>
+
+            <div id="youthProposalDetailPanel" class="d-none border rounded p-3 mb-3 bg-light">
+                <h6 class="text-success font-weight-bold mb-2">Selected Youth Proposal</h6>
+                <dl class="row small mb-0">
+                    <dt class="col-sm-4">Name of the Youth</dt>
+                    <dd class="col-sm-8" id="yp_detail_org">—</dd>
+                    <dt class="col-sm-4">Nature of the Business</dt>
+                    <dd class="col-sm-8" id="yp_detail_business">—</dd>
+                    <dt class="col-sm-4">Contact person</dt>
+                    <dd class="col-sm-8" id="yp_detail_contact">—</dd>
+                    <dt class="col-sm-4">Mobile phone</dt>
+                    <dd class="col-sm-8" id="yp_detail_mobile">—</dd>
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8" id="yp_detail_category">—</dd>
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8" id="yp_detail_status">—</dd>
+                </dl>
+            </div>
+
+            <h6 class="font-weight-bold text-secondary mb-2">Beneficiary &amp; proposal summary</h6>
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0" id="youthAgreementSummaryTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Beneficiary name</th>
+                            <th>Type of project</th>
+                            <th>Nature of the business</th>
+                            <th>Contact person</th>
+                            <th>Mobile phone</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="yas_cell_name"><span class="text-muted">Enter name with initials below</span></td>
+                            <td>Youth Enterprise</td>
+                            <td id="yas_cell_business">—</td>
+                            <td id="yas_cell_contact">—</td>
+                            <td id="yas_cell_mobile">—</td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script type="application/json" id="youth-proposals-data">@json($agreementSignedYouth)</script>
 
 <!-- ✅ 4P PROJECT SECTION -->
 <div id="eoiSection" class="d-none mt-3">
@@ -906,19 +962,6 @@ textarea:focus {
 
 
 <script>
-
-$(document).ready(function () {
-    // Fetch tank names from the API endpoint
-    $.get('/tanks', function (data) {
-        // Populate the dropdown menu with tank names
-        $.each(data, function (index, tank) {
-            $('#tankDropdown').append($('<option>', {
-                value: tank.tank_name,
-                text: tank.tank_name
-            }));
-        });
-    });
-});
 
 $(document).ready(function () {
     // Fetch ASC names from the API endpoint
@@ -1293,6 +1336,52 @@ document.getElementById("agriculture_livestock").addEventListener("change", func
         const youthField = document.getElementById('youthEnterpriseProjectName');
         const youthProposalSelect = document.getElementById('youth_proposal_id');
         const preselectedYouthProposalId = @json($preselectedYouthProposalId ?? null);
+        const proposalsEl = document.getElementById('youth-proposals-data');
+        let proposalsById = {};
+        if (proposalsEl) {
+            try {
+                const list = JSON.parse(proposalsEl.textContent || '[]');
+                list.forEach(function (p) { proposalsById[String(p.id)] = p; });
+            } catch (e) { proposalsById = {}; }
+        }
+
+        function esc(s) {
+            if (s == null || s === '') return '—';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        function updateYouthAgreementSummary() {
+            const id = youthProposalSelect && youthProposalSelect.value;
+            const panel = document.getElementById('youthProposalDetailPanel');
+            const p = id ? proposalsById[id] : null;
+            const nameInput = document.getElementById('name_with_initials');
+            const nameCell = document.getElementById('yas_cell_name');
+
+            if (p && panel) {
+                panel.classList.remove('d-none');
+                document.getElementById('yp_detail_org').textContent = p.organization_name || '—';
+                document.getElementById('yp_detail_business').textContent = p.business_title || '—';
+                document.getElementById('yp_detail_contact').textContent = p.contact_person || '—';
+                document.getElementById('yp_detail_mobile').textContent = p.mobile_phone || '—';
+                document.getElementById('yp_detail_category').textContent = p.category || '—';
+                document.getElementById('yp_detail_status').textContent = p.status || '—';
+                document.getElementById('yas_cell_business').textContent = p.business_title || p.organization_name || '—';
+                document.getElementById('yas_cell_contact').textContent = p.contact_person || '—';
+                document.getElementById('yas_cell_mobile').textContent = p.mobile_phone || '—';
+            } else if (panel) {
+                panel.classList.add('d-none');
+                document.getElementById('yas_cell_business').textContent = '—';
+                document.getElementById('yas_cell_contact').textContent = '—';
+                document.getElementById('yas_cell_mobile').textContent = '—';
+            }
+
+            if (nameCell) {
+                const nm = nameInput && nameInput.value.trim();
+                nameCell.innerHTML = nm ? esc(nm) : '<span class="text-muted">Enter name with initials below</span>';
+            }
+        }
 
         function toggleFields() {
             if (projectType.value === 'Youth Enterprise') {
@@ -1303,16 +1392,24 @@ document.getElementById("agriculture_livestock").addEventListener("change", func
         }
 
         projectType.addEventListener('change', toggleFields);
-        toggleFields(); // Run on page load
+        toggleFields();
 
-        // Pre-select Youth Enterprise and proposal when coming from "Add youth data"
+        if (youthProposalSelect) {
+            youthProposalSelect.addEventListener('change', updateYouthAgreementSummary);
+        }
+        const nameWithInitials = document.getElementById('name_with_initials');
+        if (nameWithInitials) {
+            nameWithInitials.addEventListener('input', updateYouthAgreementSummary);
+        }
+
         if (preselectedYouthProposalId && youthProposalSelect) {
             projectType.value = 'Youth Enterprise';
             $('#youthSection').removeClass('d-none');
             $('#youthEnterpriseProjectName').show();
             youthField.style.display = 'block';
-            youthProposalSelect.value = preselectedYouthProposalId;
+            youthProposalSelect.value = String(preselectedYouthProposalId);
         }
+        updateYouthAgreementSummary();
     });
 </script>
 
@@ -1320,5 +1417,6 @@ document.getElementById("agriculture_livestock").addEventListener("change", func
 
     </div>
     </div>
+@include('partials.sarp_tank_select2')
 </body>
 </html>

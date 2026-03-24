@@ -122,7 +122,8 @@ li.active {
 
     $is4P          = request()->is('expressions*') || request()->is('4p-training*');
 
-    $isAgroEnt     = request()->is('agro*');
+    // Keep Agro Enterprise separate from Agro Forest routes.
+    $isAgroEnt     = request()->is('agro') || request()->is('agro/*');
 
     $isNRM         = request()->is('nrmtraining*');
     $isFFS         = request()->is('ffs-training*');

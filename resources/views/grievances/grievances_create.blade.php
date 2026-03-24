@@ -165,7 +165,9 @@
                 </div>
                 <div class="form-group">
                     <label for="tank_name">Tank Name</label>
-                    <input type="text" name="tank_name" id="tank_name" class="form-control" required>
+                    <select name="tank_name" id="tank_name" class="form-control sarp-tank-select" required>
+                        <option value="">Select tank name</option>
+                    </select>
                 </div>
 
                 <div class="row">
@@ -208,5 +210,6 @@
         });
     });
 </script>
+@include('partials.sarp_tank_select2')
 </body>
 </html>

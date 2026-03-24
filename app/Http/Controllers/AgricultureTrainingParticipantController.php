@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AgricultureTraining;
 use App\Models\AgricultureTrainingParticipant;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -29,13 +30,16 @@ class AgricultureTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
-            ->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $femaleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
-            ->whereRaw('LOWER(gender) = ?', ['female'])->count();
+        $stats = TrainingParticipantStats::forProgram(
+            AgricultureTrainingParticipant::class,
+            'agriculture_training_id',
+            $agricultureTrainingId
+        );
 
-        return view('agriculture_training_participants.index', compact('agricultureTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('agriculture_training_participants.index', array_merge(
+            compact('agricultureTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 
     public function create($agriculture_training_id)
@@ -57,7 +61,7 @@ class AgricultureTrainingParticipantController extends Controller
         ]);
 
         $agricultureTraining = AgricultureTraining::findOrFail($agricultureTrainingId);
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         $agricultureTraining->agricultureTrainingParticipants()->create([
             'name' => $request->name,
@@ -95,7 +99,7 @@ class AgricultureTrainingParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = (int) ($row['Age'] ?? 0);
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
             $agricultureTraining->agricultureTrainingParticipants()->create([
                 'name' => $row['Name'] ?? '',
                 'nic' => $row['NIC'] ?? '',
@@ -158,11 +162,15 @@ class AgricultureTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
-            ->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $femaleCount = AgricultureTrainingParticipant::where('agriculture_training_id', $agricultureTrainingId)
-            ->whereRaw('LOWER(gender) = ?', ['female'])->count();
-        return view('agriculture_training_participants.index', compact('agricultureTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        $stats = TrainingParticipantStats::forProgram(
+            AgricultureTrainingParticipant::class,
+            'agriculture_training_id',
+            $agricultureTrainingId
+        );
+
+        return view('agriculture_training_participants.index', array_merge(
+            compact('agricultureTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 }

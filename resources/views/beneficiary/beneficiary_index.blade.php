@@ -1438,19 +1438,6 @@
         </div>
 
 
-<div class="row table-container">
-    <div class="col">
-        <table id="beneficiariesTable" class="table table-bordered table-sm">
-            <thead class="thead-light">
-                <!-- Table headers here -->
-            </thead>
-            <tbody>
-                <!-- Table rows here -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
         <div class="row table-container">
             <div class="col">
                 <div class="table-responsive">
@@ -1460,38 +1447,11 @@
                             <th scope="col">NIC Number</th>
                             <th scope="col">Name with Initials</th>
                             <th scope="col">Gender</th>
-                            <!-- <th scope="col">Date Of Birth</th> -->
-                            <!-- <th scope="col">Age</th> -->
-                            <th scope="col">Address</th>
                             <th scope="col">Phone Numbers</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Type of Project</th>
                             <th scope="col">Crop Name/<br/>Production Focus/<br/>Youth Proposal/<br/>Nutrition Program Name</th>
                             <th scope="col">Tank Name</th>
-                            <!-- <th scope="col">Education</th>
-                            <th scope="col">Bank Name</th>
-                            <th scope="col">Bank Branch</th>
-                            <th scope="col">Account Number</th>
-                            <th scope="col">Land Ownership (Total Extent)</th>
-                            <th scope="col">Proposed Cultivation Area</th>
-                            <th scope="col">Province</th>
-                            <th scope="col">District</th>
-                            <th scope="col">DS Division</th>
-                            <th scope="col">GN Division</th>
-                            <th scope="col">ASC</th>
-                            <th scope="col">Tank Name</th>
-                            <th scope="col">Cascade Name</th>
-                            <th scope="col">AI Division</th>
-                            <th scope="col">Latitude</th>
-                            <th scope="col">Longitude</th>
-                            <th scope="col">Number of Family Members</th>
-                            <th scope="col">Head of Householder Name</th>
-                            <th scope="col">Householder Number</th>
-                            <th scope="col">Income Source</th>
-                            <th scope="col">Average Income</th>
-                            <th scope="col">Monthly Household Expenses</th>
-                            <th scope="col">Household Level Assets Description</th>
-                            <th scope="col">Community-Based Organization</th>
-                            <th scope="col">Type of Water Resource</th>
-                            <th scope="col">Training Details Description</th> -->
                             <th scope="col">Actions</th>
                             <th scope="col">Edit/Delete</th>
                         </tr>
@@ -1504,6 +1464,22 @@
             $isDuplicate = isset($duplicateNics[$nic]) || ($converted && isset($duplicateNics[$converted]));
             $isOldNic = preg_match('/^(\d{2})(\d{3})(\d{4})[VXvx]?$/', $nic);
             $showDuplicates = request('duplicates');
+            $projectTypeKey = strtolower(trim((string) ($beneficiary->project_type ?? '')));
+            $projectTypeLabels = [
+                'resilience' => 'Resilience',
+                'youth' => 'Youth',
+                '4p' => '4P',
+                'nutrition' => 'Nutrition',
+            ];
+            $projectTypeDisplay = $projectTypeLabels[$projectTypeKey] ?? ($beneficiary->project_type ? ucfirst($beneficiary->project_type) : '—');
+            $addrLines = array_values(array_filter([
+                trim((string) ($beneficiary->gn_division_name ?? '')) !== '' ? 'GN Division: ' . $beneficiary->gn_division_name : null,
+                trim((string) ($beneficiary->ds_division_name ?? '')) !== '' ? 'DS Division: ' . $beneficiary->ds_division_name : null,
+                trim((string) ($beneficiary->district_name ?? '')) !== '' ? 'District: ' . $beneficiary->district_name : null,
+                trim((string) ($beneficiary->province_name ?? '')) !== '' ? 'Province: ' . $beneficiary->province_name : null,
+                trim((string) ($beneficiary->as_center ?? '')) !== '' ? 'ASC: ' . $beneficiary->as_center : null,
+            ]));
+            $hasStreet = trim((string) ($beneficiary->address ?? '')) !== '';
         @endphp
         <tr>
             <td>
@@ -1523,38 +1499,21 @@
 
                             <td>{{ $beneficiary->name_with_initials }}</td>
                             <td>{{ $beneficiary->gender }}</td>
-                            <!-- <td>{{ $beneficiary->dob }}</td> -->
-                            <!-- <td>{{ $beneficiary->age }}</td> -->
-                            <td>{{ $beneficiary->address }}</td>
-                            <td>{{ $beneficiary->phone }}</td>
-                            <td>{{ $beneficiary->input3 }}</td>
-                            <td>{{ $beneficiary->tank_name }}</td>
-                            <!-- <td>{{ $beneficiary->education }}</td>
-                            <td>{{ $beneficiary->bank_name }}</td>
-                            <td>{{ $beneficiary->bank_branch }}</td>
-                            <td>{{ $beneficiary->account_number }}</td>
-                            <td>{{ $beneficiary->land_ownership_total_extent }}</td>
-                            <td>{{ $beneficiary->land_ownership_proposed_cultivation_area }}</td>
-                            <td>{{ $beneficiary->province_name }}</td>
-                            <td>{{ $beneficiary->district_name }}</td>
-                            <td>{{ $beneficiary->ds_division_name }}</td>
-                            <td>{{ $beneficiary->gn_division_name }}</td>
-                            <td>{{ $beneficiary->tank_name }}</td>
-                            <td>{{ $beneficiary->as_center }}</td>
-                            <td>{{ $beneficiary->cascade_name }}</td>
-                            <td>{{ $beneficiary->ai_division }}</td>
-                            <td>{{ $beneficiary->latitude }}</td>
-                            <td>{{ $beneficiary->longitude }}</td>
-                            <td>{{ $beneficiary->number_of_family_members }}</td>
-                            <td>{{ $beneficiary->head_of_householder_name }}</td>
-                            <td>{{ $beneficiary->householder_number }}</td>
-                            <td>{{ $beneficiary->income_source }}</td>
-                            <td>{{ $beneficiary->average_income }}</td>
-                            <td>{{ $beneficiary->monthly_household_expenses }}</td>
-                            <td>{{ $beneficiary->household_level_assets_description }}</td>
-                            <td>{{ $beneficiary->community_based_organization }}</td>
-                            <td>{{ $beneficiary->type_of_water_resource }}</td>
-                            <td>{{ $beneficiary->training_details_description }}</td> -->
+                            <td>{{ $beneficiary->phone ?: '—' }}</td>
+                            <td class="text-start beneficiary-address-cell" style="white-space: normal; max-width: 280px;">
+                                @if ($hasStreet)
+                                    <div>{{ $beneficiary->address }}</div>
+                                @endif
+                                @foreach ($addrLines as $line)
+                                    <div class="small text-muted" style="color: #4a5568 !important;">{{ $line }}</div>
+                                @endforeach
+                                @if (!$hasStreet && count($addrLines) === 0)
+                                    —
+                                @endif
+                            </td>
+                            <td>{{ $projectTypeDisplay }}</td>
+                            <td>{{ $beneficiary->input3 ?: '—' }}</td>
+                            <td>{{ $beneficiary->tank_name ?: '—' }}</td>
                             <td class="buttonline">
                                 <a href="{{ route('beneficiary.show', $beneficiary->id) }}" class="btn btn-info btn-sm">View</a>
                                 @if(auth()->user()->hasPermission('family', 'add'))

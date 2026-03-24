@@ -817,26 +817,107 @@
                     </div>
                                     </div>
 
-                <!-- Project Information: Type of Project, Agriculture/Livestock, Crop Category, Crop Name -->
+                @php
+                    $rawProjectType = trim((string) ($beneficiary->project_type ?? ''));
+                    $pt = strtolower($rawProjectType);
+                    $isResilience = in_array($pt, ['resilience project', 'resilience'], true);
+                    $isYouth = in_array($pt, ['youth enterprise', 'youth'], true);
+                    $is4p = in_array($pt, ['4p projects', '4p'], true);
+                    $isNutrition = in_array($pt, ['nutrition programs', 'nutrition'], true);
+                    $isTank = $pt === 'tank beneficiary';
+                    if ($isResilience) {
+                        $projectTypeLabel = 'Resilience Project';
+                    } elseif ($isYouth) {
+                        $projectTypeLabel = 'Youth Enterprise';
+                    } elseif ($is4p) {
+                        $projectTypeLabel = '4P Projects';
+                    } elseif ($isNutrition) {
+                        $projectTypeLabel = 'Nutrition Programs';
+                    } elseif ($isTank) {
+                        $projectTypeLabel = 'Tank Beneficiary';
+                    } elseif ($rawProjectType !== '') {
+                        $projectTypeLabel = $rawProjectType;
+                    } else {
+                        $projectTypeLabel = '—';
+                    }
+                    $input1Norm = strtolower(trim((string) ($beneficiary->input1 ?? '')));
+                    if ($input1Norm === 'agriculture') {
+                        $agriLiveDisplay = 'Agriculture';
+                    } elseif ($input1Norm === 'livestock') {
+                        $agriLiveDisplay = 'Livestock';
+                    } else {
+                        $agriLiveDisplay = $beneficiary->input1 ? ucfirst((string) $beneficiary->input1) : null;
+                    }
+                    $cropCategoryDisplay = (strtolower(trim((string) ($beneficiary->input2 ?? ''))) === 'others')
+                        ? 'Cereals/Legumes'
+                        : ($beneficiary->input2 ?: null);
+                    $youthProjectTitle = optional($beneficiary->youthProposal)->business_title
+                        ?? optional($beneficiary->youthProposal)->organization_name
+                        ?? ($beneficiary->input3 ?: null);
+                    $eoiTitle = $beneficiary->eoi_business_title ?? $beneficiary->input2 ?? null;
+                    $eoiCategory = $beneficiary->eoi_category ?? $beneficiary->input3 ?? null;
+                    $nutritionName = $beneficiary->input3 ?: null;
+                @endphp
+                <!-- Project Information: same rules as create/edit — only relevant fields (read-only text, no dropdowns) -->
                 <div class="project-info-section">
                     <h5><i class="fas fa-project-diagram"></i>Project Information</h5>
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Type of Project</div>
-                            <div class="info-value">{{ ucfirst($beneficiary->project_type ?? 'N/A') }}</div>
+                            <div class="info-value">{{ $projectTypeLabel }}</div>
                         </div>
-                        <div class="info-item">
-                            <div class="info-label">Agriculture/Livestock</div>
-                            <div class="info-value">{{ ucfirst($beneficiary->input1 ?? 'N/A') }}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Crop Category</div>
-                            <div class="info-value">{{ (strtolower(trim($beneficiary->input2 ?? '')) === 'others') ? 'Cereals/Legumes' : ($beneficiary->input2 ?? $beneficiary->eoi_business_title ?? 'N/A') }}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Crop Name</div>
-                            <div class="info-value">{{ $beneficiary->input3 ?? $beneficiary->eoi_category ?? 'N/A' }}</div>
-                        </div>
+
+                        @if ($isResilience)
+                            @if ($agriLiveDisplay)
+                                <div class="info-item">
+                                    <div class="info-label">Agriculture/Livestock</div>
+                                    <div class="info-value">{{ $agriLiveDisplay }}</div>
+                                </div>
+                            @endif
+                            @if (strtolower(trim((string) ($beneficiary->input1 ?? ''))) === 'agriculture')
+                                <div class="info-item">
+                                    <div class="info-label">Crop Category</div>
+                                    <div class="info-value">{{ $cropCategoryDisplay ?: '—' }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Crop Name</div>
+                                    <div class="info-value">{{ $beneficiary->input3 ?: '—' }}</div>
+                                </div>
+                            @elseif (strtolower(trim((string) ($beneficiary->input1 ?? ''))) === 'livestock')
+                                <div class="info-item">
+                                    <div class="info-label">Livestock Type</div>
+                                    <div class="info-value">{{ $beneficiary->input2 ?: '—' }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Production Focus</div>
+                                    <div class="info-value">{{ $beneficiary->input3 ?: '—' }}</div>
+                                </div>
+                            @endif
+                        @elseif ($isYouth)
+                            <div class="info-item">
+                                <div class="info-label">Youth Enterprise (Business Title)</div>
+                                <div class="info-value">{{ $youthProjectTitle ?: '—' }}</div>
+                            </div>
+                        @elseif ($is4p)
+                            <div class="info-item">
+                                <div class="info-label">4P Project — Business Concept Title</div>
+                                <div class="info-value">{{ $eoiTitle ?: '—' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">4P Project Category</div>
+                                <div class="info-value">{{ $eoiCategory ?: '—' }}</div>
+                            </div>
+                        @elseif ($isNutrition)
+                            <div class="info-item">
+                                <div class="info-label">Nutrition Program Name</div>
+                                <div class="info-value">{{ $nutritionName ?: '—' }}</div>
+                            </div>
+                        @elseif ($isTank)
+                            <div class="info-item">
+                                <div class="info-label">Tank Name</div>
+                                <div class="info-value">{{ $beneficiary->tank_name ?: '—' }}</div>
+                            </div>
+                        @endif
                     </div>
                 </div>
                                     </div>

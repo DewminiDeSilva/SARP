@@ -10,83 +10,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-
-    <style>
-            .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            padding: 10px 50px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-back img {
-            width: 45px;
-            height: auto;
-            margin-right: 5px;
-            transition: transform 0.3s ease;
-            background: none;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-back .btn-text {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            right: 25px;
-            background-color: #1e8e1e;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 0;
-        }
-
-        .btn-back:hover .btn-text {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-
-        .btn-back:hover img {
-            transform: translateX(-50px);
-        }
-
-
-        </style>
-    <style>
-        .frame {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-        }
-        .left-column {
-            flex: 0 0 20%;
-            border-right: 1px solid #dee2e6;
-        }
-        .right-column {
-            flex: 0 0 80%;
-            padding: 20px;
-        }
-       
-        .view-button { color: white; background-color: #60C267; }
-        .view-button:hover { border-color: green; }
-        .sidebar.hidden { transform: translateX(-100%); }
-        .left-column.hidden { display: none; }
-        .right-column { transition: flex 0.3s ease, padding 0.3s ease; }
-    </style>
+    @include('partials.sarp_green_theme')
 
     
 </head>
@@ -111,7 +35,7 @@
             </a>
         </div> -->
          <div class="d-flex align-items-center mb-3">
-            <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
+            <button type="button" id="sidebarToggle" class="btn mr-2"><i class="fas fa-bars"></i></button>
             <a href="javascript:void(0);" onclick="window.history.back();" class="btn-back">
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
@@ -119,15 +43,15 @@
 
 
         <div class="center-heading text-center">
-            <h1 style="font-size: 2.5rem; color: green;">Registered Beneficiaries - {{  $eoi->business_title }} ({{ $eoi->category }})</h1>
+            <h1 class="sarp-page-title">Registered Beneficiaries - {{  $eoi->business_title }} ({{ $eoi->category }})</h1>
         </div>
 
         @if ($beneficiaries->isEmpty())
-            <div class="alert alert-warning mt-4">No beneficiaries found for this EOI title and category.</div>
+            <div class="alert alert-sarp-muted mt-4">No beneficiaries found for this EOI title and category.</div>
         @else
             <div class="table-responsive mt-4">
-                <table class="table table-bordered table-striped">
-                    <thead class="thead-light">
+                <table class="table table-bordered table-striped table-sarp-green">
+                    <thead>
                         <tr>
                             <th>NIC</th>
                             <th>Name with Initials</th>
@@ -147,10 +71,10 @@
                             <td>{{ $beneficiary->eoi_category }}</td>
                             <td>
                                 <a href="{{ route('eoi_form.create', $beneficiary->id) }}" class="btn btn-sm btn-success">
-                                <i class="fas fa-plus-circle"></i> Add EOI Data
+                                <i class="fas fa-plus-circle"></i> Add Data
                                 </a>
                                         @if($beneficiary->eoiForm)
-            <a href="{{ route('eoi_form.show', $beneficiary->id) }}" class="btn btn-sm btn-info">
+            <a href="{{ route('eoi_form.show', $beneficiary->id) }}" class="btn btn-sm btn-sarp-outline ml-1">
                 <i class="fas fa-eye"></i> View EOI Data
             </a>
         @endif

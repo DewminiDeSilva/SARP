@@ -27,7 +27,7 @@
     <div class="right-column" style="padding:70px;">
         <div class="d-flex align-items-center mb-3">
             <button id="sidebarToggle" class="btn btn-secondary mr-2"><i class="fas fa-bars"></i></button>
-            <a href="{{ route('youth-proposals.beneficiaries', $proposal->id) }}" class="btn-back" style="background-color: #126926;">
+            <a href="{{ route('youth-proposal.agreementSigned') }}" class="btn-back" style="background-color: #126926;">
                 <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
             </a>
         </div>

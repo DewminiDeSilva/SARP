@@ -416,7 +416,7 @@
                 <div class="col">
                     <div class="dropdown">
                         <label for="tank" class="form-label dropdown-label">Select Tank Name</label>
-                        <select class="form-control btn btn-success" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required>
+                        <select class="form-control btn btn-success sarp-tank-select" id="tankDropdown" name="tank_name" data-bs-toggle="dropdown" aria-expanded="false" required>
                             <option value="">Select Tank</option>
                         </select>
                     </div>
@@ -538,20 +538,6 @@
     <!--form script-->
 
     <script>
-
-        $(document).ready(function () {
-            // Fetch tank names from the API endpoint
-            $.get('/tanks', function (data) {
-                // console.log(data);
-                // Populate the dropdown menu with tank names
-                $.each(data, function (index, tank) {
-                    $('#tankDropdown').append($('<option>', {
-                        value: tank.tank_name,
-                        text: tank.tank_name
-                    }));
-                });
-            });
-        });
 
         $(document).ready(function () {
             // Fetch ASC names from the API endpoint
@@ -859,8 +845,7 @@
     });
 </script>
 
-
-
+@include('partials.sarp_tank_select2')
 
 </body>
 </html>

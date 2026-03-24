@@ -219,11 +219,11 @@
                     <table class="table table-bordered">
                         <thead class="thead-light">
                             <tr>
-                                <th>NIC</th>
+                                <th>NIC Number</th>
                                 <th>Name with Initials</th>
                                 <th>Gender</th>
                                 <th>Address</th>
-                                <th>Phone</th>
+                                <th>Phone Numbers</th>
                                 <th>Tank Name</th>
                                 <th>Action</th>
                             </tr>

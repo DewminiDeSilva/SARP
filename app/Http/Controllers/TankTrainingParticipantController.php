@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TankTraining;
 use App\Models\TankTrainingParticipant;
+use App\Support\TrainingParticipantStats;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Writer;
@@ -29,11 +30,16 @@ class TankTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'male')->count();
-        $femaleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'female')->count();
+        $stats = TrainingParticipantStats::forProgram(
+            TankTrainingParticipant::class,
+            'tank_training_id',
+            $tankTrainingId
+        );
 
-        return view('tank_training_participants.index', compact('tankTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        return view('tank_training_participants.index', array_merge(
+            compact('tankTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 
     public function create($tank_training_id)
@@ -55,7 +61,7 @@ class TankTrainingParticipantController extends Controller
         ]);
 
         $tankTraining = TankTraining::findOrFail($tankTrainingId);
-        $youth = ($request->age >= 18 && $request->age <= 35) ? 'Youth' : 'Not Youth';
+        $youth = ($request->age >= 18 && $request->age <= 40) ? 'Youth' : 'Not Youth';
 
         $tankTraining->tankTrainingParticipants()->create([
             'name' => $request->name,
@@ -93,7 +99,7 @@ class TankTrainingParticipantController extends Controller
 
         foreach ($csv as $row) {
             $age = $row['Age'];
-            $youth = ($age >= 18 && $age <= 35) ? 'Youth' : 'Not Youth';
+            $youth = ($age >= 18 && $age <= 40) ? 'Youth' : 'Not Youth';
             $tankTraining->tankTrainingParticipants()->create([
                 'name' => $row['Name'],
                 'nic' => $row['NIC'],
@@ -156,9 +162,15 @@ class TankTrainingParticipantController extends Controller
             ->paginate($entries)
             ->appends(['search' => $search, 'entries' => $entries]);
 
-        $totalParticipants = $participants->total();
-        $maleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'male')->count();
-        $femaleCount = TankTrainingParticipant::where('tank_training_id', $tankTrainingId)->where('gender', 'female')->count();
-        return view('tank_training_participants.index', compact('tankTraining', 'participants', 'totalParticipants', 'maleCount', 'femaleCount', 'search', 'entries'));
+        $stats = TrainingParticipantStats::forProgram(
+            TankTrainingParticipant::class,
+            'tank_training_id',
+            $tankTrainingId
+        );
+
+        return view('tank_training_participants.index', array_merge(
+            compact('tankTraining', 'participants', 'search', 'entries'),
+            $stats
+        ));
     }
 }
