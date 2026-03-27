@@ -468,7 +468,7 @@
                             <tr>
                                 <td><input type="text" name="project_coverage[0][area]" class="form-control"></td>
                                 <td><input type="number" name="project_coverage[0][farmers]" class="form-control"></td>
-                                <td><input type="number" name="project_coverage[0][acreage]" class="form-control"></td>
+                                <td><input type="number" name="project_coverage[0][acreage]" class="form-control" step="0.01" min="0" inputmode="decimal"></td>
                                 <td><button type="button" class="btn yp-btn-remove remove-coverage">−</button></td>
                             </tr>
                         </tbody>
@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const tbody = document.getElementById('coverage-table');
         const idx = tbody.querySelectorAll('tr').length;
         const tr = document.createElement('tr');
-        tr.innerHTML = '<td><input type="text" name="project_coverage[' + idx + '][area]" class="form-control"></td><td><input type="number" name="project_coverage[' + idx + '][farmers]" class="form-control"></td><td><input type="number" name="project_coverage[' + idx + '][acreage]" class="form-control"></td><td><button type="button" class="btn yp-btn-remove remove-coverage">−</button></td>';
+        tr.innerHTML = '<td><input type="text" name="project_coverage[' + idx + '][area]" class="form-control"></td><td><input type="number" name="project_coverage[' + idx + '][farmers]" class="form-control"></td><td><input type="number" name="project_coverage[' + idx + '][acreage]" class="form-control" step="0.01" min="0" inputmode="decimal"></td><td><button type="button" class="btn yp-btn-remove remove-coverage">−</button></td>';
         tbody.appendChild(tr);
     });
     document.getElementById('coverage-table').addEventListener('click', function (e) {
