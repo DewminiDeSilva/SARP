@@ -10,6 +10,8 @@ use League\Csv\Reader;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
+use App\Support\NicYouth;
 
 class BeneficiaryController extends Controller
 {
@@ -77,13 +79,22 @@ class BeneficiaryController extends Controller
         ->groupBy('input3')
         ->get();
 
-    $tankBeneficiarySummary = Beneficiary::where('project_type', 'Tank Beneficiary')
-        ->where('input3', 'like', '%'.$search.'%')
-        ->select('input3', DB::raw('COUNT(*) as count'))
-        ->groupBy('input3')
+    $maleBeneficiaryCount = Beneficiary::whereRaw("LOWER(TRIM(COALESCE(gender, ''))) = ?", ['male'])->count();
+    $femaleBeneficiaryCount = Beneficiary::whereRaw("LOWER(TRIM(COALESCE(gender, ''))) = ?", ['female'])->count();
+    $youthBeneficiaryCount = Beneficiary::query()
+        ->pluck('nic')
+        ->filter(fn ($nic) => NicYouth::isYouthByNic($nic))
+        ->count();
+    $notYouthBeneficiaryCount = Beneficiary::query()
+        ->pluck('nic')
+        ->filter(fn ($nic) => NicYouth::isNotYouthByNic($nic))
+        ->count();
+    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
+        ->groupBy('tank_name')
         ->get();
+
     $tankBeneficiaryCount = Beneficiary::where('project_type', 'Tank Beneficiary')->count();
-    $youthBeneficiaryCount = Beneficiary::where('project_type', 'Youth Enterprise')->count();
+    $youthProgrammeBeneficiaryCount = Beneficiary::whereIn('project_type', ['Youth Enterprise', 'youth'])->count();
     $fourpBeneficiaryCount = Beneficiary::whereIn('project_type', ['4P Projects', '4p'])->count();
     $resilienceAgricultureCount = Beneficiary::where('project_type', 'Resilience Project')
         ->where('input1', 'agriculture')
@@ -92,24 +103,29 @@ class BeneficiaryController extends Controller
         ->where('input1', 'livestock')
         ->count();
 
-    $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
-        ->groupBy('tank_name')
-        ->get();
-
     return view('beneficiary.beneficiary_index', compact(
         'beneficiaries',
         'search',
         'input3Summary',
-        'tankBeneficiarySummary',
-        'tankBeneficiaryCount',
+        'maleBeneficiaryCount',
+        'femaleBeneficiaryCount',
         'youthBeneficiaryCount',
+        'notYouthBeneficiaryCount',
+        'tankNameSummary',
+        'tankBeneficiaryCount',
+        'youthProgrammeBeneficiaryCount',
         'fourpBeneficiaryCount',
         'resilienceAgricultureCount',
         'resilienceLivestockCount',
-        'tankNameSummary',
         'allBeneficiaries',
         'convertedMap'
-    ));
+    ) + [
+        'filterTankOptions' => collect(),
+        'filterDsOptions' => collect(),
+        'filterAscOptions' => collect(),
+        'filterGnOptions' => collect(),
+        'activeFilterCount' => 0,
+    ]);
 }
         
     
@@ -309,7 +325,7 @@ class BeneficiaryController extends Controller
         }
 
         $message = empty($parts) ? 'No valid rows to import.' : implode('. ', $parts);
-        return redirect()->back()->with('success', $message);
+        return redirect()->back()->with('success', $message)->with('swal_title', 'CSV upload');
     }
      
 
@@ -394,62 +410,113 @@ public function generateCsv()
     ]);
 }
 
-public function index(Request $request)
+    /**
+     * Apply free-text search to a beneficiary query (same fields as index).
+     */
+    private function applyBeneficiaryIndexSearch(Builder $query, string $search): void
+    {
+        if ($search === '') {
+            return;
+        }
+        $query->where(function ($q) use ($search) {
+            $q->where('nic', 'like', '%'.$search.'%')
+                ->orWhere('name_with_initials', 'like', '%'.$search.'%')
+                ->orWhere('gender', '=', $search)
+                ->orWhere('dob', 'like', '%'.$search.'%')
+                ->orWhere('age', 'like', '%'.$search.'%')
+                ->orWhere('address', 'like', '%'.$search.'%')
+                ->orWhere('email', 'like', '%'.$search.'%')
+                ->orWhere('phone', 'like', '%'.$search.'%')
+                ->orWhere('income_source', 'like', '%'.$search.'%')
+                ->orWhere('average_income', 'like', '%'.$search.'%')
+                ->orWhere('monthly_household_expenses', 'like', '%'.$search.'%')
+                ->orWhere('number_of_family_members', 'like', '%'.$search.'%')
+                ->orWhere('education', 'like', '%'.$search.'%')
+                ->orWhere('land_ownership_total_extent', 'like', '%'.$search.'%')
+                ->orWhere('land_ownership_proposed_cultivation_area', 'like', '%'.$search.'%')
+                ->orWhere('province_name', 'like', '%'.$search.'%')
+                ->orWhere('district_name', 'like', '%'.$search.'%')
+                ->orWhere('ds_division_name', 'like', '%'.$search.'%')
+                ->orWhere('gn_division_name', 'like', '%'.$search.'%')
+                ->orWhere('as_center', 'like', '%'.$search.'%')
+                ->orWhere('cascade_name', 'like', '%'.$search.'%')
+                ->orWhere('ai_division', 'like', '%'.$search.'%')
+                ->orWhere('tank_name', 'like', '%'.$search.'%')
+                ->orWhere('bank_name', 'like', '%'.$search.'%')
+                ->orWhere('bank_branch', 'like', '%'.$search.'%')
+                ->orWhere('account_number', 'like', '%'.$search.'%')
+                ->orWhere('head_of_householder_name', 'like', '%'.$search.'%')
+                ->orWhere('householder_number', 'like', '%'.$search.'%')
+                ->orWhere('household_level_assets_description', 'like', '%'.$search.'%')
+                ->orWhere('community_based_organization', 'like', '%'.$search.'%')
+                ->orWhere('type_of_water_resource', 'like', '%'.$search.'%')
+                ->orWhere('training_details_description', 'like', '%'.$search.'%')
+                ->orWhere('latitude', 'like', '%'.$search.'%')
+                ->orWhere('longitude', 'like', '%'.$search.'%')
+                ->orWhere('input1', 'like', '%'.$search.'%')
+                ->orWhere('input2', 'like', '%'.$search.'%')
+                ->orWhere('input3', 'like', '%'.$search.'%')
+                ->orWhere('project_type', 'like', '%'.$search.'%');
+        });
+    }
+
+    /**
+     * Table filters: tank name, programme type, DS division, ASC, GN division.
+     */
+    private function applyBeneficiaryTableFilters(Builder $query, Request $request): void
+    {
+        if ($request->filled('filter_tank')) {
+            $query->where('tank_name', $request->get('filter_tank'));
+        }
+
+        $cat = $request->get('filter_category');
+        if ($cat === 'tank_beneficiary') {
+            $query->where('project_type', 'Tank Beneficiary');
+        } elseif ($cat === 'youth') {
+            $query->whereIn('project_type', ['Youth Enterprise', 'youth']);
+        } elseif ($cat === '4p') {
+            $query->whereIn('project_type', ['4P Projects', '4p']);
+        } elseif ($cat === 'resilience_agriculture') {
+            $query->where('project_type', 'Resilience Project')->where('input1', 'agriculture');
+        } elseif ($cat === 'resilience_livestock') {
+            $query->where('project_type', 'Resilience Project')->where('input1', 'livestock');
+        }
+
+        if ($request->filled('filter_ds')) {
+            $query->where('ds_division_name', $request->get('filter_ds'));
+        }
+        if ($request->filled('filter_asc')) {
+            $query->where('as_center', $request->get('filter_asc'));
+        }
+        if ($request->filled('filter_gn')) {
+            $query->where('gn_division_name', $request->get('filter_gn'));
+        }
+    }
+
+    /**
+     * Base query for index list and summaries (search + duplicates + table filters).
+     */
+    private function buildBeneficiaryIndexBaseQuery(Request $request, array $duplicateNICs): Builder
+    {
+        $query = Beneficiary::query();
+        $this->applyBeneficiaryIndexSearch($query, (string) $request->get('search', ''));
+        if ($request->get('duplicates')) {
+            $query->whereIn('id', $duplicateNICs);
+        }
+        $this->applyBeneficiaryTableFilters($query, $request);
+
+        return $query;
+    }
+
+    public function index(Request $request)
     {
         $search = $request->get('search', '');
         $entries = $request->get('entries', 100);
         $showDuplicates = $request->get('duplicates');
 
-        $query = Beneficiary::query();
-
-        // Apply search filters if provided
-        if ($search !== '') {
-            $query->where(function ($q) use ($search) {
-                $q->where('nic', 'like', '%'.$search.'%')
-                    ->orWhere('name_with_initials', 'like', '%'.$search.'%')
-                    ->orWhere('gender', '=', $search)
-                    ->orWhere('dob', 'like', '%'.$search.'%')
-                    ->orWhere('age', 'like', '%'.$search.'%')
-                    ->orWhere('address', 'like', '%'.$search.'%')
-                    ->orWhere('email', 'like', '%'.$search.'%')
-                    ->orWhere('phone', 'like', '%'.$search.'%')
-                    ->orWhere('income_source', 'like', '%'.$search.'%')
-                    ->orWhere('average_income', 'like', '%'.$search.'%')
-                    ->orWhere('monthly_household_expenses', 'like', '%'.$search.'%')
-                    ->orWhere('number_of_family_members', 'like', '%'.$search.'%')
-                    ->orWhere('education', 'like', '%'.$search.'%')
-                    ->orWhere('land_ownership_total_extent', 'like', '%'.$search.'%')
-                    ->orWhere('land_ownership_proposed_cultivation_area', 'like', '%'.$search.'%')
-                    ->orWhere('province_name', 'like', '%'.$search.'%')
-                    ->orWhere('district_name', 'like', '%'.$search.'%')
-                    ->orWhere('ds_division_name', 'like', '%'.$search.'%')
-                    ->orWhere('gn_division_name', 'like', '%'.$search.'%')
-                    ->orWhere('as_center', 'like', '%'.$search.'%')
-                    ->orWhere('cascade_name', 'like', '%'.$search.'%')
-                    ->orWhere('ai_division', 'like', '%'.$search.'%')
-                    ->orWhere('tank_name', 'like', '%'.$search.'%')
-                    ->orWhere('bank_name', 'like', '%'.$search.'%')
-                    ->orWhere('bank_branch', 'like', '%'.$search.'%')
-                    ->orWhere('account_number', 'like', '%'.$search.'%')
-                    ->orWhere('head_of_householder_name', 'like', '%'.$search.'%')
-                    ->orWhere('householder_number', 'like', '%'.$search.'%')
-                    ->orWhere('household_level_assets_description', 'like', '%'.$search.'%')
-                    ->orWhere('community_based_organization', 'like', '%'.$search.'%')
-                    ->orWhere('type_of_water_resource', 'like', '%'.$search.'%')
-                    ->orWhere('training_details_description', 'like', '%'.$search.'%')
-                    ->orWhere('latitude', 'like', '%'.$search.'%')
-                    ->orWhere('longitude', 'like', '%'.$search.'%')
-                    ->orWhere('input1', 'like', '%'.$search.'%')
-                    ->orWhere('input2', 'like', '%'.$search.'%')
-                    ->orWhere('input3', 'like', '%'.$search.'%')
-                    ->orWhere('project_type', 'like', '%'.$search.'%');
-            });
-        }
-
         // Get all beneficiaries (for duplicate detection)
         $allBeneficiaries = Beneficiary::all();
 
-        // Map for tracking NICs and converted NICs
         $nicMap = [];
         $convertedMap = [];
 
@@ -468,7 +535,6 @@ public function index(Request $request)
             }
         }
 
-        // Find all duplicate NICs
         $duplicateNICs = [];
         foreach ($nicMap as $nic => $ids) {
             if (count($ids) > 1) {
@@ -478,44 +544,120 @@ public function index(Request $request)
             }
         }
 
-        // Filter only duplicates if requested
-        if ($showDuplicates) {
-            $query->whereIn('id', $duplicateNICs);
-        }
+        $baseQuery = $this->buildBeneficiaryIndexBaseQuery($request, $duplicateNICs);
+        $beneficiaries = $baseQuery->clone()->latest()->paginate($entries)->appends($request->query());
 
-        $beneficiaries = $query->latest()->paginate($entries)->appends($request->query());
+        $summaryBase = $this->buildBeneficiaryIndexBaseQuery($request, $duplicateNICs);
 
-        $input3Summary = Beneficiary::select('input3', DB::raw('COUNT(*) as count'))
-                                    ->groupBy('input3')->get();
-        $tankBeneficiarySummary = Beneficiary::where('project_type', 'Tank Beneficiary')
-                                    ->select('input3', DB::raw('COUNT(*) as count'))
-                                    ->groupBy('input3')->get();
-        $tankBeneficiaryCount = Beneficiary::where('project_type', 'Tank Beneficiary')->count();
-        $youthBeneficiaryCount = Beneficiary::where('project_type', 'Youth Enterprise')->count();
-        $fourpBeneficiaryCount = Beneficiary::whereIn('project_type', ['4P Projects', '4p'])->count();
-        $resilienceAgricultureCount = Beneficiary::where('project_type', 'Resilience Project')
+        $input3Summary = $summaryBase->clone()
+            ->select('input3', DB::raw('COUNT(*) as count'))
+            ->groupBy('input3')
+            ->get();
+
+        $youthBeneficiaryCount = $summaryBase->clone()
+            ->pluck('nic')
+            ->filter(fn ($nic) => NicYouth::isYouthByNic($nic))
+            ->count();
+        $notYouthBeneficiaryCount = $summaryBase->clone()
+            ->pluck('nic')
+            ->filter(fn ($nic) => NicYouth::isNotYouthByNic($nic))
+            ->count();
+        $maleBeneficiaryCount = $summaryBase->clone()
+            ->whereRaw("LOWER(TRIM(COALESCE(gender, ''))) = ?", ['male'])
+            ->count();
+        $femaleBeneficiaryCount = $summaryBase->clone()
+            ->whereRaw("LOWER(TRIM(COALESCE(gender, ''))) = ?", ['female'])
+            ->count();
+
+        $tankNameSummary = $summaryBase->clone()
+            ->select('tank_name', DB::raw('COUNT(*) as count'))
+            ->groupBy('tank_name')
+            ->get();
+
+        $tankBeneficiaryCount = $summaryBase->clone()->where('project_type', 'Tank Beneficiary')->count();
+        $youthProgrammeBeneficiaryCount = $summaryBase->clone()
+            ->whereIn('project_type', ['Youth Enterprise', 'youth'])
+            ->count();
+        $fourpBeneficiaryCount = $summaryBase->clone()
+            ->whereIn('project_type', ['4P Projects', '4p'])
+            ->count();
+        $resilienceAgricultureCount = $summaryBase->clone()
+            ->where('project_type', 'Resilience Project')
             ->where('input1', 'agriculture')
             ->count();
-        $resilienceLivestockCount = Beneficiary::where('project_type', 'Resilience Project')
+        $resilienceLivestockCount = $summaryBase->clone()
+            ->where('project_type', 'Resilience Project')
             ->where('input1', 'livestock')
             ->count();
 
-        $tankNameSummary = Beneficiary::select('tank_name', DB::raw('COUNT(*) as count'))
-                                    ->groupBy('tank_name')->get();
+        $filterTankOptions = Beneficiary::query()
+            ->whereNotNull('tank_name')
+            ->where('tank_name', '!=', '')
+            ->distinct()
+            ->orderBy('tank_name')
+            ->pluck('tank_name');
+
+        $filterDsOptions = Beneficiary::query()
+            ->whereNotNull('ds_division_name')
+            ->where('ds_division_name', '!=', '')
+            ->distinct()
+            ->orderBy('ds_division_name')
+            ->pluck('ds_division_name');
+
+        $ascScope = Beneficiary::query();
+        if ($request->filled('filter_ds')) {
+            $ascScope->where('ds_division_name', $request->get('filter_ds'));
+        }
+        $filterAscOptions = $ascScope->clone()
+            ->whereNotNull('as_center')
+            ->where('as_center', '!=', '')
+            ->distinct()
+            ->orderBy('as_center')
+            ->pluck('as_center');
+
+        $gnScope = Beneficiary::query();
+        if ($request->filled('filter_ds')) {
+            $gnScope->where('ds_division_name', $request->get('filter_ds'));
+        }
+        if ($request->filled('filter_asc')) {
+            $gnScope->where('as_center', $request->get('filter_asc'));
+        }
+        $filterGnOptions = $gnScope->clone()
+            ->whereNotNull('gn_division_name')
+            ->where('gn_division_name', '!=', '')
+            ->distinct()
+            ->orderBy('gn_division_name')
+            ->pluck('gn_division_name');
+
+        $activeFilterCount = collect([
+            $request->filled('filter_tank'),
+            $request->filled('filter_category'),
+            $request->filled('filter_ds'),
+            $request->filled('filter_asc'),
+            $request->filled('filter_gn'),
+        ])->filter()->count();
 
         return view('beneficiary.beneficiary_index', compact(
             'beneficiaries',
             'allBeneficiaries',
             'input3Summary',
-            'tankBeneficiarySummary',
-            'tankBeneficiaryCount',
+            'maleBeneficiaryCount',
+            'femaleBeneficiaryCount',
             'youthBeneficiaryCount',
+            'notYouthBeneficiaryCount',
+            'tankNameSummary',
+            'tankBeneficiaryCount',
+            'youthProgrammeBeneficiaryCount',
             'fourpBeneficiaryCount',
             'resilienceAgricultureCount',
             'resilienceLivestockCount',
-            'tankNameSummary',
             'convertedMap',
-            'duplicateNICs'
+            'duplicateNICs',
+            'filterTankOptions',
+            'filterDsOptions',
+            'filterAscOptions',
+            'filterGnOptions',
+            'activeFilterCount'
         ));
     }
 
@@ -787,21 +929,39 @@ public function index(Request $request)
      */
     public function destroy(Beneficiary $beneficiary)
     {
-    // Retrieve all associated family members for the beneficiary
-    $familyMembers = $beneficiary->family;
-
-    // Check if there are family members before attempting to delete
-    if ($familyMembers) {
-        // Delete each family member
-        foreach ($familyMembers as $familyMember) {
+        foreach ($beneficiary->families as $familyMember) {
             $familyMember->delete();
         }
+
+        $beneficiary->delete();
+
+        return redirect('/beneficiary')->with('success', 'Beneficiary and associated family members deleted successfully.');
     }
 
-    // Now, delete the beneficiary
-    $beneficiary->delete();
+    /**
+     * Delete multiple beneficiaries (and their family rows) by ID.
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:beneficiaries,id',
+        ]);
 
-    return redirect('/beneficiary')->with('success', 'Beneficiary and associated family members deleted successfully.');
+        $deleted = 0;
+        foreach ($validated['ids'] as $id) {
+            $beneficiary = Beneficiary::find($id);
+            if (!$beneficiary) {
+                continue;
+            }
+            foreach ($beneficiary->families as $familyMember) {
+                $familyMember->delete();
+            }
+            $beneficiary->delete();
+            $deleted++;
+        }
+
+        return redirect()->back()->with('success', $deleted.' beneficiary(ies) deleted successfully.')->with('swal_title', 'Bulk delete');
     }
 
 

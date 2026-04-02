@@ -19,6 +19,7 @@ class TankRehabilitationController extends Controller
         $entries = request()->get('entries', 10); // Get 'entries' from request, default to 10 if not present
         $tankRehabilitations = TankRehabilitation::latest()->paginate($entries)->appends(['entries' => $entries]);
         $totalTanks = TankRehabilitation::count();
+        $totalHouseholds = (int) TankRehabilitation::sum('no_of_family');
         $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
         $completedCount = TankRehabilitation::where('status', 'Completed')->count();
 
@@ -26,7 +27,7 @@ class TankRehabilitationController extends Controller
         $tankLocations = TankRehabilitation::select('tank_id', 'tank_name', 'latitude', 'longitude', 'progress', 'status')->get();
 
         // Return the view with tank rehabilitation records
-       return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'ongoingCount', 'completedCount', 'totalTanks', 'entries', 'tankLocations'));
+       return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'ongoingCount', 'completedCount', 'totalTanks', 'totalHouseholds', 'entries', 'tankLocations'));
     }
 
     /**
@@ -323,12 +324,13 @@ public function reportCsv()
 
     // Add the counts for ongoing and completed rehabilitations
     $totalTanks = TankRehabilitation::count();
+    $totalHouseholds = (int) TankRehabilitation::sum('no_of_family');
     $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
     $completedCount = TankRehabilitation::where('status', 'Completed')->count();
 
     $tankLocations = TankRehabilitation::select('tank_name', 'latitude', 'longitude')->get();
 
-    return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'search','totalTanks','tankLocations', 'ongoingCount', 'completedCount'));
+    return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'search','totalTanks','totalHouseholds','tankLocations', 'ongoingCount', 'completedCount'));
     }
 
 

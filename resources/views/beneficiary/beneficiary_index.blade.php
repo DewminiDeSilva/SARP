@@ -15,24 +15,39 @@
 
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <!-- Inter — clear numerals for summary counts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         .frame {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: flex-start;
+        align-items: stretch;
         width: 100%;
     }
-.right-column {
-    flex: 0 0 80%;
-    padding: 20px;
+    .right-column {
+        flex: 1 1 80%;
+        min-width: 0;
+        max-width: 80%;
+        padding: 20px;
     }
 
     .left-column {
         flex: 0 0 20%;
-        /*padding: 20px;*/
+        max-width: 20%;
         border-right: 1px solid #dee2e6;
+    }
+
+    /* Sidebar locked hidden until hamburger clicked again (see partial sarp_sidebar_frame_toggle) */
+    .frame.sidebar-collapsed .left-column {
+        display: none !important;
+    }
+    .frame.sidebar-collapsed .right-column {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
     }
 
     .pagination .page-item {
@@ -1005,6 +1020,217 @@
     font-size: 12px;
 }
 
+/* Summary row: bold, readable numbers + labels (beneficiary dashboard cards) */
+.sarp-ben-summary-font {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.sarp-summary-metric-lg {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 5.5vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: #ffffff;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.18), 0 4px 20px rgba(0, 0, 0, 0.25);
+    -webkit-font-smoothing: antialiased;
+}
+.sarp-summary-metric-row {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.5rem, 3.5vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: #ffffff;
+    min-width: 3.25rem;
+    text-align: right;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 2px 12px rgba(0, 0, 0, 0.2);
+    -webkit-font-smoothing: antialiased;
+}
+.sarp-summary-row-label {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.95);
+}
+.sarp-summary-card-title {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Programme-type mini cards (Tank / Youth Enterprise / 4P / Resilience) */
+.sarp-programme-summary-row {
+    margin-top: 0.15rem;
+}
+.sarp-programme-mini-card {
+    border-radius: 14px;
+    padding: 20px 12px 22px;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sarp-programme-mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+.sarp-programme-mini-card__label {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    font-size: 0.6875rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    -webkit-font-smoothing: antialiased;
+}
+.sarp-programme-mini-card__value {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    line-height: 1;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Total Beneficiaries — modern hero summary card */
+.sarp-total-ben-card {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    min-height: 220px;
+    border-radius: 22px;
+    padding: 28px 22px 32px;
+    text-align: center;
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse 120% 80% at 90% -10%, rgba(255, 255, 255, 0.28) 0%, transparent 52%),
+        radial-gradient(ellipse 90% 70% at -5% 105%, rgba(129, 140, 248, 0.55) 0%, transparent 48%),
+        linear-gradient(145deg, #1e1b4b 0%, #3730a3 28%, #5b21b6 55%, #7c3aed 88%, #8b5cf6 100%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+        0 4px 6px -1px rgba(15, 23, 42, 0.12),
+        0 18px 38px -10px rgba(67, 56, 202, 0.55),
+        0 0 0 1px rgba(0, 0, 0, 0.06) inset,
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    transition: transform 0.4s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.4s ease;
+    cursor: default;
+}
+.sarp-total-ben-card::before {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    background: conic-gradient(from 210deg at 50% 50%, transparent 0deg, rgba(255, 255, 255, 0.06) 60deg, transparent 120deg);
+    animation: sarp-total-ben-shimmer 14s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.9;
+}
+@keyframes sarp-total-ben-shimmer {
+    to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sarp-total-ben-card::before {
+        animation: none;
+    }
+    .sarp-total-ben-card:hover {
+        transform: none;
+    }
+}
+.sarp-total-ben-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+        0 8px 12px -2px rgba(15, 23, 42, 0.15),
+        0 28px 48px -12px rgba(79, 70, 229, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+.sarp-total-ben-card__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+.sarp-total-ben-card__badge {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 1.45rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.sarp-total-ben-card__label {
+    margin: 0 0 10px;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.35;
+}
+.sarp-total-ben-card__count {
+    margin: 6px 0 16px;
+    padding: 8px 18px 12px;
+    color: #ffffff;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: clamp(2.85rem, 7vw, 3.85rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    font-variant-numeric: tabular-nums lining-nums;
+    text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.22),
+        0 6px 28px rgba(0, 0, 0, 0.35),
+        0 0 1px rgba(0, 0, 0, 0.5);
+}
+.sarp-total-ben-card__hint {
+    margin: 0;
+    max-width: 240px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+}
+.sarp-total-ben-card__accent {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48%;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    z-index: 2;
+    pointer-events: none;
+}
+
 /* Show Only Duplicates Button Styling */
 .btn-danger {
     background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
@@ -1039,6 +1265,330 @@
     box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
+        /* Beneficiary table filters (above data table) */
+        .beneficiary-filter-toolbar {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin: 20px 0 12px;
+            box-shadow: none;
+            text-align: left;
+        }
+        .beneficiary-filter-toolbar .filter-toolbar-top {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            margin-bottom: 2px;
+        }
+        .beneficiary-filter-toolbar .filter-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 10px 18px;
+            border: 2px solid #126926;
+            background: #fff;
+            color: #126926;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(18, 105, 38, 0.12);
+        }
+        .beneficiary-filter-toolbar .filter-toggle-btn:hover {
+            background: #126926;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(18, 105, 38, 0.25);
+        }
+        .beneficiary-filter-toolbar .filter-badge {
+            background: #126926;
+            color: #fff;
+            font-size: 11px;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .beneficiary-filter-toolbar .filter-toggle-btn:hover .filter-badge {
+            background: #fff;
+            color: #126926;
+        }
+        .beneficiary-filter-toolbar .filter-toolbar-hint {
+            color: #64748b !important;
+            font-size: 13px !important;
+            font-weight: 500;
+        }
+
+        /* Inner card: all controls on one row */
+        .beneficiary-filter-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow:
+                0 4px 22px rgba(15, 23, 42, 0.07),
+                0 1px 3px rgba(15, 23, 42, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            padding: 14px 16px 12px;
+            margin-top: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        .beneficiary-filter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #126926 0%, #22c55e 45%, #0d9488 100%);
+            opacity: 0.92;
+        }
+        .beneficiary-filter-panel .beneficiary-filter-row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-end;
+            gap: 10px 12px;
+            overflow-x: auto;
+            overflow-y: visible;
+            padding: 4px 2px 6px;
+            margin: 0 -2px;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+        .beneficiary-filter-panel .beneficiary-filter-row::-webkit-scrollbar {
+            height: 6px;
+        }
+        .beneficiary-filter-panel .beneficiary-filter-row::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 6px;
+        }
+        .beneficiary-filter-panel .beneficiary-filter-row::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+        .beneficiary-filter-field {
+            flex: 1 1 0;
+            min-width: 118px;
+        }
+        .beneficiary-filter-field--tank {
+            min-width: 140px;
+        }
+        .beneficiary-filter-field--type {
+            min-width: 168px;
+            flex: 1.15 1 0;
+        }
+        .beneficiary-filter-panel label.beneficiary-filter-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 5px;
+            font-size: 10px !important;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+        }
+        .beneficiary-filter-panel label.beneficiary-filter-label i {
+            color: #126926;
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        /* Modern styled dropdowns (native select + custom chevron & surface) */
+        .beneficiary-filter-panel select.beneficiary-filter-select {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            min-height: 38px;
+            border-radius: 11px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            font-family: inherit;
+            font-size: 12.5px !important;
+            font-weight: 500 !important;
+            line-height: 1.35;
+            letter-spacing: 0.02em;
+            color: #0f172a !important;
+            padding: 8px 38px 8px 13px !important;
+            height: auto !important;
+            cursor: pointer;
+            background-color: #f1f5f9;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23126926' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"),
+                linear-gradient(165deg, #ffffff 0%, #f8fafc 42%, #f1f5f9 100%);
+            background-repeat: no-repeat, no-repeat;
+            background-position: right 11px center, 0 0;
+            background-size: 15px 15px, 100% 100%;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                0 1px 2px rgba(15, 23, 42, 0.05);
+            transition:
+                border-color 0.22s ease,
+                box-shadow 0.22s ease,
+                background-color 0.22s ease,
+                background-image 0.22s ease,
+                transform 0.18s ease;
+        }
+        .beneficiary-filter-panel select.beneficiary-filter-select:hover {
+            border-color: rgba(18, 105, 38, 0.38);
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%230f5c24' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"),
+                linear-gradient(165deg, #ffffff 0%, #fafdfb 50%, #ecfdf5 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 1),
+                0 2px 10px rgba(18, 105, 38, 0.1);
+            transform: translateY(-0.5px);
+        }
+        .beneficiary-filter-panel select.beneficiary-filter-select:focus {
+            border-color: #126926;
+            outline: none;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23126926' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"),
+                linear-gradient(165deg, #ffffff 0%, #f0fdf4 45%, #ecfdf3 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 1),
+                0 0 0 3px rgba(18, 105, 38, 0.22),
+                0 6px 16px rgba(18, 105, 38, 0.12);
+        }
+        .beneficiary-filter-panel select.beneficiary-filter-select:active {
+            transform: translateY(0);
+        }
+        @supports (-webkit-touch-callout: none) {
+            .beneficiary-filter-panel select.beneficiary-filter-select {
+                font-size: 16px !important;
+            }
+        }
+        @media (min-width: 576px) {
+            @supports (-webkit-touch-callout: none) {
+                .beneficiary-filter-panel select.beneficiary-filter-select {
+                    font-size: 12.5px !important;
+                }
+            }
+        }
+        .beneficiary-filter-actions {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            padding-left: 4px;
+            margin-left: 2px;
+            border-left: 1px solid #e2e8f0;
+        }
+        .beneficiary-filter-actions .btn-filter-apply {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 9px;
+            padding: 7px 16px;
+            font-weight: 600;
+            font-size: 12px !important;
+            border: none;
+            background: linear-gradient(135deg, #15803d 0%, #126926 100%);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(18, 105, 38, 0.3);
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+        .beneficiary-filter-actions .btn-filter-apply:hover {
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(18, 105, 38, 0.35);
+        }
+        .beneficiary-filter-actions .btn-filter-clear {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            padding: 7px 14px;
+            font-weight: 600;
+            font-size: 12px !important;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #64748b !important;
+            text-decoration: none;
+            transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+        }
+        .beneficiary-filter-actions .btn-filter-clear:hover {
+            border-color: #cbd5e1;
+            color: #126926;
+            background: #f8fafc;
+        }
+        .beneficiary-filter-panel .filter-hint {
+            font-size: 11px !important;
+            color: #94a3b8 !important;
+            margin: 8px 0 0;
+            padding-top: 8px;
+            border-top: 1px solid #f1f5f9;
+            line-height: 1.45;
+            text-align: left;
+        }
+        .beneficiary-filter-panel .filter-hint i {
+            color: #126926;
+            opacity: 0.75;
+        }
+
+        /* Bulk selection bar (delete selected) */
+        .beneficiary-bulk-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 0 0 16px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+        }
+        .beneficiary-bulk-bar__count {
+            font-weight: 600;
+            color: #334155;
+            font-size: 14px !important;
+            min-width: 100px;
+        }
+        .beneficiary-bulk-delete {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: #fff !important;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px !important;
+            padding: 8px 18px;
+            box-shadow: 0 2px 8px rgba(185, 28, 28, 0.25);
+            transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .beneficiary-bulk-delete:hover:not(:disabled) {
+            color: #fff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.35);
+        }
+        .beneficiary-bulk-delete:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .beneficiary-row-check {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #126926;
+        }
+        #beneficiariesTable th.bulk-col,
+        #beneficiariesTable td.bulk-col {
+            width: 44px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
     </style>
 
 <style>
@@ -1071,12 +1621,12 @@
     transition: flex 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
 }
 
-    /* Ensure Bootstrap modals appear above fixed header and center vertically */
+    /* Fixed MIS header uses z-index ~99999; modals must sit above it or dialogs sit "under" the bar */
     .modal {
-        z-index: 20000 !important;
+        z-index: 110000 !important;
     }
     .modal-backdrop.show {
-        z-index: 19990 !important;
+        z-index: 109900 !important;
     }
 </style>
 </head>
@@ -1089,8 +1639,8 @@
 
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
 
-    <div class="frame" style="padding-top: 70px;">
-        <div class="left-column">
+    <div class="frame" id="sarpAppFrame" style="padding-top: 70px;">
+        <div class="left-column" id="sarpSidebar">
             @include('dashboard.dashboardC')
             @csrf
         </div>
@@ -1099,8 +1649,8 @@
         <div class="d-flex align-items-center mb-3">
 
             <!-- Sidebar Toggle Button -->
-            <button id="sidebarToggle" class="btn btn-secondary mr-2">
-                <i class="fas fa-bars"></i>
+            <button type="button" id="sidebarToggle" class="btn btn-secondary mr-2" aria-controls="sarpSidebar" aria-expanded="true" title="Hide menu">
+                <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
 
 
@@ -1131,30 +1681,32 @@
             </div>
         </div>
 
-        <!-- Enhanced Summary Cards -->
+        <!-- Enhanced Summary Cards — one row: Total, Crop, Tank Names, Male/Female/Youth -->
         <div class="container mt-4">
-    <div class="row justify-content-center">
-        <!-- Total Beneficiaries Card -->
-        <div class="col-md-4 mb-4">
-            <div class="summary-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(102, 126, 234, 0.3)';">
-                <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
-                    <i class="fas fa-user-friends" style="margin-right: 8px; font-size: 24px;"></i>Total Beneficiaries
+    <div class="row justify-content-center g-3">
+        <!-- Total Beneficiaries Card (modern hero style) -->
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="sarp-total-ben-card summary-card" role="region" aria-label="Total beneficiaries summary">
+                <div class="sarp-total-ben-card__accent" aria-hidden="true"></div>
+                <div class="sarp-total-ben-card__body">
+                    <div class="sarp-total-ben-card__badge" aria-hidden="true">
+                        <i class="fas fa-user-group"></i>
+                    </div>
+                    <p class="sarp-total-ben-card__label">Total Beneficiaries</p>
+                    <div class="sarp-total-ben-card__count">{{ number_format($beneficiaries->total()) }}</div>
+                    <p class="sarp-total-ben-card__hint">Total beneficiaries currently in the system (filtered view).</p>
                 </div>
-                <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
-                    {{ $beneficiaries->total() }}
-                </div>
-                <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin: 0;">Total Beneficiaries currently in the system</p>
             </div>
         </div>
 
         <!-- Crop Names Summary Card -->
-        <div class="col-md-4 mb-4">
-            <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(79, 172, 254, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(79, 172, 254, 0.3)';">
-                <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
-                    <i class="fas fa-leaf" style="margin-right: 8px; font-size: 24px;"></i>Crop Name/Production Focus<br/>Youth Proposal
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; height: 100%;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(79, 172, 254, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(79, 172, 254, 0.3)';">
+                <div class="sarp-summary-card-title" style="margin-bottom: 15px;">
+                    <i class="fas fa-leaf" style="margin-right: 8px; font-size: 24px; vertical-align: -4px;"></i>Crop Name/Production Focus<br/>Youth Proposal
                 </div>
-                <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
-                    {{ $input3Summary->count() ?? 0 }}
+                <div class="sarp-summary-metric-lg" style="margin: 20px 0;">
+                    {{ number_format($input3Summary->count() ?? 0) }}
                 </div>
                 <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin-bottom: 20px;">Click below to view the summary</p>
                 <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#input3SummaryModal" style="border-radius: 25px; padding: 8px 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
@@ -1164,13 +1716,13 @@
         </div>
 
         <!-- Tank Names Summary Card -->
-        <div class="col-md-4 mb-4">
-            <div class="summary-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(48, 207, 208, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(48, 207, 208, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(48, 207, 208, 0.3)';">
-                <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">
-                    <i class="fas fa-water" style="margin-right: 8px; font-size: 24px;"></i>Tank Names
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="summary-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 8px 25px rgba(48, 207, 208, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; height: 100%;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(48, 207, 208, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(48, 207, 208, 0.3)';">
+                <div class="sarp-summary-card-title" style="margin-bottom: 15px;">
+                    <i class="fas fa-water" style="margin-right: 8px; font-size: 24px; vertical-align: -4px;"></i>Tank Names
                 </div>
-                <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin: 20px 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
-                    {{ $tankNameSummary->count() ?? 0 }}
+                <div class="sarp-summary-metric-lg" style="margin: 20px 0;">
+                    {{ number_format($tankNameSummary->count() ?? 0) }}
                 </div>
                 <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin-bottom: 20px;">Click below to view the summary</p>
                 <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#tankNameSummaryModal" style="border-radius: 25px; padding: 8px 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
@@ -1178,43 +1730,73 @@
                 </button>
             </div>
         </div>
+
+        <!-- Male, Female & Youth — single card (same large card style) -->
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+            <div class="summary-card" style="background: linear-gradient(135deg, #7b4397 0%, #dc2430 50%, #f7971e 100%); border-radius: 15px; padding: 24px 20px 28px; text-align: center; box-shadow: 0 8px 25px rgba(123, 67, 151, 0.35); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: default; height: 100%;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 35px rgba(123, 67, 151, 0.45)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(123, 67, 151, 0.35)';">
+                <div class="sarp-summary-card-title" style="font-size: 0.9rem; margin-bottom: 18px;">
+                    <i class="fas fa-venus-mars" style="margin-right: 8px; font-size: 22px; vertical-align: -3px;"></i>Male, Female, Youth &amp; Not Youth
+                </div>
+                <div style="text-align: left; max-width: 260px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.28); padding-bottom: 10px;">
+                        <span class="sarp-summary-row-label">Male -</span>
+                        <span class="sarp-summary-metric-row">{{ number_format($maleBeneficiaryCount ?? 0) }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.28); padding-bottom: 10px;">
+                        <span class="sarp-summary-row-label">Female -</span>
+                        <span class="sarp-summary-metric-row">{{ number_format($femaleBeneficiaryCount ?? 0) }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.28); padding-bottom: 10px;">
+                        <span class="sarp-summary-row-label">Youth -</span>
+                        <span class="sarp-summary-metric-row">{{ number_format($youthBeneficiaryCount ?? 0) }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                        <span class="sarp-summary-row-label">Not Youth -</span>
+                        <span class="sarp-summary-metric-row">{{ number_format($notYouthBeneficiaryCount ?? 0) }}</span>
+                    </div>
+                </div>
+                <p class="sarp-ben-summary-font" style="color: rgba(255, 255, 255, 0.9); font-size: 0.75rem; font-weight: 600; margin: 16px 0 0; line-height: 1.45; letter-spacing: 0.02em;">Filtered list (same as table). Youth / Not Youth: NIC birth year; age &lt;= 40 vs &gt; 40.</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container mt-1">
-    <div class="row justify-content-center">
-        <div class="col-md-2 mb-3">
-            <div class="summary-card" style="background: linear-gradient(135deg, #5b86e5 0%, #36d1dc 100%); border-radius: 12px; padding: 20px; text-align: center;">
-                <div style="color: #fff; font-size: 13px; font-weight: 600;">Tank Beneficiaries</div>
-                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $tankBeneficiaryCount ?? 0 }}</div>
+        <!-- Programme-type summary row (matches project_type breakdown; same filters as table) -->
+        <div class="container sarp-programme-summary-row mb-4">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3 justify-content-center">
+                <div class="col">
+                    <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #5b86e5 0%, #36d1dc 100%);">
+                        <div class="sarp-programme-mini-card__label">Tank Beneficiaries</div>
+                        <div class="sarp-programme-mini-card__value">{{ number_format($tankBeneficiaryCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
+                        <div class="sarp-programme-mini-card__label">Youth</div>
+                        <div class="sarp-programme-mini-card__value">{{ number_format($youthProgrammeBeneficiaryCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);">
+                        <div class="sarp-programme-mini-card__label">4P</div>
+                        <div class="sarp-programme-mini-card__value">{{ number_format($fourpBeneficiaryCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);">
+                        <div class="sarp-programme-mini-card__label">Resilience – Agriculture</div>
+                        <div class="sarp-programme-mini-card__value">{{ number_format($resilienceAgricultureCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);">
+                        <div class="sarp-programme-mini-card__label">Resilience – Livestock</div>
+                        <div class="sarp-programme-mini-card__value">{{ number_format($resilienceLivestockCount ?? 0) }}</div>
+                    </div>
+                </div>
             </div>
+            <p class="text-center text-muted small mt-2 mb-0 sarp-ben-summary-font" style="font-size: 0.75rem;">Counts by <strong>project type</strong> (Youth = Youth Enterprise). Same filters as the table. NIC-based Youth / Not Youth stay in the card above.</p>
         </div>
-        <div class="col-md-2 mb-3">
-            <div class="summary-card" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); border-radius: 12px; padding: 20px; text-align: center;">
-                <div style="color: #fff; font-size: 13px; font-weight: 600;">Youth</div>
-                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $youthBeneficiaryCount ?? 0 }}</div>
-            </div>
-        </div>
-        <div class="col-md-2 mb-3">
-            <div class="summary-card" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); border-radius: 12px; padding: 20px; text-align: center;">
-                <div style="color: #fff; font-size: 13px; font-weight: 600;">4P</div>
-                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $fourpBeneficiaryCount ?? 0 }}</div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="summary-card" style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); border-radius: 12px; padding: 20px; text-align: center;">
-                <div style="color: #fff; font-size: 13px; font-weight: 600;">Resilience - Agriculture</div>
-                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $resilienceAgricultureCount ?? 0 }}</div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="summary-card" style="background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%); border-radius: 12px; padding: 20px; text-align: center;">
-                <div style="color: #fff; font-size: 13px; font-weight: 600;">Resilience - Livestock</div>
-                <div style="color: #fff; font-size: 34px; font-weight: 700;">{{ $resilienceLivestockCount ?? 0 }}</div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal for Crop Name Summary -->
 <div class="modal fade" id="input3SummaryModal" tabindex="-1" aria-labelledby="input3SummaryModalLabel" aria-hidden="true">
@@ -1289,12 +1871,15 @@
 
 <!-- (Duplicate modals removed) -->
         <!-- Enhanced Filter Buttons -->
+        @php
+            $filterQueryBase = request()->only(['search', 'entries', 'filter_tank', 'filter_category', 'filter_ds', 'filter_asc', 'filter_gn']);
+        @endphp
         <form method="GET" action="{{ route('beneficiary.index') }}" class="mb-3">
             <div class="d-flex justify-content-end mb-3" style="gap: 10px;">
-                <a href="{{ route('beneficiary.index') }}" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 10px 20px; font-weight: 600; border: 2px solid #6c757d; transition: all 0.3s ease;" onmouseover="this.style.background='#6c757d'; this.style.color='#fff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='transparent'; this.style.color='#6c757d'; this.style.transform='translateY(0)';">
+                <a href="{{ route('beneficiary.index', request()->only(['search', 'entries'])) }}" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 10px 20px; font-weight: 600; border: 2px solid #6c757d; transition: all 0.3s ease;" onmouseover="this.style.background='#6c757d'; this.style.color='#fff'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='transparent'; this.style.color='#6c757d'; this.style.transform='translateY(0)';">
                     <i class="fas fa-list" style="margin-right: 5px;"></i>Show All
                 </a>
-                <a href="{{ route('beneficiary.index', ['duplicates' => '1']) }}" class="btn btn-danger" style="border-radius: 8px; padding: 10px 20px; font-weight: 600; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(220, 53, 69, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.3)';">
+                <a href="{{ route('beneficiary.index', array_merge($filterQueryBase, ['duplicates' => '1'])) }}" class="btn btn-danger" style="border-radius: 8px; padding: 10px 20px; font-weight: 600; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(220, 53, 69, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.3)';">
                     <i class="fas fa-exclamation-triangle" style="margin-right: 5px;"></i>Show Only Duplicates
                 </a>
             </div>
@@ -1377,6 +1962,11 @@
                         @if(request('entries'))
                             <input type="hidden" name="entries" value="{{ request('entries') }}">
                         @endif
+                        @foreach (['filter_tank', 'filter_category', 'filter_ds', 'filter_asc', 'filter_gn'] as $fk)
+                            @if (request()->filled($fk))
+                                <input type="hidden" name="{{ $fk }}" value="{{ request($fk) }}">
+                            @endif
+                        @endforeach
                     </form>
                 </div>
 
@@ -1400,16 +1990,17 @@
 
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <!-- Upload CSV success / error messages -->
 @if(session('success') || session('error'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
             Swal.fire({
                 icon: 'success',
-                title: 'CSV Upload',
-                text: '{{ session('success') }}',
+                title: @json(session('swal_title', 'Success')),
+                text: @json(session('success')),
                 confirmButtonColor: '#126926'
             });
             @endif
@@ -1425,6 +2016,95 @@
     </script>
 @endif
 
+        <!-- Table filters: tank, programme type, DSD → ASC → GN (single row in card) -->
+        <div class="beneficiary-filter-toolbar">
+            <div class="filter-toolbar-top">
+                <button class="btn filter-toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#beneficiaryFilterCollapse" aria-expanded="{{ ($activeFilterCount ?? 0) > 0 ? 'true' : 'false' }}" aria-controls="beneficiaryFilterCollapse">
+                    <i class="fas fa-filter"></i>
+                    <span>Filters</span>
+                    @if(($activeFilterCount ?? 0) > 0)
+                        <span class="filter-badge">{{ $activeFilterCount }}</span>
+                    @endif
+                </button>
+                <span class="filter-toolbar-hint d-none d-md-inline">Narrow the list and summaries by tank, programme type, and location.</span>
+            </div>
+
+            <div class="collapse {{ ($activeFilterCount ?? 0) > 0 ? 'show' : '' }}" id="beneficiaryFilterCollapse">
+                <div class="beneficiary-filter-card">
+                    <form method="GET" action="{{ route('beneficiary.index') }}" id="beneficiaryFilterForm" class="beneficiary-filter-panel">
+                        @if(request('search'))
+                            <input type="hidden" name="search" value="{{ request('search') }}">
+                        @endif
+                        @if(request('duplicates'))
+                            <input type="hidden" name="duplicates" value="1">
+                        @endif
+                        @if(request('entries'))
+                            <input type="hidden" name="entries" value="{{ request('entries') }}">
+                        @endif
+
+                        <div class="beneficiary-filter-row">
+                            <div class="beneficiary-filter-field beneficiary-filter-field--tank">
+                                <label class="beneficiary-filter-label" for="filter_tank"><i class="fas fa-water" aria-hidden="true"></i> Tank</label>
+                                <select name="filter_tank" id="filter_tank" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by tank">
+                                    <option value="">All tanks</option>
+                                    @foreach ($filterTankOptions ?? [] as $tname)
+                                        <option value="{{ $tname }}" {{ request('filter_tank') === $tname ? 'selected' : '' }}>{{ $tname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="beneficiary-filter-field beneficiary-filter-field--type">
+                                <label class="beneficiary-filter-label" for="filter_category"><i class="fas fa-layer-group" aria-hidden="true"></i> Programme type</label>
+                                <select name="filter_category" id="filter_category" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by programme type">
+                                    <option value="">All types</option>
+                                    <option value="tank_beneficiary" {{ request('filter_category') === 'tank_beneficiary' ? 'selected' : '' }}>Tank Beneficiaries</option>
+                                    <option value="youth" {{ request('filter_category') === 'youth' ? 'selected' : '' }}>Youth</option>
+                                    <option value="4p" {{ request('filter_category') === '4p' ? 'selected' : '' }}>4P</option>
+                                    <option value="resilience_agriculture" {{ request('filter_category') === 'resilience_agriculture' ? 'selected' : '' }}>Resilience – Agriculture</option>
+                                    <option value="resilience_livestock" {{ request('filter_category') === 'resilience_livestock' ? 'selected' : '' }}>Resilience – Livestock</option>
+                                </select>
+                            </div>
+                            <div class="beneficiary-filter-field">
+                                <label class="beneficiary-filter-label" for="filter_ds"><i class="fas fa-map-marked-alt" aria-hidden="true"></i> DSD</label>
+                                <select name="filter_ds" id="filter_ds" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by DS division">
+                                    <option value="">All DS</option>
+                                    @foreach ($filterDsOptions ?? [] as $ds)
+                                        <option value="{{ $ds }}" {{ request('filter_ds') === $ds ? 'selected' : '' }}>{{ $ds }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="beneficiary-filter-field">
+                                <label class="beneficiary-filter-label" for="filter_asc"><i class="fas fa-building" aria-hidden="true"></i> ASC</label>
+                                <select name="filter_asc" id="filter_asc" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by ASC">
+                                    <option value="">All ASC</option>
+                                    @foreach ($filterAscOptions ?? [] as $asc)
+                                        <option value="{{ $asc }}" {{ request('filter_asc') === $asc ? 'selected' : '' }}>{{ $asc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="beneficiary-filter-field">
+                                <label class="beneficiary-filter-label" for="filter_gn"><i class="fas fa-map-pin" aria-hidden="true"></i> GND</label>
+                                <select name="filter_gn" id="filter_gn" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by GN division">
+                                    <option value="">All GN</option>
+                                    @foreach ($filterGnOptions ?? [] as $gn)
+                                        <option value="{{ $gn }}" {{ request('filter_gn') === $gn ? 'selected' : '' }}>{{ $gn }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="beneficiary-filter-actions">
+                                <button type="submit" class="btn-filter-apply">
+                                    <i class="fas fa-check me-1"></i>Apply
+                                </button>
+                                <a href="{{ route('beneficiary.index', request()->only(['search', 'entries', 'duplicates'])) }}" class="btn-filter-clear">
+                                    <i class="fas fa-undo me-1"></i>Clear
+                                </a>
+                            </div>
+                        </div>
+                        <p class="filter-hint"><i class="fas fa-info-circle me-1"></i>Use <strong>Programme type</strong> to limit by project. Select <strong>DSD</strong> then <strong>Apply</strong> to refresh ASC; then <strong>ASC</strong> and <strong>Apply</strong> for GN. Filters combine (AND). Summary cards use the same filtered set.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Enhanced Entries Selector -->
         <div class="entries-container" style="background: #f8f9fa; padding: 15px 20px; border-radius: 10px; margin: 20px 0; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
             <label for="entriesSelect" style="font-weight: 600; color: #495057; margin: 0;">Show</label>
@@ -1437,6 +2117,18 @@
             <span style="font-weight: 600; color: #495057;">entries</span>
         </div>
 
+        @if(auth()->user()->hasPermission('beneficiary', 'delete'))
+        <div class="beneficiary-bulk-bar" id="beneficiaryBulkBar">
+            <span class="beneficiary-bulk-bar__count" id="bulkSelectedCount">0 selected</span>
+            <button type="button" class="btn btn-sm beneficiary-bulk-delete" id="bulkDeleteBtn" disabled aria-label="Delete selected beneficiaries">
+                <i class="fas fa-trash-alt me-1"></i>Delete selected
+            </button>
+        </div>
+        <form id="beneficiaryBulkDeleteForm" action="{{ route('beneficiary.bulkDestroy') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+        @endif
+
 
         <div class="row table-container">
             <div class="col">
@@ -1444,6 +2136,11 @@
                 <table id="beneficiariesTable" class="table">
                     <thead>
                         <tr>
+                            @if(auth()->user()->hasPermission('beneficiary', 'delete'))
+                            <th scope="col" class="bulk-col" title="Select visible rows">
+                                <input type="checkbox" class="beneficiary-row-check" id="beneficiarySelectAll" aria-label="Select all visible beneficiaries">
+                            </th>
+                            @endif
                             <th scope="col">NIC Number</th>
                             <th scope="col">Name with Initials</th>
                             <th scope="col">Gender</th>
@@ -1482,6 +2179,11 @@
             $hasStreet = trim((string) ($beneficiary->address ?? '')) !== '';
         @endphp
         <tr>
+            @if(auth()->user()->hasPermission('beneficiary', 'delete'))
+            <td class="bulk-col">
+                <input type="checkbox" class="beneficiary-row-check" name="bulk_row_sel" value="{{ $beneficiary->id }}" aria-label="Select {{ $beneficiary->name_with_initials }}">
+            </td>
+            @endif
             <td>
                 @if ($isDuplicate || $showDuplicates)
                     <div>
@@ -1943,25 +2645,99 @@ document.addEventListener('DOMContentLoaded', function() {
             );
         });
     });
+
+    const selectAll = document.getElementById('beneficiarySelectAll');
+    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+    const bulkForm = document.getElementById('beneficiaryBulkDeleteForm');
+    const countEl = document.getElementById('bulkSelectedCount');
+
+    function getBeneficiaryRowChecks() {
+        return document.querySelectorAll('.beneficiary-row-check:not(#beneficiarySelectAll)');
+    }
+
+    function updateBulkSelectedCount() {
+        if (!countEl) return;
+        var checks = getBeneficiaryRowChecks();
+        var n = 0;
+        checks.forEach(function (c) { if (c.checked) n++; });
+        countEl.textContent = n + ' selected';
+        if (bulkDeleteBtn) {
+            bulkDeleteBtn.disabled = n === 0;
+        }
+        if (selectAll) {
+            var all = checks.length;
+            selectAll.checked = all > 0 && n === all;
+            selectAll.indeterminate = n > 0 && n < all;
+        }
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function () {
+            getBeneficiaryRowChecks().forEach(function (c) { c.checked = selectAll.checked; });
+            updateBulkSelectedCount();
+        });
+    }
+    getBeneficiaryRowChecks().forEach(function (c) {
+        c.addEventListener('change', updateBulkSelectedCount);
+    });
+    updateBulkSelectedCount();
+
+    if (bulkDeleteBtn && bulkForm) {
+        bulkDeleteBtn.addEventListener('click', function () {
+            var checked = Array.prototype.slice.call(getBeneficiaryRowChecks()).filter(function (c) { return c.checked; });
+            if (!checked.length) return;
+            var n = checked.length;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Delete selected beneficiaries?',
+                    html: 'Permanently delete <strong>' + n + '</strong> record(s) and their linked family member rows.<br><span style="color:#64748b;font-size:0.9em;">This cannot be undone.</span>',
+                    icon: 'warning',
+                    iconColor: '#b91c1c',
+                    showCancelButton: true,
+                    focusCancel: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                    confirmButtonColor: '#b91c1c',
+                    cancelButtonColor: '#64748b',
+                    reverseButtons: true
+                }).then(function (result) {
+                    if (!result.isConfirmed) return;
+                    bulkForm.querySelectorAll('input[name="ids[]"]').forEach(function (i) { i.remove(); });
+                    checked.forEach(function (cb) {
+                        var h = document.createElement('input');
+                        h.type = 'hidden';
+                        h.name = 'ids[]';
+                        h.value = cb.value;
+                        bulkForm.appendChild(h);
+                    });
+                    bulkForm.submit();
+                });
+            } else {
+                showCustomAlert(
+                    'Permanently delete ' + n + ' beneficiary record(s) and their linked family member rows? This cannot be undone.',
+                    'Confirm bulk delete',
+                    function () {
+                        bulkForm.querySelectorAll('input[name="ids[]"]').forEach(function (i) { i.remove(); });
+                        checked.forEach(function (cb) {
+                            var h = document.createElement('input');
+                            h.type = 'hidden';
+                            h.name = 'ids[]';
+                            h.value = cb.value;
+                            bulkForm.appendChild(h);
+                        });
+                        bulkForm.submit();
+                    }
+                );
+            }
+        });
+    }
 });
 
-document.getElementById('entriesSelect').addEventListener('change', function () {
-    const perPage = this.value;
+var entriesEl = document.getElementById('entriesSelect');
+if (entriesEl) entriesEl.addEventListener('change', function () {
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('entries', perPage);
-
-    // preserve current search value and duplicates flag
-    const searchInput = document.querySelector('input[name="search"]');
-    if (searchInput && searchInput.value) {
-        urlParams.set('search', searchInput.value);
-    }
-    if ({{ request('duplicates') ? 'true' : 'false' }}) {
-        urlParams.set('duplicates', '1');
-    }
-
-    // reset to first page when page size changes
+    urlParams.set('entries', this.value);
     urlParams.delete('page');
-
     window.location = '{{ route('beneficiary.index') }}' + '?' + urlParams.toString();
 });
 
@@ -2033,24 +2809,6 @@ document.getElementById('entriesSelect').addEventListener('change', function () 
 
             <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const sidebar = document.querySelector('.left-column');
-        const content = document.querySelector('.right-column');
-        const toggleButton = document.getElementById('sidebarToggle');
-
-        toggleButton.addEventListener('click', function () {
-            // Toggle the 'hidden' class on the sidebar
-            sidebar.classList.toggle('hidden');
-
-            // Adjust the width of the content
-            if (sidebar.classList.contains('hidden')) {
-                content.style.flex = '0 0 100%'; // Expand to full width
-                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
-            } else {
-                content.style.flex = '0 0 80%'; // Default width
-                content.style.padding = '20px'; // Reset padding
-            }
-        });
-
         // Initialize datepicker for all family member modals
         $('[id^="familyMemberModal"]').on('shown.bs.modal', function () {
             var modalId = $(this).attr('id');
@@ -2127,6 +2885,8 @@ document.getElementById('entriesSelect').addEventListener('change', function () 
     });
 </script>
 
+@include('partials.sarp_sidebar_frame_toggle')
 
         </body>
 </html>
+
