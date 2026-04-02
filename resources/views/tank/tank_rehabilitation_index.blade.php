@@ -316,6 +316,17 @@ table th:first-child, table td:first-child {
                 <p class="card-text">Tanks that have completed rehabilitation.</p>
             </div>
         </div>
+
+        <!-- Number of Household Card -->
+        <div class="card text-center" style="width: 18rem;">
+            <div class="card-header">
+                Number of Household
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><span class="count" data-target="{{ $totalHouseholds ?? 0 }}">0</span></h5>
+                <p class="card-text">Total households covered in the tank module.</p>
+            </div>
+        </div>
     </div>
 
     <!-- View Map Button -->

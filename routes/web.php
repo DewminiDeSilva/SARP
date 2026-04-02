@@ -145,6 +145,10 @@ Route::middleware(['auth'])->group(function () {
             ->name('index')
             ->middleware('check.permission:beneficiary,view');
 
+        Route::post('/bulk-delete', [BeneficiaryController::class, 'bulkDestroy'])
+            ->name('bulkDestroy')
+            ->middleware('check.permission:beneficiary,delete');
+
         Route::get('/create', [BeneficiaryController::class, 'create'])
             ->name('create')
             ->middleware('check.permission:beneficiary,add');
