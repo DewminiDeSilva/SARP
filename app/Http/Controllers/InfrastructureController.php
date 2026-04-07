@@ -3,26 +3,152 @@
 namespace App\Http\Controllers;
 
 use App\Models\Infrastructure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 
 class InfrastructureController extends Controller
 {
+    private function applyInfrastructureIndexSearch(Builder $query, string $search): void
+    {
+        $search = trim($search);
+        if ($search === '') {
+            return;
+        }
+        $like = '%' . $search . '%';
+        $query->where(function (Builder $q) use ($like) {
+            $q->where('type_of_infrastructure', 'like', $like)
+                ->orWhere('infrastructure_progress', 'like', $like)
+                ->orWhere('infrastructure_description', 'like', $like)
+                ->orWhere('river_basin', 'like', $like)
+                ->orWhere('cascade_name', 'like', $like)
+                ->orWhere('province_name', 'like', $like)
+                ->orWhere('district', 'like', $like)
+                ->orWhere('ds_division_name', 'like', $like)
+                ->orWhere('gn_division_name', 'like', $like)
+                ->orWhere('as_centre', 'like', $like)
+                ->orWhere('agency', 'like', $like)
+                ->orWhere('contractor', 'like', $like)
+                ->orWhere('payment', 'like', $like)
+                ->orWhere('eot', 'like', $like)
+                ->orWhere('contract_period', 'like', $like)
+                ->orWhere('status', 'like', $like)
+                ->orWhere('remarks', 'like', $like)
+                ->orWhere('longitude', 'like', $like)
+                ->orWhere('latitude', 'like', $like);
+        });
+    }
+
+    private function applyInfrastructureTableFilters(Builder $query, Request $request): void
+    {
+        if ($request->filled('filter_type')) {
+            $query->where('type_of_infrastructure', $request->get('filter_type'));
+        }
+
+        $completion = $request->get('filter_completion');
+        if ($completion === 'completed') {
+            $query->where('status', 'Finished');
+        } elseif ($completion === 'ongoing') {
+            $query->where('status', 'On Going');
+        }
+
+        if ($request->filled('filter_ds')) {
+            $query->where('ds_division_name', $request->get('filter_ds'));
+        }
+        if ($request->filled('filter_asc')) {
+            $query->where('as_centre', $request->get('filter_asc'));
+        }
+        if ($request->filled('filter_gn')) {
+            $query->where('gn_division_name', $request->get('filter_gn'));
+        }
+    }
+
+    private function buildInfrastructureIndexBaseQuery(Request $request): Builder
+    {
+        $query = Infrastructure::query();
+        $this->applyInfrastructureIndexSearch($query, (string) $request->get('search', ''));
+        $this->applyInfrastructureTableFilters($query, $request);
+
+        return $query;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-    $entries = request()->get('entries', 10);
-    $infrastructures = Infrastructure::latest()->paginate($entries)->appends(['entries' => $entries]);
+        $entries = (int) $request->get('entries', 10);
+        if (! in_array($entries, [10, 25, 50, 100], true)) {
+            $entries = 10;
+        }
 
-    // Get counts for ongoing and completed infrastructure records
-    $totalInfrastructures = Infrastructure::count();
-    $ongoingCount = Infrastructure::where('status', 'On Going')->count();
-    $completedCount = Infrastructure::where('status', 'Finished')->count();
+        $baseQuery = $this->buildInfrastructureIndexBaseQuery($request);
+        $infrastructures = $baseQuery->clone()->latest()->paginate($entries)->appends($request->query());
 
-    // Pass these counts to the view
-    return view('infrastructure.infrastructure_index', compact('infrastructures', 'totalInfrastructures', 'ongoingCount', 'completedCount', 'entries'));
+        $summaryBase = $this->buildInfrastructureIndexBaseQuery($request);
+        $totalInfrastructures = $summaryBase->count();
+        $ongoingCount = $summaryBase->clone()->where('status', 'On Going')->count();
+        $completedCount = $summaryBase->clone()->where('status', 'Finished')->count();
+
+        $filterTypeOptions = Infrastructure::query()
+            ->whereNotNull('type_of_infrastructure')
+            ->where('type_of_infrastructure', '!=', '')
+            ->distinct()
+            ->orderBy('type_of_infrastructure')
+            ->pluck('type_of_infrastructure');
+
+        $filterDsOptions = Infrastructure::query()
+            ->whereNotNull('ds_division_name')
+            ->where('ds_division_name', '!=', '')
+            ->distinct()
+            ->orderBy('ds_division_name')
+            ->pluck('ds_division_name');
+
+        $ascScope = Infrastructure::query();
+        if ($request->filled('filter_ds')) {
+            $ascScope->where('ds_division_name', $request->get('filter_ds'));
+        }
+        $filterAscOptions = $ascScope->clone()
+            ->whereNotNull('as_centre')
+            ->where('as_centre', '!=', '')
+            ->distinct()
+            ->orderBy('as_centre')
+            ->pluck('as_centre');
+
+        $gnScope = Infrastructure::query();
+        if ($request->filled('filter_ds')) {
+            $gnScope->where('ds_division_name', $request->get('filter_ds'));
+        }
+        if ($request->filled('filter_asc')) {
+            $gnScope->where('as_centre', $request->get('filter_asc'));
+        }
+        $filterGnOptions = $gnScope->clone()
+            ->whereNotNull('gn_division_name')
+            ->where('gn_division_name', '!=', '')
+            ->distinct()
+            ->orderBy('gn_division_name')
+            ->pluck('gn_division_name');
+
+        $activeFilterCount = collect([
+            $request->filled('filter_type'),
+            $request->filled('filter_completion'),
+            $request->filled('filter_ds'),
+            $request->filled('filter_asc'),
+            $request->filled('filter_gn'),
+        ])->filter()->count();
+
+        return view('infrastructure.infrastructure_index', compact(
+            'infrastructures',
+            'totalInfrastructures',
+            'ongoingCount',
+            'completedCount',
+            'entries',
+            'filterTypeOptions',
+            'filterDsOptions',
+            'filterAscOptions',
+            'filterGnOptions',
+            'activeFilterCount'
+        ));
     }
 
 
@@ -176,27 +302,11 @@ class InfrastructureController extends Controller
     }
 
     /**
-     * Search functionality.
+     * Legacy search URL: same filters and summaries as index.
      */
     public function search(Request $request)
     {
-        $search = $request->get('search');
-        $infrastructures = Infrastructure::where('type_of_infrastructure', 'like', '%'.$search.'%')
-            ->orWhere('infrastructure_progress', 'like', '%'.$search.'%')
-            ->orWhere('infrastructure_description', 'like', '%'.$search.'%')
-            ->orWhere('river_basin', 'like', '%'.$search.'%')
-            ->orWhere('cascade_name', 'like', '%'.$search.'%')
-            ->orWhere('province_name', 'like', '%'.$search.'%')
-            ->orWhere('district', 'like', '%'.$search.'%')
-            ->orWhere('ds_division_name', 'like', '%'.$search.'%')
-            ->orWhere('gn_division_name', 'like', '%'.$search.'%')
-            ->orWhere('as_centre', 'like', '%'.$search.'%')
-            ->orWhere('agency', 'like', '%'.$search.'%')
-            ->orWhere('payment', 'like', '%'.$search.'%')
-            ->orWhere('status', 'like', '%'.$search.'%')
-            ->paginate(10);
-
-        return view('infrastructure.infrastructure_index', compact('infrastructures', 'search'));
+        return redirect()->route('infrastructure.index', $request->query());
     }
 
     /**

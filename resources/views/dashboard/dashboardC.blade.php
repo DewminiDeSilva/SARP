@@ -112,7 +112,7 @@ li.active {
     // group checks (submenu open)
     $isBeneficiary = request()->is('beneficiary*');
     $isTank        = request()->is('tank_rehabilitation*') || request()->is('tank-training*');
-    $isInfra       = request()->is('infrastructure*');
+    $isInfra       = request()->is('infrastructure*') || request()->is('feeder_road_development*');
 
     $isSocial      = request()->is('cdf*') || request()->is('asc_registration*') || request()->is('farmerorganization*') || request()->is('training*') || request()->is('grievances*');
 
@@ -201,6 +201,12 @@ li.active {
             </li>
             <li class="{{ request()->is('infrastructure') ? 'active' : '' }}">
                 <a href="/infrastructure" style="color:#FFFFFF">Infrastructure Development Details</a>
+            </li>
+            <li class="{{ request()->is('feeder_road_development/create') ? 'active' : '' }}">
+                <a href="/feeder_road_development/create" style="color:#FFFFFF">Feeder Road Development Registration</a>
+            </li>
+            <li class="{{ (request()->is('feeder_road_development') || request()->is('feeder_road_development/*')) && !request()->is('feeder_road_development/create') ? 'active' : '' }}">
+                <a href="/feeder_road_development" style="color:#FFFFFF">Feeder Road Development Details</a>
             </li>
         </ul>
     </li>

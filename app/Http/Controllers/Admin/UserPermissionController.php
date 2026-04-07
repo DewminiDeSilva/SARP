@@ -23,7 +23,7 @@ class UserPermissionController extends Controller
         $modules = [
             'staff_profile', 'beneficiary', 'family', 'training', 'livestock', 'agri', 'nutrition', 'nutrition_trainee',
             'ffs-training', 'ffs-participants', 'cdf', 'cdfmembers', 'farmerorganization', 'farmermember',
-            'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'fingerling', 'infrastructure',
+            'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'feeder_road_development', 'fingerling', 'infrastructure',
             'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'youth_training', 'youth_training_participants', 'awpb',
             'costtab', 'projectdesignreport', 'vegitable', 'fruit', 'goat', 'dairy', 'poultary',
             'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks',             'expressions', 'nutrient_rich_home_garden', 'fourp_training', 'fourp_training_participants', 'tank_training', 'tank_training_participants', 'agriculture_training_participants', 'livestock_training_participants'
@@ -48,6 +48,7 @@ class UserPermissionController extends Controller
     'grievances' => 'Grievances',
     'officer' => 'Officer',
     'tank_rehabilitation' => 'Tank Rehabilitation',
+    'feeder_road_development' => 'Feeder Road Development',
     'fingerling' => 'Fingerlings',
     'infrastructure' => 'Infrastructure',
     'gallery' => 'Gallery',

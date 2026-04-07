@@ -71,15 +71,11 @@
                             <td>{{ $beneficiary->eoi_category }}</td>
                             <td>
                                 <a href="{{ route('eoi_form.create', $beneficiary->id) }}" class="btn btn-sm btn-success">
-                                <i class="fas fa-plus-circle"></i> Add Data
+                                    <i class="fas fa-plus-circle"></i> Add Data
                                 </a>
-                                        @if($beneficiary->eoiForm)
-            <a href="{{ route('eoi_form.show', $beneficiary->id) }}" class="btn btn-sm btn-sarp-outline ml-1">
-                <i class="fas fa-eye"></i> View EOI Data
-            </a>
-        @endif
-
-
+                                <a href="{{ route('eoi_form.show', $beneficiary->id) }}" class="btn btn-sm btn-sarp-outline ml-1">
+                                    <i class="fas fa-eye"></i> View EOI Data
+                                </a>
                             </td>
                         </tr>
                         @endforeach

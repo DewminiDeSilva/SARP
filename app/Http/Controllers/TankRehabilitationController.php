@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TankRehabilitation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -12,22 +13,162 @@ use Illuminate\Support\Facades\Log;
 class TankRehabilitationController extends Controller
 {
     /**
+     * Search text across tank fields (AND-combined with table filters).
+     */
+    private function applyTankIndexSearch(Builder $query, string $search): void
+    {
+        $search = trim($search);
+        if ($search === '') {
+            return;
+        }
+        $like = '%' . $search . '%';
+        $query->where(function (Builder $q) use ($like) {
+            $q->where('tank_id', 'like', $like)
+                ->orWhere('tank_name', 'like', $like)
+                ->orWhere('river_basin', 'like', $like)
+                ->orWhere('cascade_name', 'like', $like)
+                ->orWhere('province_name', 'like', $like)
+                ->orWhere('district', 'like', $like)
+                ->orWhere('ds_division_name', 'like', $like)
+                ->orWhere('gn_division_name', 'like', $like)
+                ->orWhere('as_centre', 'like', $like)
+                ->orWhere('agency', 'like', $like)
+                ->orWhere('progress', 'like', $like)
+                ->orWhere('contractor', 'like', $like)
+                ->orWhere('status', 'like', $like)
+                ->orWhere('open_ref_no', 'like', $like)
+                ->orWhere('awarded_date', 'like', $like)
+                ->orWhere('cumulative_amount', 'like', $like)
+                ->orWhere('paid_advanced_amount', 'like', $like)
+                ->orWhere('recommended_ipc_no', 'like', $like)
+                ->orWhere('recommended_ipc_amount', 'like', $like)
+                ->orWhere('longitude', 'like', $like)
+                ->orWhere('latitude', 'like', $like)
+                ->orWhere('remarks', 'like', $like);
+        });
+    }
+
+    /**
+     * Table filters: tank name, completion status, DS → ASC → GN (AND).
+     */
+    private function applyTankTableFilters(Builder $query, Request $request): void
+    {
+        if ($request->filled('filter_tank')) {
+            $query->where('tank_name', $request->get('filter_tank'));
+        }
+
+        $completion = $request->get('filter_completion');
+        if ($completion === 'completed') {
+            $query->where('status', 'Completed');
+        } elseif ($completion === 'ongoing') {
+            $query->where('status', 'On Going');
+        }
+
+        if ($request->filled('filter_ds')) {
+            $query->where('ds_division_name', $request->get('filter_ds'));
+        }
+        if ($request->filled('filter_asc')) {
+            $query->where('as_centre', $request->get('filter_asc'));
+        }
+        if ($request->filled('filter_gn')) {
+            $query->where('gn_division_name', $request->get('filter_gn'));
+        }
+    }
+
+    /**
+     * Base query for list, summaries, and map (search + table filters).
+     */
+    private function buildTankIndexBaseQuery(Request $request): Builder
+    {
+        $query = TankRehabilitation::query();
+        $this->applyTankIndexSearch($query, (string) $request->get('search', ''));
+        $this->applyTankTableFilters($query, $request);
+
+        return $query;
+    }
+
+    /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $entries = request()->get('entries', 10); // Get 'entries' from request, default to 10 if not present
-        $tankRehabilitations = TankRehabilitation::latest()->paginate($entries)->appends(['entries' => $entries]);
-        $totalTanks = TankRehabilitation::count();
-        $totalHouseholds = (int) TankRehabilitation::sum('no_of_family');
-        $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
-        $completedCount = TankRehabilitation::where('status', 'Completed')->count();
+        $entries = (int) $request->get('entries', 10);
+        if (! in_array($entries, [10, 25, 50, 100], true)) {
+            $entries = 10;
+        }
 
-        
-        $tankLocations = TankRehabilitation::select('tank_id', 'tank_name', 'latitude', 'longitude', 'progress', 'status')->get();
+        $baseQuery = $this->buildTankIndexBaseQuery($request);
+        $tankRehabilitations = $baseQuery->clone()->latest()->paginate($entries)->appends($request->query());
 
-        // Return the view with tank rehabilitation records
-       return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'ongoingCount', 'completedCount', 'totalTanks', 'totalHouseholds', 'entries', 'tankLocations'));
+        $summaryBase = $this->buildTankIndexBaseQuery($request);
+        $ongoingCount = $summaryBase->clone()->where('status', 'On Going')->count();
+        $completedCount = $summaryBase->clone()->where('status', 'Completed')->count();
+        $totalHouseholds = (int) $summaryBase->sum('no_of_family');
+
+        $tankLocations = $summaryBase->clone()
+            ->select('tank_id', 'tank_name', 'latitude', 'longitude', 'progress', 'status')
+            ->get();
+
+        $filterTankOptions = TankRehabilitation::query()
+            ->whereNotNull('tank_name')
+            ->where('tank_name', '!=', '')
+            ->distinct()
+            ->orderBy('tank_name')
+            ->pluck('tank_name');
+
+        $filterDsOptions = TankRehabilitation::query()
+            ->whereNotNull('ds_division_name')
+            ->where('ds_division_name', '!=', '')
+            ->distinct()
+            ->orderBy('ds_division_name')
+            ->pluck('ds_division_name');
+
+        $ascScope = TankRehabilitation::query();
+        if ($request->filled('filter_ds')) {
+            $ascScope->where('ds_division_name', $request->get('filter_ds'));
+        }
+        $filterAscOptions = $ascScope->clone()
+            ->whereNotNull('as_centre')
+            ->where('as_centre', '!=', '')
+            ->distinct()
+            ->orderBy('as_centre')
+            ->pluck('as_centre');
+
+        $gnScope = TankRehabilitation::query();
+        if ($request->filled('filter_ds')) {
+            $gnScope->where('ds_division_name', $request->get('filter_ds'));
+        }
+        if ($request->filled('filter_asc')) {
+            $gnScope->where('as_centre', $request->get('filter_asc'));
+        }
+        $filterGnOptions = $gnScope->clone()
+            ->whereNotNull('gn_division_name')
+            ->where('gn_division_name', '!=', '')
+            ->distinct()
+            ->orderBy('gn_division_name')
+            ->pluck('gn_division_name');
+
+        $activeFilterCount = collect([
+            $request->filled('filter_tank'),
+            $request->filled('filter_completion'),
+            $request->filled('filter_ds'),
+            $request->filled('filter_asc'),
+            $request->filled('filter_gn'),
+        ])->filter()->count();
+
+        return view('tank.tank_rehabilitation_index', compact(
+            'tankRehabilitations',
+            'ongoingCount',
+            'completedCount',
+            'totalHouseholds',
+            'entries',
+            'tankLocations',
+            'filterTankOptions',
+            'filterDsOptions',
+            'filterAscOptions',
+            'filterGnOptions',
+            'activeFilterCount'
+        ));
     }
 
     /**
@@ -290,47 +431,11 @@ public function reportCsv()
 
 
     /**
- * Search functionality.
- */
+     * Legacy search URL: same filters and summaries as index.
+     */
     public function search(Request $request)
     {
-    $search = $request->get('search');
-
-    // Updated query to include the new fields
-    $tankRehabilitations = TankRehabilitation::where('tank_id', 'like', '%' . $search . '%')
-        ->orWhere('tank_name', 'like', '%' . $search . '%')
-        ->orWhere('river_basin', 'like', '%' . $search . '%')
-        ->orWhere('cascade_name', 'like', '%' . $search . '%')
-        ->orWhere('province_name', 'like', '%' . $search . '%')
-        ->orWhere('district', 'like', '%' . $search . '%')
-        ->orWhere('ds_division_name', 'like', '%' . $search . '%')
-        ->orWhere('gn_division_name', 'like', '%' . $search . '%')
-        ->orWhere('as_centre', 'like', '%' . $search . '%')
-        ->orWhere('agency', 'like', '%' . $search . '%')
-        ->orWhere('progress', 'like', '%' . $search . '%')
-        ->orWhere('contractor', 'like', '%' . $search . '%')
-        ->orWhere('status', 'like', '%' . $search . '%')
-        ->orWhere('open_ref_no', 'like', '%' . $search . '%') // New field
-        ->orWhere('awarded_date', 'like', '%' . $search . '%') // New field
-        ->orWhere('cumulative_amount', 'like', '%' . $search . '%') // New field
-        ->orWhere('paid_advanced_amount', 'like', '%' . $search . '%') // New field
-        ->orWhere('recommended_ipc_no', 'like', '%' . $search . '%') // New field
-        ->orWhere('recommended_ipc_amount', 'like', '%' . $search . '%') // New field
-        ->orWhere('longitude', 'like', '%' . $search . '%')
-        ->orWhere('latitude', 'like', '%' . $search . '%')
-        ->orWhere('remarks', 'like', '%' . $search . '%')
-        ->paginate(10)->appends(['search' => $search]);
-
-
-    // Add the counts for ongoing and completed rehabilitations
-    $totalTanks = TankRehabilitation::count();
-    $totalHouseholds = (int) TankRehabilitation::sum('no_of_family');
-    $ongoingCount = TankRehabilitation::where('status', 'On Going')->count();
-    $completedCount = TankRehabilitation::where('status', 'Completed')->count();
-
-    $tankLocations = TankRehabilitation::select('tank_name', 'latitude', 'longitude')->get();
-
-    return view('tank.tank_rehabilitation_index', compact('tankRehabilitations', 'search','totalTanks','totalHouseholds','tankLocations', 'ongoingCount', 'completedCount'));
+        return redirect()->route('tank_rehabilitation.index', $request->query());
     }
 
 
