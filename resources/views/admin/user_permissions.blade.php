@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Assign Permissions</title>
+    <title>Assign Permissions — {{ $user->name }}</title>
 
-    <!-- Bootstrap CSS (optional, or replace with your framework CSS) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-
-    <!-- Font Awesome CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
@@ -283,7 +281,214 @@ table td:nth-child(6) input[type="checkbox"] {
 
     </style>
 
+<style>
+    .sarp-perm {
+        font-family: 'Inter', system-ui, sans-serif;
+        --sarp-green: #126926;
+        --sarp-green-light: #ecfdf5;
+        --sarp-border: rgba(15, 23, 42, 0.08);
+    }
+    .sarp-perm-hero {
+        background: linear-gradient(135deg, #0f3d2a 0%, #126926 42%, #0d9488 100%);
+        border-radius: 16px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 1.25rem;
+        color: #fff;
+        box-shadow: 0 12px 40px rgba(18, 105, 38, 0.28);
+    }
+    .sarp-perm-hero h1 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 0 0 0.35rem;
+        letter-spacing: -0.02em;
+    }
+    .sarp-perm-hero p {
+        margin: 0;
+        opacity: 0.92;
+        font-size: 0.9rem;
+    }
+    .sarp-perm-user-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-top: 0.75rem;
+    }
+    .sarp-perm-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.85rem 1rem;
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 1px solid var(--sarp-border);
+        border-radius: 12px;
+    }
+    .sarp-perm-toolbar .btn {
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        padding: 0.45rem 0.9rem;
+    }
+    .sarp-perm-toolbar .btn-sarp-primary {
+        background: linear-gradient(135deg, #15803d, var(--sarp-green));
+        border: none;
+        color: #fff;
+    }
+    .sarp-perm-toolbar .btn-sarp-primary:hover {
+        filter: brightness(1.06);
+        color: #fff;
+    }
+    .sarp-perm-toolbar .btn-outline-secondary {
+        border-color: #cbd5e1;
+    }
+    .sarp-perm-toolbar-hint {
+        font-size: 0.78rem;
+        color: #64748b;
+        margin-left: auto;
+        max-width: 22rem;
+    }
+    .sarp-perm-card {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid var(--sarp-border);
+        box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+    }
+    .sarp-perm-table-wrap {
+        max-height: min(70vh, 900px);
+        overflow: auto;
+    }
+    .sarp-perm-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 0.8125rem;
+    }
+    .sarp-perm-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        border-bottom: 2px solid #e2e8f0;
+        padding: 0.5rem 0.35rem;
+        font-weight: 700;
+        font-size: 0.7rem;
+        color: #475569;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    .sarp-perm-th-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    .sarp-perm-th-col span {
+        font-size: 0.68rem;
+    }
+    .sarp-perm-table tbody tr:nth-child(even) {
+        background: #fafbfc;
+    }
+    .sarp-perm-table tbody tr:hover {
+        background: var(--sarp-green-light);
+    }
+    .sarp-perm-table td {
+        padding: 0.45rem 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+    .sarp-perm-table td.sarp-perm-module-cell {
+        position: sticky;
+        left: 2.75rem;
+        z-index: 2;
+        background: inherit;
+        text-align: left;
+        font-weight: 600;
+        color: #0f172a;
+        min-width: 11rem;
+        max-width: 16rem;
+        padding-left: 0.65rem;
+        border-right: 1px solid #e2e8f0;
+        box-shadow: 4px 0 12px rgba(15, 23, 42, 0.04);
+    }
+    .sarp-perm-table thead th.sarp-perm-corner {
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        width: 2.75rem;
+        min-width: 2.75rem;
+        max-width: 2.75rem;
+    }
+    .sarp-perm-table thead th.sarp-perm-module-head {
+        position: sticky;
+        left: 2.75rem;
+        z-index: 5;
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        text-align: left;
+        padding-left: 0.75rem;
+        text-transform: none;
+        letter-spacing: normal;
+        font-size: 0.8rem;
+    }
+    .sarp-perm-table tbody td.sarp-perm-row-master {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: inherit;
+        border-right: 1px solid #e2e8f0;
+        width: 2.75rem;
+        min-width: 2.75rem;
+        max-width: 2.75rem;
+    }
+    .sarp-perm-table tbody tr:nth-child(even) td.sarp-perm-row-master,
+    .sarp-perm-table tbody tr:nth-child(even) td.sarp-perm-module-cell {
+        background: #fafbfc;
+    }
+    .sarp-perm-table tbody tr:hover td.sarp-perm-row-master,
+    .sarp-perm-table tbody tr:hover td.sarp-perm-module-cell {
+        background: var(--sarp-green-light);
+    }
+    .sarp-perm-cb {
+        width: 1.15rem;
+        height: 1.15rem;
+        cursor: pointer;
+        accent-color: var(--sarp-green);
+        border-radius: 4px;
+    }
+    .sarp-perm-cb[data-action="view"] { accent-color: #16a34a; }
+    .sarp-perm-cb[data-action="add"] { accent-color: #2563eb; }
+    .sarp-perm-cb[data-action="edit"] { accent-color: #0891b2; }
+    .sarp-perm-cb[data-action="delete"] { accent-color: #dc2626; }
+    .sarp-perm-cb[data-action="upload_csv"] { accent-color: #7c3aed; }
+    .sarp-perm-save {
+        margin-top: 1.25rem;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #15803d, var(--sarp-green));
+        border: none;
+        color: #fff;
+        box-shadow: 0 4px 14px rgba(18, 105, 38, 0.35);
+    }
+    .sarp-perm-save:hover {
+        filter: brightness(1.05);
+        color: #fff;
+    }
+    @media (max-width: 992px) {
+        .sarp-perm-toolbar-hint { margin-left: 0; width: 100%; }
+    }
+</style>
+
 </head>
+<body class="bg-light text-dark sarp-perm">
+
 @include('dashboard.header')
 
 <div class="frame" style="padding-top: 70px;">
@@ -307,46 +512,92 @@ table td:nth-child(6) input[type="checkbox"] {
         <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
     </a>
     </div>
-<body class="bg-light text-dark">
 
-    <div class="container">
-        <h2 class="mb-4">Assign Permissions to: {{ $user->name }}</h2>
+    <div class="container-fluid px-2 px-md-3 pb-5">
+        <div class="sarp-perm-hero">
+            <h1><i class="fas fa-user-shield me-2"></i>Assign permissions</h1>
+            <p>Grant View, Add, Edit, Delete, and Upload CSV per module. Use row or column shortcuts to select many at once.</p>
+            <div class="sarp-perm-user-badge">
+                <i class="fas fa-user"></i>
+                <span>{{ $user->name }}</span>
+                @if($user->email)
+                    <span class="opacity-75 fw-normal">· {{ $user->email }}</span>
+                @endif
+            </div>
+        </div>
 
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-3">{{ session('success') }}</div>
         @endif
 
-        <form method="POST" action="{{ route('admin.assign.permissions', $user->id) }}">
+        <form method="POST" action="{{ route('admin.assign.permissions', $user->id) }}" id="permForm">
             @csrf
 
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle text-center">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Module</th>
-                            @foreach ($actions as $action)
-                                 <th class="col-{{ $action }}">{{ ucfirst($action) }}</th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($modules as $module)
-                            <tr>
-                                <td class="text-start">{{ ucfirst(str_replace('_', ' ', $module)) }}</td>
-                                @foreach ($actions as $action)
-                                    <td>
-                                        <input type="checkbox" name="permissions[]"
-                                               value="{{ $module }}|{{ $action }}"
-                                               {{ $user->hasPermission($module, $action) ? 'checked' : '' }}>
-                                    </td>
-                                @endforeach
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="sarp-perm-toolbar">
+                <button type="button" class="btn btn-sarp-primary" id="permSelectAll" title="Check every permission">
+                    <i class="fas fa-check-double me-1"></i> Select all
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="permClearAll" title="Uncheck every permission">
+                    <i class="fas fa-times me-1"></i> Clear all
+                </button>
+                <span class="sarp-perm-toolbar-hint">
+                    <i class="fas fa-info-circle text-success me-1"></i>
+                    <strong>Row</strong> = all actions for that module. <strong>Column</strong> = that action for every module.
+                </span>
             </div>
 
-            <button type="submit" class="btn btn-success">Save Permissions</button>
+            <div class="sarp-perm-card">
+                <div class="sarp-perm-table-wrap">
+                    <table class="sarp-perm-table table-bordered mb-0 text-center">
+                        <thead>
+                            <tr>
+                                <th class="sarp-perm-corner"><span class="visually-hidden">Row</span></th>
+                                <th class="sarp-perm-module-head">Module</th>
+                                @foreach ($actions as $action)
+                                    <th>
+                                        <div class="sarp-perm-th-col">
+                                            <input type="checkbox" class="sarp-perm-cb perm-col-select" data-action="{{ $action }}" title="Select all: {{ str_replace('_', ' ', $action) }}" aria-label="Select all {{ $action }} for every module">
+                                            @if($action === 'view')<i class="fas fa-eye text-success" style="font-size:0.75rem;"></i>
+                                            @elseif($action === 'add')<i class="fas fa-plus-circle text-primary" style="font-size:0.75rem;"></i>
+                                            @elseif($action === 'edit')<i class="fas fa-pen text-info" style="font-size:0.75rem;"></i>
+                                            @elseif($action === 'delete')<i class="fas fa-trash-alt text-danger" style="font-size:0.75rem;"></i>
+                                            @else<i class="fas fa-file-upload" style="font-size:0.75rem;color:#7c3aed;"></i>
+                                            @endif
+                                            <span>{{ str_replace('_', ' ', ucfirst($action)) }}</span>
+                                        </div>
+                                    </th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($modules as $module)
+                                <tr data-module="{{ e($module) }}">
+                                    <td class="sarp-perm-row-master">
+                                        <input type="checkbox" class="sarp-perm-cb perm-row-select" title="All permissions for this module" aria-label="Select all permissions for {{ $moduleLabels[$module] ?? $module }}">
+                                    </td>
+                                    <td class="sarp-perm-module-cell">
+                                        {{ $moduleLabels[$module] ?? ucfirst(str_replace('_', ' ', $module)) }}
+                                    </td>
+                                    @foreach ($actions as $action)
+                                        <td>
+                                            <input type="checkbox" name="permissions[]"
+                                                   class="sarp-perm-cb perm-cb"
+                                                   data-module="{{ e($module) }}"
+                                                   data-action="{{ $action }}"
+                                                   value="{{ $module }}|{{ $action }}"
+                                                   {{ $user->hasPermission($module, $action) ? 'checked' : '' }}>
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button type="submit" class="btn sarp-perm-save">
+                <i class="fas fa-save me-2"></i>Save permissions
+            </button>
         </form>
     </div>
 
@@ -357,17 +608,83 @@ table td:nth-child(6) input[type="checkbox"] {
         const toggleButton = document.getElementById('sidebarToggle');
 
         toggleButton.addEventListener('click', function () {
-            // Toggle the 'hidden' class on the sidebar
             sidebar.classList.toggle('hidden');
-
-            // Adjust the width of the content
             if (sidebar.classList.contains('hidden')) {
-                content.style.flex = '0 0 100%'; // Expand to full width
-                content.style.padding = '20px'; // Optional: Adjust padding for better visuals
+                content.style.flex = '0 0 100%';
+                content.style.padding = '20px';
             } else {
-                content.style.flex = '0 0 80%'; // Default width
-                content.style.padding = '20px'; // Reset padding
+                content.style.flex = '0 0 80%';
+                content.style.padding = '20px';
             }
+        });
+
+        const allPerm = () => document.querySelectorAll('#permForm .perm-cb');
+
+        function syncRowBox(tr) {
+            const boxes = tr.querySelectorAll('.perm-cb');
+            const rowBox = tr.querySelector('.perm-row-select');
+            if (!rowBox || !boxes.length) return;
+            const n = [...boxes].filter(b => b.checked).length;
+            rowBox.checked = n === boxes.length;
+            rowBox.indeterminate = n > 0 && n < boxes.length;
+        }
+
+        function syncColBox(action) {
+            const colBoxes = document.querySelectorAll('#permForm .perm-cb[data-action="' + action + '"]');
+            const headBox = document.querySelector('#permForm .perm-col-select[data-action="' + action + '"]');
+            if (!headBox || !colBoxes.length) return;
+            const n = [...colBoxes].filter(b => b.checked).length;
+            headBox.checked = n === colBoxes.length;
+            headBox.indeterminate = n > 0 && n < colBoxes.length;
+        }
+
+        document.querySelectorAll('#permForm tr[data-module]').forEach(tr => {
+            syncRowBox(tr);
+        });
+        @foreach ($actions as $action)
+        syncColBox('{{ $action }}');
+        @endforeach
+
+        document.querySelectorAll('#permForm .perm-row-select').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const tr = this.closest('tr');
+                const on = this.checked;
+                tr.querySelectorAll('.perm-cb').forEach(c => { c.checked = on; });
+                this.indeterminate = false;
+                @foreach ($actions as $action)
+                syncColBox('{{ $action }}');
+                @endforeach
+            });
+        });
+
+        document.querySelectorAll('#permForm .perm-col-select').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const action = this.dataset.action;
+                const on = this.checked;
+                document.querySelectorAll('#permForm .perm-cb[data-action="' + action + '"]').forEach(c => { c.checked = on; });
+                this.indeterminate = false;
+                document.querySelectorAll('#permForm tr[data-module]').forEach(tr => syncRowBox(tr));
+            });
+        });
+
+        document.querySelectorAll('#permForm .perm-cb').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const tr = this.closest('tr');
+                syncRowBox(tr);
+                syncColBox(this.dataset.action);
+            });
+        });
+
+        document.getElementById('permSelectAll').addEventListener('click', function () {
+            allPerm().forEach(c => { c.checked = true; });
+            document.querySelectorAll('#permForm .perm-row-select').forEach(b => { b.checked = true; b.indeterminate = false; });
+            document.querySelectorAll('#permForm .perm-col-select').forEach(b => { b.checked = true; b.indeterminate = false; });
+        });
+
+        document.getElementById('permClearAll').addEventListener('click', function () {
+            allPerm().forEach(c => { c.checked = false; });
+            document.querySelectorAll('#permForm .perm-row-select').forEach(b => { b.checked = false; b.indeterminate = false; });
+            document.querySelectorAll('#permForm .perm-col-select').forEach(b => { b.checked = false; b.indeterminate = false; });
         });
     });
 </script>

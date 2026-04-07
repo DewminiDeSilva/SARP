@@ -10,6 +10,7 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\DSDivisionController;
 use App\Http\Controllers\GNDivisionController;
 use App\Http\Controllers\TankRehabilitationController;
+use App\Http\Controllers\FeederRoadDevelopmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\ASCController;
@@ -318,6 +319,56 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/search', [TankRehabilitationController::class, 'search'])
             ->name('search')
             ->middleware('check.permission:tank_rehabilitation,view');
+    });
+
+    Route::get('/searchFeederRoad', [FeederRoadDevelopmentController::class, 'search'])
+        ->name('searchFeederRoad')
+        ->middleware('check.permission:feeder_road_development,view');
+
+    Route::middleware(['auth'])->prefix('feeder_road_development')->name('feeder_road_development.')->group(function () {
+        Route::get('/', [FeederRoadDevelopmentController::class, 'index'])
+            ->name('index')
+            ->middleware('check.permission:feeder_road_development,view');
+
+        Route::get('/create', [FeederRoadDevelopmentController::class, 'create'])
+            ->name('create')
+            ->middleware('check.permission:feeder_road_development,add');
+
+        Route::post('/', [FeederRoadDevelopmentController::class, 'store'])
+            ->name('store')
+            ->middleware('check.permission:feeder_road_development,add');
+
+        Route::get('/report-excel', [FeederRoadDevelopmentController::class, 'reportExcel'])
+            ->name('reportExcel')
+            ->middleware('check.permission:feeder_road_development,view');
+
+        Route::get('/download-template', [FeederRoadDevelopmentController::class, 'downloadTemplate'])
+            ->name('download_template')
+            ->middleware('check.permission:feeder_road_development,upload_csv');
+
+        Route::post('/upload-excel', [FeederRoadDevelopmentController::class, 'uploadExcel'])
+            ->name('upload_excel')
+            ->middleware('check.permission:feeder_road_development,upload_csv');
+
+        Route::post('/bulk-delete', [FeederRoadDevelopmentController::class, 'bulkDelete'])
+            ->name('bulk_delete')
+            ->middleware('check.permission:feeder_road_development,delete');
+
+        Route::get('/{feederRoadDevelopment}', [FeederRoadDevelopmentController::class, 'show'])
+            ->name('show')
+            ->middleware('check.permission:feeder_road_development,view');
+
+        Route::get('/{feederRoadDevelopment}/edit', [FeederRoadDevelopmentController::class, 'edit'])
+            ->name('edit')
+            ->middleware('check.permission:feeder_road_development,edit');
+
+        Route::put('/{feederRoadDevelopment}', [FeederRoadDevelopmentController::class, 'update'])
+            ->name('update')
+            ->middleware('check.permission:feeder_road_development,edit');
+
+        Route::delete('/{feederRoadDevelopment}', [FeederRoadDevelopmentController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('check.permission:feeder_road_development,delete');
     });
 
 
