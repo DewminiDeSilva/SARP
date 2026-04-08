@@ -457,7 +457,9 @@
         <a href="{{route('farmerorganization.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add New Organization</a>
     @endif
 
+        @sarpMutate('farmerorganization')
         <a href="{{ route('downloadfarmerorganization.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+        @endsarpMutate
     </div>
 
 

@@ -26,7 +26,7 @@ class UserPermissionController extends Controller
             'asc_registration', 'grievances', 'officer', 'tank_rehabilitation', 'feeder_road_development', 'fingerling', 'infrastructure',
             'gallery', 'agro', 'shareholder', 'bene_form', 'nrm', 'nrm_participants', 'youth_training', 'youth_training_participants', 'awpb',
             'costtab', 'projectdesignreport', 'vegitable', 'fruit', 'goat', 'dairy', 'poultary',
-            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks',             'expressions', 'nutrient_rich_home_garden', 'fourp_training', 'fourp_training_participants', 'tank_training', 'tank_training_participants', 'agriculture_training_participants', 'livestock_training_participants'
+            'aquaculture', 'homegarden', 'other_crops', 'agriculture', 'livestocks',             'expressions', 'nutrient_rich_home_garden', 'fourp_training', 'fourp_training_participants', 'tank_training', 'tank_training_participants', 'livestock_training', 'agriculture_training', 'agriculture_training_participants', 'livestock_training_participants'
         ];
 
         $moduleLabels = [
@@ -78,6 +78,8 @@ class UserPermissionController extends Controller
     'fourp_training_participants' => '4P Training Participants',
     'tank_training' => 'Tank Training Program',
     'tank_training_participants' => 'Tank Training Participants',
+    'livestock_training' => 'Livestock Training Program',
+    'agriculture_training' => 'Agriculture Training Program',
     'agriculture_training_participants' => 'Agriculture Training Participants (Members)',
     'livestock_training_participants' => 'Livestock Training Participants (Members)'
 ];

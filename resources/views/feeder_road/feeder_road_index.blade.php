@@ -813,8 +813,10 @@ body.modal-open .modal-backdrop {
                 @if(auth()->user()->hasPermission('feeder_road_development', 'add'))
                     <a href="{{route('feeder_road_development.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Feeder Road Details</a>
                 @endif
+                @sarpMutate('feeder_road_development')
                     <a href="{{route('feeder_road_development.reportExcel')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Download Excel Report</a>
                     <a href="{{route('feeder_road_development.download_template')}}" class="btn btn-outline-primary" style="border-color: green; color: green;">Download Excel Template</a>
+                @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">

@@ -480,6 +480,8 @@ public function generateCsv()
             $query->where('project_type', 'Resilience Project')->where('input1', 'agriculture');
         } elseif ($cat === 'resilience_livestock') {
             $query->where('project_type', 'Resilience Project')->where('input1', 'livestock');
+        } elseif ($cat === 'nutrition_program') {
+            $query->whereIn('project_type', ['Nutrition Programs', 'nutrition']);
         }
 
         if ($request->filled('filter_ds')) {
@@ -589,6 +591,9 @@ public function generateCsv()
             ->where('project_type', 'Resilience Project')
             ->where('input1', 'livestock')
             ->count();
+        $nutritionProgrammeBeneficiaryCount = $summaryBase->clone()
+            ->whereIn('project_type', ['Nutrition Programs', 'nutrition'])
+            ->count();
 
         $filterTankOptions = Beneficiary::query()
             ->whereNotNull('tank_name')
@@ -651,6 +656,7 @@ public function generateCsv()
             'fourpBeneficiaryCount',
             'resilienceAgricultureCount',
             'resilienceLivestockCount',
+            'nutritionProgrammeBeneficiaryCount',
             'convertedMap',
             'duplicateNICs',
             'filterTankOptions',

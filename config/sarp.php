@@ -21,4 +21,15 @@ return [
     'github_url' => env('SARP_GITHUB_URL', 'https://github.com/your-org/SARP'),
     'github_branch' => env('SARP_GITHUB_BRANCH', 'develop'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Login page — demo / view-only credentials (optional)
+    |--------------------------------------------------------------------------
+    | Set LOGIN_HINT_EMAIL (and optionally LOGIN_HINT_PASSWORD) to override the
+    | defaults below. Use only on demo or internal servers.
+    */
+    'login_hint_auto_fill' => filter_var(env('LOGIN_HINT_AUTO_FILL', false), FILTER_VALIDATE_BOOLEAN),
+    'login_hint_email' => env('LOGIN_HINT_EMAIL', 'sarp@sarp.lk'),
+    'login_hint_password' => env('LOGIN_HINT_PASSWORD', 'sarp123'),
+
 ];

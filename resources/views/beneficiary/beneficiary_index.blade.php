@@ -1763,7 +1763,7 @@
 
         <!-- Programme-type summary row (matches project_type breakdown; same filters as table) -->
         <div class="container sarp-programme-summary-row mb-4">
-            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3 justify-content-center">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-3 row-cols-xxl-6 g-3 justify-content-center">
                 <div class="col">
                     <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #5b86e5 0%, #36d1dc 100%);">
                         <div class="sarp-programme-mini-card__label">Tank Beneficiaries</div>
@@ -1783,6 +1783,12 @@
                     </div>
                 </div>
                 <div class="col">
+                    <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);">
+                        <div class="sarp-programme-mini-card__label">Nutrition Program</div>
+                        <div class="sarp-programme-mini-card__value">{{ number_format($nutritionProgrammeBeneficiaryCount ?? 0) }}</div>
+                    </div>
+                </div>
+                <div class="col">
                     <div class="sarp-programme-mini-card summary-card" style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);">
                         <div class="sarp-programme-mini-card__label">Resilience – Agriculture</div>
                         <div class="sarp-programme-mini-card__value">{{ number_format($resilienceAgricultureCount ?? 0) }}</div>
@@ -1795,7 +1801,7 @@
                     </div>
                 </div>
             </div>
-            <p class="text-center text-muted small mt-2 mb-0 sarp-ben-summary-font" style="font-size: 0.75rem;">Counts by <strong>project type</strong> (Youth = Youth Enterprise). Same filters as the table. NIC-based Youth / Not Youth stay in the card above.</p>
+            <p class="text-center text-muted small mt-2 mb-0 sarp-ben-summary-font" style="font-size: 0.75rem;">Counts by <strong>project type</strong> (Youth = Youth Enterprise; Nutrition = Nutrition Programs). Same filters as the table. NIC-based Youth / Not Youth stay in the card above.</p>
         </div>
 
 <!-- Modal for Crop Name Summary -->
@@ -1978,9 +1984,11 @@
                             <i class="fas fa-plus-circle" style="margin-right: 5px;"></i>Add New
                         </a>
                         @endif
+                        @sarpMutate('beneficiary')
                         <a href="{{route('download.csv')}}" class="btn submitbtton" style="border-radius: 8px; padding: 12px 25px; font-weight: 600; box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(25, 135, 84, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(25, 135, 84, 0.3)';">
                             <i class="fas fa-file-csv" style="margin-right: 5px;"></i>Generate CSV
                         </a>
+                        @endsarpMutate
                     </div>
                 </div>
             </div>
@@ -2059,6 +2067,7 @@
                                     <option value="tank_beneficiary" {{ request('filter_category') === 'tank_beneficiary' ? 'selected' : '' }}>Tank Beneficiaries</option>
                                     <option value="youth" {{ request('filter_category') === 'youth' ? 'selected' : '' }}>Youth</option>
                                     <option value="4p" {{ request('filter_category') === '4p' ? 'selected' : '' }}>4P</option>
+                                    <option value="nutrition_program" {{ request('filter_category') === 'nutrition_program' ? 'selected' : '' }}>Nutrition Program</option>
                                     <option value="resilience_agriculture" {{ request('filter_category') === 'resilience_agriculture' ? 'selected' : '' }}>Resilience – Agriculture</option>
                                     <option value="resilience_livestock" {{ request('filter_category') === 'resilience_livestock' ? 'selected' : '' }}>Resilience – Livestock</option>
                                 </select>

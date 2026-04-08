@@ -228,10 +228,11 @@ td {
 </div>
 
 
+            @sarpMutate('expressions')
             <div class="mb-3">
-           
             <a href="{{ route('expressions.create') }}" class="btn submitbtton">+ Submit New</a>
             </div>
+            @endsarpMutate
             
          <form method="GET" action="{{ route('expressions.index') }}" class="mb-3">
   <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -317,6 +318,7 @@ td {
         };
     @endphp
 
+    @if(auth()->user()->hasPermission('expressions', 'edit'))
     <div id="status-{{ $expression->id }}" data-current-status="{{ $status ?? '' }}">
         <span class="badge {{ $badgeClass }} status-badge {{ $status === 'Agreement Signed' ? 'locked-status' : '' }}"
             style="cursor:{{ $status === 'Agreement Signed' ? 'default' : 'pointer' }};"
@@ -334,6 +336,9 @@ td {
         @method('PATCH')
         <input type="hidden" name="status" id="status-input-{{ $expression->id }}">
     </form>
+    @else
+        <span class="badge {{ $badgeClass }} status-badge locked-status">{{ $status ?? '—' }}</span>
+    @endif
 </td>
 
 

@@ -293,7 +293,9 @@
                     @if(auth()->user()->hasPermission('nrm', 'add'))
                     <a href="{{ route('nrm.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add NRM Training Program</a>
                     @endif
+                    @sarpMutate('nrm')
                     <a href="{{ route('nrmdownload.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                    @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">

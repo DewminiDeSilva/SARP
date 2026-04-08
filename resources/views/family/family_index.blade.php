@@ -204,27 +204,20 @@
                 <td>{{ $family->nutrition_level }}</td>
 
                 <td>
-                    {{-- <button class="btn btn-primary edit-family-btn" data-toggle="modal" data-target="#editFamilyModal" data-family-id="{{ $family->id }}">Edit</button> --}}
-                    {{-- <a href="/family/{{ $family->id }}/edit">Edit</a>
-                    <form action="/family/{{ $family->id }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <form action="/crud/{{$crud->id}}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">delete</button>
-                </form>
-                    <a href="/family/{{ $family->id }}/delete
-
-                        <button type="submit">Delete</button> --}}
-                        <div class="d-flex">
-                        <a class="btn btn-primary  mr-2" href='family/{{$family->id}}/edit'>Edit</a>
-
-                        <form action="/family/{{ $family->id }}" method="POST">
+                        <div class="d-flex flex-wrap gap-1">
+                        @if(auth()->user()->hasPermission('family', 'view'))
+                        <a class="btn btn-info btn-sm mr-1" href="{{ route('family.show', $family) }}">View</a>
+                        @endif
+                        @if(auth()->user()->hasPermission('family', 'edit'))
+                        <a class="btn btn-primary btn-sm mr-1" href="{{ route('family.edit', $family) }}">Edit</a>
+                        @endif
+                        @if(auth()->user()->hasPermission('family', 'delete'))
+                        <form action="{{ route('family.destroy', $family) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this family member?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</a>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
+                        @endif
                     </div>
                 </td>
             </tr>

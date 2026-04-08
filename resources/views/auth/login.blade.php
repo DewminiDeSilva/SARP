@@ -489,6 +489,147 @@
             color: var(--sarp-green-dark);
             text-decoration: underline;
         }
+
+        /* View-only hint — email + password display only */
+        .login-hint-block {
+            margin-top: 1.25rem;
+            padding-top: 1.1rem;
+            border-top: 1px solid rgba(226, 232, 240, 0.95);
+        }
+
+        .btn-hint-reveal {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.4rem 0.85rem;
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--sarp-green);
+            background: rgba(13, 122, 60, 0.08);
+            border: 1px solid rgba(13, 122, 60, 0.22);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-hint-reveal:hover {
+            background: rgba(13, 122, 60, 0.14);
+            border-color: rgba(13, 122, 60, 0.4);
+        }
+
+        .btn-hint-reveal[aria-expanded="true"] .hint-reveal-ico {
+            transform: rotate(180deg);
+        }
+
+        .hint-reveal-ico {
+            font-size: 0.65rem;
+            transition: transform 0.25s ease;
+        }
+
+        .login-hint-panel {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.25s ease, margin 0.25s ease;
+        }
+
+        .login-hint-panel.is-open {
+            max-height: 22rem;
+            opacity: 1;
+            margin-top: 0.85rem;
+        }
+
+        .login-hint-avatar-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 0 0 0.75rem;
+        }
+
+        .login-hint-avatar {
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            object-fit: contain;
+            object-position: center bottom;
+            background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+            border: 3px solid rgba(13, 122, 60, 0.22);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1);
+            padding: 4px;
+        }
+
+        .login-hint-card {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, rgba(240, 253, 244, 0.65) 0%, rgba(255, 255, 255, 0.95) 100%);
+            border: 1px solid rgba(13, 122, 60, 0.18);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+        }
+
+        .login-hint-card-title {
+            margin: 0 0 0.65rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--sarp-green);
+            text-align: center;
+        }
+
+        .login-hint-creds {
+            display: grid;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .login-hint-cred-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 0.75rem;
+            padding: 0.5rem 0.65rem;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .login-hint-cred-row dt {
+            margin: 0;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            min-width: 4.75rem;
+        }
+
+        /* Readable Latin text for email / password (not monospace) */
+        .login-hint-cred-row dd {
+            margin: 0;
+            flex: 1;
+            min-width: 0;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+            color: #0f172a;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        .login-hint-muted {
+            margin: 0;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -603,6 +744,11 @@
 
                 <form method="POST" action="{{ route('login') }}" novalidate>
                     @csrf
+                    @php
+                        $hintConfigured = filled(config('sarp.login_hint_email'));
+                        $hintEmail = config('sarp.login_hint_email');
+                        $hintPassword = config('sarp.login_hint_password');
+                    @endphp
 
                     <div class="field">
                         <label for="email">Email</label>
@@ -655,6 +801,38 @@
                             <br>
                         @endif
                         <span>Need an account? <a href="{{ route('register') }}">Register</a></span>
+                    </div>
+
+                    <div class="login-hint-block">
+                        <button type="button" class="btn-hint-reveal" id="loginHintRevealBtn" aria-expanded="false" aria-controls="loginHintPanel">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                            View-only hint
+                            <i class="fas fa-chevron-down hint-reveal-ico" aria-hidden="true"></i>
+                        </button>
+                        <div id="loginHintPanel" class="login-hint-panel" role="region" aria-labelledby="loginHintRevealBtn" aria-hidden="true">
+                            <div class="login-hint-card">
+                                @if ($hintConfigured)
+                                <div class="login-hint-avatar-wrap">
+                                    <img src="{{ asset('assets/images/farmer.png') }}" alt="View-only demo account" class="login-hint-avatar" width="104" height="104" loading="lazy" decoding="async">
+                                </div>
+                                @endif
+                                <p class="login-hint-card-title">View-only sign-in</p>
+                                @if ($hintConfigured)
+                                    <dl class="login-hint-creds">
+                                        <div class="login-hint-cred-row">
+                                            <dt>Email</dt>
+                                            <dd id="hintDisplayEmail">{{ $hintEmail }}</dd>
+                                        </div>
+                                        <div class="login-hint-cred-row">
+                                            <dt>Password</dt>
+                                            <dd id="hintDisplayPassword">{{ filled($hintPassword) ? $hintPassword : '—' }}</dd>
+                                        </div>
+                                    </dl>
+                                @else
+                                    <p class="login-hint-muted">Not configured.</p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -719,6 +897,31 @@
                 this.setAttribute('aria-label', 'Show password');
             }
         });
+
+        (function () {
+            var LS_HINT_OPEN = 'sarp_mis_view_hint_open';
+            var btn = document.getElementById('loginHintRevealBtn');
+            var panel = document.getElementById('loginHintPanel');
+            if (!btn || !panel) return;
+
+            function setPanelOpen(open) {
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+                panel.classList.toggle('is-open', open);
+                try { localStorage.setItem(LS_HINT_OPEN, open ? '1' : '0'); } catch (e) {}
+            }
+
+            btn.addEventListener('click', function () {
+                var open = btn.getAttribute('aria-expanded') === 'true';
+                setPanelOpen(!open);
+            });
+
+            try {
+                if (localStorage.getItem(LS_HINT_OPEN) === '1') {
+                    setPanelOpen(true);
+                }
+            } catch (e) {}
+        })();
     </script>
 </body>
 </html>

@@ -72,4 +72,20 @@ class User extends Authenticatable
             return $perm->module === $module && $perm->action === $action;
         });
     }
+
+    /**
+     * True if the user may change data: add / edit / delete / upload CSV (or is admin).
+     * View-only accounts should return false so blades can hide create/edit/delete/upload/export controls.
+     */
+    public function hasMutationAccess(string $module): bool
+    {
+        if (($this->role ?? '') === 'admin') {
+            return true;
+        }
+
+        return $this->hasPermission($module, 'add')
+            || $this->hasPermission($module, 'edit')
+            || $this->hasPermission($module, 'delete')
+            || $this->hasPermission($module, 'upload_csv');
+    }
 }

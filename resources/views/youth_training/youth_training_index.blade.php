@@ -98,7 +98,9 @@
                     @if(auth()->user()->hasPermission('youth_training', 'add'))
                     <a href="{{ route('youth-training.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Youth Training Program</a>
                     @endif
+                    @sarpMutate('youth_training')
                     <a href="{{ route('youth-training.download.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                    @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
