@@ -351,7 +351,9 @@
             @if(auth()->user()->hasPermission('nutrition', 'add'))
                 <a href="{{ route('nutrition.create') }}" class="btn btn-custom" style="background-color: green; border-color: green;">Add New Program</a>
             @endif
+            @sarpMutate('nutrition')
                 <a href="{{ route('downloadnutrition.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+            @endsarpMutate
 
             </div>
 

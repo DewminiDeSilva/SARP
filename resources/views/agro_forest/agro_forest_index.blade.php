@@ -213,7 +213,9 @@
                 </select>
                 <span>entries</span>
             </div>
+ @sarpMutate('agro')
  <a href="{{ route('agro-forest.create') }}" class="btn submitbtton ms-2">+ Add New</a>
+ @endsarpMutate
             <!-- Table -->
             <div class="row table-container">
                 <div class="col">
@@ -274,14 +276,19 @@
                                     @endif
                                 </td>
                                 <td class="buttonline">
+                                    @if(auth()->user()->hasPermission('agro', 'view'))
                                     <a href="{{ route('agro-forest.show', $row->id) }}" class="btn btn-info btn-sm">View</a>
+                                    @endif
                                 </td>
                                 <td class="button-group">
+                                    @if(auth()->user()->hasPermission('agro', 'edit'))
                                     <a href="{{ route('agro-forest.edit', $row->id) }}" class="btn btn-primary btn-sm"
                                        style="background-color: green;border: 2px solid green;">
                                         <img src="{{ asset('assets/images/edit4.png') }}" alt="Edit" style="width: 20px; height: 20px;">
                                     </a>
+                                    @endif
 
+                                    @if(auth()->user()->hasPermission('agro', 'delete'))
                                     <form action="{{ route('agro-forest.destroy', $row->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this record?');">
                                         @csrf
                                         @method('DELETE')
@@ -289,6 +296,7 @@
                                             <img src="{{ asset('assets/images/delete1.png') }}" alt="Delete" style="width: 20px; height: 20px;">
                                         </button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

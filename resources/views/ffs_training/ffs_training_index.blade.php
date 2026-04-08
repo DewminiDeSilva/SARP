@@ -300,7 +300,9 @@
                 @if(auth()->user()->hasPermission('ffs-training', 'add'))
                     <a href="{{ route('ffs-training.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add FFS Training Program</a>
                 @endif
+                @sarpMutate('ffs-training')
                     <a href="{{ route('downloadffs-training.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">

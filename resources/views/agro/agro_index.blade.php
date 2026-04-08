@@ -506,7 +506,9 @@
 
     <!-- Generate CSV Report Button in a Separate Column -->
     <div class="col-md-6 offset-md-3 text-right">
+        @sarpMutate('agro')
         <a href="{{ route('agro.csv.generate') }}" class="btn submitbtton">Generate CSV Report</a>
+        @endsarpMutate
     </div>
 </div>
 

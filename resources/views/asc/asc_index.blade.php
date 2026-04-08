@@ -423,7 +423,9 @@
         </div>
 
         <div class="bottom-left">
+            @sarpMutate('asc_registration')
             <a href="{{ route('downloadAscCsv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+            @endsarpMutate
             @if(auth()->user()->hasPermission('asc_registration', 'upload_csv'))
             <form action="{{ route('asc_registration.upload_csv') }}" method="POST" enctype="multipart/form-data">
 

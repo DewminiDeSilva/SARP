@@ -545,10 +545,12 @@ td {
 
         <div class="d-flex justify-content-between mb-3">
         @if(auth()->user()->hasPermission('cdf', 'add'))
-        <a href="{{ route('cdf.create') }}" class="btn submitbtton"> + Add New </button>
+        <a href="{{ route('cdf.create') }}" class="btn submitbtton"> + Add New </a>
         @endif
                     <!--<a href="{{route('cdf.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add</a>-->
+                    @sarpMutate('cdf')
                     <a href="{{route('downloadcdf.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                    @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">

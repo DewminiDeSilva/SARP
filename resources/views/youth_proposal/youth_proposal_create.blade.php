@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youth Proposal</title>
+    <title>Create youth proposal — SARP MIS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -20,17 +20,24 @@
             --yp-shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 28px rgba(18,105,38,.07);
             --yp-space: 1.5rem;
         }
-        body { background-color: #eef2f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
-        .frame { display: flex; width: 100%; }
-        .left-column { flex: 0 0 20%; border-right: 1px solid var(--yp-border); background: #fafbfa; }
+        body { background-color: #eef2f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; overflow-x: hidden; }
+        .frame { display: flex; width: 100%; max-width: 100%; align-items: flex-start; }
+        .left-column { flex: 0 0 20%; min-width: 0; border-right: 1px solid var(--yp-border); background: #fafbfa; }
         .left-column.hidden { display: none; }
-        .right-column { flex: 0 0 80%; padding: 20px 16px 28px; transition: flex 0.3s ease; }
+        .right-column { flex: 1 1 auto; min-width: 0; max-width: 100%; padding: 20px 16px 28px; transition: flex 0.3s ease; }
 
         /* Page shell: wider card, uses more of the content column */
         .yp-frame-wrap {
             max-width: min(1240px, 100%);
+            width: 100%;
             margin: 0 auto;
             padding: 8px 0 40px;
+        }
+        .yp-table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 0;
         }
         .yp-form-shell {
             background: var(--yp-surface);
@@ -290,11 +297,11 @@
                     <div class="yp-radio-group-wrap">
                         <div class="yp-radio-group" role="radiogroup">
                             <label class="yp-radio-wrap">
-                                <input type="radio" name="business_type" value="New Business">
+                                <input type="radio" name="business_type" value="New Business" {{ old('business_type') === 'New Business' ? 'checked' : '' }}>
                                 <span class="yp-radio-option">New Business</span>
                             </label>
                             <label class="yp-radio-wrap">
-                                <input type="radio" name="business_type" value="Existing Business">
+                                <input type="radio" name="business_type" value="Existing Business" {{ old('business_type') === 'Existing Business' ? 'checked' : '' }}>
                                 <span class="yp-radio-option">Existing Business</span>
                             </label>
                         </div>
@@ -304,12 +311,12 @@
                 <div class="yp-row-3">
                     <div class="yp-field">
                         <label class="yp-label">NIC Number</label>
-                        <input type="text" class="form-control yp-input {{ $errors->has('nic_number') ? 'is-invalid' : '' }}" name="nic_number" placeholder="NIC">
+                        <input type="text" class="form-control yp-input {{ $errors->has('nic_number') ? 'is-invalid' : '' }}" name="nic_number" placeholder="NIC" value="{{ old('nic_number') }}">
                         @error('nic_number') <span class="yp-error">{{ $message }}</span> @enderror
                     </div>
                     <div class="yp-field">
                         <label class="yp-label">Birth date</label>
-                        <input type="date" class="form-control yp-input {{ $errors->has('birth_date') ? 'is-invalid' : '' }}" name="birth_date" id="birth_date" title="mm/dd/yyyy">
+                        <input type="date" class="form-control yp-input {{ $errors->has('birth_date') ? 'is-invalid' : '' }}" name="birth_date" id="birth_date" title="mm/dd/yyyy" value="{{ old('birth_date') }}">
                         @error('birth_date') <span class="yp-error">{{ $message }}</span> @enderror
                     </div>
                     <div class="yp-field">
@@ -320,38 +327,38 @@
 
                 <div class="yp-field">
                     <label class="yp-label">Address</label>
-                    <textarea class="form-control yp-input" name="address" rows="2" placeholder="Address"></textarea>
+                    <textarea class="form-control yp-input" name="address" rows="2" placeholder="Address">{{ old('address') }}</textarea>
                 </div>
 
                 <div class="yp-row-3">
                     <div class="yp-field">
                         <label class="yp-label">Telephone (Office)</label>
-                        <input type="text" class="form-control yp-input" name="office_phone" placeholder="Office">
+                        <input type="text" class="form-control yp-input" name="office_phone" placeholder="Office" value="{{ old('office_phone') }}">
                     </div>
                     <div class="yp-field">
                         <label class="yp-label">Mobile Phone Number</label>
-                        <input type="text" class="form-control yp-input" name="mobile_phone" placeholder="Mobile">
+                        <input type="text" class="form-control yp-input" name="mobile_phone" placeholder="Mobile" value="{{ old('mobile_phone') }}">
                     </div>
                     <div class="yp-field">
                         <label class="yp-label">Email</label>
-                        <input type="email" class="form-control yp-input" name="email" placeholder="Email">
+                        <input type="email" class="form-control yp-input" name="email" placeholder="Email" value="{{ old('email') }}">
                     </div>
                 </div>
 
                 <div class="yp-row-3">
                     <div class="yp-field">
                         <label class="yp-label">Market Analysis</label>
-                        <textarea class="form-control yp-input {{ $errors->has('market_problem') ? 'is-invalid' : '' }}" name="market_problem" rows="2" placeholder="Market Analysis"></textarea>
+                        <textarea class="form-control yp-input {{ $errors->has('market_problem') ? 'is-invalid' : '' }}" name="market_problem" rows="2" placeholder="Market Analysis">{{ old('market_problem') }}</textarea>
                         @error('market_problem') <span class="yp-error">{{ $message }}</span> @enderror
                     </div>
                     <div class="yp-field">
                         <label class="yp-label">Business Objectives</label>
-                        <textarea class="form-control yp-input {{ $errors->has('business_objectives') ? 'is-invalid' : '' }}" name="business_objectives" rows="2" placeholder="Business Objectives"></textarea>
+                        <textarea class="form-control yp-input {{ $errors->has('business_objectives') ? 'is-invalid' : '' }}" name="business_objectives" rows="2" placeholder="Business Objectives">{{ old('business_objectives') }}</textarea>
                         @error('business_objectives') <span class="yp-error">{{ $message }}</span> @enderror
                     </div>
                     <div class="yp-field">
                         <label class="yp-label">Category</label>
-                        <input type="text" class="form-control yp-input {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category" placeholder="Category">
+                        <input type="text" class="form-control yp-input {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category" placeholder="Category" value="{{ old('category') }}">
                         @error('category') <span class="yp-error">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -362,6 +369,7 @@
                     <div class="yp-section-card__header"><i class="fas fa-shield-alt"></i> Project risks &amp; mitigation</div>
                     <div class="yp-section-card__body">
                 <div class="yp-field mb-0">
+                    <div class="yp-table-scroll">
                     <table class="table yp-table mb-0">
                         <thead>
                             <tr>
@@ -378,6 +386,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
                     </div>
                 </div>
@@ -408,6 +417,7 @@
                     <div class="yp-section-card__body">
                 <div class="yp-section-title mb-3">Total investment breakdown</div>
                 <div class="yp-field">
+                    <div class="yp-table-scroll">
                     <table class="table yp-table">
                         <thead>
                             <tr>
@@ -424,28 +434,29 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <div class="yp-field">
                     <label class="yp-label">Registration Details (if any)</label>
-                    <input type="text" class="form-control yp-input" name="registration_details" placeholder="Registration details">
+                    <input type="text" class="form-control yp-input" name="registration_details" placeholder="Registration details" value="{{ old('registration_details') }}">
                 </div>
                 <div class="yp-field">
                     <label class="yp-label">Contact Person</label>
-                    <input type="text" class="form-control yp-input" name="contact_person" placeholder="Contact person">
+                    <input type="text" class="form-control yp-input" name="contact_person" placeholder="Contact person" value="{{ old('contact_person') }}">
                 </div>
 
                 <div class="yp-field">
                     <label class="yp-label">Background information</label>
-                    <textarea class="form-control yp-input" name="background_info" rows="3"></textarea>
+                    <textarea class="form-control yp-input" name="background_info" rows="3">{{ old('background_info') }}</textarea>
                 </div>
                 <div class="yp-field">
                     <label class="yp-label">Project Justification</label>
-                    <textarea class="form-control yp-input" name="project_justification" rows="3"></textarea>
+                    <textarea class="form-control yp-input" name="project_justification" rows="3">{{ old('project_justification') }}</textarea>
                 </div>
                 <div class="yp-field">
                     <label class="yp-label">Project Benefits</label>
-                    <textarea class="form-control yp-input" name="project_benefits" rows="3"></textarea>
+                    <textarea class="form-control yp-input" name="project_benefits" rows="3">{{ old('project_benefits') }}</textarea>
                 </div>
                     </div>
                 </div>
@@ -455,6 +466,7 @@
                     <div class="yp-section-card__body">
                 <div class="yp-section-title mb-3">Project coverage</div>
                 <div class="yp-field">
+                    <div class="yp-table-scroll">
                     <table class="table yp-table">
                         <thead>
                             <tr>
@@ -473,6 +485,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <div class="yp-section-title mt-4 mb-3">Expected outputs &amp; outcomes</div>
@@ -504,6 +517,7 @@
                     <div class="yp-section-card__body">
                 <div class="yp-section-title mb-3">Funding source</div>
                 <div class="yp-field">
+                    <div class="yp-table-scroll">
                     <table class="table yp-table">
                         <thead>
                             <tr>
@@ -522,10 +536,12 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <div class="yp-section-title mt-4 mb-3">Assistance required</div>
                 <div class="yp-field mb-0">
+                    <div class="yp-table-scroll">
                     <table class="table yp-table mb-0">
                         <thead>
                             <tr>
@@ -544,6 +560,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
                     </div>
                 </div>
@@ -582,6 +599,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     birthInput.addEventListener('change', updateAge);
     birthInput.addEventListener('input', updateAge);
+    updateAge();
 
     // Add/remove risk
     document.querySelector('.add-risk').addEventListener('click', function () {

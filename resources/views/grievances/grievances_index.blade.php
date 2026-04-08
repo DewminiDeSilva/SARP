@@ -284,7 +284,9 @@
                 @if(auth()->user()->hasPermission('grievances', 'add'))
                 <a href="{{ route('grievances.create') }}" class="btn btn-success">Add New Grievance</a>
                 @endif
+                @sarpMutate('grievances')
                 <a href="{{ route('grievances.report.csv') }}" class="btn btn-primary">Generate CSV Report</a>
+                @endsarpMutate
             </div>
 
             <!-- CSV Upload Form -->

@@ -812,7 +812,9 @@ table th:first-child, table td:first-child {
                 @if(auth()->user()->hasPermission('tank_rehabilitation', 'add'))
                     <a href="{{route('tank_rehabilitation.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Tank Details</a>
                 @endif
+                @sarpMutate('tank_rehabilitation')
                     <a href="{{route('downloadtank.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">

@@ -90,7 +90,9 @@
                     @if(auth()->user()->hasPermission('tank_training', 'add'))
                     <a href="{{ route('tank-training.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Tank Training Program</a>
                     @endif
+                    @sarpMutate('tank_training')
                     <a href="{{ route('tank-training.download.csv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                    @endsarpMutate
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">

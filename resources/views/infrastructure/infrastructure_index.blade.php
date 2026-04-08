@@ -651,7 +651,9 @@
                         @if(auth()->user()->hasPermission('infrastructure', 'add'))
                         <a href="{{route('infrastructure.create')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Infrastructure</a>
                         @endif
+                        @sarpMutate('infrastructure')
                         <a href="{{route('downloadInfrastructure.csv')}}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
+                        @endsarpMutate
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">

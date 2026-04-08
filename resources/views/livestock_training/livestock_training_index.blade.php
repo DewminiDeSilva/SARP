@@ -77,6 +77,7 @@
                     </div>
                 </div>
             </div>
+            @sarpMutate('livestock_training')
             <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('livestock-training.create') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Add Livestock Training Program</a>
                 <a href="{{ route('livestock-training.downloadCsv') }}" class="btn btn-primary" style="background-color: green; border-color: green;">Generate CSV Report</a>
@@ -89,6 +90,7 @@
                     </div>
                     <button type="submit" class="btn btn-success">Upload CSV / Excel</button>
                 </form>
+            @endsarpMutate
                 <form method="GET" action="{{ route('livestock-training.search') }}" class="form-inline">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="search" value="{{ $search ?? '' }}">
@@ -148,11 +150,18 @@
                                     <td>{{ $training->gn_division_name }}</td>
                                     <td>{{ $training->as_center }}</td>
                                     <td class="button-container">
+                                        @if(auth()->user()->hasPermission('livestock_training_participants', 'add'))
                                         <a href="{{ route('livestock-training-participants.create', $training->id) }}" class="btn btn-success" title="Add Participants" style="height: 40px; padding: 8px 12px;">Add Participants</a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('livestock_training_participants', 'view'))
                                         <a href="{{ route('livestock-training-participants.list', $training->id) }}" class="btn btn-success" title="View Members" style="height: 40px; padding: 8px 12px;">View Members</a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('livestock_training', 'edit'))
                                         <a href="{{ route('livestock-training.edit', $training) }}" class="btn edit-button" title="Edit">
                                             <img src="{{ asset('assets/images/edit2.png') }}" alt="Edit" style="width: 16px; height: 16px;">
                                         </a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('livestock_training', 'delete'))
                                         <form action="{{ route('livestock-training.destroy', $training) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -160,6 +169,7 @@
                                                 <img src="{{ asset('assets/images/delete.png') }}" alt="Delete" style="width: 16px; height: 16px;">
                                             </button>
                                         </form>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
