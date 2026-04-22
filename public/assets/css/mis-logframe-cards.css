@@ -1,0 +1,170 @@
+/**
+ * Dashboard only: the three top logframe indicator cards (.mis-logframe-cards).
+ * Does not affect module charts, tank card, or other .card elements elsewhere.
+ */
+
+.mis-logframe-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2vw, 28px);
+  margin-bottom: var(--spacing-xl, 36px);
+}
+
+@media (max-width: 1100px) {
+  .mis-logframe-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Outer cards */
+.mis-logframe-cards > .card {
+  position: relative;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 26px 22px 28px !important;
+  min-height: 0 !important;
+  background: linear-gradient(165deg, #ffffff 0%, #f8fafc 45%, #f1f5f9 100%) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 12px 40px rgba(15, 23, 42, 0.08),
+    0 4px 12px rgba(15, 23, 42, 0.04) !important;
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.mis-logframe-cards > .card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 24px 56px rgba(15, 23, 42, 0.12),
+    0 8px 20px rgba(21, 115, 71, 0.08) !important;
+}
+
+.mis-logframe-cards > .card::before {
+  height: 5px !important;
+  border-radius: 20px 20px 0 0;
+  opacity: 1;
+}
+
+.mis-logframe-cards > .card:nth-child(1)::before {
+  background: linear-gradient(90deg, #15803d, #22c55e, #4ade80) !important;
+}
+
+.mis-logframe-cards > .card:nth-child(2)::before {
+  background: linear-gradient(90deg, #b45309, #f59e0b, #fbbf24) !important;
+}
+
+.mis-logframe-cards > .card:nth-child(3)::before {
+  background: linear-gradient(90deg, #0f766e, #14b8a6, #2dd4bf) !important;
+}
+
+.mis-logframe-cards .card-header {
+  margin-bottom: 20px !important;
+  align-items: flex-start !important;
+}
+
+.mis-logframe-cards .card-title {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.45 !important;
+  color: #64748b !important;
+  font-weight: 700 !important;
+  max-width: 85%;
+}
+
+.mis-logframe-cards .card-badge {
+  border-radius: 14px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+.mis-logframe-cards > .card:nth-child(1) .card-badge {
+  background: linear-gradient(145deg, #22c55e, #15803d) !important;
+}
+
+.mis-logframe-cards > .card:nth-child(2) .card-badge {
+  background: linear-gradient(145deg, #fbbf24, #d97706) !important;
+}
+
+.mis-logframe-cards > .card:nth-child(3) .card-badge {
+  background: linear-gradient(145deg, #2dd4bf, #0d9488) !important;
+}
+
+/* Stat rows */
+.mis-logframe-cards .mis-logframe-row--targets {
+  gap: 12px !important;
+  margin-bottom: 18px !important;
+}
+
+.mis-logframe-cards .mis-logframe-row--results {
+  gap: 12px !important;
+  margin-top: 8px !important;
+}
+
+.mis-logframe-cards .mis-logframe-row--targets > div,
+.mis-logframe-cards .mis-logframe-row--results > div {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%) !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  border-radius: 14px !important;
+  padding: 16px 12px !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 4px 14px rgba(15, 23, 42, 0.06) !important;
+  text-align: center !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mis-logframe-cards .mis-logframe-row--targets > div:hover,
+.mis-logframe-cards .mis-logframe-row--results > div:hover {
+  border-color: rgba(100, 116, 139, 0.45) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 8px 22px rgba(15, 23, 42, 0.09) !important;
+}
+
+.mis-logframe-cards .mis-logframe-row .card-value-label {
+  color: #64748b !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase;
+  margin-bottom: 10px !important;
+}
+
+.mis-logframe-cards .mis-logframe-row .card-value-amount {
+  font-size: 1.85rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.1 !important;
+}
+
+.mis-logframe-cards .mis-logframe-row p:not(.card-value-label) {
+  font-size: 0.68rem !important;
+  color: #94a3b8 !important;
+  margin-top: 10px !important;
+}
+
+/* Subtle tint per column in top row */
+.mis-logframe-cards .mis-logframe-row--targets > div:nth-child(1) {
+  background: linear-gradient(180deg, rgba(239, 246, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+}
+
+.mis-logframe-cards .mis-logframe-row--targets > div:nth-child(2) {
+  background: linear-gradient(180deg, rgba(250, 245, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+}
+
+.mis-logframe-cards .mis-logframe-row--targets > div:nth-child(3) {
+  background: linear-gradient(180deg, rgba(236, 253, 245, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+}
+
+/* Tank row: single full-width column (unchanged look, layout only) */
+.mis-tank-cards-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.mis-tank-cards-grid .card-wide {
+  grid-column: 1 / -1;
+}

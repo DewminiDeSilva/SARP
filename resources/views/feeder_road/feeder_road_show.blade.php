@@ -446,8 +446,8 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Finance Progress as at <span id="currentDate2"></span></h5>
-                            <p class="card-text">Paid Amount: Rs. {{ !empty($record->payment) && is_numeric($record->payment) ? number_format((float) $record->payment, 2) : 'N/A' }}</p>
-                            <p class="card-text">Percentage: {{$percentage ?? 0}}%</p>
+                            <p class="card-text">Paid Amount: Rs. {{ !empty($record->cumulative_amount) && is_numeric($record->cumulative_amount) ? number_format((float) $record->cumulative_amount, 2) : 'N/A' }}</p>
+                            <p class="card-text">Percentage: {{ $percentage ?? 0 }}%</p>
                         </div>
                     </div>
                 </div>

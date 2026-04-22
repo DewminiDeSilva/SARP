@@ -242,9 +242,9 @@ class TankRehabilitationController extends Controller
     public function show(TankRehabilitation $tankRehabilitation)
     {
         // Assuming a total amount to calculate percentage (replace with actual logic)
-        $cumulative_amount = $tankRehabilitation->cumulative_amount;
-        $payment = $tankRehabilitation->payment;
-        $percentage = $this->calculatePercentage($payment, $cumulative_amount);
+        $cumulativePaid = $tankRehabilitation->cumulative_amount;
+        $contractAmount = $tankRehabilitation->payment;
+        $percentage = $this->calculateFinanceProgressPercent($cumulativePaid, $contractAmount);
 
         return view('tank.tank_rehabilitation_show', compact('tankRehabilitation', 'percentage'));
     }
@@ -520,17 +520,18 @@ public function uploadCsv(Request $request)
 
 
     /**
-     * Calculate percentage function.
+     * Finance progress % = (cumulative paid amount / contract amount) × 100.
      */
-    private function calculatePercentage($payment, $cumulative_amount)
+    private function calculateFinanceProgressPercent($cumulativePaid, $contractAmount): float
     {
-        $payment = (float) $payment;
-        $cumulative_amount = (float) $cumulative_amount;
+        $paid = is_numeric($cumulativePaid) ? (float) $cumulativePaid : 0.0;
+        $contract = is_numeric($contractAmount) ? (float) $contractAmount : 0.0;
 
-        if ($cumulative_amount > 0) {
-            return round(($cumulative_amount / $payment) * 100, 0);
+        if ($contract > 0) {
+            return round(($paid / $contract) * 100, 2);
         }
-        return 0;
+
+        return 0.0;
     }
     public function bulkDelete(Request $request)
     {

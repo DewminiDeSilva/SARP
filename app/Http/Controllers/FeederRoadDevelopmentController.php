@@ -227,9 +227,9 @@ class FeederRoadDevelopmentController extends Controller
 
     public function show(FeederRoadDevelopment $feederRoadDevelopment)
     {
-        $cumulative_amount = $feederRoadDevelopment->cumulative_amount;
-        $payment = $feederRoadDevelopment->payment;
-        $percentage = $this->calculatePercentage($payment, $cumulative_amount);
+        $cumulativePaid = $feederRoadDevelopment->cumulative_amount;
+        $contractAmount = $feederRoadDevelopment->payment;
+        $percentage = $this->calculateFinanceProgressPercent($cumulativePaid, $contractAmount);
 
         return view('feeder_road.feeder_road_show', [
             'record' => $feederRoadDevelopment,
@@ -631,16 +631,16 @@ class FeederRoadDevelopmentController extends Controller
         }
     }
 
-    private function calculatePercentage($payment, $cumulative_amount)
+    private function calculateFinanceProgressPercent($cumulativePaid, $contractAmount): float
     {
-        $payment = (float) $payment;
-        $cumulative_amount = (float) $cumulative_amount;
+        $paid = is_numeric($cumulativePaid) ? (float) $cumulativePaid : 0.0;
+        $contract = is_numeric($contractAmount) ? (float) $contractAmount : 0.0;
 
-        if ($cumulative_amount > 0) {
-            return round(($cumulative_amount / $payment) * 100, 0);
+        if ($contract > 0) {
+            return round(($paid / $contract) * 100, 2);
         }
 
-        return 0;
+        return 0.0;
     }
 
     public function bulkDelete(Request $request)
