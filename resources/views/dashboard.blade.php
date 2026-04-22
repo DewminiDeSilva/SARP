@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link rel="stylesheet" href="{{ asset('assets/css/mis-logframe-cards.css') }}"/>
+
   <style>
     /* Professional Dashboard Design Variables */
     :root {
@@ -734,8 +735,8 @@
     <a href="{{ route('beneficiary.index') }}" class="home-btn">Home</a>
     <a href="{{ route('logframe.tanks.index') }}" class="home-btn" style="background:#2563eb;">Logframe</a>
   </div>
-      <!-- Data Cards -->
-      <div class="cards-grid">
+      <!-- Data Cards: three logframe indicators only (styled via mis-logframe-cards.css) -->
+      <div class="cards-grid mis-logframe-cards">
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">1.A Estimated corresponding Total Number of Household members</h3>
@@ -743,7 +744,7 @@
           </div>
           
           <!-- Baseline, Mid-Term, End Target Squares -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+          <div class="mis-logframe-row mis-logframe-row--targets" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
             <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
               <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Baseline</p>
               <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #316aff; margin: 0;">{{ isset($householdMembers) ? number_format($householdMembers->baseline) : '—' }}</div>
@@ -762,7 +763,7 @@
           </div>
           
           <!-- Cumulative and Result Squares -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+          <div class="mis-logframe-row mis-logframe-row--results" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
             <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
               <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">1. Cumulative</p>
               <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ isset($householdMembers) && isset($householdMembers->cumulative) ? number_format($householdMembers->cumulative) : '—' }}</div>
@@ -786,7 +787,7 @@
           </div>
           
           <!-- Baseline, Mid-Term, End Target Squares -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+          <div class="mis-logframe-row mis-logframe-row--targets" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
             <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
               <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Baseline</p>
               <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #316aff; margin: 0;">{{ isset($householdsReached) ? number_format($householdsReached->baseline) : '—' }}</div>
@@ -805,7 +806,7 @@
           </div>
           
           <!-- Cumulative and Result Squares -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+          <div class="mis-logframe-row mis-logframe-row--results" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
             <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
               <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">1. Cumulative</p>
               <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ isset($householdsReached) && isset($householdsReached->cumulative) ? number_format($householdsReached->cumulative) : '—' }}</div>
@@ -829,7 +830,7 @@
           </div>
           
           <!-- Baseline, Mid-Term, End Target Squares -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
+          <div class="mis-logframe-row mis-logframe-row--targets" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
             <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
               <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">Baseline</p>
               <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: #316aff; margin: 0;">{{ isset($personsReceivingServices) ? number_format($personsReceivingServices->baseline) : '—' }}</div>
@@ -848,7 +849,7 @@
           </div>
           
           <!-- Cumulative and Result Squares -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+          <div class="mis-logframe-row mis-logframe-row--results" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
             <div style="background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: var(--spacing-md); text-align: center; box-shadow: var(--shadow-sm);">
               <p class="card-value-label" style="margin-bottom: 8px; font-weight: 600;">1. Cumulative</p>
               <div class="card-value-amount" style="font-size: 1.75rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ isset($personsReceivingServices) && isset($personsReceivingServices->cumulative) ? number_format($personsReceivingServices->cumulative) : '—' }}</div>
@@ -865,7 +866,9 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <div class="cards-grid mis-tank-cards-grid">
         <!-- Tank Selection Card -->
         <div class="card card-wide" id="tank-selection-card" style="display: none;">
           <div class="card-header">
