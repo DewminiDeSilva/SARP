@@ -1654,9 +1654,7 @@
             </button>
 
 
-            <a href="{{ route('beneficiary.index') }}" class="btn-back">
-                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-            </a>
+            @include('partials.sarp_history_back', ['fallback' => route('dashboard')])
 
         </div>
 
@@ -1878,7 +1876,7 @@
 <!-- (Duplicate modals removed) -->
         <!-- Enhanced Filter Buttons -->
         @php
-            $filterQueryBase = request()->only(['search', 'entries', 'filter_tank', 'filter_category', 'filter_ds', 'filter_asc', 'filter_gn']);
+            $filterQueryBase = request()->only(['search', 'entries', 'filter_tank', 'filter_category', 'filter_district', 'filter_ds', 'filter_asc', 'filter_gn']);
         @endphp
         <form method="GET" action="{{ route('beneficiary.index') }}" class="mb-3">
             <div class="d-flex justify-content-end mb-3" style="gap: 10px;">
@@ -1968,7 +1966,7 @@
                         @if(request('entries'))
                             <input type="hidden" name="entries" value="{{ request('entries') }}">
                         @endif
-                        @foreach (['filter_tank', 'filter_category', 'filter_ds', 'filter_asc', 'filter_gn'] as $fk)
+                        @foreach (['filter_tank', 'filter_category', 'filter_district', 'filter_ds', 'filter_asc', 'filter_gn'] as $fk)
                             @if (request()->filled($fk))
                                 <input type="hidden" name="{{ $fk }}" value="{{ request($fk) }}">
                             @endif
@@ -2000,8 +1998,8 @@
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <!-- Upload CSV success / error messages -->
-@if(session('success') || session('error'))
+        <!-- Upload CSV success / error messages (validation uses $errors; controller uses session('error')) -->
+@if(session('success') || session('error') || $errors->any())
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
@@ -2015,8 +2013,16 @@
             @if(session('error'))
             Swal.fire({
                 icon: 'error',
-                title: 'Upload failed',
-                text: '{{ session('error') }}',
+                title: @json(session('swal_title', 'Upload failed')),
+                text: @json(session('error')),
+                confirmButtonColor: '#126926'
+            });
+            @endif
+            @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: @json(session('swal_title', 'Upload failed')),
+                html: @json(implode('<br>', array_map('e', $errors->all()))),
                 confirmButtonColor: '#126926'
             });
             @endif
@@ -2034,7 +2040,7 @@
                         <span class="filter-badge">{{ $activeFilterCount }}</span>
                     @endif
                 </button>
-                <span class="filter-toolbar-hint d-none d-md-inline">Narrow the list and summaries by tank, programme type, and location.</span>
+                <span class="filter-toolbar-hint d-none d-md-inline">Narrow the list and summaries by tank, programme type, district, and location.</span>
             </div>
 
             <div class="collapse {{ ($activeFilterCount ?? 0) > 0 ? 'show' : '' }}" id="beneficiaryFilterCollapse">
@@ -2073,6 +2079,15 @@
                                 </select>
                             </div>
                             <div class="beneficiary-filter-field">
+                                <label class="beneficiary-filter-label" for="filter_district"><i class="fas fa-map" aria-hidden="true"></i> District</label>
+                                <select name="filter_district" id="filter_district" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by district">
+                                    <option value="">All districts</option>
+                                    @foreach ($filterDistrictOptions ?? [] as $dist)
+                                        <option value="{{ $dist }}" {{ request('filter_district') === $dist ? 'selected' : '' }}>{{ $dist }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="beneficiary-filter-field">
                                 <label class="beneficiary-filter-label" for="filter_ds"><i class="fas fa-map-marked-alt" aria-hidden="true"></i> DSD</label>
                                 <select name="filter_ds" id="filter_ds" class="form-select form-select-sm beneficiary-filter-select" aria-label="Filter by DS division">
                                     <option value="">All DS</option>
@@ -2108,7 +2123,7 @@
                                 </a>
                             </div>
                         </div>
-                        <p class="filter-hint"><i class="fas fa-info-circle me-1"></i>Use <strong>Programme type</strong> to limit by project. Select <strong>DSD</strong> then <strong>Apply</strong> to refresh ASC; then <strong>ASC</strong> and <strong>Apply</strong> for GN. Filters combine (AND). Summary cards use the same filtered set.</p>
+                        <p class="filter-hint"><i class="fas fa-info-circle me-1"></i>Use <strong>District</strong> to limit DSD options, then <strong>DSD</strong> and <strong>Apply</strong> to refresh ASC; then <strong>ASC</strong> and <strong>Apply</strong> for GN. Filters combine (AND). Summary cards use the same filtered set.</p>
                     </form>
                 </div>
             </div>

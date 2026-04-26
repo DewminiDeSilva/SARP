@@ -736,9 +736,7 @@
                 <button id="sidebarToggle" class="btn">
 		<i class="fas fa-bars"></i>
 	</button>
-    <a href="{{ route('beneficiary.index') }}" class="btn-back">
-                    <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-        </a>
+    @include('partials.sarp_history_back', ['fallback' => route('beneficiary.index')])
     </div>
 
             <div class="page-header">

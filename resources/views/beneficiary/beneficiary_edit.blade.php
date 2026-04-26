@@ -408,9 +408,7 @@
                 <button id="sidebarToggle" class="btn">
                     <i class="fas fa-bars"></i>
                 </button>
-                <a href="{{ route('beneficiary.index') }}" class="btn-back">
-                    <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-                </a>
+                @include('partials.sarp_history_back', ['fallback' => route('beneficiary.index')])
             </div>
 
             <div class="page-header">
@@ -703,8 +701,18 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="education" class="form-label">Highest Education Level</label>
+                                @php
+                                    $educationLevels = ['Primary', 'Secondary', 'Higher Secondary', 'Graduate', 'Post Graduate', 'Others'];
+                                    $currentEducation = (string) ($beneficiary->education ?? '');
+                                @endphp
                                 <select class="form-select" id="education" name="education">
-                                    <option value="{{ $beneficiary->education }}" selected>{{ $beneficiary->education }}</option>
+                                    <option value="">Select Education Level</option>
+                                    @foreach ($educationLevels as $level)
+                                        <option value="{{ $level }}" {{ $currentEducation === $level ? 'selected' : '' }}>{{ $level }}</option>
+                                    @endforeach
+                                    @if ($currentEducation !== '' && ! in_array($currentEducation, $educationLevels, true))
+                                        <option value="{{ $currentEducation }}" selected>{{ $currentEducation }}</option>
+                                    @endif
                                 </select>
                             </div>
                             

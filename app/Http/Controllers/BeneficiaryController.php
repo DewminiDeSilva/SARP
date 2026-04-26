@@ -15,7 +15,7 @@ use App\Support\NicYouth;
 
 class BeneficiaryController extends Controller
 {
-
+    /** Index/show/create/edit back links: Blade partial `partials.sarp_history_back`. */
 
     /**
      * Display a listing of the resource.
@@ -461,7 +461,7 @@ public function generateCsv()
     }
 
     /**
-     * Table filters: tank name, programme type, DS division, ASC, GN division.
+     * Table filters: tank name, programme type, district, DS division, ASC, GN division.
      */
     private function applyBeneficiaryTableFilters(Builder $query, Request $request): void
     {
@@ -482,6 +482,10 @@ public function generateCsv()
             $query->where('project_type', 'Resilience Project')->where('input1', 'livestock');
         } elseif ($cat === 'nutrition_program') {
             $query->whereIn('project_type', ['Nutrition Programs', 'nutrition']);
+        }
+
+        if ($request->filled('filter_district')) {
+            $query->where('district_name', $request->get('filter_district'));
         }
 
         if ($request->filled('filter_ds')) {
@@ -602,6 +606,13 @@ public function generateCsv()
             ->orderBy('tank_name')
             ->pluck('tank_name');
 
+        $filterDistrictOptions = Beneficiary::query()
+            ->whereNotNull('district_name')
+            ->where('district_name', '!=', '')
+            ->distinct()
+            ->orderBy('district_name')
+            ->pluck('district_name');
+
         $filterDsOptions = Beneficiary::query()
             ->whereNotNull('ds_division_name')
             ->where('ds_division_name', '!=', '')
@@ -621,6 +632,9 @@ public function generateCsv()
             ->pluck('as_center');
 
         $gnScope = Beneficiary::query();
+        if ($request->filled('filter_district')) {
+            $gnScope->where('district_name', $request->get('filter_district'));
+        }
         if ($request->filled('filter_ds')) {
             $gnScope->where('ds_division_name', $request->get('filter_ds'));
         }
@@ -637,6 +651,7 @@ public function generateCsv()
         $activeFilterCount = collect([
             $request->filled('filter_tank'),
             $request->filled('filter_category'),
+            $request->filled('filter_district'),
             $request->filled('filter_ds'),
             $request->filled('filter_asc'),
             $request->filled('filter_gn'),
@@ -660,6 +675,7 @@ public function generateCsv()
             'convertedMap',
             'duplicateNICs',
             'filterTankOptions',
+            'filterDistrictOptions',
             'filterDsOptions',
             'filterAscOptions',
             'filterGnOptions',

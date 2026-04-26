@@ -20,8 +20,8 @@
 .mis-logframe-cards > .card {
   position: relative;
   border: none !important;
-  border-radius: 20px !important;
-  padding: 26px 22px 28px !important;
+  border-radius: 22px !important;
+  padding: 28px 24px 30px !important;
   min-height: 0 !important;
   background: linear-gradient(165deg, #ffffff 0%, #f8fafc 45%, #f1f5f9 100%) !important;
   box-shadow:

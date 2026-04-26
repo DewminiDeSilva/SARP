@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EOI Beneficiaries</title>
+  <title>SARP MIS · Dashboard</title>
 
   <!-- Bootstrap + Font Awesome -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
@@ -13,31 +13,32 @@
   <link rel="stylesheet" href="{{ asset('assets/css/mis-logframe-cards.css') }}"/>
 
   <style>
-    /* Professional Dashboard Design Variables */
+    /* Design tokens — aligned with SARP green + modern neutrals */
     :root {
-      --primary-color: #5C3E9E;
-      --secondary-color: #4CAF50;
-      --accent-color: #FF9800;
-      --danger-color: #ea4335;
-      --success-color: #4CAF50;
-      --warning-color: #fbbc05;
-      --info-color: #2196F3;
-      --purple-color: #9C27B0;
-      --teal-color: #00BCD4;
+      --primary-color: #126926;
+      --primary-hover: #0f5420;
+      --secondary-color: #0d9488;
+      --accent-color: #d97706;
+      --danger-color: #dc2626;
+      --success-color: #16a34a;
+      --warning-color: #eab308;
+      --info-color: #2563eb;
+      --purple-color: #7c3aed;
+      --teal-color: #0d9488;
       
-      --bg-color: #F0F2F8;
+      --bg-color: #f1f5f9;
       --panel-color: #ffffff;
-      --text-primary: #212529;
-      --text-secondary: #6c757d;
-      --text-muted: #adb5bd;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
       
-      --border-color: #e9ecef;
-      --border-light: #f8f9fa;
+      --border-color: #e2e8f0;
+      --border-light: #f8fafc;
       
-      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07);
+      --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1);
+      --shadow-xl: 0 20px 50px rgba(15, 23, 42, 0.12);
       
       --radius-sm: 8px;
       --radius-md: 12px;
@@ -54,28 +55,256 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Home Button Styles */
-    .home-button-container {
-      margin-bottom: var(--spacing-lg);
+    /* Top hero: title + pill navigation */
+    .dashboard-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+      padding: var(--spacing-xl) var(--spacing-xl);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 250, 252, 0.96) 100%);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(8px);
     }
 
-    .home-btn {
-      background: #059669;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: inline-block;
+    .dashboard-hero__eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--success-color);
+      margin: 0 0 6px;
     }
 
-    .home-btn:hover {
-      background: #059669;
-      color: white;
+    .dashboard-hero__title {
+      font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin: 0 0 6px;
+      line-height: 1.2;
+    }
+
+    .dashboard-hero__subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin: 0;
+      max-width: 36rem;
+    }
+
+    .dashboard-hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .dash-nav-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
       text-decoration: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .dash-nav-pill:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .dash-nav-pill--primary {
+      background: linear-gradient(135deg, #15803d 0%, #126926 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(18, 105, 38, 0.35);
+    }
+
+    .dash-nav-pill--primary:hover {
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(18, 105, 38, 0.4);
+    }
+
+    .dash-nav-pill--ghost {
+      background: #fff;
+      color: var(--text-primary);
+      border-color: var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dash-nav-pill--ghost:hover {
+      color: var(--primary-color);
+      border-color: rgba(18, 105, 38, 0.35);
+    }
+
+    /* Module selection panel */
+    .module-selection-panel {
+      max-width: 820px;
+      width: 100%;
+      margin: 0 auto;
+      border: none;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: var(--panel-color);
+    }
+
+    .module-selection-panel__head {
+      padding: var(--spacing-lg) var(--spacing-xl);
+      background: linear-gradient(120deg, #126926 0%, #0d9488 55%, #0f766e 100%);
+      color: #fff;
+    }
+
+    .module-selection-panel__head .module-selection-panel__title {
+      color: #fff;
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .module-selection-panel__head .card-badge {
+      background: rgba(255, 255, 255, 0.22) !important;
+      color: #fff !important;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 12px !important;
+      min-width: 44px;
+      height: 44px;
+    }
+
+    .module-selection-panel__body {
+      padding: var(--spacing-xl);
+      background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+    }
+
+    .module-selection-panel__body .form-select {
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .module-selection-panel__body .form-select:focus {
+      border-color: var(--success-color);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    }
+
+    .module-selection-panel__actions .btn {
+      border-radius: 12px;
+      min-width: 170px;
+    }
+
+    .module-selection-panel__actions .btn-outline {
+      border-width: 1.5px;
+    }
+
+    .module-selection-panel__actions .btn-success {
+      background: linear-gradient(135deg, #16a34a 0%, #126926 100%);
+      border: none;
+      box-shadow: 0 4px 14px rgba(18, 105, 38, 0.3);
+    }
+
+    /* Full-screen module dashboard modal */
+    .sarp-module-dashboard-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .sarp-module-dashboard-modal[hidden] {
+      display: none !important;
+    }
+
+    .sarp-module-dashboard-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(6px);
+    }
+
+    .sarp-module-dashboard-modal__panel {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: min(1400px, 100vw);
+      margin: 12px;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #f8fafc 0%, #fff 32%);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      overflow: hidden;
+    }
+
+    .sarp-module-dashboard-modal__header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      background: linear-gradient(120deg, #126926 0%, #0d9488 100%);
+      color: #fff;
+    }
+
+    .sarp-module-dashboard-modal__eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin: 0 0 4px;
+    }
+
+    .sarp-module-dashboard-modal__title {
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    .sarp-module-dashboard-modal__close {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: background 0.2s ease;
+    }
+
+    .sarp-module-dashboard-modal__close:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .sarp-module-dashboard-modal__body {
+      flex: 1;
+      overflow: auto;
+      padding: 20px 22px 28px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .sarp-module-dashboard-modal__body .chart-section {
+      margin-bottom: 1.5rem;
     }
 
     * {
@@ -92,13 +321,16 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Main Content Area */
+    /* Main content */
     .main-content-area {
       margin-top: 100px;
       margin-left: 0;
       padding: var(--spacing-2xl);
-      background: var(--bg-color);
       min-height: calc(100vh - 100px);
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 197, 94, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(13, 148, 136, 0.08), transparent),
+        linear-gradient(180deg, #f8fafc 0%, var(--bg-color) 45%, #eef2ff 100%);
     }
 
     .right-column {
@@ -145,6 +377,12 @@
       right: 0;
       height: 6px;
       background: var(--success-color);
+    }
+
+    .card.module-selection-panel::before {
+      content: none;
+      height: 0;
+      display: none;
     }
 
     /* Card-specific top border colors */
@@ -306,7 +544,7 @@
     .form-select:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
     }
 
     .btn {
@@ -324,12 +562,12 @@
     }
 
     .btn-primary {
-      background: var(--primary-color);
+      background: linear-gradient(135deg, #15803d 0%, var(--primary-color) 100%);
       color: white;
     }
 
     .btn-primary:hover {
-      background: #1d4ed8;
+      background: var(--primary-hover);
       transform: translateY(-1px);
     }
 
@@ -730,11 +968,17 @@
     @csrf
 
     <div class="right-column">
-      <!-- Home Button Container -->
-  <div class="home-button-container">
-    <a href="{{ route('beneficiary.index') }}" class="home-btn">Home</a>
-    <a href="{{ route('logframe.tanks.index') }}" class="home-btn" style="background:#2563eb;">Logframe</a>
-  </div>
+      <header class="dashboard-hero" role="banner">
+        <div class="dashboard-hero__intro">
+          <p class="dashboard-hero__eyebrow">SARP · Monitoring Information System</p>
+          <h1 class="dashboard-hero__title">Executive dashboard</h1>
+          <p class="dashboard-hero__subtitle">Logframe headline indicators, tank rehabilitation KPIs, and module analytics in one place.</p>
+        </div>
+        <div class="dashboard-hero__actions">
+          <a href="{{ route('beneficiary.index') }}" class="dash-nav-pill dash-nav-pill--primary"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+          <a href="{{ route('logframe.tanks.index') }}" class="dash-nav-pill dash-nav-pill--ghost"><i class="fas fa-table" aria-hidden="true"></i> Logframe</a>
+        </div>
+      </header>
       <!-- Data Cards: three logframe indicators only (styled via mis-logframe-cards.css) -->
       <div class="cards-grid mis-logframe-cards">
         <div class="card">
@@ -868,6 +1112,8 @@
         </div>
       </div>
 
+      <div id="sarp-dashboard-modules-host">
+      <div id="sarp-dashboard-module-bundle">
       <div class="cards-grid mis-tank-cards-grid">
         <!-- Tank Selection Card -->
         <div class="card card-wide" id="tank-selection-card" style="display: none;">
@@ -892,24 +1138,24 @@
 
       </div>
 
-      <!-- Module Selection Card - Centered Rectangle -->
+      <!-- Module selection -->
       <div style="display: flex; justify-content: center; margin: var(--spacing-2xl) 0;">
-        <div class="card module-selection-card" style="max-width: 800px; width: 100%; margin: 0 auto; border: 2px solid var(--primary-color); box-shadow: var(--shadow-xl);">
-          <div class="card-header" style="background: linear-gradient(135deg, var(--primary-color) 0%, #6D4CBC 100%); color: white; border-radius: var(--radius-sm) var(--radius-sm) 0 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <h3 class="card-title" style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700;">Module Selection</h3>
-              <div class="card-badge" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3);">
-                <i class="fas fa-cube" style="font-size: 1.2rem;"></i>
+        <div class="card module-selection-card module-selection-panel">
+          <div class="module-selection-panel__head">
+            <div class="card-header" style="margin-bottom: 0; align-items: center;">
+              <h3 class="module-selection-panel__title">Module selection</h3>
+              <div class="card-badge" aria-hidden="true">
+                <i class="fas fa-cube" style="font-size: 1.1rem;"></i>
               </div>
             </div>
           </div>
           
-          <div style="padding: var(--spacing-2xl);">
+          <div class="module-selection-panel__body">
             <div class="form-group" style="margin-bottom: var(--spacing-xl);">
-              <label for="module_id" class="form-label" style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md); color: var(--text-primary);">
-                <i class="fas fa-list-ul" style="margin-right: 8px; color: var(--primary-color);"></i>Select Module
+              <label for="module_id" class="form-label" style="font-size: 0.95rem; font-weight: 600; margin-bottom: var(--spacing-md); color: var(--text-primary);">
+                <i class="fas fa-list-ul" style="margin-right: 8px; color: var(--success-color);"></i>Select module
               </label>
-              <select name="module_id" id="module_id" class="form-select" style="font-size: 1rem; padding: var(--spacing-md) var(--spacing-lg); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--panel-color); transition: all 0.3s ease;">
+              <select name="module_id" id="module_id" class="form-select">
                 <option value="">-- Choose module --</option>
                 <option value="beneficiary">Beneficiary</option>
                 <option value="tank_rehabilitation">Tank Rehabilitation</option>
@@ -926,12 +1172,12 @@
               </select>
             </div>
 
-            <div class="d-flex gap-3" style="justify-content: center; margin-top: var(--spacing-xl);">
-              <button class="btn btn-outline" style="padding: var(--spacing-md) var(--spacing-xl); font-size: 1rem; font-weight: 600; border: 2px solid var(--border-color); min-width: 180px;">
-                <i class="fas fa-eye" style="margin-right: 8px;"></i>View Module
+            <div class="d-flex gap-3 module-selection-panel__actions" style="justify-content: center; margin-top: var(--spacing-xl); flex-wrap: wrap;">
+              <button type="button" id="sarp-btn-open-module-dashboard" class="btn btn-outline" style="padding: var(--spacing-md) var(--spacing-xl); font-size: 0.95rem; font-weight: 600;">
+                <i class="fas fa-expand-alt" style="margin-right: 8px;"></i>Open module dashboard
               </button>
-              <button class="btn btn-success" style="padding: var(--spacing-md) var(--spacing-xl); font-size: 1rem; font-weight: 600; min-width: 180px; box-shadow: var(--shadow-md);">
-                <i class="fas fa-file-pdf" style="margin-right: 8px;"></i>Generate Report
+              <button type="button" class="btn btn-success" style="padding: var(--spacing-md) var(--spacing-xl); font-size: 0.95rem; font-weight: 600;">
+                <i class="fas fa-file-pdf" style="margin-right: 8px;"></i>Generate report
               </button>
             </div>
           </div>
@@ -2512,6 +2758,24 @@
           </div>
         </div>
       </div>
+      </div>
+      </div>
+
+  <div id="sarp-module-dashboard-modal" class="sarp-module-dashboard-modal" role="dialog" aria-modal="true" aria-labelledby="sarp-module-modal-title" aria-hidden="true" hidden>
+    <div class="sarp-module-dashboard-modal__backdrop" data-sarp-modal-backdrop tabindex="-1"></div>
+    <div class="sarp-module-dashboard-modal__panel">
+      <header class="sarp-module-dashboard-modal__header">
+        <div>
+          <p class="sarp-module-dashboard-modal__eyebrow">Full view</p>
+          <h2 id="sarp-module-modal-title" class="sarp-module-dashboard-modal__title">Module dashboard</h2>
+        </div>
+        <button type="button" class="sarp-module-dashboard-modal__close" id="sarp-module-modal-close" aria-label="Close dashboard">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </header>
+      <div class="sarp-module-dashboard-modal__body" id="sarp-module-modal-slot"></div>
+    </div>
+  </div>
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2903,7 +3167,8 @@
           </div>
         </div>
       `;
-      document.querySelector('.right-column').appendChild(youthSection);
+      const moduleBundleEl = document.getElementById('sarp-dashboard-module-bundle');
+      (moduleBundleEl || document.querySelector('.right-column')).appendChild(youthSection);
 
       // Initially hide all sections and show module summary
       tankChartSection.style.display = 'none';
@@ -2920,8 +3185,7 @@
       nrmSummarySection.style.display = 'none';
       ffsSummarySection.style.display = 'none';
       nutritionSummarySection.style.display = 'none';
-      moduleSelect.addEventListener('change', function() {
-        const selectedModule = this.value;
+      function applyDashboardModule(selectedModule) {
         
         if (selectedModule === 'tank_rehabilitation') {
           // Show tank rehabilitation specific content
@@ -3144,7 +3408,91 @@
           ffsSummarySection.style.display = 'none';
           nutritionSummarySection.style.display = 'none';
         }
+      }
+
+      moduleSelect.addEventListener('change', function() {
+        applyDashboardModule(this.value);
       });
+
+      (function setupModuleDashboardModal() {
+        const moduleModal = document.getElementById('sarp-module-dashboard-modal');
+        const moduleModalSlot = document.getElementById('sarp-module-modal-slot');
+        const moduleModalTitle = document.getElementById('sarp-module-modal-title');
+        const modulesHost = document.getElementById('sarp-dashboard-modules-host');
+        const moduleBundle = document.getElementById('sarp-dashboard-module-bundle');
+        const openBtn = document.getElementById('sarp-btn-open-module-dashboard');
+        const closeBtn = document.getElementById('sarp-module-modal-close');
+        const backdrop = moduleModal && moduleModal.querySelector('[data-sarp-modal-backdrop]');
+        const moduleLabelsForModal = @json($moduleLabels ?? []);
+
+        if (!moduleModal || !moduleModalSlot || !modulesHost || !moduleBundle || !openBtn) {
+          return;
+        }
+
+        function getModuleTitle(key) {
+          if (!key) {
+            return 'Module dashboard';
+          }
+          return moduleLabelsForModal[key] || String(key).replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+        }
+
+        function resizeChartsInModal() {
+          setTimeout(function () {
+            window.dispatchEvent(new Event('resize'));
+            if (typeof Chart === 'undefined') {
+              return;
+            }
+            document.querySelectorAll('#sarp-module-modal-slot canvas').forEach(function (canvas) {
+              try {
+                var ch = Chart.getChart ? Chart.getChart(canvas) : null;
+                if (ch && typeof ch.resize === 'function') {
+                  ch.resize();
+                }
+              } catch (e) { /* ignore */ }
+            });
+          }, 250);
+        }
+
+        function openModuleDashboardModal() {
+          var selectedModule = moduleSelect.value;
+          if (!selectedModule) {
+            alert('Please select a module from the list first.');
+            return;
+          }
+          applyDashboardModule(selectedModule);
+          if (moduleModalTitle) {
+            moduleModalTitle.textContent = getModuleTitle(selectedModule);
+          }
+          moduleModalSlot.appendChild(moduleBundle);
+          moduleModal.removeAttribute('hidden');
+          moduleModal.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          resizeChartsInModal();
+        }
+
+        function closeModuleDashboardModal() {
+          if (moduleBundle.parentElement === moduleModalSlot) {
+            modulesHost.appendChild(moduleBundle);
+          }
+          moduleModal.setAttribute('hidden', '');
+          moduleModal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          resizeChartsInModal();
+        }
+
+        openBtn.addEventListener('click', openModuleDashboardModal);
+        if (closeBtn) {
+          closeBtn.addEventListener('click', closeModuleDashboardModal);
+        }
+        if (backdrop) {
+          backdrop.addEventListener('click', closeModuleDashboardModal);
+        }
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !moduleModal.hasAttribute('hidden')) {
+            closeModuleDashboardModal();
+          }
+        });
+      })();
 
       function createInfrastructureCharts(){
         const statusCtx = document.getElementById('infrastructureStatusChart');

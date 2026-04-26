@@ -10,6 +10,8 @@ use Illuminate\Support\Collection;
 class TankController extends Controller
 {
     /**
+     * Shared module back navigation: Blade partial `partials.sarp_history_back` (history.back + fallback URL).
+     *
      * JSON list of tank names for dropdowns: Tank registry + unique names from Tank Rehabilitation.
      * Query: q (optional filter), limit (default 300, max 500).
      */
