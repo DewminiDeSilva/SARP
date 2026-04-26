@@ -2315,6 +2315,12 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
     <div class="h1">Smallholder Agribusiness and Resilience Project - Logical Framework</div>
     <div style="display:flex;gap:.5rem;">
+      @include('partials.sarp_history_back', [
+        'fallback' => route('beneficiary.index'),
+        'linkClass' => 'btn',
+        'showArrowImage' => false,
+        'label' => '← Back',
+      ])
       <a class="btn" href="{{ route('beneficiary.index') }}">Home</a>
       <a class="btn" href="{{ route('logframe.tanks.index') }}">Refresh</a>
       <!-- <a class="btn btn-primary" href="{{ route('logframe.tanks.create') }}">Create / Edit</a> -->

@@ -702,9 +702,12 @@ table th:first-child, table td:first-child {
 	</button>
 
 
-	<a href="{{ route('tank_rehabilitation.index') }}" class="btn btn-outline-success mb-3">
-        <i class="fas fa-arrow-left"></i> Back to Tank List
-    </a>
+	@include('partials.sarp_history_back', [
+        'fallback' => route('dashboard'),
+        'linkClass' => 'btn btn-outline-success mb-3',
+        'showArrowImage' => false,
+        'labelHtml' => '<i class="fas fa-arrow-left"></i> Back',
+    ])
 
 
 </div>
@@ -845,7 +848,7 @@ table th:first-child, table td:first-child {
                         @if(request('entries'))
                             <input type="hidden" name="entries" value="{{ request('entries') }}">
                         @endif
-                        @foreach (['filter_tank', 'filter_completion', 'filter_ds', 'filter_asc', 'filter_gn'] as $fk)
+                        @foreach (['filter_tank', 'filter_completion', 'filter_district', 'filter_ds', 'filter_asc', 'filter_gn'] as $fk)
                             @if (request()->filled($fk))
                                 <input type="hidden" name="{{ $fk }}" value="{{ request($fk) }}">
                             @endif
@@ -863,7 +866,7 @@ table th:first-child, table td:first-child {
                                 <span class="filter-badge">{{ $activeFilterCount }}</span>
                             @endif
                         </button>
-                        <span class="filter-toolbar-hint d-none d-md-inline">Narrow the list and summaries by tank, completion, and location.</span>
+                        <span class="filter-toolbar-hint d-none d-md-inline">Narrow the list and summaries by tank, completion, district, and location.</span>
                     </div>
 
                     <div class="collapse {{ ($activeFilterCount ?? 0) > 0 ? 'show' : '' }}" id="tankFilterCollapse">
@@ -892,6 +895,15 @@ table th:first-child, table td:first-child {
                                             <option value="">All types</option>
                                             <option value="completed" {{ request('filter_completion') === 'completed' ? 'selected' : '' }}>Completed</option>
                                             <option value="ongoing" {{ request('filter_completion') === 'ongoing' ? 'selected' : '' }}>On Going</option>
+                                        </select>
+                                    </div>
+                                    <div class="beneficiary-filter-field">
+                                        <label class="beneficiary-filter-label" for="filter_district"><i class="fas fa-map" aria-hidden="true"></i> District</label>
+                                        <select name="filter_district" id="filter_district" class="form-control form-control-sm beneficiary-filter-select" aria-label="Filter by district">
+                                            <option value="">All districts</option>
+                                            @foreach ($filterDistrictOptions ?? [] as $dist)
+                                                <option value="{{ $dist }}" {{ request('filter_district') === $dist ? 'selected' : '' }}>{{ $dist }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="beneficiary-filter-field">
@@ -930,7 +942,7 @@ table th:first-child, table td:first-child {
                                         </a>
                                     </div>
                                 </div>
-                                <p class="filter-hint"><i class="fas fa-info-circle mr-1"></i>Use <strong>Completed Tank</strong> to show only completed or ongoing works. Select <strong>DSD</strong> then <strong>Apply</strong> to refresh ASC; then <strong>ASC</strong> and <strong>Apply</strong> for GN. Filters combine (AND). Summary cards use the same filtered set.</p>
+                                <p class="filter-hint"><i class="fas fa-info-circle mr-1"></i>Use <strong>District</strong> to narrow DSD lists. Select <strong>DSD</strong> then <strong>Apply</strong> to refresh ASC; then <strong>ASC</strong> and <strong>Apply</strong> for GN. Filters combine (AND). Summary cards use the same filtered set.</p>
                             </form>
                         </div>
                     </div>

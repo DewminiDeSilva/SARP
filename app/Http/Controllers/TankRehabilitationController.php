@@ -49,7 +49,7 @@ class TankRehabilitationController extends Controller
     }
 
     /**
-     * Table filters: tank name, completion status, DS → ASC → GN (AND).
+     * Table filters: tank name, completion status, district, DS → ASC → GN (AND).
      */
     private function applyTankTableFilters(Builder $query, Request $request): void
     {
@@ -62,6 +62,10 @@ class TankRehabilitationController extends Controller
             $query->where('status', 'Completed');
         } elseif ($completion === 'ongoing') {
             $query->where('status', 'On Going');
+        }
+
+        if ($request->filled('filter_district')) {
+            $query->where('district', $request->get('filter_district'));
         }
 
         if ($request->filled('filter_ds')) {
@@ -116,7 +120,18 @@ class TankRehabilitationController extends Controller
             ->orderBy('tank_name')
             ->pluck('tank_name');
 
-        $filterDsOptions = TankRehabilitation::query()
+        $filterDistrictOptions = TankRehabilitation::query()
+            ->whereNotNull('district')
+            ->where('district', '!=', '')
+            ->distinct()
+            ->orderBy('district')
+            ->pluck('district');
+
+        $dsScope = TankRehabilitation::query();
+        if ($request->filled('filter_district')) {
+            $dsScope->where('district', $request->get('filter_district'));
+        }
+        $filterDsOptions = $dsScope->clone()
             ->whereNotNull('ds_division_name')
             ->where('ds_division_name', '!=', '')
             ->distinct()
@@ -124,6 +139,9 @@ class TankRehabilitationController extends Controller
             ->pluck('ds_division_name');
 
         $ascScope = TankRehabilitation::query();
+        if ($request->filled('filter_district')) {
+            $ascScope->where('district', $request->get('filter_district'));
+        }
         if ($request->filled('filter_ds')) {
             $ascScope->where('ds_division_name', $request->get('filter_ds'));
         }
@@ -135,6 +153,9 @@ class TankRehabilitationController extends Controller
             ->pluck('as_centre');
 
         $gnScope = TankRehabilitation::query();
+        if ($request->filled('filter_district')) {
+            $gnScope->where('district', $request->get('filter_district'));
+        }
         if ($request->filled('filter_ds')) {
             $gnScope->where('ds_division_name', $request->get('filter_ds'));
         }
@@ -151,6 +172,7 @@ class TankRehabilitationController extends Controller
         $activeFilterCount = collect([
             $request->filled('filter_tank'),
             $request->filled('filter_completion'),
+            $request->filled('filter_district'),
             $request->filled('filter_ds'),
             $request->filled('filter_asc'),
             $request->filled('filter_gn'),
@@ -164,6 +186,7 @@ class TankRehabilitationController extends Controller
             'entries',
             'tankLocations',
             'filterTankOptions',
+            'filterDistrictOptions',
             'filterDsOptions',
             'filterAscOptions',
             'filterGnOptions',

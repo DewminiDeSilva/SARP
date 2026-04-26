@@ -295,9 +295,7 @@
                 <i class="fas fa-bars"></i>
             </button>
 
-            <a href="{{ route('tank_rehabilitation.index') }}" class="btn-back">
-                <img src="{{ asset('assets/images/backarrow.png') }}" alt="Back"><span class="btn-text">Back</span>
-            </a>
+            @include('partials.sarp_history_back', ['fallback' => route('tank_rehabilitation.index')])
         </div>
 
         @if ($errors->any())
