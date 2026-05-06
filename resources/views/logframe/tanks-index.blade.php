@@ -2595,8 +2595,12 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
         resultInputs.forEach(inp => { updatedResults[inp.getAttribute('data-year')] = Number(inp.value)||0; });
 
         // Create or update indicator in database
+        // IMPORTANT: Use a stable per-row key so rows with the same name/description
+        // don't overwrite each other.
+        const rowKey = `${partKey}:${row.getAttribute('data-row')}`;
         const indicatorData = {
           section_key: partKey,
+          indicator_type: rowKey,
           indicator_name: title,
           indicator_description: row.querySelector('td.desc:nth-child(2) strong')?.textContent?.trim() || '',
           baseline: newBaseline,
@@ -2800,9 +2804,11 @@ thead th{background:linear-gradient(180deg,#f9fafb 0%, #eef2ff 100%);}
         
         // Find matching indicator in database
         const sectionIndicators = indicatorsBySection[partKey] || [];
-        const matchingIndicator = sectionIndicators.find(ind =>
-          ind.indicator_name === indicatorName && (ind.indicator_description || '') === indicatorDesc
-        );
+        const rowKey = `${partKey}:${rowIndex}`;
+        const matchingIndicator = sectionIndicators.find(ind => (ind.indicator_type || '') === rowKey)
+          || sectionIndicators.find(ind =>
+            ind.indicator_name === indicatorName && (ind.indicator_description || '') === indicatorDesc
+          );
         
         if (matchingIndicator) {
           // Set the indicator ID for future updates

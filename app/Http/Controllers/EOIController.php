@@ -281,17 +281,49 @@ public function evaluationCompleted()
 }
 
 
-public function viewEOIBeneficiaries($id)
+public function viewEOIBeneficiaries(Request $request, $id)
 {
     $eoi = EOI::findOrFail($id);
 
-    $beneficiaries = Beneficiary::where('eoi_business_title', $eoi->business_title)
+    $entries = (int) $request->get('entries', 25);
+    $search  = trim((string) $request->get('search', ''));
+
+    $baseQuery = Beneficiary::query()
+        ->where('eoi_business_title', $eoi->business_title)
         ->where('eoi_category', $eoi->category)
         ->whereNotNull('eoi_business_title')
-        ->whereNotNull('eoi_category')
-        ->get();
+        ->whereNotNull('eoi_category');
 
-    return view('eoi.eoi_beneficiaries', compact('eoi', 'beneficiaries'));
+    if ($search !== '') {
+        $like = "%{$search}%";
+        $baseQuery->where(function ($q) use ($like) {
+            $q->where('nic', 'like', $like)
+              ->orWhere('name_with_initials', 'like', $like)
+              ->orWhere('gn_division_name', 'like', $like)
+              ->orWhere('eoi_business_title', 'like', $like)
+              ->orWhere('eoi_category', 'like', $like);
+        });
+    }
+
+    $totalBeneficiaries = (clone $baseQuery)->count();
+    $uniqueGndCount = (clone $baseQuery)
+        ->whereNotNull('gn_division_name')
+        ->distinct('gn_division_name')
+        ->count('gn_division_name');
+
+    $beneficiaries = $baseQuery
+        ->orderBy('name_with_initials')
+        ->paginate($entries)
+        ->appends($request->only('entries', 'search'));
+
+    return view('eoi.eoi_beneficiaries', compact(
+        'eoi',
+        'beneficiaries',
+        'entries',
+        'search',
+        'totalBeneficiaries',
+        'uniqueGndCount'
+    ));
 }
 
 public function createForBeneficiary($beneficiaryId)
